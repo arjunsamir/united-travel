@@ -1,4 +1,4 @@
-const sgMail = require('@sendgrid/mail');
+//const sgMail = require('@sendgrid/mail');
 const http = require("https");
 
 class Email {

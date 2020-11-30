@@ -7,7 +7,7 @@ const capitalize = require('js-capitalize');
 
 const User = require('../models/user');
 const AppError = require('../utils/appError');
-const Email = require('../utils/email');
+const Email = require('../utils/Email');
 const catchAsync = require('./../utils/catchAsync');
 const credits = require('./creditController');
 const send = require('../utils/sendResponse');
