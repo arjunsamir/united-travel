@@ -4,8 +4,9 @@
   "description": "Website and Application For United Travel LLC",
   "main": "app.js",
   "scripts": {
-    "start": "nodemon server.js",
-    "start:prod": "NODE_ENV=production nodemon server.js",
+    "start": "if-env NODE_ENV=production && npm run start:prod || npm run start:dev",
+    "start:prod": "NODE_ENV=production node server.js",
+    "start:dev": "nodemon server.js",
     "debug": "ndb server.js",
     "watch": "parcel watch ./client/src/*.html -d ./client/dist/",
     "build": "parcel build ./client/src/*.html -d ./client/dist/",
