@@ -1,0 +1,97 @@
+.hello-week {
+    width: 100%;
+    margin: 0 auto;
+    user-select: none;
+    font-size: 1em;
+
+    .navigation{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        padding: 0;
+    }
+
+    .prev, .next {
+        padding: 1em;
+        cursor: pointer;
+    }
+
+    .period {
+        width: 100%;
+        font-size: 1.2em;
+        font-weight: 400;
+        text-align: center;
+    }
+
+    .week {
+        display: flex;
+        font-size: 0.9em;
+
+        &.rtl {
+            flex-direction: row-reverse;
+        }
+    }
+
+    .month {
+        display: flex;
+        flex-wrap: wrap;
+        padding: .4em 0;
+        cursor: pointer;
+
+        &.rtl {
+            flex-direction: row-reverse;
+        }
+    }
+
+    .day {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: calc(100% / 7);
+        padding: 1em;
+        cursor: pointer;
+
+        &.is-disabled {
+            cursor: not-allowed;
+            opacity: 0.3;
+        }
+    }
+
+    // Theme
+    .navigation { background-color: #f7f8f9; }
+    .day { color: #66758c; }
+    .week {
+        background-color: #f7f8f9;
+        color: #bcc3ce;
+    }
+
+    .day.is-weekend {
+        color: #6785b3;
+    }
+    .day.is-highlight {
+        background-color: #8fbc8f;
+        color: #fff;
+    }
+    .day.is-today {
+        background-color: #444;
+        color: #fff;
+    }
+    .day.is-selected {
+        background-color: #3634d2;
+        color: #fff;
+    }
+    .day.is-range {
+        background-color: #f1f1fc;
+        color: #5755d9;
+    }
+    .day.is-begin-range,
+    .day.is-end-range {
+        background-color: #3634d2;
+        color: #fff;
+    }
+
+}
+
+        
+  

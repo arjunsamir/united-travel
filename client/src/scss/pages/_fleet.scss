@@ -1,0 +1,71 @@
+.fleet-page {
+
+    section.text-banner {
+        background-color: #333740;
+    }
+
+    .bg-video__overlay {
+        background-image: none;
+        background-color: rgba(#142034, .75);
+    }
+}
+
+.fleet {
+
+    padding: var(--y-pad) var(--x-pad);
+
+    &.large {
+        background-color: var(--bg-light-alt);
+        @include dark {
+            background-color: var(--black);
+        }
+        
+    }
+
+    .section__container {
+        &:not(:last-child) {
+            margin-bottom: 10rem;
+        }
+    }
+
+    .section__content {
+        
+        h2 {
+            margin-bottom: 1.6rem;
+        }
+
+        h5 {
+            margin-bottom: 3rem;
+        }
+
+        h2, h5 {
+            @include dark {
+                color: var(--white);
+            }
+        }
+
+    }
+
+    .section__image .img-accent {
+
+        &.compact {
+            background-color: #2F3D5F;
+        }
+
+        &.standard {
+            background-color: #787862;
+            @include dark { background-color: #2C3316;}
+        }
+        
+        &.large {
+            background-color: #9C7D69;
+            @include dark { background-color: #27201F;}
+        }
+        
+        &.super {
+            background-color: #A4AFC0;
+            @include dark { background-color: #5C6440;}
+        }
+
+    }
+}

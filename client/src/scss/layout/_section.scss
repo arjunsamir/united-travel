@@ -1,0 +1,319 @@
+.section {
+
+    padding: var(--y-pad) var(--x-pad);
+    
+
+    &__container {
+
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: 15rem;
+
+        max-width: var(--x-max);
+        margin: 0 auto;
+
+        align-items: center;
+
+        @include ipadPro {
+            grid-gap: 5rem;
+        }
+
+        @include ipad {
+            grid-template-columns: 1fr;
+            grid-gap: 10rem;
+        }
+
+        @include phone {
+            grid-gap: 5rem;
+        }
+
+    }
+
+
+    &__content {
+
+        h2 {
+            font-size: $h1;
+            width: 90%;
+            margin-bottom: 4rem;
+
+            @include phone {
+                font-size: $h2;
+                margin-bottom: 3rem;
+            }
+
+            span {
+                color: var(--primary);
+            }
+        }
+
+        p {
+            color: var(--text-dark);
+            font-size: 1.8rem;
+            line-height: 2;
+
+            &:not(:last-child) {
+                margin-bottom: 4rem;
+            }
+        }
+
+    }
+
+
+    &.light &__content h2 {
+
+        color: var(--jet);
+
+        @include dark { color: var(--white); }
+
+    }
+
+
+
+    &__image {
+        
+        position: relative;
+
+        @include ipad {
+            grid-row: 1 / 2;
+        }
+
+        img {
+            position: absolute;
+            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+            width: var(--img-width);
+
+            top: 0;
+            left: var(--img-left);
+            right: var(--img-right);
+
+        }
+
+
+        .img-accent {
+            position: absolute;
+            bottom: 0;
+
+            left: var(--acc-left);
+            right: var(--acc-right);
+        }
+
+
+        &.portrait {
+
+            --height: 60rem;
+            --offset: 0;
+
+            --img-height: calc(var(--height) * .85);
+            --img-width: calc(var(--img-height) * .75);
+            --img-left: auto;
+            --img-right: var(--offset);
+
+            --acc-height: calc(var(--height) * .6);
+            --acc-left: var(--offset);
+            --acc-right: auto;
+
+        
+            height: var(--height);
+
+            &:first-child {
+                --img-left: var(--offset);
+                --img-right: auto;
+                --acc-left: auto;
+                --acc-right: var(--offset);
+            }
+
+
+            @include ipadPro {
+                --height: 55rem;
+            }
+
+            @include ipad {
+                --height: 50rem;
+                --offset: 24%;
+            }
+
+            @include responsive(45em) {
+                --offset: 17%;
+            }
+
+            @include phone {
+                --height: 45rem;
+                --offset: 17%;
+            }
+
+            @include responsive(30em) {
+                --height: 40rem;
+                --offset: 11%;
+            }
+
+            @include iphone {
+                --height: 35rem;
+                --offset: 8%;
+            }
+
+
+
+            img {
+                height: var(--img-height);
+            }
+
+            .img-accent {
+                height: var(--acc-height);
+                width: var(--acc-height);
+            }
+
+        }
+        
+        
+        &.square {
+
+            height: 50rem;
+
+            --img-width: 85%;
+            --acc-width: calc(var(--img-width) - 10%);
+
+            --offset: 0;
+
+            --img-left: auto;
+            --img-right: var(--offset);
+
+            --acc-left: var(--offset);
+            --acc-right: auto;
+
+            &:first-child {
+                --img-left: var(--offset);
+                --img-right: auto;
+                --acc-left: auto;
+                --acc-right: var(--offset);
+            }
+
+            @include ipadPro {
+                --img-width: 77%;
+            }
+
+            @include responsive(68em) {
+                height: 43rem;
+                --img-width: 80%;
+                --offset: 2rem;
+            }
+
+            @include ipad {
+                height: 50rem;
+                --img-width: 50%;
+                --offset: 20%;
+            }
+
+
+            @include responsive(46em) {
+                height: 47rem;
+                --img-width: 60%;
+                --offset: 15%;
+            }
+
+            @include responsive(40.625em) {
+                height: 43rem;
+            }
+
+            @include phone {
+                --img-width: 50%;
+                --offset: 18%;
+            }
+
+            @include responsive (33.75em) {
+                height: 40rem;
+                --img-width: 60%;
+                --offset: 15%;
+            }
+
+            @include responsive(27.5em) {
+                height: 33rem;
+            }
+
+            @include iphone {
+                height: 30rem;
+                --img-width: 65%;
+                --offset: 10%;
+            }
+
+            .img-accent {
+                width: var(--acc-width);
+                padding-top: var(--acc-width);
+            }
+        }
+
+
+        &.landscape {
+
+            height: 50rem;
+
+            --img-width: 90%;
+            --acc-width: 70%;
+
+            --offset: 0;
+            --offset-y: 10%;
+
+            --img-bottom: auto;
+            --img-top: var(--offset-y);
+            --img-left: auto;
+            --img-right: var(--offset);
+
+            --acc-left: var(--offset);
+            --acc-right: auto;
+
+            @include ipadPro {
+                height: 42rem;
+            }
+
+            @include ipad {
+                height: 50rem;
+                --acc-width: 40%;
+                --img-width: 60%;
+                --offset: 15%;
+            }
+
+            @include responsive(43.75em) {
+                height: 35rem;
+            }
+
+            @include responsive(28.75em) {
+                height: 30rem;
+            }
+
+            @include responsive(25em) {
+                --img-width: 70%;
+                --acc-width: 50%;
+                --offset: 10%;
+            }
+
+            @include iphone {
+                height: 27rem;
+            }
+
+
+            &:first-child {
+                --img-top: auto;
+                --img-bottom: var(--offset-y);
+                --img-left: var(--offset);
+                --img-right: auto;
+                --acc-left: auto;
+                --acc-right: var(--offset);
+            }
+
+            img {
+                top: var(--img-top);
+                bottom: var(--img-bottom);
+            }
+            
+            .img-accent {
+                width: var(--acc-width);
+                height: 100%;
+            }
+
+        }
+
+    }
+
+}

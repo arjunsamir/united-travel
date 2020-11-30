@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>United Travel LLC</title>
+
+    <link rel="stylesheet" type="text/css" href="/main.77bb5cfd.css">
+
+
+</head>
+<body class="login-page" data-barba="wrapper">
+
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
+    
+
+    <!-- Navigation Bar -->
+    <nav class="navbar logged-in-na" id="navbar">
+
+    <a href="/" class="navbar__brand" id="nav-brand">
+
+        <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
+        <h5>United Travel</h5>
+
+    </a>
+
+    <label for="nav-toggle" class="navbar__icon" id="nav-icon" aria-label="Toggle Navigation Menu">
+        <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
+        <svg><use xlink:href="/icons.a0140bae.svg#close"></use></svg>
+    </label>
+
+    <input type="checkbox" id="nav-toggle" class="navbar__checkbox">
+
+    <div class="navbar__mobile">
+
+        <div class="navbar__mobile-account">
+
+            <div class="logged-in">
+                <a href="/my-account" class="logged-in__grid">
+                    <div class="navbar__mobile-profile-photo">
+                        <img class="navbar-profile-pic" src="/profile.f6abe80f.png" alt="Profile Picture">
+                    </div>
+                    <div>
+                        <h4 class="navbar-user-name">Arjun Patel</h4>
+                        <p class="navbar-user-email">me@arjunsamir.com</p>
+                    </div>
+                </a>
+                <a href="/log-out" class="carat-btn">
+                    <h6>Log Out</h6>
+                    <svg>
+                        <use xlink:href="/icons.a0140bae.svg#exit"></use>
+                    <svg>
+                </svg></svg></a>
+            </div>
+
+            <div class="logged-out">
+                <h3>United Travel</h3>
+                <a href="/create-account">Create Account</a>
+                <a href="/login">Log In</a>
+            </div>
+
+
+        </div>
+
+        <div class="navbar__mobile-links">
+            <ul>
+                <li><a class="nb-link" href="/">Home</a></li>
+                <li><a class="nb-link" href="/services" id="services-mobile-link">Services</a></li>
+                <li><a class="nb-link" href="/about">About Us</a></li>
+                <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                <!-- <li><a class="nb-link" href="/search">My Trips</a></li> -->
+                <li><a class="nb-link" href="/book">Book Now</a></li>
+            </ul>
+        </div>
+
+        <div class="navbar__mobile-language">
+            <hr>
+            <h5>Language</h5>
+            <ul>
+                <li class="active"><a href="#">English</a></li>
+                <li><a href="#">Español</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+    <div class="navbar__main">
+
+        <div class="navbar__action">
+            <button>
+                <svg><use xlink:href="/icons.a0140bae.svg#globe"></use></svg>
+                <span>EN</span>
+            </button>
+            <div class="navbar__dropdown">
+                <ul>
+                    <li><a href="#">Español</a></li>
+                    <li><a href="#">Spanish</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <span class="navbar__divider">|</span>
+
+        <ul class="navbar__links">
+            <li class="navbar__link"><a class="nb-link" href="/services">Services</a></li>
+            <li class="navbar__link"><a class="nb-link" href="/about">About Us</a></li>
+            <li class="navbar__link"><a class="nb-link" href="/fleet">Our Fleet</a></li>
+        </ul>
+
+        <div class="navbar__action tablet">
+            <button>
+                <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
+                <span>Learn More</span>
+            </button>
+            <div class="navbar__dropdown">
+                <ul>
+                    <li><a class="nb-link" href="/services">Services</a></li>
+                    <li><a class="nb-link" href="/about">About Us</a></li>
+                    <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <span class="navbar__divider">|</span>
+
+        <div class="navbar__actions">
+            <div class="navbar__action show-on-login">
+                <button class="navbar__profile-photo">
+                    <img class="navbar-profile-pic" src="/profile.f6abe80f.png" alt="User Profile Photo">
+                </button>
+                <div class="navbar__dropdown">
+                    <ul>
+                        <li><a href="/me">My Account</a></li>
+                        <!-- <li><a href="/me">My Trips</a></li> -->
+                        <li><a href="#" class="action-log-out">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="navbar__action hide-on-login">
+                <button>Account</button>
+                <div class="navbar__dropdown">
+                    <ul>
+                        <li><a href="/create-account">Create Account</a></li>
+                        <li><a href="/login">Log In</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- <a class="navbar__link nb-link hide-on-login" href="/search">My Trips</a> -->
+
+            <a class="navbar__cta nb-link" href="/book">Book Now</a>
+        </div>
+
+    </div>
+
+
+</nav>
+
+
+    <main data-scroll-container="" data-barba="container" data-barba-namespace="login">
+
+        <section class="auth">
+
+            <div class="auth__content window" id="navbar-collapse">
+
+                <div class="auth__container">
+
+                    <h2>Welcome Back</h2>
+                    <p>Don't have an account? <a href="/create-account">Sign up now.</a></p>
+
+                    <form action="/auth/create-session" method="POST" class="auth__form" id="login-form"> 
+
+                        <div class="auth__providers">
+                            <button type="button" id="google-auth-btn" class="btn filled icon-fill wide google hover-opacity-75"><svg><use xlink:href="/icons.a0140bae.svg#google"></use></svg><span>Google</span></button>
+                            <button type="button" id="facebook-auth-btn" class="btn filled icon-fill wide facebook hover-opacity-75"><svg><use xlink:href="/icons.a0140bae.svg#facebook"></use></svg><span>Facebook</span></button>
+                        </div>
+
+                        <p class="auth__or">or log in with email</p>
+
+                        <div class="input" data-icons="1" data-name="email">
+                            <div class="input__icon"><svg><use xlink:href="/icons.a0140bae.svg#email"></use></svg></div>
+                            <label class="input__field" data-type="email" data-required="">
+                                <input type="text" placeholder="monika@example.com">
+                                <h6>Email Address</h6>
+                            </label>
+                        </div>
+                        
+                        <div class="input" data-name="password">
+                            <div class="input__icon"><svg><use xlink:href="/icons.a0140bae.svg#key"></use></svg></div>
+                            <label class="input__field" data-type="password" data-min="8" data-required="">
+                                <input type="password" placeholder="••••••••">
+                                <h6>Password</h6>
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn wide filled lt-dark lt-hover-primary dk-primary dk-hover-opacity-75">Log In</button>
+
+                        <a class="auth__reset-btn">Forgot your password?</a>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            <div class="auth__img">
+                <picture>
+                    <source srcset="/luggage.c1abb374.jpg" type="image/jpeg">
+                    <img src="/luggage.c1abb374.jpg" alt="Man setpping out the door with luggage in hand" data-scroll="" data-scroll-speed="-1">
+                </picture>
+                <span></span>
+            </div>
+
+        </section>
+
+        <!-- <div class="auth" data-barba="wrapper" style="display: none;">
+
+            <form id="auth-form" data-type="login">
+                <p id="auth-error"></p>
+                
+                <label for="auth-email">Email</label>
+                <input type="email" id="auth-email" placeholder="me@example.com">
+    
+                <label for="auth-password">Password</label>
+                <input type="password" id="auth-password" placeholder="••••••••">
+    
+                <label>
+                    <input type="checkbox" name="show-password" id="show-password">
+                    Show Password
+                </label>
+    
+                <button type="submit">Login In</button>
+    
+            </form>
+            
+            <button id="google-auth-btn">Continue With Google</button>
+            <button id="facebook-auth-btn">Continue With Facebook</button>
+    
+    
+            <form id="reset-request-form" style="margin: 50px 0;">
+    
+                <label for="request-reset-email">Your Email Address</label>
+                <input type="email" id="request-reset-email" placeholder="me@example.com">
+    
+                <button type="submit">Forgot Password</button>
+                
+            </form>
+    
+        </div> -->
+
+    </main>
+    
+
+
+    <script src="/js.00a46daa.js"></script>
+</body>
+</html>

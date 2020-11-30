@@ -1,0 +1,94 @@
+.quality {
+
+    padding: var(--y-pad) var(--x-pad);
+    background-color: var(--bg-light-alt);
+
+    @include dark {
+        background-color: var(--bg-dark);
+    }
+
+    .text-banner__text {
+        color: var(--jet);
+        margin-bottom: var(--y-pad);
+
+        @include dark {
+            color: var(--white);
+        }
+
+        @include phone {
+            text-align: left;
+            margin-bottom: 6rem;
+        }
+    }
+
+    .section__content h2 {
+        @include dark {
+            color: var(--white);
+        }
+    }
+
+    &__grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        grid-gap: var(--x-pad);
+
+        @include ipad {
+            grid-template-columns: 1fr;
+        }
+
+        @include phone {
+            grid-gap: 8rem;
+        }
+    }
+
+    &__quote {
+
+        position: relative;
+
+        &-accent {
+            position: absolute;
+            top: 0;
+            right: 0;
+
+            height: 100%;
+            width: 70%;
+            background-color: #1F232D;
+        }
+
+        &-card {
+            position: relative;
+            padding: 8rem 5rem;
+            margin-top: 8rem;
+            margin-bottom: 12rem;
+            width: 75%;
+
+            box-shadow: var(--window-shadow);
+            background-color: #2F3D5F;
+            color: var(--white);
+
+            @include ipadPro {
+                width: 80%;
+                padding: 8rem 4rem;
+            }
+
+            h2 {
+                font-size: 14rem;
+                font-family: Arial, sans-serif;
+                line-height: .5;
+            }
+
+            h3 {
+                font-weight: 300;
+                line-height: 1.5;
+                margin-bottom: 4rem;
+            }
+
+            h5 {
+                font-weight: 400;
+            }
+
+        }
+
+    }
+
+}

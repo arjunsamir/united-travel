@@ -1,0 +1,91 @@
+*, *::before, *::after {
+    box-sizing: inherit;
+    margin: 0;
+    padding: 0;
+}
+
+html {
+    font-size: 62.5%;
+    scroll-behavior: smooth;
+
+    @include respond(tab-land){
+        font-size: 56.25%; //1rem = 9px
+    }
+    
+    @include respond(tab-port){
+        font-size: 50%; //1rem = 8px
+    }
+}
+
+body {
+    box-sizing: border-box;
+    overflow-x: hidden;
+    width: 100vw;
+    background-color: var(--bg-light);
+
+    @include dark {
+        background-color: var(--bg-dark);
+    }
+}
+
+label, input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
+    display: block;
+    &:focus {
+        outline: none;
+    }
+}
+
+button {
+    font-family: $font;
+}
+
+input, textarea {
+    font-family: $font;
+    font-size: 1.8rem;
+    color: var(--jet);
+    &::placeholder-shown, &::placeholder {
+        color: var(--text-light);
+        @include dark {
+            color: var(--text-dark);
+        }
+    }
+}
+
+::placeholder {
+    color: var(--text-light);
+    @include dark {
+        color: var(--text-dark);
+    }
+}
+
+::selection {
+    color: #fff;
+    background: rgba($primary, .6);
+}
+
+ul {
+    list-style: none;
+}
+
+a, a:link, a:visited {
+    text-decoration: none;
+    color: var(--primary);
+    cursor: pointer;
+    transition: color $dt, background-color $dt, opacity $dt, box-shadow $dt, border $dt;
+
+    &:hover {
+        opacity: .75;
+    }
+}
+
+img {
+    display: block;
+}
+
+hr {
+    display: block;
+    border: none;
+    background-color: var(--text-light);
+    height: 2px;
+    opacity: .5;
+}

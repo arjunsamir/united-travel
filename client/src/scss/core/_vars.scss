@@ -1,0 +1,38 @@
+$font: 'Geomanist', Arial, Helvetica, sans-serif;
+$spacing: .15em;
+
+:root {
+
+    --x-pad: 10rem;
+    --y-pad: 20rem;
+    --x-max: 120rem;
+    
+    --window-shadow:
+        0 0.3px 1.4px rgba(0, 0, 0, 0.022),
+        0 0.9px 3.5px rgba(0, 0, 0, 0.031),
+        0 1.8px 7.1px rgba(0, 0, 0, 0.039),
+        0 3.7px 14.6px rgba(0, 0, 0, 0.048),
+        0 10px 40px rgba(0, 0, 0, 0.07)
+    ;
+  
+
+    @include ipadPro {
+        --x-pad: 8rem;
+        --y-pad: 18rem;
+    }
+
+    @include ipad {
+        --x-pad: 10rem;
+        --y-pad: 15rem;
+    }
+
+    @include phone {
+        --x-pad: 3rem;
+    }
+
+    @include iphone {
+        --x-pad: 2rem;
+        --y-pad: 12rem;
+    }
+
+}

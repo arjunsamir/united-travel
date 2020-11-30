@@ -1,0 +1,99 @@
+@keyframes preloadSpin {
+    
+    from {
+        transform: rotate(0);
+    }
+    
+    to {
+        transform: rotate(359deg);
+    }
+    
+}
+
+.preloader {
+
+    // Preloader Variables
+    --preload-bg: var(--bg-light);
+    --preload-color: var(--jet);
+    --preload-color-alt: var(--text-light);
+    --spinner-style: 2px solid;
+    --spinner-size: 20rem;
+    
+
+    @include flexCenter;
+    height: 100vh;
+    width: 100vw;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 500;
+
+    background-color: var(--preload-bg);
+
+    transition: opacity $smooth ease;
+
+    @include dark {
+        --preload-bg: var(--bg-dark);
+        --preload-color: var(--white);
+        --preload-color-alt: var(--text-dark);
+    }
+
+    &.load-complete {
+        --preload-color-alt: var(--preload-color);
+        @include dark { --preload-color-alt: var(--preload-color); }
+    }
+
+    &__content {
+        @include flexCenter;
+
+        height: var(--spinner-size);
+        width: var(--spinner-size);
+
+        position: relative;
+
+        svg {
+            fill: var(--preload-color);
+            height: calc(var(--spinner-size) * .25);
+            width: calc(var(--spinner-size) * .5);
+            transition: fill $smooth ease;
+        }
+    }
+
+
+    &__spinner {
+        @include overlay;
+        border-top: var(--spinner-style) var(--preload-color);
+        border-bottom: var(--spinner-style) var(--preload-color-alt);
+        border-left: var(--spinner-style) var(--preload-color-alt);
+        border-right: var(--spinner-style) var(--preload-color-alt);
+        border-radius: 50%;
+
+        transition: border $smooth ease;
+        animation: preloadSpin 1.2s $cubic infinite;
+    }
+
+}
+
+
+.page-transition-slide {
+
+    --preload-color: var(--jet);
+    --preload-color-alt: #{rgba($jet, .5)};
+    --spinner-style: 2px solid;
+    --spinner-size: 20rem;
+    
+    @include flexCenter;
+    height: 100%;
+    width: 100%;
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+
+    transform: translateY(100vh);
+
+    background-color: var(--primary);
+
+}

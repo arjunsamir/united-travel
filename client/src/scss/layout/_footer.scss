@@ -1,0 +1,204 @@
+.footer {
+
+    --mobile-padding-x: calc(var(--x-pad) * 2 );
+    --mobile-padding-y: 8rem;
+    --grid-gap: 5rem;
+
+    display: grid;
+    grid-template-columns: 45rem 1fr;
+
+    @include laptop {
+        grid-template-columns: 40rem 1fr;
+    }
+
+    @include ipadPro {
+        grid-template-columns: 32rem 1fr;
+    }
+
+    @include responsive(44.375em) {
+        grid-template-columns: 28rem 1fr;
+    }
+
+    @include phone {
+        grid-template-columns: 1fr;
+    }
+
+    &__branding {
+
+        @include flexCenter;
+
+        @include dark {
+            color: var(--white);
+        }
+
+        svg {
+            height: 8rem;
+            width: 15rem;
+            fill: currentColor;
+            margin-bottom: 3rem;
+
+            @include phone {
+                width: 10rem;
+                height: 6rem;
+            }
+        }
+
+        @include phone {
+            background-color: var(--bg-dark-alt);
+            color: var(--white);
+            align-items: flex-start;
+            padding: var(--mobile-padding-y) 0 var(--grid-gap) var(--mobile-padding-x);
+        }
+
+    }
+
+    &__sponsor {
+
+        @include flexCenter;
+        @include uppercase;
+
+        background-color: #F1C57E;
+        transition: all $dt;
+
+        @include link {
+            color: var(--white);
+
+            &:hover {
+                background-color: var(--primary);
+                color: var(--jet);
+                opacity: 1;
+
+                @include dark {
+                    color: var(--black);
+                }
+            }
+        }
+
+        @include phone {
+            padding: 5rem 2rem;
+        }
+
+        @include dark {
+            background-color: var(--black);
+        }
+
+    }
+
+    &__main {
+
+        grid-column: 2 / 3;
+        grid-row: 1 / 3;
+
+        background-color: var(--bg-dark-alt);
+
+        padding: 15rem;
+
+        @include laptop {
+            padding: 12rem 10rem;
+        }
+
+
+        @include ipadPro {
+            padding: 10rem 8rem;
+        }
+
+        @include responsive(44.375em) {
+            padding: 8rem 4rem;
+        }
+
+        @include phone {
+            grid-row: 2 / 3;
+            grid-column: 1 / -1;
+            padding: 0 var(--mobile-padding-x);
+            padding-bottom: var(--mobile-padding-y);
+        }
+
+    }
+
+
+    &__container {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-row-gap: var(--grid-gap);
+
+        @include phone {
+            grid-template-columns: 1fr;
+        }
+    }
+
+
+    &__contact {
+
+        h3 {
+            color: var(--white);
+        }
+
+        hr {
+            height: 4px;
+            width: 8rem;
+            margin: 3rem 0;
+        }
+
+        p {
+            font-size: 1.8rem;
+            
+            &:not(:last-child) {
+                margin-bottom: 1rem;
+            }
+        }
+
+        a {
+            @include link {
+                color: var(--text-light);
+
+                &:hover {
+                    color: var(--primary);
+                    opacity: 1;
+                }
+            }
+        }
+
+    }
+
+
+    &__nav {
+
+        display: flex;
+        justify-content: center;
+
+        @include ipad {
+            justify-content: flex-end;
+        }
+
+        @include phone {
+            justify-content: flex-start;
+        }
+
+        li {
+            padding: .5rem 0;
+            @include uppercase;
+
+        }
+
+        a {
+            display: block;
+            padding: .5rem 0;
+            @include link {
+                color: var(--white);
+            }
+        }
+
+    }
+
+
+    &__copyright {
+
+        grid-column: 1 / -1;
+
+        p {
+            color: var(--text-dark);
+        }
+        
+    }
+
+}

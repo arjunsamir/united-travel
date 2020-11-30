@@ -1,0 +1,41 @@
+.about-page {
+
+    section#family {
+        background-color: var(--bg-light);
+        @include dark {
+            background-color: var(--bg-dark);
+        }
+        .img-accent {
+            background-color: var(--primary);
+        }
+    }
+
+    .immersive {
+
+        background-image: linear-gradient(#242424, #222);
+    }
+
+    section.text-banner {
+        background-color: #273853;
+        @include dark {background-color: #182233; }
+    }
+
+    .header__bg span {
+        background-image: linear-gradient(rgba(#47669A, .62), transparent);
+        @include dark {
+            background-color: rgba(black, .25);
+        }
+    }
+}
+
+section#fleet {
+    @include dark {
+        background-color: var(--black);
+    }
+    .img-accent {
+        background-color: #DEE4E0;
+        @include dark {
+            background-color: #9A9297;
+        }
+    }
+}

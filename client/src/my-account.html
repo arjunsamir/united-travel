@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>United Travel LLC</title>
+
+    <link rel="stylesheet" type="text/css" href="./scss/main.scss">
+</head>
+
+<body class="account-page preload" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+        <div class="preloader__content">
+            <svg><use xlink:href="img/icons.svg#logo"></use></svg>
+            <span class="preloader__spinner"></span>
+        </div>
+    </section>
+    
+
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+
+        <a href="/" class="navbar__brand" id="nav-brand">
+
+            <svg><use xlink:href="img/icons.svg#logo"></use></svg>
+            <h5>United Travel</h5>
+
+        </a>
+
+        <label for="nav-toggle" class="navbar__icon" id="nav-icon" aria-label="Toggle Navigation Menu">
+            <svg><use xlink:href="img/icons.svg#menu"></use></svg>
+            <svg><use xlink:href="img/icons.svg#close"></use></svg>
+        </label>
+
+        <input type="checkbox" id="nav-toggle" class="navbar__checkbox">
+
+        <div class="navbar__mobile">
+
+            <div class="navbar__mobile-account">
+
+                <div class="logged-in">
+                    <a href="/my-account" class="logged-in__grid">
+                        <div class="navbar__mobile-profile-pic" >
+                            <img src="img/profile.png" alt="Profile Picture">
+                        </div>
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <p>me@arjunsamir.com</p>
+                        </div>
+                    </a>
+                    <a href="/log-out" class="carat-btn">
+                        <h6>Log Out</h6>
+                        <svg>
+                            <use xlink:href="img/icons.svg#exit"></use>
+                        <svg>
+                    </a>
+                </div>
+
+                <div class="logged-out" style="display: none;">
+                    <a href="/create-account">Create Account</a>
+                    <a href="/login">Log In</a>
+                </div>
+
+
+            </div>
+
+            <div class="navbar__mobile-links">
+                <ul>
+                    <li><a class="nb-link" href="/services" id="services-mobile-link">Services</a></li>
+                    <li><a class="nb-link" href="/about">About Us</a></li>
+                    <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                    <li><a class="nb-link" href="/search">My Trips</a></li>
+                    <li><a class="nb-link" href="/book">Book Now</a></li>
+                </ul>
+            </div>
+
+            <div class="navbar__mobile-language">
+                <hr>
+                <h5>Language</h5>
+                <ul>
+                    <li class="active"><a href="#">English</a></li>
+                    <li><a href="#">Español</a></li>
+                </ul>
+            </div>
+
+        </div>
+
+
+        <div class="navbar__main">
+
+            <div class="navbar__action">
+                <button>
+                    <svg><use xlink:href="img/icons.svg#globe"></use></svg>
+                    <span>EN</span>
+                </button>
+                <div class="navbar__dropdown">
+                    <ul>
+                        <li><a href="#">English</a></li>
+                        <li><a href="#">Spanish</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <span class="navbar__divider">|</span>
+
+            <ul class="navbar__links">
+                <li class="navbar__link"><a class="nb-link" href="/services">Services</a></li>
+                <li class="navbar__link"><a class="nb-link" href="/about">About Us</a></li>
+                <li class="navbar__link"><a class="nb-link" href="/fleet">Our Fleet</a></li>
+            </ul>
+
+            <div class="navbar__action tablet">
+                <button>
+                    <svg><use xlink:href="img/icons.svg#menu"></use></svg>
+                    <span>Learn More</span>
+                </button>
+                <div class="navbar__dropdown">
+                    <ul>
+                        <li><a class="nb-link" href="/services">Services</a></li>
+                        <li><a class="nb-link" href="/about">About Us</a></li>
+                        <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <span class="navbar__divider">|</span>
+
+            <div class="navbar__actions">
+                <div class="navbar__action">
+                    <button>Account</button>
+                    <div class="navbar__dropdown">
+                        <ul>
+                            <li><a href="/create-account">Create Account</a></li>
+                            <li><a href="/login">Log In</a></li>
+                        </ul>
+                    </div>
+                </div>
+                
+                <a class="navbar__link nb-link" href="/search">My Trips</a>
+                <a class="navbar__cta nb-link" href="/book">Book Now</a>
+            </div>
+
+        </div>
+
+
+    </nav>
+
+
+    <!-- Data Scroll Container -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="account">
+
+        <!-- Hero -->
+        <header class="header">
+
+            <div class="header__bg">
+                <picture>
+                    <source srcset="img/disney-boat.jpg" type="image/jpeg">
+                    <img src="img/disney-boat.jpg" alt="Woman sitting in back seat of car using a tablet">
+                </picture>
+                <span></span>
+            </div>
+
+            <div class="header__content">
+                <h2 class="header__headline" id="navbar-collapse">Welcome Back <span>Arjun</span></h2>
+            </div>
+
+            <div class="account-bar"></div>
+
+        </header>
+
+
+        <!-- Personal Information -->
+        <section class="section light" id="personal-information">
+
+            <div class="section__container">
+
+                <div class="section__content animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+
+                    <h2>Your <span>Personal</span> Information</h2>
+
+                    <p>We never share or sell any of your personal information. Your information belongs to you and we intend to keep it that way. We only collect just enough information to power our app, includeing your name, contact information and payment methods.</p>
+
+                    <a href="#" class="carat-btn lt-dark dk-light">
+                        <h6>See Our Privacy Policy</h6>
+                        <svg><use xlink:href="img/icons.svg#carat-right"></use><svg>
+                    </a>
+
+                </div>
+
+
+                <div class="section__form">
+
+                    <div class="img-accent"></div>
+
+                    <form class="account-form window" action="/users/update-information" method="PATCH">
+
+                        <div class="account-form__profile-picture">
+                            <img src="img/profile.png" alt="Arjun's Profile Picture">
+                            <h6>Change your profile picture</h6>
+                        </div>
+
+                        <div class="input" data-icons="1" data-name="name">
+                            <div class="input__icon"><svg><use xlink:href="img/icons.svg#person"></use></svg></div>
+                            <label class="input__field" data-type="name" data-name="full_name" data-required>
+                                <input type="text" placeholder="Monika Patterson">
+                                <h6>Full Name</h6>
+                            </label>
+                            <label class="input__field" data-type="name" data-name="preferred_name" data-required>
+                                <input type="text" placeholder="Monika">
+                                <h6>Preferred Name</h6>
+                            </label>
+                        </div>
+
+                        <div class="input" data-icons="1" data-name="contact">
+                            <div class="input__icon"><svg><use xlink:href="img/icons.svg#email"></use></svg></div>
+                            <label class="input__field" data-type="email" data-required>
+                                <input type="text" placeholder="monika@example.com">
+                                <h6>Email Address</h6>
+                            </label>
+                            <label class="input__field" data-type="phone">
+                                <input type="text" placeholder="(123) 456-7890">
+                                <h6>Phone Number</h6>
+                            </label>
+                        </div>
+
+                        <button class="btn filled lt-dark lt-hover-accent dk-accent dk-hover-opacity-75">Save Changes</button>
+
+                    </form>
+
+                </div>
+
+            </div>
+            
+
+        </section>
+
+
+        <!-- Login & Security -->
+        <section class="section light" id="login-security">
+
+            <div class="section__container">
+
+                <div class="section__content animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+
+                    <svg class="accent-svg"><use xlink:href="img/icons.svg#lock"></use></svg>
+
+                    <h2>Account Login <span>&amp;</span> Security</h2>
+
+                    <p>You can change your password here, or set a new password if you don’t already have one. You can also see which social accounts are linked to this account for login. If you would like to delete your account, you can do so here, however it is important to know that deleting your account is permenant.</p>
+
+                    <a href="#" class="carat-btn lt-dark dk-light">
+                        <h6>Delete My Account</h6>
+                        <svg><use xlink:href="img/icons.svg#carat-right"></use><svg>
+                    </a>
+
+                </div>
+
+
+                <div class="section__form">
+
+                    <form class="account-form" action="/users/update-information" method="PATCH">
+
+                        <h4>Update Account Password</h4>
+
+                        <div class="input" data-name="password">
+                            <div class="input__icon"><svg><use xlink:href="img/icons.svg#key"></use></svg></div>
+                            <label class="input__field" data-type="password" data-min="8" data-required>
+                                <input type="password" placeholder="••••••••">
+                                <h6>Password</h6>
+                            </label>
+                        </div>
+
+                        <button class="btn filled lt-dark lt-hover-accent dk-accent dk-hover-opacity-75">Update Password</button>
+
+                        <div class="account-form__accounts">
+                            <h4>Linked Social Accounts</h4>
+                            <div>
+                                <svg class="google-color"><use xlink:href="img/icons.svg#google"></use></svg>
+                                <p>Arjun Patel - me@arjunsamir.com</p>
+                            </div>
+                            
+                            <div>
+                                <svg class="facebook-color"><use xlink:href="img/icons.svg#facebook"></use></svg>
+                                <p>Not Connected</p>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
+
+            </div>
+            
+
+        </section>
+
+
+        <!-- Booked Trips-->
+        <section class="section" id="booked-trips"></section>
+
+
+        <!-- Review Carousel -->
+        <section class="reviews">
+
+            <h2 class="reviews__title">Reviews You Wrote</h2>
+
+            <div class="reviews__carousel">
+
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review__ghost"></div>
+
+            </div>
+
+            <div class="reviews__cta">
+
+                <button class="btn hollow lt-dark hover-fill dk-light dk-hover-opacity-75">Write A Review</button>
+
+            </div>
+
+        </section>
+
+
+        <!-- Payment Information -->
+        <section class="section" id="payments"></section>
+
+
+        <!-- Refer a friend -->
+        <section class="section" id="referral">
+            <div class="section__container">
+
+                <div class="section__content animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+
+                    <h2>Refer a friend and <span>earn credit.</span></h2>
+
+                    <p>Invite your firends to join United Travel and earn ride credits. When you invite your friends you’ll both earn credit. They will get $15 off their first ride, and once they complete their first trip you will also get a $10 credit to use on your next ride.</p>
+
+                    <a href="#" class="carat-btn lt-dark dk-light">
+                        <h6>See Terms &amp; Conditions</h6>
+                        <svg><use xlink:href="img/icons.svg#carat-right"></use><svg>
+                    </a>
+
+                </div>
+
+
+                <div class="section__form">
+
+                    <div class="img-accent"></div>
+
+                    <div class="account-form window">
+
+                        <h4>Share your invite link</h4>
+                        <div class="input-box">
+                            <span id="referral-link">https://www.unitedtravelflorida.com/</span>
+                        </div>
+
+                        <h4>Or have your friend scan this code</h4>
+                        <div class="account-form__qr-code" id="qr-code"></div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- Footer -->
+        <footer class="footer">
+
+            <div class="footer__branding">
+
+                <svg><use xlink:href="img/icons.svg#logo"></use></svg>
+                <h5>United Travel LLC</h5>
+
+            </div>
+
+            <a href="https://www.arjunsamir.com" class="footer__sponsor">Designed On Day FiftyFive</a href="https://www.arjunsamir.com">
+
+            <div class="footer__main">
+
+                <div class="footer__container">
+
+                    <div class="footer__contact">
+
+                        <h3>Contact Us</h3>
+                        <hr>
+                        <p><a href="mailto:info@unitedtravelflorida.com">info@unitedtravelflorida.com</a></p>
+                        <p><a href="tel:321-295-1104">(321) 295-1104</a></p>
+
+                    </div>
+
+                    <div class="footer__nav">
+                        <ul>
+                            <li><a href="/services">Services</a></li>
+                            <li><a href="/about">About Us</a></li>
+                            <li><a href="/fleet">Our Fleet</a></li>
+                            <li><a href="/book">Book Now</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer__copyright">
+
+                        <p>&copy; Copyright Day FiftyFive LLC 2020. All rights reserved.</p>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </footer>
+
+
+    </main>
+
+
+    <!-- JavaScript Source -->
+    <script src="./js/index.js"></script>
+
+</body>
+
+</html>

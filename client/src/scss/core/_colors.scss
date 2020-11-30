@@ -1,0 +1,37 @@
+// Color Variables
+$primary: #EEB559;
+$jet: #333333;
+$text-dark: #999999;
+$text-light: #CFCFCF;
+$white: #FFFFFF;
+$black: #000000;
+$bg-dark: #121212;
+$bg-dark-alt: #222222;
+$bg-light: #FFFFFF;
+$bg-light-alt: #F9F9F9;
+
+$error-color: #D45555;
+$success-color: #80CF9B;
+
+$google-color: #4285F4;
+$facebook-color: #1978F2;
+
+
+:root {
+
+    --primary: #{$primary};
+    --text-dark: #{$text-dark};
+    --text-light: #{$text-light};
+    --white: #{$white};
+    --black: #{$black};
+    --jet: #{$jet};
+    --bg-dark: #{$bg-dark};
+    --bg-dark-alt: #{$bg-dark-alt};
+    --bg-light: #{$white};
+    --bg-light-alt: #{$bg-light-alt};
+    --card-dark: #363636;
+    --error-color: #{$error-color};
+    --success-color: #{$success-color};
+    --google-color: #{$google-color};
+    --facebook-color: #{$facebook-color};
+}

@@ -1,0 +1,37 @@
+@mixin absoluteFull {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    height: 100%;
+    width: 100%;
+}
+
+.bg-video {
+
+    overflow: hidden;
+    z-index: -1;
+
+    &, &__overlay, &__player, &__fallback {
+        @include absoluteFull;
+    }
+
+    &__overlay {
+        z-index: 5;
+        background-color: rgba(black, .25);
+        background-image: linear-gradient(rgba(black, .5), transparent);
+
+        @include dark {
+            background-color: rgba(black, .4);
+        }
+    }
+
+    &__fallback {
+        background-color: black;
+    }
+
+    &__player {
+        z-index: 1;
+        object-fit: cover;
+    }
+}

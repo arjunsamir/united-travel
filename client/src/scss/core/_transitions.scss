@@ -1,0 +1,120 @@
+// Transition Times
+$cubic: cubic-bezier(0.860, 0.000, 0.070, 1.000);
+
+
+// Transition Durations
+$quick: .2s;
+$normal: .4s;
+$smooth: .8s;
+$lax: 1.2s;
+
+
+// Default Transitions
+$dt: .2s ease-in;
+$d-cubic: .8s cubic-bezier(0.860, 0.000, 0.070, 1.000);
+
+
+.transition { --t-duration: #{$quick}; }
+.animate-on-scroll { --t-duration: #{$smooth}; }
+.transition, .animate-on-scroll {
+
+    // Default Transition Values
+    --t-properties: all;
+    --t-fx: ease;
+    --t-delay: 0s;
+
+
+    // Assembled Transitions
+    --t-colors: color, opacity, background;
+    --t-positions: top, bottom, left, right;
+    --t-sizes: height, width, padding, margin;
+
+
+    // Applied Transition Values
+    transition-property: var(--t-properties);
+    transition-duration: var(--t-duration);
+    transition-timing-function: var(--t-fx);
+    transition-delay: var(--t-delay);
+    
+
+    // Transition Timing Function Modifiers
+    &.cubic { --t-fx: #{$cubic}; }
+    &.ease { --t-fx: ease; }
+    &.ease-in { --t-fx: ease-in; }
+    &.ease-in-out { --t-fx: ease-in-out; }
+    &.ease-out { --t-fx: ease-out; }
+
+
+    // Transition Duration Modifiers
+    &.quick { --t-duration: #{$quick}; }
+    &.normal { --t-duration: #{$normal}; }
+    &.smooth { --t-duration: #{$smooth}; }
+    &.lax { --t-duration: #{$lax}; }
+
+
+    // Transition Delay Modifiers
+    &.delay-short { --t-delay: .2s; }
+    &.delay-medium { --t-delay: .5s; }
+    &.delay-long { --t-delay: 1s; }
+
+
+    // Transition Property Modifiers
+    &.colors { --t-properties: var(--t-colors); }
+    &.position { --t-properties: var(--t-positions); }
+    &.size { --t-properties: var(--t-sizes); }
+    &.transform { --t-properties: transform; }
+    &.size-and-transform, &.transform-and-size { --t-properties: transform, var(--t-sizes); }
+    &.position-and-size, &.size-and-position { --t-properties: var(--t-positions), var(--t-sizes) }
+    &.position-and-transform, &.transform-and-position { --t-properties: transform, var(--t-positions); }
+    &.colors-and-size, &.size-and-colors { --t-properties: var(--t-colors), var(--t-sizes); }
+    &.colors-and-position, &.position-and-colors { --t-properties: var(--t-colors), var(--t-positions); }
+    &.colors-and-transform, &.transform-and-colors { --t-properties: transform, var(--t-colors); }
+
+}
+
+
+
+.animate-on-scroll {
+
+    &.reveal {
+        opacity: 0;
+        &.is-inview { opacity: 1; }
+    }
+
+    &.grow, &.shrink {
+        transform: scale(var(--initial));
+        &.is-inview { transform: scale(1); }
+    }
+
+    &.shrink {
+        --initial: 1.1;
+
+        &.from-105 { --initial: 1.05; }
+        &.from-120 { --initial: 1.2; }
+        &.from-130 { --initial: 1.3; }
+        &.from-140 { --initial: 1.4; }
+        &.from-150 { --initial: 1.5; }
+        &.from-160 { --initial: 1.6; }
+        &.from-170 { --initial: 1.7; }
+        &.from-180 { --initial: 1.8; }
+        &.from-190 { --initial: 1.9; }
+        &.from-200 { --initial: 2; }
+    }
+
+    &.grow {
+        --initial: .9;
+
+        &.from-95 { --initial: .95; }
+        &.from-90 { --initial: .9; }
+        &.from-80 { --initial: .8; }
+        &.from-70 { --initial: .7; }
+        &.from-60 { --initial: .6; }
+        &.from-50 { --initial: .5; }
+        &.from-40 { --initial: .4; }
+        &.from-30 { --initial: .3; }
+        &.from-20 { --initial: .2; }
+        &.from-10 { --initial: .1; }
+        &.from-0 { --initial: 0; }
+    }
+
+}

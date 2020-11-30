@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>United Travel | 404</title>
+    <link rel="stylesheet" type="text/css" href="./scss/main.scss">
+</head>
+<body data-contexts='["main"]'>
+    <h1>Error 404... Fucks not found</h1>
+    <a href="/">Go home</a>
+    <button id="logout-btn">Log Out</button>
+
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr;">
+
+        <form id="booking-form">
+
+            <h3>Flight Information</h3>
+            <label><input type="checkbox" id="airport-toggle"> This is an airport Ride</label>
+
+
+            <div id="flight-fields" style="display: none;">
+                <p>Select Airport</p>
+
+                <select id="flight-airport">
+                    <option value="MCO ChIJ85K0xidj54gRbeERlDa5Sq0">MCO - Orlando International Airport</option>
+                    <option value="MIA ChIJwUq5Tk232YgR4fiiy-Dan5g">MIA - Miami International Airport</option>
+                    <option value="TPA ChIJQ0Sek0bCwogRCdUBxgiEW3o">TPA - Tampa International Airport</option>
+                    <option value="FLL ChIJ9frI5Hqq2YgR5sumkJ0z4Co">FLL - Fort Lauderdale-Hollywood International Airport</option>
+                    <option value="JAX ChIJE0IKb3-v5YgRZnt9T4YY-Bk">JAX - Jacksonville International Airport</option>
+                    <option value="SFB ChIJ1yAyEaUU54gR3HjmytkKgoU">SBF - Sanford International Airport</option>
+                    <option value="DAB ChIJb6NBzDvZ5ogRjFlbUUVOkLo">DAB - Daytona Beach International Airport</option>
+                </select>
+
+                <p>Select Flight Type</p>
+                <label><input type="radio" name="flight-type" value="arriving" checked>Arriving Flight</label>
+                <label><input type="radio" name="flight-type" value="departing">Departing Flight</label>
+                <p>Airline</p>
+                <input type="text" id="flight-airline">
+                <p>Flight Number</p>
+                <input type="text" id="flight-number">
+                <p>Flight Time</p>
+                <input type="time" id="flight-time">
+                <p>Arrive at the Airport</p>
+                <select id="flight-cushion" style="display: none;">
+                    <option value="1.5">1 1/2 Hours Before Flight</option>
+                    <option value="2">2 Hours Before Flight</option>
+                    <option value="2.5">2 1/2 Hours Before Flight</option>
+                    <option value="3">3 Hours Before Flight</option>
+                    <option value="4">4 Hours Before Flight</option>
+                    <option value="5">5 Hours Before Flight</option>
+                    <option value="6">6 Hours Before Flight</option>
+                </select>
+                <button type="button" id="confirm-flight">Confirm Flight Info</button>
+            </div>
+
+            
+            <h3>Enter Locations</h3>
+            <label>
+                <input type="radio" name="location-toggle" value="origin" checked>
+                Origin
+            </label>
+            <label>
+                <input type="radio" name="location-toggle" value="destination">
+                Destination
+            </label>
+
+            <label>
+                <p>Search Locations</p>
+                <input type="text" id="search-box" style="width: 70%; display: block;" placeholder="Search Locations">
+            </label>
+
+
+            
+
+            <h3>Passengers</h3>
+            <p>Adults</p>
+            <input type="number" id="passengers-adults" value="1">
+            <p>Children</p>
+            <input type="number" id="passengers-children" value="0">
+            <p>Infants</p>
+            <input type="number" id="passengers-infants" value="0">
+
+
+            <h3>Luggage</h3>
+            <p>Large Bags</p>
+            <input type="number" id="luggage-large" value="0">
+            <p>Medium Bags</p>
+            <input type="number" id="luggage-medium" value="0">
+            <p>Small Bags</p>
+            <input type="number" id="luggage-small" value="0">
+
+
+            <h3>Select Vehicle</h3>
+            <label>
+                <input type="radio" name="vehicle" value="standard" checked>
+                Up To 3 Passengers
+            </label>
+            
+            <label>
+                <input type="radio" name="vehicle" value="midsize">
+                Up To 7 Passengers
+            </label>
+            
+            <label>
+                <input type="radio" name="vehicle" value="large">
+                Up To 11 Passengers
+            </label>
+            
+            <label>
+                <input type="radio" name="vehicle" value="extra-large">
+                Up To 14 Passengers
+            </label>
+
+
+            <h3>Select Date & time</h3>
+            <p>Select Time</p>
+            <input type="time" id="ride-time">
+            <div id="booking-calendar"></div>
+
+
+            <button type="submit" style="margin-top: 25px;">Book Now</button>
+            
+        </form>
+
+        <div id="map" style="height: 100vh;"></div>
+
+    </div>
+    
+    <script src="./js/index.js"></script>
+</body>
+</html>

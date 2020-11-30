@@ -1,0 +1,144 @@
+.contact {
+
+    position: relative;
+    display: grid;
+    grid-template-columns: 40% 1fr;
+
+    --grid-gap: 4rem;
+
+    @include laptop {
+        display: flex;
+        justify-content: flex-end;
+        background-color: var(--bg-light-alt);
+
+        @include dark {
+            background-color: var(--bg-dark);
+        }
+    }
+
+    @include phone {
+        background-color: var(--bg-light);
+        flex-direction: column;
+        --grid-gap: 3rem;
+    }
+
+    &__img {
+        background-color: black;
+        overflow: hidden;
+
+        @include laptop {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 50%;
+            height: 100%;
+        }
+
+        @include ipadPro {
+            width: 60%;
+        }
+
+        @include ipad {
+            width: 100%;
+            height: 55rem;
+        }
+
+        @include phone {
+            height: 35rem;
+            position: relative;
+        }
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+
+            @include ipad {
+                object-position: 50% 30%;
+            }
+
+            @include phone {
+                object-position: 50% 20%;
+            }
+        }
+    }
+
+    &__form {
+
+        padding: var(--y-pad) var(--x-pad);
+        display: flex;
+        justify-content: center;
+
+        @include laptop {
+            padding: var(--y-pad) 0;
+        }
+
+        @include ipad {
+            flex-grow: 1;
+            padding-top: calc(var(--y-pad) * 3);
+        }
+
+        @include phone {
+            padding: 0;
+        }
+
+        &-container {
+            position: relative;
+            max-width: 80rem;
+            flex-grow: 1;
+
+            @include laptop {
+                background-color: var(--white);
+                width: 80rem;
+                max-width: auto;
+                margin-right: var(--x-pad);
+                padding: 8rem 6rem;
+                box-shadow: var(--window-shadow);
+
+                @include dark {
+                    background-color: var(--card-dark);
+                }
+            }
+
+            @include ipadPro {
+                width: 85rem;
+            }
+
+            @include ipad {
+                margin: 0 1rem;
+                width: 100%;
+            }
+
+            @include phone {
+                margin: 0;
+                padding:10rem var(--x-pad);
+                box-shadow: none;
+            }
+        }
+        
+
+        h2.h2 {
+            margin-bottom: 6rem;
+            max-width: 55rem;
+
+            @include dark {
+                color: var(--white);
+            }
+
+            @include ipadPro {
+                margin-bottom: 4rem;
+            }
+        }
+
+        .input, .textarea {
+            margin-bottom: var(--grid-gap);
+            --gap: var(--grid-gap);
+        }
+
+        .btn {
+            margin-top: 2rem;
+        }
+
+    }
+
+}
