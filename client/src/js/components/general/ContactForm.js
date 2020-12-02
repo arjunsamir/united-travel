@@ -2,9 +2,9 @@ import Form from './Form';
 
 export default class ContactForm extends Form {
 
-    constructor(selector, container) {
+    constructor(options) {
 
-        super(selector, container);
+        super(options.selector, options.container);
 
         this.elements = {
             input: this.form.children('.input'),

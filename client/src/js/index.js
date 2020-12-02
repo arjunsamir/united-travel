@@ -29,12 +29,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
     // Create New Page
     const page = new Page({
-        initialPage: true
-    });
-
-
-    // Initialize Page
-    page.init();
+        initialPage: true,
+        barba
+    }).init();
 
 
     barba.init({
@@ -77,9 +74,37 @@ window.addEventListener('DOMContentLoaded', () => {
 
         ],
         views: [
-
+            {
+                namespace: 'home',
+                afterEnter({ next }) {
+                    page.addComponent(
+                        {
+                            name: 'Typewriter',
+                            data: '#typewrite'
+                        },
+                        {
+                            name: 'DraggableSlider', 
+                            data: {
+                                selector: '.reviews__carousel',
+                                activeClass: 'dragging'
+                            }
+                        },
+                        {
+                            name: 'ContactForm',
+                            data: {
+                                selector: '#contact-form',
+                                container: next.container
+                            }
+                        },
+                        {
+                            name: 'Footer',
+                            data: page
+                        }
+                    );
+                }
+            }
         ]
-    })
+    });
 
 
     // Attach Barba Hooks

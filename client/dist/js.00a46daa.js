@@ -870,7 +870,7 @@ function _inheritsLoose(subClass, superClass) {
   subClass.__proto__ = superClass;
 }
 /*!
- * GSAP 3.4.2
+ * GSAP 3.5.1
  * https://greensock.com
  *
  * @license Copyright 2008-2020, GreenSock. All rights reserved.
@@ -927,7 +927,9 @@ var _config = {
     _isFuncOrString = function _isFuncOrString(value) {
   return _isFunction(value) || _isString(value);
 },
-    _isArray = Array.isArray,
+    _isTypedArray = typeof ArrayBuffer === "function" && ArrayBuffer.isView || function () {},
+    // note: IE10 has ArrayBuffer, but NOT ArrayBuffer.isView().
+_isArray = Array.isArray,
     _strictNumExp = /(?:-?\.?\d|\.)+/gi,
     //only numbers (including negatives and decimals) but NOT relative values.
 _numExp = /[-+=.]*\d+[.e\-+]*\d*[e\-\+]*\d*/g,
@@ -935,8 +937,6 @@ _numExp = /[-+=.]*\d+[.e\-+]*\d*[e\-\+]*\d*/g,
 _numWithUnitExp = /[-+=.]*\d+[.e-]*\d*[a-z%]*/g,
     _complexStringNumExp = /[-+=.]*\d+(?:\.|e-|e)*\d*/gi,
     //duplicate so that while we're looping through matches from exec(), it doesn't contaminate the lastIndex of _numExp which we use to search for colors too.
-_parenthesesExp = /\(([^()]+)\)/i,
-    //finds the string between parentheses.
 _relExp = /[+-]=-?[\.\d]+/,
     _delimitedValueExp = /[#\-+.]*\b[a-z\d-=+%.]+/gi,
     _globalTimeline,
@@ -974,10 +974,7 @@ _relExp = /[+-]=-?[\.\d]+/,
   var target = targets[0],
       harnessPlugin,
       i;
-
-  if (!_isObject(target) && !_isFunction(target)) {
-    targets = [targets];
-  }
+  _isObject(target) || _isFunction(target) || (targets = [targets]);
 
   if (!(harnessPlugin = (target._gsap || {}).harness)) {
     i = _harnessPlugins.length;
@@ -998,9 +995,8 @@ _relExp = /[+-]=-?[\.\d]+/,
     _getCache = function _getCache(target) {
   return target._gsap || _harness(toArray(target))[0]._gsap;
 },
-    _getProperty = function _getProperty(target, property) {
-  var currentValue = target[property];
-  return _isFunction(currentValue) ? target[property]() : _isUndefined(currentValue) && target.getAttribute(property) || currentValue;
+    _getProperty = function _getProperty(target, property, v) {
+  return (v = target[property]) && _isFunction(v) ? target[property]() : _isUndefined(v) && target.getAttribute && target.getAttribute(property) || v;
 },
     _forEachName = function _forEachName(names, func) {
   return (names = names.split(",")).forEach(func) || names;
@@ -1025,10 +1021,7 @@ _round = function _round(value) {
       vars = params[varsIndex],
       irVars;
 
-  if (isLegacy) {
-    vars.duration = params[1];
-  }
-
+  isLegacy && (vars.duration = params[1]);
   vars.parent = parent;
 
   if (type) {
@@ -1041,12 +1034,7 @@ _round = function _round(value) {
     }
 
     vars.immediateRender = _isNotFalse(irVars.immediateRender);
-
-    if (type < 2) {
-      vars.runBackwards = 1;
-    } else {
-      vars.startAt = params[varsIndex - 1]; // "from" vars
-    }
+    type < 2 ? vars.runBackwards = 1 : vars.startAt = params[varsIndex - 1]; // "from" vars
   }
 
   return vars;
@@ -1072,7 +1060,7 @@ _round = function _round(value) {
 },
     _numericIfPossible = function _numericIfPossible(value) {
   var n = parseFloat(value);
-  return (n || n === 0) && (value + "").match(_delimitedValueExp).length < 2 ? n : value;
+  return (n || n === 0) && (value + "").match(_delimitedValueExp).length < 2 ? n : _isString(value) ? value.trim() : value;
 },
     _passThrough = function _passThrough(p) {
   return p;
@@ -1086,9 +1074,7 @@ _round = function _round(value) {
 },
     _setKeyframeDefaults = function _setKeyframeDefaults(obj, defaults) {
   for (var p in defaults) {
-    if (!(p in obj) && p !== "duration" && p !== "ease") {
-      obj[p] = defaults[p];
-    }
+    p in obj || p === "duration" || p === "ease" || (obj[p] = defaults[p]);
   }
 },
     _merge = function _merge(base, toMerge) {
@@ -1204,12 +1190,15 @@ _round = function _round(value) {
   child.parent && (!onlyIfParentHasAutoRemove || child.parent.autoRemoveChildren) && child.parent.remove(child);
   child._act = 0;
 },
-    _uncache = function _uncache(animation) {
-  var a = animation;
+    _uncache = function _uncache(animation, child) {
+  if (animation && (!child || child._end > animation._dur || child._start < 0)) {
+    // performance optimization: if a child animation is passed in we should only uncache if that child EXTENDS the animation (its end time is beyond the end)
+    var a = animation;
 
-  while (a) {
-    a._dirty = 1;
-    a = a.parent;
+    while (a) {
+      a._dirty = 1;
+      a = a.parent;
+    }
   }
 
   return animation;
@@ -1251,7 +1240,7 @@ _animationCycle = function _animationCycle(tTime, cycleDuration) {
 
     _setEnd(animation);
 
-    parent._dirty || _uncache(parent); //for performance improvement. If the parent's cache is already dirty, it already took care of marking the ancestors as dirty too, so skip the function call here.
+    parent._dirty || _uncache(parent, animation); //for performance improvement. If the parent's cache is already dirty, it already took care of marking the ancestors as dirty too, so skip the function call here.
   }
 
   return animation;
@@ -1280,7 +1269,7 @@ _postAddChecks = function _postAddChecks(timeline, child) {
   } //if the timeline has already ended but the inserted tween/timeline extends the duration, we should enable this timeline again so that it renders properly. We should also align the playhead with the parent timeline's when appropriate.
 
 
-  if (_uncache(timeline)._dp && timeline._initted && timeline._time >= timeline._dur && timeline._ts) {
+  if (_uncache(timeline, child)._dp && timeline._initted && timeline._time >= timeline._dur && timeline._ts) {
     //in case any of the ancestors had completed but should now be enabled...
     if (timeline._dur < timeline.duration()) {
       t = timeline;
@@ -1325,7 +1314,7 @@ _postAddChecks = function _postAddChecks(timeline, child) {
 },
     _renderZeroDurationTween = function _renderZeroDurationTween(tween, totalTime, suppressEvents, force) {
   var prevRatio = tween.ratio,
-      ratio = totalTime < 0 || !totalTime && prevRatio && !tween._start && tween._zTime > _tinyNum && !tween._dp._lock || tween._ts < 0 || tween._dp._ts < 0 ? 0 : 1,
+      ratio = totalTime < 0 || !totalTime && prevRatio && !tween._start && tween._zTime > _tinyNum && !tween._dp._lock || (tween._ts < 0 || tween._dp._ts < 0) && tween.data !== "isFromStart" && tween.data !== "isStart" ? 0 : 1,
       // check parent's _lock because when a timeline repeats/yoyos and does its artificial wrapping, we shouldn't force the ratio back to 0. Also, if the tween or its parent is reversed and the totalTime is 0, we should go to a ratio of 0.
   repeatDelay = tween._rDelay,
       tTime = 0,
@@ -1345,12 +1334,12 @@ _postAddChecks = function _postAddChecks(timeline, child) {
     }
   }
 
-  if (!tween._initted && _attemptInitTween(tween, totalTime, force, suppressEvents)) {
-    // if we render the very beginning (time == 0) of a fromTo(), we must force the render (normal tweens wouldn't need to render at a time of 0 when the prevTime was also 0). This is also mandatory to make sure overwriting kicks in immediately.
-    return;
-  }
-
   if (ratio !== prevRatio || force || tween._zTime === _tinyNum || !totalTime && tween._zTime) {
+    if (!tween._initted && _attemptInitTween(tween, totalTime, force, suppressEvents)) {
+      // if we render the very beginning (time == 0) of a fromTo(), we must force the render (normal tweens wouldn't need to render at a time of 0 when the prevTime was also 0). This is also mandatory to make sure overwriting kicks in immediately.
+      return;
+    }
+
     prevIteration = tween._zTime;
     tween._zTime = totalTime || (suppressEvents ? _tinyNum : 0); // when the playhead arrives at EXACTLY time 0 (right on top) of a zero-duration tween, we need to discern if events are suppressed so that when the playhead moves again (next time), it'll trigger the callback. If events are NOT suppressed, obviously the callback would be triggered in this render. Basically, the callback should fire either when the playhead ARRIVES or LEAVES this exact spot, not both. Imagine doing a timeline.seek(0) and there's a callback that sits at 0. Since events are suppressed on that seek() by default, nothing will fire, but when the playhead moves off of that position, the callback should fire. This behavior is what people intuitively expect.
 
@@ -1410,19 +1399,15 @@ _postAddChecks = function _postAddChecks(timeline, child) {
     }
   }
 },
-    _setDuration = function _setDuration(animation, duration, skipUncache) {
+    _setDuration = function _setDuration(animation, duration, skipUncache, leavePlayhead) {
   var repeat = animation._repeat,
-      dur = _round(duration) || 0;
+      dur = _round(duration) || 0,
+      totalProgress = animation._tTime / animation._tDur;
+  totalProgress && !leavePlayhead && (animation._time *= dur / animation._dur);
   animation._dur = dur;
   animation._tDur = !repeat ? dur : repeat < 0 ? 1e10 : _round(dur * (repeat + 1) + animation._rDelay * repeat);
-
-  if (animation._time > dur) {
-    animation._time = dur;
-    animation._tTime = Math.min(animation._tTime, animation._tDur);
-  }
-
-  !skipUncache && _uncache(animation.parent);
-  animation.parent && _setEnd(animation);
+  totalProgress && !leavePlayhead ? _alignPlayhead(animation, animation._tTime = animation._tDur * totalProgress) : animation.parent && _setEnd(animation);
+  skipUncache || _uncache(animation.parent, animation);
   return animation;
 },
     _onUpdateTotalDuration = function _onUpdateTotalDuration(animation) {
@@ -1468,9 +1453,10 @@ _postAddChecks = function _postAddChecks(timeline, child) {
   return value < min ? min : value > max ? max : value;
 },
     getUnit = function getUnit(value) {
-  return (value + "").substr((parseFloat(value) + "").length);
+  return (value = (value + "").substr((parseFloat(value) + "").length)) && isNaN(value) ? value : "";
 },
-    clamp = function clamp(min, max, value) {
+    // note: protect against padded numbers as strings, like "100.100". That shouldn't return "00" as the unit. If it's numeric, return no unit.
+clamp = function clamp(min, max, value) {
   return _conditionalReturn(value, function (v) {
     return _clamp(min, max, v);
   });
@@ -1698,7 +1684,7 @@ distribute = function distribute(v) {
     end = value.indexOf(")", i);
     isArray = value.charAt(i + 7) === "[";
     nums = value.substr(i + 7, end - i - 7).match(isArray ? _delimitedValueExp : _strictNumExp);
-    s += value.substr(prev, i - prev) + random(isArray ? nums : +nums[0], +nums[1], +nums[2] || 1e-5);
+    s += value.substr(prev, i - prev) + random(isArray ? nums : +nums[0], isArray ? 0 : +nums[1], +nums[2] || 1e-5);
     prev = end + 1;
   }
 
@@ -1807,10 +1793,7 @@ distribute = function distribute(v) {
     _interrupt = function _interrupt(animation) {
   _removeFromParent(animation);
 
-  if (animation.progress() < 1) {
-    _callback(animation, "onInterrupt");
-  }
-
+  animation.progress() < 1 && _callback(animation, "onInterrupt");
   return animation;
 },
     _quickTween,
@@ -1865,9 +1848,7 @@ distribute = function distribute(v) {
 
   _addGlobal(name, Plugin);
 
-  if (config.register) {
-    config.register(gsap, Plugin, PropTween);
-  }
+  config.register && config.register(gsap, Plugin, PropTween);
 },
 
 /*
@@ -1942,10 +1923,7 @@ _255 = 255,
         l = +a[2] / 100;
         g = l <= .5 ? l * (s + 1) : l + s - l * s;
         r = l * 2 - g;
-
-        if (a.length > 3) {
-          a[3] *= 1; //cast as number
-        }
+        a.length > 3 && (a[3] *= 1); //cast as number
 
         a[0] = _hue(h + 1 / 3, r, g);
         a[1] = _hue(h, r, g);
@@ -2082,38 +2060,44 @@ _tickerActive,
       _adjustedLag = 33,
       _startTime = _getTime(),
       _lastUpdate = _startTime,
-      _gap = 1 / 240,
+      _gap = 1000 / 240,
       _nextTime = _gap,
       _listeners = [],
       _id,
       _req,
       _raf,
       _self,
+      _delta,
+      _i,
       _tick = function _tick(v) {
     var elapsed = _getTime() - _lastUpdate,
         manual = v === true,
         overlap,
-        dispatch;
+        dispatch,
+        time,
+        frame;
 
-    if (elapsed > _lagThreshold) {
-      _startTime += elapsed - _adjustedLag;
-    }
-
+    elapsed > _lagThreshold && (_startTime += elapsed - _adjustedLag);
     _lastUpdate += elapsed;
-    _self.time = (_lastUpdate - _startTime) / 1000;
-    overlap = _self.time - _nextTime;
+    time = _lastUpdate - _startTime;
+    overlap = time - _nextTime;
 
     if (overlap > 0 || manual) {
-      _self.frame++;
-      _nextTime += overlap + (overlap >= _gap ? 0.004 : _gap - overlap);
+      frame = ++_self.frame;
+      _delta = time - _self.time * 1000;
+      _self.time = time = time / 1000;
+      _nextTime += overlap + (overlap >= _gap ? 4 : _gap - overlap);
       dispatch = 1;
     }
 
     manual || (_id = _req(_tick)); //make sure the request is made before we dispatch the "tick" event so that timing is maintained. Otherwise, if processing the "tick" requires a bunch of time (like 15ms) and we're using a setTimeout() that's based on 16.7ms, it'd technically take 31.7ms between frames otherwise.
 
-    dispatch && _listeners.forEach(function (l) {
-      return l(_self.time, elapsed, _self.frame, v);
-    });
+    if (dispatch) {
+      for (_i = 0; _i < _listeners.length; _i++) {
+        // use _i and check _listeners.length instead of a variable because a listener could get removed during the loop, and if that happens to an element less than the current index, it'd throw things off in the loop.
+        _listeners[_i](time, _delta, frame, v);
+      }
+    }
   };
 
   _self = {
@@ -2121,6 +2105,9 @@ _tickerActive,
     frame: 0,
     tick: function tick() {
       _tick(true);
+    },
+    deltaRatio: function deltaRatio(fps) {
+      return _delta / (1000 / (fps || 60));
     },
     wake: function wake() {
       if (_coreReady) {
@@ -2138,7 +2125,7 @@ _tickerActive,
         _id && _self.sleep();
 
         _req = _raf || function (f) {
-          return setTimeout(f, (_nextTime - _self.time) * 1000 + 1 | 0);
+          return setTimeout(f, _nextTime - _self.time * 1000 + 1 | 0);
         };
 
         _tickerActive = 1;
@@ -2157,8 +2144,8 @@ _tickerActive,
       _adjustedLag = Math.min(adjustedLag, _lagThreshold, 0);
     },
     fps: function fps(_fps) {
-      _gap = 1 / (_fps || 240);
-      _nextTime = _self.time + _gap;
+      _gap = 1000 / (_fps || 240);
+      _nextTime = _self.time * 1000 + _gap;
     },
     add: function add(callback) {
       _listeners.indexOf(callback) < 0 && _listeners.push(callback);
@@ -2167,7 +2154,7 @@ _tickerActive,
     },
     remove: function remove(callback) {
       var i;
-      ~(i = _listeners.indexOf(callback)) && _listeners.splice(i, 1);
+      ~(i = _listeners.indexOf(callback)) && _listeners.splice(i, 1) && _i >= i && _i--;
     },
     _listeners: _listeners
   };
@@ -2207,11 +2194,17 @@ _easeMap = {},
 
   return obj;
 },
+    _valueInParentheses = function _valueInParentheses(value) {
+  var open = value.indexOf("(") + 1,
+      close = value.indexOf(")"),
+      nested = value.indexOf("(", open);
+  return value.substring(open, ~nested && nested < close ? value.indexOf(")", close + 1) : close);
+},
     _configEaseFromString = function _configEaseFromString(name) {
   //name can be a string like "elastic.out(1,0.5)", and pass in _easeMap as obj and it'll parse it out and call the actual function like _easeMap.Elastic.easeOut.config(1,0.5). It will also parse custom ease strings as long as CustomEase is loaded and registered (internally as _easeMap._CE).
   var split = (name + "").split("("),
       ease = _easeMap[split[0]];
-  return ease && split.length > 1 && ease.config ? ease.config.apply(null, ~name.indexOf("{") ? [_parseObjectInString(split[1])] : _parenthesesExp.exec(name)[1].split(",").map(_numericIfPossible)) : _easeMap._CE && _customEaseExp.test(name) ? _easeMap._CE("", name) : ease;
+  return ease && split.length > 1 && ease.config ? ease.config.apply(null, ~name.indexOf("{") ? [_parseObjectInString(split[1])] : _valueInParentheses(name).split(",").map(_numericIfPossible)) : _easeMap._CE && _customEaseExp.test(name) ? _easeMap._CE("", name) : ease;
 },
     _invertEase = function _invertEase(ease) {
   return function (p) {
@@ -2467,7 +2460,7 @@ var Animation = /*#__PURE__*/function () {
 
     this._ts = 1;
 
-    _setDuration(this, +vars.duration, 1);
+    _setDuration(this, +vars.duration, 1, 1);
 
     this.data = vars.data;
     _tickerActive || _ticker.wake();
@@ -2498,11 +2491,7 @@ var Animation = /*#__PURE__*/function () {
     }
 
     this._dirty = 0;
-    var t = this._time / this._dur || 0;
-
-    _setDuration(this, this._repeat < 0 ? value : (value - this._repeat * this._rDelay) / (this._repeat + 1));
-
-    return this._tTime ? _alignPlayhead(this, t * value + _elapsedCycleDuration(this)) : this; // in case the animation hasn't even started yet and it has a delay. Aligning the playhead in that case would make it appear to lose the delay.
+    return _setDuration(this, this._repeat < 0 ? value : (value - this._repeat * this._rDelay) / (this._repeat + 1));
   };
 
   _proto.totalTime = function totalTime(_totalTime, suppressEvents) {
@@ -2532,7 +2521,8 @@ var Animation = /*#__PURE__*/function () {
       }
     }
 
-    if (this._tTime !== _totalTime || !this._dur && !suppressEvents || this._initted && Math.abs(this._zTime) === _tinyNum || !_totalTime && !this._initted) {
+    if (this._tTime !== _totalTime || !this._dur && !suppressEvents || this._initted && Math.abs(this._zTime) === _tinyNum || !_totalTime && !this._initted && (this.add || this._ptLookup)) {
+      // check for _ptLookup on a Tween instance to ensure it has actually finished being instantiated, otherwise if this.reverse() gets called in the Animation constructor, it could trigger a render() here even though the _targets weren't populated, thus when _init() is called there won't be any PropTweens (it'll act like the tween is non-functional)
       this._ts || (this._pTime = _totalTime); // otherwise, if an animation is paused, then the playhead is moved back to zero, then resumed, it'd revert back to the original time at the pause
 
       _lazySafeRender(this, _totalTime, suppressEvents);
@@ -2680,26 +2670,17 @@ var Animation = /*#__PURE__*/function () {
   };
 
   _proto.play = function play(from, suppressEvents) {
-    if (from != null) {
-      this.seek(from, suppressEvents);
-    }
-
+    from != null && this.seek(from, suppressEvents);
     return this.reversed(false).paused(false);
   };
 
   _proto.reverse = function reverse(from, suppressEvents) {
-    if (from != null) {
-      this.seek(from || this.totalDuration(), suppressEvents);
-    }
-
+    from != null && this.seek(from || this.totalDuration(), suppressEvents);
     return this.reversed(true).paused(false);
   };
 
   _proto.pause = function pause(atTime, suppressEvents) {
-    if (atTime != null) {
-      this.seek(atTime, suppressEvents);
-    }
-
+    atTime != null && this.seek(atTime, suppressEvents);
     return this.paused(true);
   };
 
@@ -2709,9 +2690,7 @@ var Animation = /*#__PURE__*/function () {
 
   _proto.reversed = function reversed(value) {
     if (arguments.length) {
-      if (!!value !== this.reversed()) {
-        this.timeScale(-this._rts || (value ? -_tinyNum : 0)); // in case timeScale is zero, reversing would have no effect so we use _tinyNum.
-      }
+      !!value !== this.reversed() && this.timeScale(-this._rts || (value ? -_tinyNum : 0)); // in case timeScale is zero, reversing would have no effect so we use _tinyNum.
 
       return this;
     }
@@ -2740,14 +2719,8 @@ var Animation = /*#__PURE__*/function () {
         delete vars[type];
       } else {
         vars[type] = callback;
-
-        if (params) {
-          vars[type + "Params"] = params;
-        }
-
-        if (type === "onUpdate") {
-          this._onUpdate = callback;
-        }
+        params && (vars[type + "Params"] = params);
+        type === "onUpdate" && (this._onUpdate = callback);
       }
 
       return this;
@@ -2929,15 +2902,19 @@ var Timeline = /*#__PURE__*/function (_Animation) {
         cycleDuration = dur + this._rDelay;
         time = _round(tTime % cycleDuration); //round to avoid floating point errors. (4 % 0.8 should be 0 but some browsers report it as 0.79999999!)
 
-        if (time > dur || tDur === tTime) {
+        if (tTime === tDur) {
+          // the tDur === tTime is for edge cases where there's a lengthy decimal on the duration and it may reach the very end but the time is rendered as not-quite-there (remember, tDur is rounded to 4 decimals whereas dur isn't)
+          iteration = this._repeat;
           time = dur;
-        }
+        } else {
+          iteration = ~~(tTime / cycleDuration);
 
-        iteration = ~~(tTime / cycleDuration);
+          if (iteration && iteration === tTime / cycleDuration) {
+            time = dur;
+            iteration--;
+          }
 
-        if (iteration && iteration === tTime / cycleDuration) {
-          time = dur;
-          iteration--;
+          time > dur && (time = dur);
         }
 
         prevIteration = _animationCycle(this._tTime, cycleDuration);
@@ -2960,28 +2937,24 @@ var Timeline = /*#__PURE__*/function (_Animation) {
         if (iteration !== prevIteration && !this._lock) {
           var rewinding = yoyo && prevIteration & 1,
               doesWrap = rewinding === (yoyo && iteration & 1);
-
-          if (iteration < prevIteration) {
-            rewinding = !rewinding;
-          }
-
+          iteration < prevIteration && (rewinding = !rewinding);
           prevTime = rewinding ? 0 : dur;
           this._lock = 1;
           this.render(prevTime || (isYoyo ? 0 : _round(iteration * cycleDuration)), suppressEvents, !dur)._lock = 0;
-
-          if (!suppressEvents && this.parent) {
-            _callback(this, "onRepeat");
-          }
-
+          !suppressEvents && this.parent && _callback(this, "onRepeat");
           this.vars.repeatRefresh && !isYoyo && (this.invalidate()._lock = 1);
 
           if (prevTime !== this._time || prevPaused !== !this._ts) {
             return this;
           }
 
+          dur = this._dur; // in case the duration changed in the onRepeat
+
+          tDur = this._tDur;
+
           if (doesWrap) {
             this._lock = 2;
-            prevTime = rewinding ? dur + 0.0001 : -0.0001;
+            prevTime = rewinding ? dur : -0.0001;
             this.render(prevTime, true);
             this.vars.repeatRefresh && !isYoyo && this.invalidate();
           }
@@ -3015,9 +2988,7 @@ var Timeline = /*#__PURE__*/function (_Animation) {
         this._zTime = totalTime;
       }
 
-      if (!prevTime && time && !suppressEvents) {
-        _callback(this, "onStart");
-      }
+      !prevTime && time && !suppressEvents && _callback(this, "onStart");
 
       if (time >= prevTime && totalTime >= 0) {
         child = this._first;
@@ -3113,7 +3084,7 @@ var Timeline = /*#__PURE__*/function (_Animation) {
         child.forEach(function (obj) {
           return _this2.add(obj, position);
         });
-        return _uncache(this);
+        return this;
       }
 
       if (_isString(child)) {
@@ -3291,11 +3262,12 @@ var Timeline = /*#__PURE__*/function (_Animation) {
       ease: "none",
       lazy: false,
       time: endTime,
+      overwrite: "auto",
       duration: vars.duration || Math.abs((endTime - (startAt && "time" in startAt ? startAt.time : tl._time)) / tl.timeScale()) || _tinyNum,
       onStart: function onStart() {
         tl.pause();
         var duration = vars.duration || Math.abs((endTime - tl._time) / tl.timeScale());
-        tween._dur !== duration && _setDuration(tween, duration).render(tween._time, true, true);
+        tween._dur !== duration && _setDuration(tween, duration, 0, 1).render(tween._time, true, true);
         _onStart && _onStart.apply(tween, onStartParams || []); //in case the user had an onStart in the vars - we don't want to overwrite it.
       }
     }));
@@ -3347,6 +3319,7 @@ var Timeline = /*#__PURE__*/function (_Animation) {
     while (child) {
       if (child._start >= ignoreBeforeTime) {
         child._start += amount;
+        child._end += amount;
       }
 
       child = child._next;
@@ -3390,11 +3363,7 @@ var Timeline = /*#__PURE__*/function (_Animation) {
     }
 
     this._time = this._tTime = this._pTime = 0;
-
-    if (includeLabels) {
-      this.labels = {};
-    }
-
+    includeLabels && (this.labels = {});
     return _uncache(this);
   };
 
@@ -3404,7 +3373,6 @@ var Timeline = /*#__PURE__*/function (_Animation) {
         child = self._last,
         prevStart = _bigNum,
         prev,
-        end,
         start,
         parent;
 
@@ -3445,16 +3413,11 @@ var Timeline = /*#__PURE__*/function (_Animation) {
           prevStart = 0;
         }
 
-        end = _setEnd(child);
-
-        if (end > max && child._ts) {
-          max = end;
-        }
-
+        child._end > max && child._ts && (max = child._end);
         child = prev;
       }
 
-      _setDuration(self, self === _globalTimeline && self._time > max ? self._time : max, 1);
+      _setDuration(self, self === _globalTimeline && self._time > max ? self._time : max, 1, 1);
 
       self._dirty = 0;
     }
@@ -3594,11 +3557,9 @@ var _addComplexStringPropTween = function _addComplexStringPropTween(target, pro
 },
     //creates a copy of the vars object and processes any function-based values (putting the resulting values directly into the copy) as well as strings with "random()" in them. It does NOT process relative values.
 _processVars = function _processVars(vars, index, target, targets, tween) {
-  if (_isFunction(vars)) {
-    vars = _parseFuncOrString(vars, tween, index, target, targets);
-  }
+  _isFunction(vars) && (vars = _parseFuncOrString(vars, tween, index, target, targets));
 
-  if (!_isObject(vars) || vars.style && vars.nodeType || _isArray(vars)) {
+  if (!_isObject(vars) || vars.style && vars.nodeType || _isArray(vars) || _isTypedArray(vars)) {
     return _isString(vars) ? _parseFuncOrString(vars, tween, index, target, targets) : vars;
   }
 
@@ -3702,9 +3663,9 @@ _initTween = function _initTween(tween, time) {
 
       if (immediateRender) {
         if (time > 0) {
-          !autoRevert && (tween._startAt = 0); //tweens that render immediately (like most from() and fromTo() tweens) shouldn't revert when their parent timeline's playhead goes backward past the startTime because the initial render could have happened anytime and it shouldn't be directly correlated to this tween's startTime. Imagine setting up a complex animation where the beginning states of various objects are rendered immediately but the tween doesn't happen for quite some time - if we revert to the starting values as soon as the playhead goes backward past the tween's startTime, it will throw things off visually. Reversion should only happen in Timeline instances where immediateRender was false or when autoRevert is explicitly set to true.
+          autoRevert || (tween._startAt = 0); //tweens that render immediately (like most from() and fromTo() tweens) shouldn't revert when their parent timeline's playhead goes backward past the startTime because the initial render could have happened anytime and it shouldn't be directly correlated to this tween's startTime. Imagine setting up a complex animation where the beginning states of various objects are rendered immediately but the tween doesn't happen for quite some time - if we revert to the starting values as soon as the playhead goes backward past the tween's startTime, it will throw things off visually. Reversion should only happen in Timeline instances where immediateRender was false or when autoRevert is explicitly set to true.
         } else if (dur && !(time < 0 && prevStartAt)) {
-          tween._zTime = time;
+          time && (tween._zTime = time);
           return; //we skip initialization here so that overwriting doesn't occur until the tween actually begins. Otherwise, if you create several immediateRender:true tweens of the same target/properties to drop into a Timeline, the last one created would overwrite the first ones because they didn't get placed into the timeline yet before the first render occurs and kicks in overwriting.
         }
       }
@@ -3746,7 +3707,7 @@ _initTween = function _initTween(tween, time) {
       target = targets[i];
       gsData = target._gsap || _harness(targets)[i]._gsap;
       tween._ptLookup[i] = ptLookup = {};
-      _lazyLookup[gsData.id] && _lazyRender(); //if other tweens of the same target have recently initted but haven't rendered yet, we've got to force the render so that the starting values are correct (imagine populating a timeline with a bunch of sequential tweens and then jumping to the end)
+      _lazyLookup[gsData.id] && _lazyTweens.length && _lazyRender(); //if other tweens of the same target have recently initted but haven't rendered yet, we've got to force the render so that the starting values are correct (imagine populating a timeline with a bunch of sequential tweens and then jumping to the end)
 
       index = fullTargets === targets ? i : fullTargets.indexOf(target);
 
@@ -3859,7 +3820,7 @@ var Tween = /*#__PURE__*/function (_Animation2) {
         scrollTrigger = _this3$vars.scrollTrigger,
         yoyoEase = _this3$vars.yoyoEase,
         parent = _this3.parent,
-        parsedTargets = (_isArray(targets) ? _isNumber(targets[0]) : "length" in vars) ? [targets] : toArray(targets),
+        parsedTargets = (_isArray(targets) || _isTypedArray(targets) ? _isNumber(targets[0]) : "length" in vars) ? [targets] : toArray(targets),
         tl,
         i,
         copy,
@@ -3989,16 +3950,19 @@ var Tween = /*#__PURE__*/function (_Animation2) {
         cycleDuration = dur + this._rDelay;
         time = _round(tTime % cycleDuration); //round to avoid floating point errors. (4 % 0.8 should be 0 but some browsers report it as 0.79999999!)
 
-        if (time > dur || tDur === tTime) {
+        if (tTime === tDur) {
           // the tDur === tTime is for edge cases where there's a lengthy decimal on the duration and it may reach the very end but the time is rendered as not-quite-there (remember, tDur is rounded to 4 decimals whereas dur isn't)
+          iteration = this._repeat;
           time = dur;
-        }
+        } else {
+          iteration = ~~(tTime / cycleDuration);
 
-        iteration = ~~(tTime / cycleDuration);
+          if (iteration && iteration === tTime / cycleDuration) {
+            time = dur;
+            iteration--;
+          }
 
-        if (iteration && iteration === tTime / cycleDuration) {
-          time = dur;
-          iteration--;
+          time > dur && (time = dur);
         }
 
         isYoyo = this._yoyo && iteration & 1;
@@ -4065,10 +4029,7 @@ var Tween = /*#__PURE__*/function (_Animation2) {
       timeline && timeline.render(totalTime < 0 ? totalTime : !time && isYoyo ? -_tinyNum : timeline._dur * ratio, suppressEvents, force) || this._startAt && (this._zTime = totalTime);
 
       if (this._onUpdate && !suppressEvents) {
-        if (totalTime < 0 && this._startAt) {
-          this._startAt.render(totalTime, true, force); //note: for performance reasons, we tuck this conditional logic inside less traveled areas (most tweens don't have an onUpdate). We'd just have it at the end before the onComplete, but the values should be updated before any onUpdate is called, so we ALSO put it here and then if it's not called, we do so later near the onComplete.
-
-        }
+        totalTime < 0 && this._startAt && this._startAt.render(totalTime, true, force); //note: for performance reasons, we tuck this conditional logic inside less traveled areas (most tweens don't have an onUpdate). We'd just have it at the end before the onComplete, but the values should be updated before any onUpdate is called, so we ALSO put it here and then if it's not called, we do so later near the onComplete.
 
         _callback(this, "onUpdate");
       }
@@ -4119,7 +4080,7 @@ var Tween = /*#__PURE__*/function (_Animation2) {
       var tDur = this.timeline.totalDuration();
       this.timeline.killTweensOf(targets, vars, _overwritingTween && _overwritingTween.vars.overwrite !== true)._first || _interrupt(this); // if nothing is left tweenng, interrupt.
 
-      this.parent && tDur !== this.timeline.totalDuration() && _setDuration(this, this._dur * this.timeline._tDur / tDur); // if a nested tween is killed that changes the duration, it should affect this tween's duration. We must use the ratio, though, because sometimes the internal timeline is stretched like for keyframes where they don't all add up to whatever the parent tween's duration was set to.
+      this.parent && tDur !== this.timeline.totalDuration() && _setDuration(this, this._dur * this.timeline._tDur / tDur, 0, 1); // if a nested tween is killed that changes the duration, it should affect this tween's duration. We must use the ratio, though, because sometimes the internal timeline is stretched like for keyframes where they don't all add up to whatever the parent tween's duration was set to.
 
       return this;
     }
@@ -4326,11 +4287,7 @@ var _setterPlain = function _setterPlain(target, property, value) {
 
   while (pt) {
     next = pt._next;
-
-    if (pt.p === property) {
-      pt.modifier(modifier, tween, target);
-    }
-
+    pt.p === property && pt.modifier(modifier, tween, target);
     pt = next;
   }
 },
@@ -4466,18 +4423,12 @@ var _gsap = {
     return _globalTimeline.getTweensOf(targets, onlyActive);
   },
   getProperty: function getProperty(target, property, unit, uncache) {
-    if (_isString(target)) {
-      //in case selector text or an array is passed in
-      target = toArray(target)[0];
-    }
+    _isString(target) && (target = toArray(target)[0]); //in case selector text or an array is passed in
 
     var getter = _getCache(target || {}).get,
         format = unit ? _passThrough : _numericIfPossible;
 
-    if (unit === "native") {
-      unit = "";
-    }
-
+    unit === "native" && (unit = "");
     return !target ? target : !property ? function (property, unit, uncache) {
       return format((_plugins[property] && _plugins[property].get || getter)(target, property, unit, uncache));
     } : format((_plugins[property] && _plugins[property].get || getter)(target, property, unit, uncache));
@@ -4521,10 +4472,7 @@ var _gsap = {
     return _globalTimeline.getTweensOf(targets, true).length > 0;
   },
   defaults: function defaults(value) {
-    if (value && value.ease) {
-      value.ease = _parseEase(value.ease, _defaults.ease);
-    }
-
+    value && value.ease && (value.ease = _parseEase(value.ease, _defaults.ease));
     return _mergeDeep(_defaults, value || {});
   },
   config: function config(value) {
@@ -4710,7 +4658,7 @@ var gsap = _gsap.registerPlugin({
 
     for (p in vars) {
       pt = this.add(target, "setAttribute", (target.getAttribute(p) || 0) + "", vars[p], index, targets, 0, 0, p);
-      pt && (pt.op = p); //this.add(target, "setAttribute", (target.getAttribute((p in target.dataset ? (p = "data-" + p) : p)) || 0) + "", vars[p], index, targets, 0, 0, p);
+      pt && (pt.op = p);
 
       this._props.push(p);
     }
@@ -4728,7 +4676,7 @@ var gsap = _gsap.registerPlugin({
 
 
 exports.default = exports.gsap = gsap;
-Tween.version = Timeline.version = gsap.version = "3.4.2";
+Tween.version = Timeline.version = gsap.version = "3.5.1";
 _coreReady = 1;
 
 if (_windowExists()) {
@@ -4782,7 +4730,7 @@ exports.checkPrefix = exports._createElement = exports._getBBox = exports.defaul
 var _gsapCore = require("./gsap-core.js");
 
 /*!
- * CSSPlugin 3.4.2
+ * CSSPlugin 3.5.1
  * https://greensock.com
  *
  * Copyright 2008-2020, GreenSock. All rights reserved.
@@ -5980,10 +5928,7 @@ var CSSPlugin = {
         cache,
         smooth,
         hasPriority;
-
-    if (!_pluginInitted) {
-      _initCore();
-    }
+    _pluginInitted || _initCore();
 
     for (p in vars) {
       if (p === "autoRound") {
@@ -6016,7 +5961,7 @@ var CSSPlugin = {
       } else if (p.substr(0, 2) === "--") {
         //CSS variable
         this.add(style, "setProperty", getComputedStyle(target).getPropertyValue(p) + "", endValue + "", index, targets, 0, 0, p);
-      } else {
+      } else if (type !== "undefined") {
         startValue = _get(target, p);
         startNum = parseFloat(startValue);
         relative = type === "string" && endValue.charAt(1) === "=" ? +(endValue.charAt(0) + "1") : 0;
@@ -6040,10 +5985,7 @@ var CSSPlugin = {
 
           if (p !== "scale" && p !== "transform") {
             p = _propertyAliases[p];
-
-            if (~p.indexOf(",")) {
-              p = p.split(",")[0];
-            }
+            ~p.indexOf(",") && (p = p.split(",")[0]);
           }
         }
 
@@ -6072,9 +6014,7 @@ var CSSPlugin = {
             } else {
               endUnit = parseFloat(endValue.split(" ")[2]) || 0; //handle the zOrigin separately!
 
-              if (endUnit !== cache.zOrigin) {
-                _addNonTweeningPT(this, cache, "zOrigin", cache.zOrigin, endUnit);
-              }
+              endUnit !== cache.zOrigin && _addNonTweeningPT(this, cache, "zOrigin", cache.zOrigin, endUnit);
 
               _addNonTweeningPT(this, style, p, _firstTwoOnly(startValue), _firstTwoOnly(endValue));
             }
@@ -6108,12 +6048,8 @@ var CSSPlugin = {
           startUnit = (startValue + "").substr((startNum + "").length);
           endNum || (endNum = 0); // protect against NaN
 
-          endUnit = (endValue + "").substr((endNum + "").length) || (p in _gsapCore._config.units ? _gsapCore._config.units[p] : startUnit);
-
-          if (startUnit !== endUnit) {
-            startNum = _convertToUnit(target, p, startValue, endUnit);
-          }
-
+          endUnit = (0, _gsapCore.getUnit)(endValue) || (p in _gsapCore._config.units ? _gsapCore._config.units[p] : startUnit);
+          startUnit !== endUnit && (startNum = _convertToUnit(target, p, startValue, endUnit));
           this._pt = new _gsapCore.PropTween(this._pt, isTransformRelated ? cache : style, p, startNum, relative ? relative * endNum : endNum - startNum, endUnit === "px" && vars.autoRound !== false && !isTransformRelated ? _renderRoundedCSSProp : _renderCSSProp);
           this._pt.u = endUnit || 0;
 
@@ -6138,9 +6074,7 @@ var CSSPlugin = {
       }
     }
 
-    if (hasPriority) {
-      (0, _gsapCore._sortPropTweensByPriority)(this);
-    }
+    hasPriority && (0, _gsapCore._sortPropTweensByPriority)(this);
   },
   get: _get,
   aliases: _propertyAliases,
@@ -6462,6 +6396,15 @@ class Dream {
     });
     return this.cycle();
   }
+
+  pop() {
+    this.elements.forEach(e => e.removeChild(e.lastChild));
+  }
+
+  idx(idx) {
+    const node = [this.elements[idx]];
+    return this.newCycle(node, this.selector);
+  }
   /* -------------------------- ELEMENT PROPERTIES -------------------------- */
   // Convert Shorthand Keys
 
@@ -6526,8 +6469,8 @@ class Dream {
 
   set(attr, value) {
     const key = this.constructor.getElementKey(attr);
-    this.elements.forEach(e => e[key] = value);
-    return this.cycle();
+    this.elements.forEach(e => e.setAttribute(key, value));
+    return this;
   } // Get Value Of Element
 
 
@@ -6736,24 +6679,31 @@ class Dream {
       });
     });
     return this.cycle();
+  }
+
+  kill() {
+    this.elements = this.elements.map(el => {
+      const clone = el.cloneNode(true);
+      el.parentNode.replaceChild(clone, el);
+      return clone;
+    });
+    return this.cycle();
   } // Remove Event Listeners
 
 
   off(shallow) {
-    this.elements.forEach(element => element.removeEventListener(eventType, eventAction));
-    this.elements.forEach(element => {
-      let clone;
+    this.elements.forEach(element => element.removeEventListener(eventType, eventAction)); // this.elements.forEach(element => {
+    //     let clone;
+    //     if (!shallow) {
+    //         clone = element.cloneNode(true);
+    //     }
+    //     else {
+    //         clone = element.cloneNode(false);
+    //         while (element.hasChildNodes()) clone.appendChild(element.firstChild);
+    //     }
+    //     element.parentNode.replaceChild(clone, element);
+    // });
 
-      if (!shallow) {
-        clone = element.cloneNode(true);
-      } else {
-        clone = element.cloneNode(false);
-
-        while (element.hasChildNodes()) clone.appendChild(element.firstChild);
-      }
-
-      element.parentNode.replaceChild(clone, element);
-    });
     return this;
   } // Prevent Default Action
 
@@ -6805,6 +6755,15 @@ class Dream {
   dispatch(event) {
     this.elements.forEach(element => element.dispatchEvent(event));
     return this.cycle();
+  } // On Resize
+
+
+  onresize(callback, bind) {
+    const observer = new ResizeObserver(bind ? callback : () => callback());
+    this.elements.forEach(element => {
+      observer.observe(element);
+    });
+    return this;
   }
   /* -------------------------- ELEMENT ARRAY METHODS -------------------------- */
   // Iterate Over Function
@@ -6823,7 +6782,13 @@ class Dream {
 
   filter(test) {
     this.elements = Array.from(this.elements).filter(test);
-    return this.cycle();
+    this.length = this.elements.length;
+    return this;
+  }
+
+  concat(otherDream) {
+    const elements = [...this.elements, ...otherDream.elements];
+    return this.newCycle(elements, "".concat(this.selector || '').concat(this.selector ? ', ' : ' ').concat(otherDream.selector || ''));
   }
   /* -------------------------- OTHER METHODS -------------------------- */
   // Delay Events
@@ -6904,35 +6869,7 @@ initDream.html = markup => {
     getAll: true,
     index: null
   });
-}; // // Smooth Page Scrolling To Target
-// initDream.scroll = ( target, time, offset ) => {
-//     const easeInCubic = (t) => { return t*t*t };
-//     const scrollToElem = (start, stamp, duration, scrollEndElemTop, startScrollOffset) => {
-//         const runtime = stamp - start;
-//         let progress = runtime / duration;
-//         const ease = easeInCubic(progress);
-//         progress = Math.min(progress, 1);
-//         //console.log(startScrollOffset,startScrollOffset + (scrollEndElemTop * ease));
-//         const newScrollOffset = startScrollOffset + (scrollEndElemTop * ease);
-//         window.scroll(0, startScrollOffset + (scrollEndElemTop * ease));
-//         if(runtime < duration){
-//             requestAnimationFrame((timestamp) => {
-//                 const stamp = new Date().getTime();
-//                 scrollToElem(start, stamp, duration, scrollEndElemTop, startScrollOffset);
-//             });
-//         }
-//     }
-//     const animate = requestAnimationFrame(() => {
-//         const stamp = new Date().getTime();
-//         const duration = time;
-//         const start = stamp;
-//         const startScrollOffset = window.pageYOffset;
-//         const scrollEndElemTop = target.getBoundingClientRect().top + offset;
-//         scrollToElem(start, stamp, duration, scrollEndElemTop, startScrollOffset);
-//         // scrollToElem(scrollEndElemTop);
-//     });
-// };
-// Link Timer Class To Dreams
+}; // Link Timer Class To Dreams
 
 
 initDream.timer = threshold => new Timer(threshold); // Check For Instance Of Dream
@@ -7048,9 +6985,9 @@ var global = arguments[3];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.default = void 0;
+exports.Smooth = exports.Native = exports.default = void 0;
 
-/* locomotive-scroll v3.5.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
+/* locomotive-scroll v4.0.4 | MIT License | https://github.com/locomotivemtl/locomotive-scroll */
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
     throw new TypeError("Cannot call a class as a function");
@@ -7153,6 +7090,19 @@ function _setPrototypeOf(o, p) {
   return _setPrototypeOf(o, p);
 }
 
+function _isNativeReflectConstruct() {
+  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
+  if (Reflect.construct.sham) return false;
+  if (typeof Proxy === "function") return true;
+
+  try {
+    Date.prototype.toString.call(Reflect.construct(Date, [], function () {}));
+    return true;
+  } catch (e) {
+    return false;
+  }
+}
+
 function _assertThisInitialized(self) {
   if (self === void 0) {
     throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
@@ -7167,6 +7117,25 @@ function _possibleConstructorReturn(self, call) {
   }
 
   return _assertThisInitialized(self);
+}
+
+function _createSuper(Derived) {
+  var hasNativeReflectConstruct = _isNativeReflectConstruct();
+
+  return function _createSuperInternal() {
+    var Super = _getPrototypeOf(Derived),
+        result;
+
+    if (hasNativeReflectConstruct) {
+      var NewTarget = _getPrototypeOf(this).constructor;
+
+      result = Reflect.construct(Super, arguments, NewTarget);
+    } else {
+      result = Super.apply(this, arguments);
+    }
+
+    return _possibleConstructorReturn(this, result);
+  };
 }
 
 function _superPropBase(object, property) {
@@ -7199,37 +7168,90 @@ function _get(target, property, receiver) {
   return _get(target, property, receiver || target);
 }
 
+function _slicedToArray(arr, i) {
+  return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+}
+
 function _toConsumableArray(arr) {
-  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
+  return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread();
 }
 
 function _arrayWithoutHoles(arr) {
-  if (Array.isArray(arr)) {
-    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+  if (Array.isArray(arr)) return _arrayLikeToArray(arr);
+}
 
-    return arr2;
-  }
+function _arrayWithHoles(arr) {
+  if (Array.isArray(arr)) return arr;
 }
 
 function _iterableToArray(iter) {
-  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
+  if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter);
+}
+
+function _iterableToArrayLimit(arr, i) {
+  if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+  var _arr = [];
+  var _n = true;
+  var _d = false;
+  var _e = undefined;
+
+  try {
+    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
+      _arr.push(_s.value);
+
+      if (i && _arr.length === i) break;
+    }
+  } catch (err) {
+    _d = true;
+    _e = err;
+  } finally {
+    try {
+      if (!_n && _i["return"] != null) _i["return"]();
+    } finally {
+      if (_d) throw _e;
+    }
+  }
+
+  return _arr;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
 }
 
 function _nonIterableSpread() {
-  throw new TypeError("Invalid attempt to spread non-iterable instance");
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+function _nonIterableRest() {
+  throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
 
 var defaults = {
   el: document,
-  elMobile: document,
   name: 'scroll',
   offset: [0, 0],
   repeat: false,
   smooth: false,
-  smoothMobile: false,
   direction: 'vertical',
+  gestureDirection: 'vertical',
+  reloadOnContextChange: false,
   lerp: 0.1,
   "class": 'is-inview',
+  scrollbarContainer: false,
   scrollbarClass: 'c-scrollbar',
   scrollingClass: 'has-scroll-scrolling',
   draggingClass: 'has-scroll-dragging',
@@ -7237,10 +7259,22 @@ var defaults = {
   initClass: 'has-scroll-init',
   getSpeed: false,
   getDirection: false,
+  scrollFromAnywhere: false,
   multiplier: 1,
   firefoxMultiplier: 50,
   touchMultiplier: 2,
-  scrollFromAnywhere: false
+  resetNativeScroll: true,
+  tablet: {
+    smooth: false,
+    direction: 'vertical',
+    gestureDirection: 'vertical',
+    breakpoint: 1024
+  },
+  smartphone: {
+    smooth: false,
+    direction: 'vertical',
+    gestureDirection: 'vertical'
+  }
 };
 
 var _default = /*#__PURE__*/function () {
@@ -7250,11 +7284,20 @@ var _default = /*#__PURE__*/function () {
     _classCallCheck(this, _default);
 
     Object.assign(this, defaults, options);
+    this.smartphone = defaults.smartphone;
+    if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
+    this.tablet = defaults.tablet;
+    if (options.tablet) Object.assign(this.tablet, options.tablet);
     this.namespace = 'locomotive';
     this.html = document.documentElement;
     this.windowHeight = window.innerHeight;
-    this.windowMiddle = this.windowHeight / 2;
-    this.els = [];
+    this.windowWidth = window.innerWidth;
+    this.windowMiddle = {
+      x: this.windowWidth / 2,
+      y: this.windowHeight / 2
+    };
+    this.els = {};
+    this.currentElements = {};
     this.listeners = {};
     this.hasScrollTicking = false;
     this.hasCallEventSet = false;
@@ -7266,8 +7309,30 @@ var _default = /*#__PURE__*/function () {
         x: 0,
         y: 0
       },
-      limit: this.html.offsetHeight
+      limit: {
+        x: this.html.offsetHeight,
+        y: this.html.offsetHeight
+      },
+      currentElements: this.currentElements
     };
+
+    if (this.isMobile) {
+      if (this.isTablet) {
+        this.context = 'tablet';
+      } else {
+        this.context = 'smartphone';
+      }
+    } else {
+      this.context = 'desktop';
+    }
+
+    if (this.isMobile) this.direction = this[this.context].direction;
+
+    if (this.direction === 'horizontal') {
+      this.directionAxis = 'x';
+    } else {
+      this.directionAxis = 'y';
+    }
 
     if (this.getDirection) {
       this.instance.direction = null;
@@ -7309,6 +7374,30 @@ var _default = /*#__PURE__*/function () {
     key: "resize",
     value: function resize() {}
   }, {
+    key: "checkContext",
+    value: function checkContext() {
+      if (!this.reloadOnContextChange) return;
+      this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 || this.windowWidth < this.tablet.breakpoint;
+      this.isTablet = this.isMobile && this.windowWidth >= this.tablet.breakpoint;
+      var oldContext = this.context;
+
+      if (this.isMobile) {
+        if (this.isTablet) {
+          this.context = 'tablet';
+        } else {
+          this.context = 'smartphone';
+        }
+      } else {
+        this.context = 'desktop';
+      }
+
+      if (oldContext != this.context) {
+        var oldSmooth = oldContext == 'desktop' ? this.smooth : this[oldContext].smooth;
+        var newSmooth = this.context == 'desktop' ? this.smooth : this[this.context].smooth;
+        if (oldSmooth != newSmooth) window.location.reload();
+      }
+    }
+  }, {
     key: "initEvents",
     value: function initEvents() {
       var _this2 = this;
@@ -7323,7 +7412,9 @@ var _default = /*#__PURE__*/function () {
     key: "setScrollTo",
     value: function setScrollTo(event) {
       event.preventDefault();
-      this.scrollTo(event.currentTarget.getAttribute("data-".concat(this.name, "-href")) || event.currentTarget.getAttribute('href'), event.currentTarget.getAttribute("data-".concat(this.name, "-offset")));
+      this.scrollTo(event.currentTarget.getAttribute("data-".concat(this.name, "-href")) || event.currentTarget.getAttribute('href'), {
+        offset: event.currentTarget.getAttribute("data-".concat(this.name, "-offset"))
+      });
     }
   }, {
     key: "addElements",
@@ -7335,22 +7426,46 @@ var _default = /*#__PURE__*/function () {
 
       var scrollTop = this.instance.scroll.y;
       var scrollBottom = scrollTop + this.windowHeight;
-      this.els.forEach(function (el, i) {
+      var scrollLeft = this.instance.scroll.x;
+      var scrollRight = scrollLeft + this.windowWidth;
+      Object.entries(this.els).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            i = _ref2[0],
+            el = _ref2[1];
+
         if (el && (!el.inView || hasCallEventSet)) {
-          if (scrollBottom >= el.top && scrollTop < el.bottom) {
-            _this3.setInView(el, i);
+          if (_this3.direction === 'horizontal') {
+            if (scrollRight >= el.left && scrollLeft < el.right) {
+              _this3.setInView(el, i);
+            }
+          } else {
+            if (scrollBottom >= el.top && scrollTop < el.bottom) {
+              _this3.setInView(el, i);
+            }
           }
         }
 
         if (el && el.inView) {
-          if (scrollBottom < el.top || scrollTop > el.bottom) {
-            _this3.setOutOfView(el, i);
+          if (_this3.direction === 'horizontal') {
+            var width = el.right - el.left;
+            el.progress = (_this3.instance.scroll.x - (el.left - _this3.windowWidth)) / (width + _this3.windowWidth);
+
+            if (scrollRight < el.left || scrollLeft > el.right) {
+              _this3.setOutOfView(el, i);
+            }
+          } else {
+            var height = el.bottom - el.top;
+            el.progress = (_this3.instance.scroll.y - (el.top - _this3.windowHeight)) / (height + _this3.windowHeight);
+
+            if (scrollBottom < el.top || scrollTop > el.bottom) {
+              _this3.setOutOfView(el, i);
+            }
           }
         }
-      });
-      this.els = this.els.filter(function (current, i) {
-        return current !== null;
-      });
+      }); // this.els = this.els.filter((current, i) => {
+      //     return current !== null;
+      // });
+
       this.hasScrollTicking = false;
     }
   }, {
@@ -7358,6 +7473,7 @@ var _default = /*#__PURE__*/function () {
     value: function setInView(current, i) {
       this.els[i].inView = true;
       current.el.classList.add(current["class"]);
+      this.currentElements[i] = current;
 
       if (current.call && this.hasCallEventSet) {
         this.dispatchCall(current, 'enter');
@@ -7365,20 +7481,24 @@ var _default = /*#__PURE__*/function () {
         if (!current.repeat) {
           this.els[i].call = false;
         }
-      }
+      } // if (!current.repeat && !current.speed && !current.sticky) {
+      //     if (!current.call || current.call && this.hasCallEventSet) {
+      //        this.els[i] = null
+      //     }
+      // }
 
-      if (!current.repeat && !current.speed && !current.sticky) {
-        if (!current.call || current.call && this.hasCallEventSet) {
-          this.els[i] = null;
-        }
-      }
     }
   }, {
     key: "setOutOfView",
     value: function setOutOfView(current, i) {
-      if (current.repeat || current.speed !== undefined) {
-        this.els[i].inView = false;
-      }
+      var _this4 = this; // if (current.repeat || current.speed !== undefined) {
+
+
+      this.els[i].inView = false; // }
+
+      Object.keys(this.currentElements).forEach(function (el) {
+        el === i && delete _this4.currentElements[el];
+      });
 
       if (current.call && this.hasCallEventSet) {
         this.dispatchCall(current, 'exit');
@@ -7441,7 +7561,7 @@ var _default = /*#__PURE__*/function () {
   }, {
     key: "checkEvent",
     value: function checkEvent(event) {
-      var _this4 = this;
+      var _this5 = this;
 
       var name = event.type.replace(this.namespace, '');
       var list = this.listeners[name];
@@ -7449,10 +7569,10 @@ var _default = /*#__PURE__*/function () {
       list.forEach(function (func) {
         switch (name) {
           case 'scroll':
-            return func(_this4.instance);
+            return func(_this5.instance);
 
           case 'call':
-            return func(_this4.callValue, _this4.callWay, _this4.callObj);
+            return func(_this5.callValue, _this5.callWay, _this5.callObj);
 
           default:
             return func();
@@ -7476,16 +7596,17 @@ var _default = /*#__PURE__*/function () {
   }, {
     key: "destroy",
     value: function destroy() {
-      var _this5 = this;
+      var _this6 = this;
 
       window.removeEventListener('resize', this.checkResize, false);
       Object.keys(this.listeners).forEach(function (event) {
-        _this5.el.removeEventListener(_this5.namespace + event, _this5.checkEvent, false);
+        _this6.el.removeEventListener(_this6.namespace + event, _this6.checkEvent, false);
       });
       this.listeners = {};
       this.scrollToEls.forEach(function (el) {
-        el.removeEventListener('click', _this5.setScrollTo, false);
+        el.removeEventListener('click', _this6.setScrollTo, false);
       });
+      this.html.classList.remove(this.initClass);
     }
   }]);
 
@@ -7847,6 +7968,8 @@ var smoothscroll_1 = smoothscroll.polyfill;
 var _default$1 = /*#__PURE__*/function (_Core) {
   _inherits(_default, _Core);
 
+  var _super = _createSuper(_default);
+
   function _default() {
     var _this;
 
@@ -7854,9 +7977,23 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
     _classCallCheck(this, _default);
 
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
+    _this = _super.call(this, options);
+
+    if (_this.resetNativeScroll) {
+      if (history.scrollRestoration) {
+        history.scrollRestoration = 'manual';
+      }
+
+      window.scrollTo(0, 0);
+    }
+
     window.addEventListener('scroll', _this.checkScroll, false);
-    smoothscroll.polyfill();
+
+    if (window.smoothscrollPolyfill === undefined) {
+      window.smoothscrollPolyfill = smoothscroll;
+      window.smoothscrollPolyfill.polyfill();
+    }
+
     return _this;
   }
 
@@ -7882,12 +8019,12 @@ var _default$1 = /*#__PURE__*/function (_Core) {
 
       if (this.getSpeed) {
         this.addSpeed();
-        this.timestamp = Date.now();
+        this.speedTs = Date.now();
       }
 
       this.instance.scroll.y = window.pageYOffset;
 
-      if (this.els.length) {
+      if (Object.entries(this.els).length) {
         if (!this.hasScrollTicking) {
           requestAnimationFrame(function () {
             _this2.detectElements();
@@ -7913,7 +8050,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
     key: "addSpeed",
     value: function addSpeed() {
       if (window.pageYOffset != this.instance.scroll.y) {
-        this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / (Date.now() - this.timestamp);
+        this.instance.speed = (window.pageYOffset - this.instance.scroll.y) / Math.max(1, Date.now() - this.speedTs);
       } else {
         this.instance.speed = 0;
       }
@@ -7921,7 +8058,7 @@ var _default$1 = /*#__PURE__*/function (_Core) {
   }, {
     key: "resize",
     value: function resize() {
-      if (this.els.length) {
+      if (Object.entries(this.els).length) {
         this.windowHeight = window.innerHeight;
         this.updateElements();
       }
@@ -7931,13 +8068,15 @@ var _default$1 = /*#__PURE__*/function (_Core) {
     value: function addElements() {
       var _this3 = this;
 
-      this.els = [];
+      this.els = {};
       var els = this.el.querySelectorAll('[data-' + this.name + ']');
-      els.forEach(function (el, id) {
+      els.forEach(function (el, index) {
+        var BCR = el.getBoundingClientRect();
         var cl = el.dataset[_this3.name + 'Class'] || _this3["class"];
-
-        var top = el.getBoundingClientRect().top + _this3.instance.scroll.y;
-
+        var id = typeof el.dataset[_this3.name + 'Id'] === 'string' ? el.dataset[_this3.name + 'Id'] : index;
+        var top = BCR.top + _this3.instance.scroll.y;
+        var left = BCR.left;
+        var right = BCR.right;
         var bottom = top + el.offsetHeight;
         var offset = typeof el.dataset[_this3.name + 'Offset'] === 'string' ? el.dataset[_this3.name + 'Offset'].split(',') : _this3.offset;
         var repeat = el.dataset[_this3.name + 'Repeat'];
@@ -7959,13 +8098,19 @@ var _default$1 = /*#__PURE__*/function (_Core) {
           "class": cl,
           top: top + relativeOffset[0],
           bottom: bottom - relativeOffset[1],
+          left: left,
+          right: right,
           offset: offset,
+          progress: 0,
           repeat: repeat,
-          inView: el.classList.contains(cl) ? true : false,
+          inView: false,
           call: call
         };
+        _this3.els[id] = mappedEl;
 
-        _this3.els.push(mappedEl);
+        if (el.classList.contains(cl)) {
+          _this3.setInView(_this3.els[id], id);
+        }
       });
     }
   }, {
@@ -7973,7 +8118,11 @@ var _default$1 = /*#__PURE__*/function (_Core) {
     value: function updateElements() {
       var _this4 = this;
 
-      this.els.forEach(function (el, i) {
+      Object.entries(this.els).forEach(function (_ref) {
+        var _ref2 = _slicedToArray(_ref, 2),
+            i = _ref2[0],
+            el = _ref2[1];
+
         var top = el.el.getBoundingClientRect().top + _this4.instance.scroll.y;
 
         var bottom = top + el.el.offsetHeight;
@@ -8010,39 +8159,38 @@ var _default$1 = /*#__PURE__*/function (_Core) {
      * Scroll to a desired target.
      *
      * @param  Available options :
-     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An absolute vertical scroll value to reach, or an offset to apply on top of given `target` or `sourceElem`'s target
+     *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          options {object} - Options object for additionnal settings.
      * @return {void}
      */
 
   }, {
     key: "scrollTo",
-    value: function scrollTo(targetOption, offsetOption, duration, easing, disableLerp, callback) {
-      // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-      var target;
-      var offset = offsetOption ? parseInt(offsetOption) : 0;
+    value: function scrollTo(target) {
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}; // Parse options
 
-      if (typeof targetOption === 'string') {
+      var offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
+
+      var callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
+
+      if (typeof target === 'string') {
         // Selector or boundaries
-        if (targetOption === 'top') {
+        if (target === 'top') {
           target = this.html;
-        } else if (targetOption === 'bottom') {
+        } else if (target === 'bottom') {
           target = this.html.offsetHeight - window.innerHeight;
         } else {
-          target = document.querySelector(targetOption); // If the query fails, abort
+          target = document.querySelector(target); // If the query fails, abort
 
           if (!target) {
             return;
           }
         }
-      } else if (typeof targetOption === 'number') {
+      } else if (typeof target === 'number') {
         // Absolute coordinate
-        target = parseInt(targetOption);
-      } else if (targetOption && targetOption.tagName) {
-        // DOM Element
-        target = targetOption;
-      } else {
-        console.warn('`targetOption` parameter is not valid');
+        target = parseInt(target);
+      } else if (target && target.tagName) ;else {
+        console.warn('`target` parameter is not valid');
         return;
       } // We have a target that is not a coordinate yet, get it
 
@@ -8801,6 +8949,8 @@ var keyCodes$1 = {
 var _default$2 = /*#__PURE__*/function (_Core) {
   _inherits(_default, _Core);
 
+  var _super = _createSuper(_default);
+
   function _default() {
     var _this;
 
@@ -8808,16 +8958,20 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
     _classCallCheck(this, _default);
 
+    if (history.scrollRestoration) {
+      history.scrollRestoration = 'manual';
+    }
+
     window.scrollTo(0, 0);
-    history.scrollRestoration = 'manual';
-    _this = _possibleConstructorReturn(this, _getPrototypeOf(_default).call(this, options));
+    _this = _super.call(this, options);
     if (_this.inertia) _this.lerp = _this.inertia * 0.1;
     _this.isScrolling = false;
     _this.isDraggingScrollbar = false;
     _this.isTicking = false;
     _this.hasScrollTicking = false;
-    _this.parallaxElements = [];
+    _this.parallaxElements = {};
     _this.stop = false;
+    _this.scrollbarContainer = options.scrollbarContainer;
     _this.checkKey = _this.checkKey.bind(_assertThisInitialized(_this));
     window.addEventListener('keydown', _this.checkKey, false);
     return _this;
@@ -8829,6 +8983,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       var _this2 = this;
 
       this.html.classList.add(this.smoothClass);
+      this.html.setAttribute("data-".concat(this.name, "-direction"), this.direction);
       this.instance = _objectSpread2({
         delta: {
           x: 0,
@@ -8848,35 +9003,44 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           return;
         }
 
-        if (!_this2.isTicking && !_this2.isDraggingScrollbar) {
+        if (!_this2.isDraggingScrollbar) {
           requestAnimationFrame(function () {
             _this2.updateDelta(e);
 
             if (!_this2.isScrolling) _this2.startScrolling();
           });
-          _this2.isTicking = true;
         }
-
-        _this2.isTicking = false;
       });
       this.setScrollLimit();
       this.initScrollBar();
       this.addSections();
       this.addElements();
-      this.detectElements();
-      this.transformElements(true, true);
       this.checkScroll(true);
+      this.transformElements(true, true);
 
       _get(_getPrototypeOf(_default.prototype), "init", this).call(this);
     }
   }, {
     key: "setScrollLimit",
     value: function setScrollLimit() {
-      this.instance.limit = this.el.offsetHeight - this.windowHeight;
+      this.instance.limit.y = this.el.offsetHeight - this.windowHeight;
+
+      if (this.direction === 'horizontal') {
+        var totalWidth = 0;
+        var nodes = this.el.children;
+
+        for (var i = 0; i < nodes.length; i++) {
+          totalWidth += nodes[i].offsetWidth;
+        }
+
+        this.instance.limit.x = totalWidth - this.windowWidth;
+      }
     }
   }, {
     key: "startScrolling",
     value: function startScrolling() {
+      this.startScrollTs = Date.now(); // Record timestamp
+
       this.isScrolling = true;
       this.checkScroll();
       this.html.classList.add(this.scrollingClass);
@@ -8884,6 +9048,8 @@ var _default$2 = /*#__PURE__*/function (_Core) {
   }, {
     key: "stopScrolling",
     value: function stopScrolling() {
+      cancelAnimationFrame(this.checkScrollRaf); // Prevent checkScroll to continue looping
+
       if (this.scrollToRaf) {
         cancelAnimationFrame(this.scrollToRaf);
         this.scrollToRaf = null;
@@ -8906,6 +9072,8 @@ var _default$2 = /*#__PURE__*/function (_Core) {
             // Make sure native scroll is always at top of page
             _this3.html.scrollTop = 0;
             document.body.scrollTop = 0;
+            _this3.html.scrollLeft = 0;
+            document.body.scrollLeft = 0;
           });
         }
 
@@ -8919,42 +9087,46 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           requestAnimationFrame(function () {
             // Make sure native scroll is always at top of page
             _this3.html.scrollTop = 0;
-            document.body.scrollTop = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
+            document.body.scrollTop = 0;
+            _this3.html.scrollLeft = 0;
+            document.body.scrollLeft = 0; // Request scrollTo on the focusedElement, putting it at the center of the screen
 
-            _this3.scrollTo(document.activeElement, -window.innerHeight / 2);
+            _this3.scrollTo(document.activeElement, {
+              offset: -window.innerHeight / 2
+            });
           });
           break;
 
         case keyCodes$1.UP:
-          this.instance.delta.y -= 240;
+          this.instance.delta[this.directionAxis] -= 240;
           break;
 
         case keyCodes$1.DOWN:
-          this.instance.delta.y += 240;
+          this.instance.delta[this.directionAxis] += 240;
           break;
 
         case keyCodes$1.PAGEUP:
-          this.instance.delta.y -= window.innerHeight;
+          this.instance.delta[this.directionAxis] -= window.innerHeight;
           break;
 
         case keyCodes$1.PAGEDOWN:
-          this.instance.delta.y += window.innerHeight;
+          this.instance.delta[this.directionAxis] += window.innerHeight;
           break;
 
         case keyCodes$1.HOME:
-          this.instance.delta.y -= this.instance.limit;
+          this.instance.delta[this.directionAxis] -= this.instance.limit[this.directionAxis];
           break;
 
         case keyCodes$1.END:
-          this.instance.delta.y += this.instance.limit;
+          this.instance.delta[this.directionAxis] += this.instance.limit[this.directionAxis];
           break;
 
         case keyCodes$1.SPACE:
           if (!(document.activeElement instanceof HTMLInputElement) && !(document.activeElement instanceof HTMLTextAreaElement)) {
             if (e.shiftKey) {
-              this.instance.delta.y -= window.innerHeight;
+              this.instance.delta[this.directionAxis] -= window.innerHeight;
             } else {
-              this.instance.delta.y += window.innerHeight;
+              this.instance.delta[this.directionAxis] += window.innerHeight;
             }
           }
 
@@ -8964,8 +9136,10 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           return;
       }
 
-      if (this.instance.delta.y < 0) this.instance.delta.y = 0;
-      if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+      if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
+      if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
+      this.stopScrolling(); // Stop any movement, allows to kill any other `scrollTo` still happening
+
       this.isScrolling = true;
       this.checkScroll();
       this.html.classList.add(this.scrollingClass);
@@ -8979,40 +9153,49 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
       if (forced || this.isScrolling || this.isDraggingScrollbar) {
         if (!this.hasScrollTicking) {
-          requestAnimationFrame(function () {
+          this.checkScrollRaf = requestAnimationFrame(function () {
             return _this4.checkScroll();
           });
           this.hasScrollTicking = true;
         }
 
         this.updateScroll();
-        var distance = Math.abs(this.instance.delta.y - this.instance.scroll.y);
+        var distance = Math.abs(this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]);
+        var timeSinceStart = Date.now() - this.startScrollTs; // Get the time since the scroll was started: the scroll can be stopped again only past 100ms
 
-        if (!this.animatingScroll && (distance < 0.5 && this.instance.delta.y != 0 || distance < 0.5 && this.instance.delta.y == 0)) {
+        if (!this.animatingScroll && timeSinceStart > 100 && (distance < 0.5 && this.instance.delta[this.directionAxis] != 0 || distance < 0.5 && this.instance.delta[this.directionAxis] == 0)) {
           this.stopScrolling();
         }
 
-        for (var i = this.sections.length - 1; i >= 0; i--) {
-          if (this.sections[i].persistent || this.instance.scroll.y > this.sections[i].offset && this.instance.scroll.y < this.sections[i].limit) {
-            this.transform(this.sections[i].el, 0, -this.instance.scroll.y);
+        Object.entries(this.sections).forEach(function (_ref) {
+          var _ref2 = _slicedToArray(_ref, 2),
+              i = _ref2[0],
+              section = _ref2[1];
 
-            if (!this.sections[i].inView) {
-              this.sections[i].inView = true;
-              this.sections[i].el.style.opacity = 1;
-              this.sections[i].el.style.pointerEvents = 'all';
-              this.sections[i].el.setAttribute("data-".concat(this.name, "-section-inview"), '');
+          if (section.persistent || _this4.instance.scroll[_this4.directionAxis] > section.offset[_this4.directionAxis] && _this4.instance.scroll[_this4.directionAxis] < section.limit[_this4.directionAxis]) {
+            if (_this4.direction === 'horizontal') {
+              _this4.transform(section.el, -_this4.instance.scroll[_this4.directionAxis], 0);
+            } else {
+              _this4.transform(section.el, 0, -_this4.instance.scroll[_this4.directionAxis]);
+            }
+
+            if (!section.inView) {
+              section.inView = true;
+              section.el.style.opacity = 1;
+              section.el.style.pointerEvents = 'all';
+              section.el.setAttribute("data-".concat(_this4.name, "-section-inview"), '');
             }
           } else {
-            if (this.sections[i].inView) {
-              this.sections[i].inView = false;
-              this.sections[i].el.style.opacity = 0;
-              this.sections[i].el.style.pointerEvents = 'none';
-              this.sections[i].el.removeAttribute("data-".concat(this.name, "-section-inview"));
+            if (section.inView) {
+              section.inView = false;
+              section.el.style.opacity = 0;
+              section.el.style.pointerEvents = 'none';
+              section.el.removeAttribute("data-".concat(_this4.name, "-section-inview"));
             }
 
-            this.transform(this.sections[i].el, 0, 0);
+            _this4.transform(section.el, 0, 0);
           }
-        }
+        });
 
         if (this.getDirection) {
           this.addDirection();
@@ -9020,13 +9203,21 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
         if (this.getSpeed) {
           this.addSpeed();
-          this.timestamp = Date.now();
+          this.speedTs = Date.now();
         }
 
         this.detectElements();
         this.transformElements();
-        var scrollBarTranslation = this.instance.scroll.y / this.instance.limit * this.scrollBarLimit;
-        this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+
+        if (this.hasScrollbar) {
+          var scrollBarTranslation = this.instance.scroll[this.directionAxis] / this.instance.limit[this.directionAxis] * this.scrollBarLimit[this.directionAxis];
+
+          if (this.direction === 'horizontal') {
+            this.transform(this.scrollbarThumb, scrollBarTranslation, 0);
+          } else {
+            this.transform(this.scrollbarThumb, 0, scrollBarTranslation);
+          }
+        }
 
         _get(_getPrototypeOf(_default.prototype), "checkScroll", this).call(this);
 
@@ -9037,28 +9228,46 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     key: "resize",
     value: function resize() {
       this.windowHeight = window.innerHeight;
-      this.windowMiddle = this.windowHeight / 2;
+      this.windowWidth = window.innerWidth;
+      this.checkContext();
+      this.windowMiddle = {
+        x: this.windowWidth / 2,
+        y: this.windowHeight / 2
+      };
       this.update();
     }
   }, {
     key: "updateDelta",
     value: function updateDelta(e) {
-      this.instance.delta.y -= e.deltaY * this.multiplier;
-      if (this.instance.delta.y < 0) this.instance.delta.y = 0;
-      if (this.instance.delta.y > this.instance.limit) this.instance.delta.y = this.instance.limit;
+      var delta;
+      var gestureDirection = this[this.context] && this[this.context].gestureDirection ? this[this.context].gestureDirection : this.gestureDirection;
+
+      if (gestureDirection === 'both') {
+        delta = e.deltaX + e.deltaY;
+      } else if (gestureDirection === 'vertical') {
+        delta = e.deltaY;
+      } else if (gestureDirection === 'horizontal') {
+        delta = e.deltaX;
+      } else {
+        delta = e.deltaY;
+      }
+
+      this.instance.delta[this.directionAxis] -= delta * this.multiplier;
+      if (this.instance.delta[this.directionAxis] < 0) this.instance.delta[this.directionAxis] = 0;
+      if (this.instance.delta[this.directionAxis] > this.instance.limit[this.directionAxis]) this.instance.delta[this.directionAxis] = this.instance.limit[this.directionAxis];
     }
   }, {
     key: "updateScroll",
     value: function updateScroll(e) {
       if (this.isScrolling || this.isDraggingScrollbar) {
-        this.instance.scroll.y = lerp(this.instance.scroll.y, this.instance.delta.y, this.lerp);
+        this.instance.scroll[this.directionAxis] = lerp(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis], this.lerp);
       } else {
-        if (this.instance.scroll.y > this.instance.limit) {
-          this.setScroll(this.instance.scroll.x, this.instance.limit);
+        if (this.instance.scroll[this.directionAxis] > this.instance.limit[this.directionAxis]) {
+          this.setScroll(this.instance.scroll[this.directionAxis], this.instance.limit[this.directionAxis]);
         } else if (this.instance.scroll.y < 0) {
-          this.setScroll(this.instance.scroll.x, 0);
+          this.setScroll(this.instance.scroll[this.directionAxis], 0);
         } else {
-          this.setScroll(this.instance.scroll.x, this.instance.delta.y);
+          this.setScroll(this.instance.scroll[this.directionAxis], this.instance.delta[this.directionAxis]);
         }
       }
     }
@@ -9074,12 +9283,22 @@ var _default$2 = /*#__PURE__*/function (_Core) {
           this.instance.direction = 'up';
         }
       }
+
+      if (this.instance.delta.x > this.instance.scroll.x) {
+        if (this.instance.direction !== 'right') {
+          this.instance.direction = 'right';
+        }
+      } else if (this.instance.delta.x < this.instance.scroll.x) {
+        if (this.instance.direction !== 'left') {
+          this.instance.direction = 'left';
+        }
+      }
     }
   }, {
     key: "addSpeed",
     value: function addSpeed() {
-      if (this.instance.delta.y != this.instance.scroll.y) {
-        this.instance.speed = (this.instance.delta.y - this.instance.scroll.y) / Math.max(1, Date.now() - this.timestamp);
+      if (this.instance.delta[this.directionAxis] != this.instance.scroll[this.directionAxis]) {
+        this.instance.speed = (this.instance.delta[this.directionAxis] - this.instance.scroll[this.directionAxis]) / Math.max(1, Date.now() - this.speedTs);
       } else {
         this.instance.speed = 0;
       }
@@ -9092,7 +9311,13 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       this.scrollbar.classList.add("".concat(this.scrollbarClass));
       this.scrollbarThumb.classList.add("".concat(this.scrollbarClass, "_thumb"));
       this.scrollbar.append(this.scrollbarThumb);
-      document.body.append(this.scrollbar); // Scrollbar Events
+
+      if (this.scrollbarContainer) {
+        this.scrollbarContainer.append(this.scrollbar);
+      } else {
+        document.body.append(this.scrollbar);
+      } // Scrollbar Events
+
 
       this.getScrollBar = this.getScrollBar.bind(this);
       this.releaseScrollBar = this.releaseScrollBar.bind(this);
@@ -9101,24 +9326,66 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       window.addEventListener('mouseup', this.releaseScrollBar);
       window.addEventListener('mousemove', this.moveScrollBar); // Set scrollbar values
 
-      if (this.instance.limit + this.windowHeight <= this.windowHeight) {
-        return;
+      this.hasScrollbar = false;
+
+      if (this.direction == 'horizontal') {
+        if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
+          return;
+        }
+      } else {
+        if (this.instance.limit.y + this.windowHeight <= this.windowHeight) {
+          return;
+        }
       }
 
-      this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-      this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
-      this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+      this.hasScrollbar = true;
+      this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
+      this.scrollbarHeight = this.scrollbarBCR.height;
+      this.scrollbarWidth = this.scrollbarBCR.width;
+
+      if (this.direction === 'horizontal') {
+        this.scrollbarThumb.style.width = "".concat(this.scrollbarWidth * this.scrollbarWidth / (this.instance.limit.x + this.scrollbarWidth), "px");
+      } else {
+        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit.y + this.scrollbarHeight), "px");
+      }
+
+      this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect();
+      this.scrollBarLimit = {
+        x: this.scrollbarWidth - this.scrollbarThumbBCR.width,
+        y: this.scrollbarHeight - this.scrollbarThumbBCR.height
+      };
     }
   }, {
     key: "reinitScrollBar",
     value: function reinitScrollBar() {
-      if (this.instance.limit + this.windowHeight <= this.windowHeight) {
-        return;
+      this.hasScrollbar = false;
+
+      if (this.direction == 'horizontal') {
+        if (this.instance.limit.x + this.windowWidth <= this.windowWidth) {
+          return;
+        }
+      } else {
+        if (this.instance.limit.y + this.windowHeight <= this.windowHeight) {
+          return;
+        }
       }
 
-      this.scrollbarHeight = this.scrollbar.getBoundingClientRect().height;
-      this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit + this.scrollbarHeight), "px");
-      this.scrollBarLimit = this.scrollbarHeight - this.scrollbarThumb.getBoundingClientRect().height;
+      this.hasScrollbar = true;
+      this.scrollbarBCR = this.scrollbar.getBoundingClientRect();
+      this.scrollbarHeight = this.scrollbarBCR.height;
+      this.scrollbarWidth = this.scrollbarBCR.width;
+
+      if (this.direction === 'horizontal') {
+        this.scrollbarThumb.style.width = "".concat(this.scrollbarWidth * this.scrollbarWidth / (this.instance.limit.x + this.scrollbarWidth), "px");
+      } else {
+        this.scrollbarThumb.style.height = "".concat(this.scrollbarHeight * this.scrollbarHeight / (this.instance.limit.y + this.scrollbarHeight), "px");
+      }
+
+      this.scrollbarThumbBCR = this.scrollbarThumb.getBoundingClientRect();
+      this.scrollBarLimit = {
+        x: this.scrollbarWidth - this.scrollbarThumbBCR.width,
+        y: this.scrollbarHeight - this.scrollbarThumbBCR.height
+      };
     }
   }, {
     key: "destroyScrollBar",
@@ -9148,77 +9415,130 @@ var _default$2 = /*#__PURE__*/function (_Core) {
     value: function moveScrollBar(e) {
       var _this5 = this;
 
-      if (!this.isTicking && this.isDraggingScrollbar) {
+      if (this.isDraggingScrollbar) {
         requestAnimationFrame(function () {
-          var y = e.clientY * 100 / _this5.scrollbarHeight * _this5.instance.limit / 100;
+          var x = (e.clientX - _this5.scrollbarBCR.left) * 100 / _this5.scrollbarWidth * _this5.instance.limit.x / 100;
+          var y = (e.clientY - _this5.scrollbarBCR.top) * 100 / _this5.scrollbarHeight * _this5.instance.limit.y / 100;
 
-          if (y > 0 && y < _this5.instance.limit) {
+          if (y > 0 && y < _this5.instance.limit.y) {
             _this5.instance.delta.y = y;
           }
-        });
-        this.isTicking = true;
-      }
 
-      this.isTicking = false;
+          if (x > 0 && x < _this5.instance.limit.x) {
+            _this5.instance.delta.x = x;
+          }
+        });
+      }
     }
   }, {
     key: "addElements",
     value: function addElements() {
       var _this6 = this;
 
-      this.els = [];
-      this.parallaxElements = [];
-      this.sections.forEach(function (section, y) {
-        var els = _this6.sections[y].el.querySelectorAll("[data-".concat(_this6.name, "]"));
+      this.els = {};
+      this.parallaxElements = {}; // this.sections.forEach((section, y) => {
 
-        els.forEach(function (el, id) {
-          var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
-          var top;
-          var repeat = el.dataset[_this6.name + 'Repeat'];
-          var call = el.dataset[_this6.name + 'Call'];
-          var position = el.dataset[_this6.name + 'Position'];
-          var delay = el.dataset[_this6.name + 'Delay'];
-          var direction = el.dataset[_this6.name + 'Direction'];
-          var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
-          var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
-          var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : _this6.offset;
-          var target = el.dataset[_this6.name + 'Target'];
-          var targetEl;
+      var els = this.el.querySelectorAll("[data-".concat(this.name, "]"));
+      els.forEach(function (el, index) {
+        // Try and find the target's parent section
+        var targetParents = getParents(el);
+        var section = Object.entries(_this6.sections).map(function (_ref3) {
+          var _ref4 = _slicedToArray(_ref3, 2),
+              key = _ref4[0],
+              section = _ref4[1];
 
-          if (target !== undefined) {
-            targetEl = document.querySelector("".concat(target));
+          return section;
+        }).find(function (section) {
+          return targetParents.includes(section.el);
+        });
+        var cl = el.dataset[_this6.name + 'Class'] || _this6["class"];
+        var id = typeof el.dataset[_this6.name + 'Id'] === 'string' ? el.dataset[_this6.name + 'Id'] : 'el' + index;
+        var top;
+        var left;
+        var repeat = el.dataset[_this6.name + 'Repeat'];
+        var call = el.dataset[_this6.name + 'Call'];
+        var position = el.dataset[_this6.name + 'Position'];
+        var delay = el.dataset[_this6.name + 'Delay'];
+        var direction = el.dataset[_this6.name + 'Direction'];
+        var sticky = typeof el.dataset[_this6.name + 'Sticky'] === 'string';
+        var speed = el.dataset[_this6.name + 'Speed'] ? parseFloat(el.dataset[_this6.name + 'Speed']) / 10 : false;
+        var offset = typeof el.dataset[_this6.name + 'Offset'] === 'string' ? el.dataset[_this6.name + 'Offset'].split(',') : _this6.offset;
+        var target = el.dataset[_this6.name + 'Target'];
+        var targetEl;
+
+        if (target !== undefined) {
+          targetEl = document.querySelector("".concat(target));
+        } else {
+          targetEl = el;
+        }
+
+        var targetElBCR = targetEl.getBoundingClientRect();
+
+        if (section === null) {
+          top = targetElBCR.top + _this6.instance.scroll.y - getTranslate(targetEl).y;
+          left = targetElBCR.left + _this6.instance.scroll.x - getTranslate(targetEl).x;
+        } else {
+          if (!section.inView) {
+            top = targetElBCR.top - getTranslate(section.el).y - getTranslate(targetEl).y;
+            left = targetElBCR.left - getTranslate(section.el).x - getTranslate(targetEl).x;
           } else {
-            targetEl = el;
+            top = targetElBCR.top + _this6.instance.scroll.y - getTranslate(targetEl).y;
+            left = targetElBCR.left + _this6.instance.scroll.x - getTranslate(targetEl).x;
           }
+        }
 
-          if (!_this6.sections[y].inView) {
-            top = targetEl.getBoundingClientRect().top - getTranslate(_this6.sections[y].el).y - getTranslate(targetEl).y;
+        var bottom = top + targetEl.offsetHeight;
+        var right = left + targetEl.offsetWidth;
+        var middle = {
+          x: (right - left) / 2 + left,
+          y: (bottom - top) / 2 + top
+        };
+
+        if (sticky) {
+          var elBCR = el.getBoundingClientRect();
+          var elTop = elBCR.top;
+          var elLeft = elBCR.left;
+          var elDistance = {
+            x: elLeft - left,
+            y: elTop - top
+          };
+          top += window.innerHeight;
+          left += window.innerWidth;
+          bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance[_this6.directionAxis];
+          right = elLeft + targetEl.offsetWidth - el.offsetWidth - elDistance[_this6.directionAxis];
+          middle = {
+            x: (right - left) / 2 + left,
+            y: (bottom - top) / 2 + top
+          };
+        }
+
+        if (repeat == 'false') {
+          repeat = false;
+        } else if (repeat != undefined) {
+          repeat = true;
+        } else {
+          repeat = _this6.repeat;
+        }
+
+        var relativeOffset = [0, 0];
+
+        if (offset) {
+          if (_this6.direction === 'horizontal') {
+            for (var i = 0; i < offset.length; i++) {
+              if (typeof offset[i] == 'string') {
+                if (offset[i].includes('%')) {
+                  relativeOffset[i] = parseInt(offset[i].replace('%', '') * _this6.windowWidth / 100);
+                } else {
+                  relativeOffset[i] = parseInt(offset[i]);
+                }
+              } else {
+                relativeOffset[i] = offset[i];
+              }
+            }
+
+            left = left + relativeOffset[0];
+            right = right - relativeOffset[1];
           } else {
-            top = targetEl.getBoundingClientRect().top + _this6.instance.scroll.y - getTranslate(targetEl).y;
-          }
-
-          var bottom = top + targetEl.offsetHeight;
-          var middle = (bottom - top) / 2 + top;
-
-          if (sticky) {
-            var elTop = el.getBoundingClientRect().top;
-            var elDistance = elTop - top;
-            top += window.innerHeight;
-            bottom = elTop + targetEl.offsetHeight - el.offsetHeight - elDistance;
-            middle = (bottom - top) / 2 + top;
-          }
-
-          if (repeat == 'false') {
-            repeat = false;
-          } else if (repeat != undefined) {
-            repeat = true;
-          } else {
-            repeat = _this6.repeat;
-          }
-
-          var relativeOffset = [0, 0];
-
-          if (offset) {
             for (var i = 0; i < offset.length; i++) {
               if (typeof offset[i] == 'string') {
                 if (offset[i].includes('%')) {
@@ -9230,59 +9550,79 @@ var _default$2 = /*#__PURE__*/function (_Core) {
                 relativeOffset[i] = offset[i];
               }
             }
+
+            top = top + relativeOffset[0];
+            bottom = bottom - relativeOffset[1];
           }
+        }
 
-          var mappedEl = {
-            el: el,
-            id: id,
-            "class": cl,
-            top: top + relativeOffset[0],
-            middle: middle,
-            bottom: bottom - relativeOffset[1],
-            offset: offset,
-            repeat: repeat,
-            inView: el.classList.contains(cl) ? true : false,
-            call: call,
-            speed: speed,
-            delay: delay,
-            position: position,
-            target: targetEl,
-            direction: direction,
-            sticky: sticky
-          };
+        var mappedEl = {
+          el: el,
+          id: id,
+          "class": cl,
+          section: section,
+          top: top,
+          middle: middle,
+          bottom: bottom,
+          left: left,
+          right: right,
+          offset: offset,
+          progress: 0,
+          repeat: repeat,
+          inView: false,
+          call: call,
+          speed: speed,
+          delay: delay,
+          position: position,
+          target: targetEl,
+          direction: direction,
+          sticky: sticky
+        };
+        _this6.els[id] = mappedEl;
 
-          _this6.els.push(mappedEl);
+        if (el.classList.contains(cl)) {
+          _this6.setInView(_this6.els[id], id);
+        }
 
-          if (speed !== false || sticky) {
-            _this6.parallaxElements.push(mappedEl);
-          }
-        });
-      });
+        if (speed !== false || sticky) {
+          _this6.parallaxElements[id] = mappedEl;
+        }
+      }); // });
     }
   }, {
     key: "addSections",
     value: function addSections() {
       var _this7 = this;
 
-      this.sections = [];
+      this.sections = {};
       var sections = this.el.querySelectorAll("[data-".concat(this.name, "-section]"));
 
       if (sections.length === 0) {
         sections = [this.el];
       }
 
-      sections.forEach(function (section, i) {
-        var offset = section.getBoundingClientRect().top - window.innerHeight * 1.5 - getTranslate(section).y;
-        var limit = offset + section.getBoundingClientRect().height + window.innerHeight * 2;
+      sections.forEach(function (section, index) {
+        var id = typeof section.dataset[_this7.name + 'Id'] === 'string' ? section.dataset[_this7.name + 'Id'] : 'section' + index;
+        var sectionBCR = section.getBoundingClientRect();
+        var offset = {
+          x: sectionBCR.left - window.innerWidth * 1.5 - getTranslate(section).x,
+          y: sectionBCR.top - window.innerHeight * 1.5 - getTranslate(section).y
+        };
+        var limit = {
+          x: offset.x + sectionBCR.width + window.innerWidth * 2,
+          y: offset.y + sectionBCR.height + window.innerHeight * 2
+        };
         var persistent = typeof section.dataset[_this7.name + 'Persistent'] === 'string';
+        section.setAttribute('data-scroll-section-id', id);
         var mappedSection = {
           el: section,
           offset: offset,
           limit: limit,
           inView: false,
-          persistent: persistent
+          persistent: persistent,
+          id: id
         };
-        _this7.sections[i] = mappedSection;
+        _this7.sections[id] = mappedSection;
       });
     }
   }, {
@@ -9309,9 +9649,17 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       var _this8 = this;
 
       var setAllElements = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      var scrollRight = this.instance.scroll.x + this.windowWidth;
       var scrollBottom = this.instance.scroll.y + this.windowHeight;
-      var scrollMiddle = this.instance.scroll.y + this.windowMiddle;
-      this.parallaxElements.forEach(function (current, i) {
+      var scrollMiddle = {
+        x: this.instance.scroll.x + this.windowMiddle.x,
+        y: this.instance.scroll.y + this.windowMiddle.y
+      };
+      Object.entries(this.parallaxElements).forEach(function (_ref5) {
+        var _ref6 = _slicedToArray(_ref5, 2),
+            i = _ref6[0],
+            current = _ref6[1];
+
         var transformDistance = false;
 
         if (isForced) {
@@ -9321,7 +9669,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
         if (current.inView || setAllElements) {
           switch (current.position) {
             case 'top':
-              transformDistance = _this8.instance.scroll.y * -current.speed;
+              transformDistance = _this8.instance.scroll[_this8.directionAxis] * -current.speed;
               break;
 
             case 'elementTop':
@@ -9329,31 +9677,57 @@ var _default$2 = /*#__PURE__*/function (_Core) {
               break;
 
             case 'bottom':
-              transformDistance = (_this8.instance.limit - scrollBottom + _this8.windowHeight) * current.speed;
+              transformDistance = (_this8.instance.limit[_this8.directionAxis] - scrollBottom + _this8.windowHeight) * current.speed;
+              break;
+
+            case 'left':
+              transformDistance = _this8.instance.scroll[_this8.directionAxis] * -current.speed;
+              break;
+
+            case 'elementLeft':
+              transformDistance = (scrollRight - current.left) * -current.speed;
+              break;
+
+            case 'right':
+              transformDistance = (_this8.instance.limit[_this8.directionAxis] - scrollRight + _this8.windowHeight) * current.speed;
               break;
 
             default:
-              transformDistance = (scrollMiddle - current.middle) * -current.speed;
+              transformDistance = (scrollMiddle[_this8.directionAxis] - current.middle[_this8.directionAxis]) * -current.speed;
               break;
           }
         }
 
         if (current.sticky) {
           if (current.inView) {
-            transformDistance = _this8.instance.scroll.y - current.top + window.innerHeight;
-          } else {
-            if (_this8.instance.scroll.y < current.top - window.innerHeight && _this8.instance.scroll.y < current.top - window.innerHeight / 2) {
-              transformDistance = 0;
-            } else if (_this8.instance.scroll.y > current.bottom && _this8.instance.scroll.y > current.bottom + 100) {
-              transformDistance = current.bottom - current.top + window.innerHeight;
+            if (_this8.direction === 'horizontal') {
+              transformDistance = _this8.instance.scroll.x - current.left + window.innerWidth;
             } else {
-              transformDistance = false;
+              transformDistance = _this8.instance.scroll.y - current.top + window.innerHeight;
+            }
+          } else {
+            if (_this8.direction === 'horizontal') {
+              if (_this8.instance.scroll.x < current.left - window.innerWidth && _this8.instance.scroll.x < current.left - window.innerWidth / 2) {
+                transformDistance = 0;
+              } else if (_this8.instance.scroll.x > current.right && _this8.instance.scroll.x > current.right + 100) {
+                transformDistance = current.right - current.left + window.innerWidth;
+              } else {
+                transformDistance = false;
+              }
+            } else {
+              if (_this8.instance.scroll.y < current.top - window.innerHeight && _this8.instance.scroll.y < current.top - window.innerHeight / 2) {
+                transformDistance = 0;
+              } else if (_this8.instance.scroll.y > current.bottom && _this8.instance.scroll.y > current.bottom + 100) {
+                transformDistance = current.bottom - current.top + window.innerHeight;
+              } else {
+                transformDistance = false;
+              }
             }
           }
         }
 
         if (transformDistance !== false) {
-          if (current.direction === 'horizontal') {
+          if (current.direction === 'horizontal' || _this8.direction === 'horizontal' && current.direction !== 'vertical') {
             _this8.transform(current.el, transformDistance, 0, isForced ? false : current.delay);
           } else {
             _this8.transform(current.el, 0, transformDistance, isForced ? false : current.delay);
@@ -9365,48 +9739,52 @@ var _default$2 = /*#__PURE__*/function (_Core) {
      * Scroll to a desired target.
      *
      * @param  Available options :
-     *          targetOption {node, string, "top", "bottom", int} - The DOM element we want to scroll to
-     *          offsetOption {int} - An offset to apply on top of given `target` or `sourceElem`'s target
-     *          duration {int} - Duration of the scroll animation in milliseconds
-     *          easing {array} - An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
+     *          target {node, string, "top", "bottom", int} - The DOM element we want to scroll to
+     *          options {object} - Options object for additionnal settings.
      * @return {void}
      */
 
   }, {
     key: "scrollTo",
-    value: function scrollTo(targetOption, offsetOption) {
+    value: function scrollTo(target) {
       var _this9 = this;
 
-      var duration = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 1000;
-      var easing = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : [0.25, 0.00, 0.35, 1.00];
-      var disableLerp = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : false;
-      var callback = arguments.length > 5 ? arguments[5] : undefined; // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
+      var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {}; // Parse options
 
-      var target;
-      var offset = offsetOption ? parseInt(offsetOption) : 0;
+      var offset = parseInt(options.offset) || 0; // An offset to apply on top of given `target` or `sourceElem`'s target
+
+      var duration = options.duration || 1000; // Duration of the scroll animation in milliseconds
+
+      var easing = options.easing || [0.25, 0.0, 0.35, 1.0]; // An array of 4 floats between 0 and 1 defining the bezier curve for the animation's easing. See http://greweb.me/bezier-easing-editor/example/
+
+      var disableLerp = options.disableLerp ? true : false; // Lerp effect won't be applied if set to true
+
+      var callback = options.callback ? options.callback : false; // function called when scrollTo completes (note that it won't wait for lerp to stabilize)
+
       easing = src$1.apply(void 0, _toConsumableArray(easing));
 
-      if (typeof targetOption === 'string') {
+      if (typeof target === 'string') {
         // Selector or boundaries
-        if (targetOption === 'top') {
+        if (target === 'top') {
           target = 0;
-        } else if (targetOption === 'bottom') {
-          target = this.instance.limit;
+        } else if (target === 'bottom') {
+          target = this.instance.limit.y;
+        } else if (target === 'left') {
+          target = 0;
+        } else if (target === 'right') {
+          target = this.instance.limit.x;
         } else {
-          target = document.querySelector(targetOption); // If the query fails, abort
+          target = document.querySelector(target); // If the query fails, abort
 
           if (!target) {
             return;
           }
         }
-      } else if (typeof targetOption === 'number') {
+      } else if (typeof target === 'number') {
         // Absolute coordinate
-        target = parseInt(targetOption);
-      } else if (targetOption && targetOption.tagName) {
-        // DOM Element
-        target = targetOption;
-      } else {
-        console.warn('`targetOption` parameter is not valid');
+        target = parseInt(target);
+      } else if (target && target.tagName) ;else {
+        console.warn('`target` parameter is not valid');
         return;
       } // We have a target that is not a coordinate yet, get it
 
@@ -9422,22 +9800,38 @@ var _default$2 = /*#__PURE__*/function (_Core) {
 
 
         var targetBCR = target.getBoundingClientRect();
-        var offsetTop = targetBCR.top; // Try and find the target's parent section
+        var offsetTop = targetBCR.top;
+        var offsetLeft = targetBCR.left; // Try and find the target's parent section
 
         var targetParents = getParents(target);
         var parentSection = targetParents.find(function (candidate) {
-          return _this9.sections.find(function (section) {
+          return Object.entries(_this9.sections) // Get sections associative array as a regular array
+          .map(function (_ref7) {
+            var _ref8 = _slicedToArray(_ref7, 2),
+                key = _ref8[0],
+                section = _ref8[1];
+
+            return section;
+          }) // map to section only (we dont need the key here)
+          .find(function (section) {
             return section.el == candidate;
-          });
+          }); // finally find the section that matches the candidate
         });
         var parentSectionOffset = 0;
 
         if (parentSection) {
-          parentSectionOffset = getTranslate(parentSection).y; // We got a parent section, store it's current offset to remove it later
+          parentSectionOffset = getTranslate(parentSection)[this.directionAxis]; // We got a parent section, store it's current offset to remove it later
+        } else {
+          // if no parent section is found we need to use instance scroll directly
+          parentSectionOffset = -this.instance.scroll[this.directionAxis];
         } // Final value of scroll destination : offsetTop + (optional offset given in options) - (parent's section translate)
 
 
-        offset = offsetTop + offset - parentSectionOffset;
+        if (this.direction === 'horizontal') {
+          offset = offsetLeft + offset - parentSectionOffset;
+        } else {
+          offset = offsetTop + offset - parentSectionOffset;
+        }
       } else {
         offset = target + offset;
       } // Actual scrollto
@@ -9445,13 +9839,21 @@ var _default$2 = /*#__PURE__*/function (_Core) {
       // Setup
 
 
-      var scrollStart = parseFloat(this.instance.delta.y);
-      var scrollTarget = Math.max(0, Math.min(offset, this.instance.limit)); // Make sure our target is in the scroll boundaries
+      var scrollStart = parseFloat(this.instance.delta[this.directionAxis]);
+      var scrollTarget = Math.max(0, Math.min(offset, this.instance.limit[this.directionAxis])); // Make sure our target is in the scroll boundaries
 
       var scrollDiff = scrollTarget - scrollStart;
 
       var render = function render(p) {
-        if (disableLerp) _this9.setScroll(_this9.instance.delta.x, scrollStart + scrollDiff * p);else _this9.instance.delta.y = scrollStart + scrollDiff * p;
+        if (disableLerp) {
+          if (_this9.direction === 'horizontal') {
+            _this9.setScroll(scrollStart + scrollDiff * p, _this9.instance.delta.y);
+          } else {
+            _this9.setScroll(_this9.instance.delta.x, scrollStart + scrollDiff * p);
+          }
+        } else {
+          _this9.instance.delta[_this9.directionAxis] = scrollStart + scrollDiff * p;
+        }
       }; // Prepare the scroll
 
 
@@ -9506,7 +9908,7 @@ var _default$2 = /*#__PURE__*/function (_Core) {
   }, {
     key: "setScroll",
     value: function setScroll(x, y) {
-      this.instance = _objectSpread2({}, this.instance, {
+      this.instance = _objectSpread2(_objectSpread2({}, this.instance), {}, {
         scroll: {
           x: x,
           y: y
@@ -9534,25 +9936,32 @@ var _default$2 = /*#__PURE__*/function (_Core) {
   return _default;
 }(_default);
 
-var _default$3 = /*#__PURE__*/function () {
-  function _default() {
+var Smooth = /*#__PURE__*/function () {
+  function Smooth() {
     var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
 
-    _classCallCheck(this, _default);
+    _classCallCheck(this, Smooth);
 
-    this.options = options;
+    this.options = options; // Override default options with given ones
+
     Object.assign(this, defaults, options);
+    this.smartphone = defaults.smartphone;
+    if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
+    this.tablet = defaults.tablet;
+    if (options.tablet) Object.assign(this.tablet, options.tablet);
+    if (!this.smooth && this.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible');
+    if (!this.tablet.smooth && this.tablet.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible (tablet)');
+    if (!this.smartphone.smooth && this.smartphone.direction == 'horizontal') console.warn('🚨 `smooth:false` & `horizontal` direction are not yet compatible (smartphone)');
     this.init();
   }
 
-  _createClass(_default, [{
+  _createClass(Smooth, [{
     key: "init",
     value: function init() {
-      if (!this.smoothMobile) {
-        this.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1;
-      }
+      this.options.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1 || window.innerWidth < this.tablet.breakpoint;
+      this.options.isTablet = this.options.isMobile && window.innerWidth >= this.tablet.breakpoint;
 
-      if (this.smooth === true && !this.isMobile) {
+      if (this.smooth && !this.options.isMobile || this.tablet.smooth && this.options.isTablet || this.smartphone.smooth && this.options.isMobile && !this.options.isTablet) {
         this.scroll = new _default$2(this.options);
       } else {
         this.scroll = new _default$1(this.options);
@@ -9585,9 +9994,8 @@ var _default$3 = /*#__PURE__*/function () {
     }
   }, {
     key: "scrollTo",
-    value: function scrollTo(target, offset, duration, easing, disableLerp, callback) {
-      // TODO - In next breaking update, use an object as 2nd parameter for options (offset, duration, easing, disableLerp, callback)
-      this.scroll.scrollTo(target, offset, duration, easing, disableLerp, callback);
+    value: function scrollTo(target, options) {
+      this.scroll.scrollTo(target, options);
     }
   }, {
     key: "setScroll",
@@ -9611,10 +10019,88 @@ var _default$3 = /*#__PURE__*/function () {
     }
   }]);
 
-  return _default;
+  return Smooth;
 }();
 
-var _default2 = _default$3;
+exports.Smooth = Smooth;
+
+var Native = /*#__PURE__*/function () {
+  function Native() {
+    var options = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+
+    _classCallCheck(this, Native);
+
+    this.options = options; // Override default options with given ones
+
+    Object.assign(this, defaults, options);
+    this.smartphone = defaults.smartphone;
+    if (options.smartphone) Object.assign(this.smartphone, options.smartphone);
+    this.tablet = defaults.tablet;
+    if (options.tablet) Object.assign(this.tablet, options.tablet);
+    this.init();
+  }
+
+  _createClass(Native, [{
+    key: "init",
+    value: function init() {
+      this.scroll = new _default$1(this.options);
+      this.scroll.init();
+
+      if (window.location.hash) {
+        // Get the hash without the '#' and find the matching element
+        var id = window.location.hash.slice(1, window.location.hash.length);
+        var target = document.getElementById(id); // If found, scroll to the element
+
+        if (target) this.scroll.scrollTo(target);
+      }
+    }
+  }, {
+    key: "update",
+    value: function update() {
+      this.scroll.update();
+    }
+  }, {
+    key: "start",
+    value: function start() {
+      this.scroll.startScroll();
+    }
+  }, {
+    key: "stop",
+    value: function stop() {
+      this.scroll.stopScroll();
+    }
+  }, {
+    key: "scrollTo",
+    value: function scrollTo(target, options) {
+      this.scroll.scrollTo(target, options);
+    }
+  }, {
+    key: "setScroll",
+    value: function setScroll(x, y) {
+      this.scroll.setScroll(x, y);
+    }
+  }, {
+    key: "on",
+    value: function on(event, func) {
+      this.scroll.setEvents(event, func);
+    }
+  }, {
+    key: "off",
+    value: function off(event, func) {
+      this.scroll.unsetEvents(event, func);
+    }
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.scroll.destroy();
+    }
+  }]);
+
+  return Native;
+}();
+
+exports.Native = Native;
+var _default2 = Smooth;
 exports.default = _default2;
 },{}],"js/components/general/Scroll.js":[function(require,module,exports) {
 "use strict";
@@ -9630,55 +10116,81 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 class Scroll {
   constructor(page) {
-    this.setInitialValues();
+    const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+    const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
+    this.scrollMultiplier = isMac && isFirefox ? 4.8 : 1.2;
+    this.smoothScrollMultiplier = .25;
+    this.scrollEase = [0.00, 0.28, 1.00, 0.69];
+    this.lerp = .2;
     this.page = page;
   }
 
-  init(container) {
-    this.locomotive = new _locomotiveScroll.default({
-      el: container !== null && container !== void 0 ? container : this.page.elements.container,
-      smooth: true,
-      lerp: .2
-    }); // ~~ instead of Math.floor();
-
-    this.locomotive.on('scroll', e => this.onScroll(~~e.scroll.y)); // Set Position & Threshold
-
-    this.position = this.locomotive.scroll.instance.scroll.y;
-    this.threshold = this.anchor.top() - this.navbar.height();
-  }
-
-  setInitialValues() {
+  setValues() {
+    // Define Initial Values
     this.navbar = $('#navbar');
     this.anchor = $('#navbar-collapse');
     this.hidden = false;
     this.opacity = 0;
     this.position = window.pageXOffset;
     this.threshold = 250;
+    this.limits = {
+      top: 0,
+      bottom: this.locomotive.scroll.instance.limit
+    };
   }
 
-  pause() {
-    this.locomotive.stop();
+  init(container) {
+    // Define Elements
+    this.body = $('body');
+    this.container = container !== null && container !== void 0 ? container : $('main').e(); // Define Links
+
+    this.links = $(this.container).children('a[href]').concat($('#navbar a').kill()); // Attach Scroll Events
+
+    this.attachEvents();
+    this.locomotive.on('scroll', e => this.onScroll(~~e.scroll.y)); // Set Initial Values
+
+    this.setValues(); // Update Values
+
+    this.position = this.locomotive.scroll.instance.scroll.y;
+    this.threshold = this.anchor.top() - this.navbar.height(); // Determine If Mobile
+
+    this.isMobile = this.locomotive.scroll.isMobile; // Remove Fixed Class If Mobile
+
+    if (this.isMobile) this.body.removeClass('fixed');
   }
 
-  resume() {
-    this.locomotive.start();
-  }
-
-  shutDown() {
-    this.navbar.toggle('opaque', false);
-    this.navbar.toggle('hidden', false);
-    this.locomotive.stop();
+  refresh(container) {
     this.locomotive.destroy();
-    $('.c-scrollbar').remove();
-  }
-
-  reboot(container) {
-    this.setInitialValues();
     this.init(container);
   }
 
-  update() {
-    this.locomotive.update();
+  attachEvents() {
+    // Create New Locomotive Scroll Instance
+    this.locomotive = new _locomotiveScroll.default({
+      el: this.container,
+      smooth: true,
+      multiplier: this.scrollMultiplier,
+      lerp: this.lerp,
+      scrollFromAnywhere: true
+    }); // Filter Out Relative Links
+
+    this.links.filter(link => {
+      if (this.page.state.url == link.href) return link;else if (link.href.includes('#') && !link.href.split('#')[1]) return link;else return null;
+    });
+    this.links.prevent('click', e => {
+      console.log(e);
+    });
+    console.log(this.links); // Attach Scroll Event Listeners
+    // this.links.filter(link => link.href.includes('#')).prevent('click', e => {
+    //     const href = e.target.closest('a').href.split('#')[1];
+    //     const target = href ? `#${href}` : 'top';
+    //     // const currentPosition = this.locomotive.scroll.instance.scroll.y;
+    //     // const targetPosition = href ? $(target).position().top : 0;
+    //     // const delta = Math.abs(currentPosition - targetPosition);
+    //     // const duration = Math.floor(delta * this.smoothScrollMultiplier);
+    //     // this.page.navbar.close(200).then(() => this.to(target, duration));
+    //     this.to(target);
+    // });
   }
 
   onScroll(y) {
@@ -9705,11 +10217,122 @@ class Scroll {
     this.position = y;
   }
 
-  toTop(duration) {
-    this.locomotive.scrollTo('top', 0, duration || 800);
+  update() {
+    this.locomotive.update();
   }
 
-}
+  pause() {
+    this.locomotive.stop();
+    if (this.isMobile) this.body.addClass('fixed');
+  }
+
+  resume() {
+    this.locomotive.start();
+    if (this.isMobile) this.body.removeClass('fixed');
+  }
+
+  async to(target, options, callback) {
+    var _options$duration, _options$offset, _Math$floor;
+
+    let t = target;
+    let duration = (_options$duration = options.duration) !== null && _options$duration !== void 0 ? _options$duration : 1000;
+    const easing = this.scrollEase;
+    const offset = (_options$offset = options.offset) !== null && _options$offset !== void 0 ? _options$offset : 0;
+
+    if (typeof t == 'string') {
+      var _$$position$top;
+
+      if (t === 'top') t = 0;else if (t === 'bottom') t = this.limits.bottom;else t = (_$$position$top = $(t).position().top) !== null && _$$position$top !== void 0 ? _$$position$top : 0;
+    } else if (typeof t == 'object') {
+      if ($.dreaming(t)) t = t.position().top;else t = $(t).position().top;
+    } else if (typeof t == 'number') {
+      if (t < 0) t = 0;else if (t > this.limits.bottom) t = this.limits.bottom;
+    }
+
+    duration = (_Math$floor = Math.floor(Math.abs(this.position - t) * this.smoothScrollMultiplier)) !== null && _Math$floor !== void 0 ? _Math$floor : 1000;
+    await this.page.navbar.close();
+    this.locomotive.scrollTo(t, {
+      offset,
+      duration,
+      easing,
+      callback
+    });
+    await $.delay(duration);
+    return 'Scrolling Complete';
+  }
+
+} // class ScrollyBitch {
+//     constructor(page) {
+//         this.setInitialValues();
+//         this.page = page;
+//     }
+//     init(container) {
+//         this.locomotive = new LocomotiveScroll({
+//             el: container ?? this.page.elements.container,
+//             smooth: true,
+//             lerp: .2
+//         });
+//         // ~~ instead of Math.floor();
+//         this.locomotive.on('scroll', e => this.onScroll(~~e.scroll.y));
+//         // Set Position & Threshold
+//         this.position = this.locomotive.scroll.instance.scroll.y;
+//         this.threshold = this.anchor.top() - this.navbar.height();
+//     }
+//     setInitialValues() {
+//         this.navbar = $('#navbar');
+//         this.anchor = $('#navbar-collapse');
+//         this.hidden = false;
+//         this.opacity = 0;
+//         this.position = window.pageXOffset;
+//         this.threshold = 250;
+//     }
+//     pause() {
+//         this.locomotive.stop();
+//     }
+//     resume() {
+//         this.locomotive.start();
+//     }
+//     shutDown() {
+//         this.navbar.toggle('opaque', false);
+//         this.navbar.toggle('hidden', false);
+//         this.locomotive.stop();
+//         this.locomotive.destroy();
+//         $('.c-scrollbar').remove();
+//     }
+//     reboot(container) {
+//         this.setInitialValues();
+//         this.init(container);
+//     }
+//     update() {
+//         this.locomotive.update();
+//     }
+//     onScroll(y) {
+//         if (y === this.position) return;
+//         const opaque = y > this.threshold;
+//         const hide = opaque && y > this.position;
+//         if (hide && !this.hidden) {
+//             this.navbar.toggle('hidden', true);
+//             this.hidden = true;
+//         }
+//         else if (!hide && this.hidden) {
+//             this.navbar.toggle('hidden', false);
+//             this.hidden = false;
+//         }
+//         if (opaque && !this.opacity) {
+//             this.navbar.toggle('opaque', true);
+//             this.opacity = 1;
+//         }
+//         else if (!opaque && this.opacity) {
+//             this.navbar.toggle('opaque', false);
+//             this.opacity = 0;
+//         }
+//         this.position = y;
+//     }
+//     toTop(duration) {
+//         this.locomotive.scrollTo('top', 0, duration || 800);
+//     }
+// }
+
 
 exports.default = Scroll;
 },{"locomotive-scroll":"../../node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js"}],"js/components/general/Navbar.js":[function(require,module,exports) {
@@ -9722,7 +10345,7 @@ exports.default = void 0;
 
 //import { dream as $ } from '../vendor/Dreams';
 class Navbar {
-  constructor(scrollHandler) {
+  constructor(scroll) {
     this.main = $('#navbar');
     this.links = this.main.children('a[href]');
     this.userElems = {
@@ -9734,7 +10357,7 @@ class Navbar {
     this.checkbox = this.toggle.nodes();
     this.icon = $('#nav-icon');
     this.branding = $('#nav-brand');
-    this.scrollHandler = scrollHandler;
+    this.scroll = scroll;
     this.isOpen = false;
   }
 
@@ -9748,7 +10371,7 @@ class Navbar {
     this.links.prevent('click', e => {
       const page = this.namespace === 'home' ? '' : this.namespace;
       const target = e.target.href.split('/')[3];
-      if (target === page) this.scrollHandler.toTop();
+      if (target === page) this.scroll.toTop();
     });
   }
 
@@ -9758,7 +10381,7 @@ class Navbar {
     this.toggleDrawer(true);
   }
 
-  close() {
+  async close() {
     if (!this.isOpen) return;
     this.checkbox.checked = false;
     this.toggleDrawer(false);
@@ -9767,10 +10390,10 @@ class Navbar {
   toggleDrawer(open) {
     if (open) {
       this.branding.hide();
-      this.scrollHandler.pause();
+      this.scroll.pause();
     } else {
       this.branding.show();
-      this.scrollHandler.resume();
+      this.scroll.resume();
     }
 
     this.icon.toggle('open', open);
@@ -9861,24 +10484,20 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 class Footer {
-  constructor(scroll) {
-    this.scroll = scroll;
+  constructor(page) {
+    this.page = page;
+    console.log(this);
   }
 
-  init(container, namespace) {
-    this.namespace = namespace;
-    this.selectElements(container);
+  init() {
+    this.namespace = this.page.state.namespace;
+    this.links = $(this.page.elements.container).children('.footer__nav a');
     this.attachListeners();
-  }
+  } // selectElements(container) {
+  //     this.container = container ? $(container).children('footer.footer') : $('footer.footer');
+  //     this.links = this.container.children('.footer__nav a');
+  // }
 
-  update(container, namespace) {
-    this.init(container, namespace);
-  }
-
-  selectElements(container) {
-    this.container = container ? $(container).children('footer.footer') : $('footer.footer');
-    this.links = this.container.children('.footer__nav a');
-  }
 
   attachListeners() {
     this.links.children().css({
@@ -9894,7 +10513,2295 @@ class Footer {
 }
 
 exports.default = Footer;
-},{}],"js/Page.js":[function(require,module,exports) {
+},{}],"js/components/general/Typewriter.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+class Typewriter {
+  constructor(selector) {
+    this.element = $(selector);
+    this.words = this.element.data('words', 'json');
+    this.period = this.element.data('period', 'int') || 2000;
+    this.loopNum = 0;
+    this.text = '';
+  }
+
+  init() {
+    this.tick();
+    this.isDeleting = false;
+  }
+
+  tick() {
+    const i = this.loopNum % this.words.length;
+    const fullText = this.words[i];
+    if (this.isDeleting) this.text = fullText.substring(0, this.text.length - 1);else this.text = fullText.substring(0, this.text.length + 1);
+    this.element.html("<span class=\"wrap\">".concat(this.text, "</span>"));
+    let delta = 200 - Math.random() * 100;
+    if (this.isDeleting) delta /= 2;
+
+    if (!this.isDeleting && this.text === fullText) {
+      delta = this.period;
+      this.isDeleting = true;
+    } else if (this.isDeleting && this.text === '') {
+      this.isDeleting = false;
+      this.loopNum++;
+      delta = 500;
+    }
+
+    setTimeout(() => this.tick(), delta);
+  }
+
+}
+
+exports.default = Typewriter;
+},{}],"js/components/general/DraggableSlider.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+class DraggableSlider {
+  constructor(options) {
+    // Define Active Class
+    this.activeClass = options.activeClass; // Define Slider
+
+    this.slider = $(options.selector);
+    this.sliderElem = this.slider.nodes(); // Define State Variables
+
+    this.isDragging = false;
+    this.startX = undefined;
+    this.scrollLeft = undefined;
+  }
+
+  init() {
+    this.slider.on('mousedown', e => this.startDrag(e.pageX));
+    this.slider.on('mouseleave mouseup', () => this.endDrag());
+    this.slider.on('mousemove', e => this.dragging(e));
+  }
+
+  startDrag(x) {
+    this.isDragging = true;
+    this.slider.addClass(this.activeClass);
+    this.startX = x - this.sliderElem.offsetLeft;
+    this.scrollLeft = this.sliderElem.scrollLeft;
+  }
+
+  endDrag() {
+    this.isDragging = false;
+    this.slider.removeClass(this.activeClass);
+  }
+
+  dragging(e) {
+    if (!this.isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - this.sliderElem.offsetLeft;
+    const walk = (x - this.startX) * 3; // Speeds Scroll Rate
+
+    this.sliderElem.scrollLeft = this.scrollLeft - walk;
+  }
+
+}
+
+exports.default = DraggableSlider;
+},{}],"../../node_modules/axios/lib/helpers/bind.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = function bind(fn, thisArg) {
+  return function wrap() {
+    var args = new Array(arguments.length);
+    for (var i = 0; i < args.length; i++) {
+      args[i] = arguments[i];
+    }
+    return fn.apply(thisArg, args);
+  };
+};
+
+},{}],"../../node_modules/axios/lib/utils.js":[function(require,module,exports) {
+'use strict';
+
+var bind = require('./helpers/bind');
+
+/*global toString:true*/
+
+// utils is a library of generic helper functions non-specific to axios
+
+var toString = Object.prototype.toString;
+
+/**
+ * Determine if a value is an Array
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Array, otherwise false
+ */
+function isArray(val) {
+  return toString.call(val) === '[object Array]';
+}
+
+/**
+ * Determine if a value is undefined
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if the value is undefined, otherwise false
+ */
+function isUndefined(val) {
+  return typeof val === 'undefined';
+}
+
+/**
+ * Determine if a value is a Buffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Buffer, otherwise false
+ */
+function isBuffer(val) {
+  return val !== null && !isUndefined(val) && val.constructor !== null && !isUndefined(val.constructor)
+    && typeof val.constructor.isBuffer === 'function' && val.constructor.isBuffer(val);
+}
+
+/**
+ * Determine if a value is an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an ArrayBuffer, otherwise false
+ */
+function isArrayBuffer(val) {
+  return toString.call(val) === '[object ArrayBuffer]';
+}
+
+/**
+ * Determine if a value is a FormData
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an FormData, otherwise false
+ */
+function isFormData(val) {
+  return (typeof FormData !== 'undefined') && (val instanceof FormData);
+}
+
+/**
+ * Determine if a value is a view on an ArrayBuffer
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a view on an ArrayBuffer, otherwise false
+ */
+function isArrayBufferView(val) {
+  var result;
+  if ((typeof ArrayBuffer !== 'undefined') && (ArrayBuffer.isView)) {
+    result = ArrayBuffer.isView(val);
+  } else {
+    result = (val) && (val.buffer) && (val.buffer instanceof ArrayBuffer);
+  }
+  return result;
+}
+
+/**
+ * Determine if a value is a String
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a String, otherwise false
+ */
+function isString(val) {
+  return typeof val === 'string';
+}
+
+/**
+ * Determine if a value is a Number
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Number, otherwise false
+ */
+function isNumber(val) {
+  return typeof val === 'number';
+}
+
+/**
+ * Determine if a value is an Object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is an Object, otherwise false
+ */
+function isObject(val) {
+  return val !== null && typeof val === 'object';
+}
+
+/**
+ * Determine if a value is a Date
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Date, otherwise false
+ */
+function isDate(val) {
+  return toString.call(val) === '[object Date]';
+}
+
+/**
+ * Determine if a value is a File
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a File, otherwise false
+ */
+function isFile(val) {
+  return toString.call(val) === '[object File]';
+}
+
+/**
+ * Determine if a value is a Blob
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Blob, otherwise false
+ */
+function isBlob(val) {
+  return toString.call(val) === '[object Blob]';
+}
+
+/**
+ * Determine if a value is a Function
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Function, otherwise false
+ */
+function isFunction(val) {
+  return toString.call(val) === '[object Function]';
+}
+
+/**
+ * Determine if a value is a Stream
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a Stream, otherwise false
+ */
+function isStream(val) {
+  return isObject(val) && isFunction(val.pipe);
+}
+
+/**
+ * Determine if a value is a URLSearchParams object
+ *
+ * @param {Object} val The value to test
+ * @returns {boolean} True if value is a URLSearchParams object, otherwise false
+ */
+function isURLSearchParams(val) {
+  return typeof URLSearchParams !== 'undefined' && val instanceof URLSearchParams;
+}
+
+/**
+ * Trim excess whitespace off the beginning and end of a string
+ *
+ * @param {String} str The String to trim
+ * @returns {String} The String freed of excess whitespace
+ */
+function trim(str) {
+  return str.replace(/^\s*/, '').replace(/\s*$/, '');
+}
+
+/**
+ * Determine if we're running in a standard browser environment
+ *
+ * This allows axios to run in a web worker, and react-native.
+ * Both environments support XMLHttpRequest, but not fully standard globals.
+ *
+ * web workers:
+ *  typeof window -> undefined
+ *  typeof document -> undefined
+ *
+ * react-native:
+ *  navigator.product -> 'ReactNative'
+ * nativescript
+ *  navigator.product -> 'NativeScript' or 'NS'
+ */
+function isStandardBrowserEnv() {
+  if (typeof navigator !== 'undefined' && (navigator.product === 'ReactNative' ||
+                                           navigator.product === 'NativeScript' ||
+                                           navigator.product === 'NS')) {
+    return false;
+  }
+  return (
+    typeof window !== 'undefined' &&
+    typeof document !== 'undefined'
+  );
+}
+
+/**
+ * Iterate over an Array or an Object invoking a function for each item.
+ *
+ * If `obj` is an Array callback will be called passing
+ * the value, index, and complete array for each item.
+ *
+ * If 'obj' is an Object callback will be called passing
+ * the value, key, and complete object for each property.
+ *
+ * @param {Object|Array} obj The object to iterate
+ * @param {Function} fn The callback to invoke for each item
+ */
+function forEach(obj, fn) {
+  // Don't bother if no value provided
+  if (obj === null || typeof obj === 'undefined') {
+    return;
+  }
+
+  // Force an array if not already something iterable
+  if (typeof obj !== 'object') {
+    /*eslint no-param-reassign:0*/
+    obj = [obj];
+  }
+
+  if (isArray(obj)) {
+    // Iterate over array values
+    for (var i = 0, l = obj.length; i < l; i++) {
+      fn.call(null, obj[i], i, obj);
+    }
+  } else {
+    // Iterate over object keys
+    for (var key in obj) {
+      if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        fn.call(null, obj[key], key, obj);
+      }
+    }
+  }
+}
+
+/**
+ * Accepts varargs expecting each argument to be an object, then
+ * immutably merges the properties of each object and returns result.
+ *
+ * When multiple objects contain the same key the later object in
+ * the arguments list will take precedence.
+ *
+ * Example:
+ *
+ * ```js
+ * var result = merge({foo: 123}, {foo: 456});
+ * console.log(result.foo); // outputs 456
+ * ```
+ *
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function merge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = merge(result[key], val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Function equal to merge with the difference being that no reference
+ * to original objects is kept.
+ *
+ * @see merge
+ * @param {Object} obj1 Object to merge
+ * @returns {Object} Result of all merge properties
+ */
+function deepMerge(/* obj1, obj2, obj3, ... */) {
+  var result = {};
+  function assignValue(val, key) {
+    if (typeof result[key] === 'object' && typeof val === 'object') {
+      result[key] = deepMerge(result[key], val);
+    } else if (typeof val === 'object') {
+      result[key] = deepMerge({}, val);
+    } else {
+      result[key] = val;
+    }
+  }
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+    forEach(arguments[i], assignValue);
+  }
+  return result;
+}
+
+/**
+ * Extends object a by mutably adding to it the properties of object b.
+ *
+ * @param {Object} a The object to be extended
+ * @param {Object} b The object to copy properties from
+ * @param {Object} thisArg The object to bind function to
+ * @return {Object} The resulting value of object a
+ */
+function extend(a, b, thisArg) {
+  forEach(b, function assignValue(val, key) {
+    if (thisArg && typeof val === 'function') {
+      a[key] = bind(val, thisArg);
+    } else {
+      a[key] = val;
+    }
+  });
+  return a;
+}
+
+module.exports = {
+  isArray: isArray,
+  isArrayBuffer: isArrayBuffer,
+  isBuffer: isBuffer,
+  isFormData: isFormData,
+  isArrayBufferView: isArrayBufferView,
+  isString: isString,
+  isNumber: isNumber,
+  isObject: isObject,
+  isUndefined: isUndefined,
+  isDate: isDate,
+  isFile: isFile,
+  isBlob: isBlob,
+  isFunction: isFunction,
+  isStream: isStream,
+  isURLSearchParams: isURLSearchParams,
+  isStandardBrowserEnv: isStandardBrowserEnv,
+  forEach: forEach,
+  merge: merge,
+  deepMerge: deepMerge,
+  extend: extend,
+  trim: trim
+};
+
+},{"./helpers/bind":"../../node_modules/axios/lib/helpers/bind.js"}],"../../node_modules/axios/lib/helpers/buildURL.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+
+function encode(val) {
+  return encodeURIComponent(val).
+    replace(/%40/gi, '@').
+    replace(/%3A/gi, ':').
+    replace(/%24/g, '$').
+    replace(/%2C/gi, ',').
+    replace(/%20/g, '+').
+    replace(/%5B/gi, '[').
+    replace(/%5D/gi, ']');
+}
+
+/**
+ * Build a URL by appending params to the end
+ *
+ * @param {string} url The base of the url (e.g., http://www.google.com)
+ * @param {object} [params] The params to be appended
+ * @returns {string} The formatted url
+ */
+module.exports = function buildURL(url, params, paramsSerializer) {
+  /*eslint no-param-reassign:0*/
+  if (!params) {
+    return url;
+  }
+
+  var serializedParams;
+  if (paramsSerializer) {
+    serializedParams = paramsSerializer(params);
+  } else if (utils.isURLSearchParams(params)) {
+    serializedParams = params.toString();
+  } else {
+    var parts = [];
+
+    utils.forEach(params, function serialize(val, key) {
+      if (val === null || typeof val === 'undefined') {
+        return;
+      }
+
+      if (utils.isArray(val)) {
+        key = key + '[]';
+      } else {
+        val = [val];
+      }
+
+      utils.forEach(val, function parseValue(v) {
+        if (utils.isDate(v)) {
+          v = v.toISOString();
+        } else if (utils.isObject(v)) {
+          v = JSON.stringify(v);
+        }
+        parts.push(encode(key) + '=' + encode(v));
+      });
+    });
+
+    serializedParams = parts.join('&');
+  }
+
+  if (serializedParams) {
+    var hashmarkIndex = url.indexOf('#');
+    if (hashmarkIndex !== -1) {
+      url = url.slice(0, hashmarkIndex);
+    }
+
+    url += (url.indexOf('?') === -1 ? '?' : '&') + serializedParams;
+  }
+
+  return url;
+};
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/core/InterceptorManager.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+
+function InterceptorManager() {
+  this.handlers = [];
+}
+
+/**
+ * Add a new interceptor to the stack
+ *
+ * @param {Function} fulfilled The function to handle `then` for a `Promise`
+ * @param {Function} rejected The function to handle `reject` for a `Promise`
+ *
+ * @return {Number} An ID used to remove interceptor later
+ */
+InterceptorManager.prototype.use = function use(fulfilled, rejected) {
+  this.handlers.push({
+    fulfilled: fulfilled,
+    rejected: rejected
+  });
+  return this.handlers.length - 1;
+};
+
+/**
+ * Remove an interceptor from the stack
+ *
+ * @param {Number} id The ID that was returned by `use`
+ */
+InterceptorManager.prototype.eject = function eject(id) {
+  if (this.handlers[id]) {
+    this.handlers[id] = null;
+  }
+};
+
+/**
+ * Iterate over all the registered interceptors
+ *
+ * This method is particularly useful for skipping over any
+ * interceptors that may have become `null` calling `eject`.
+ *
+ * @param {Function} fn The function to call for each interceptor
+ */
+InterceptorManager.prototype.forEach = function forEach(fn) {
+  utils.forEach(this.handlers, function forEachHandler(h) {
+    if (h !== null) {
+      fn(h);
+    }
+  });
+};
+
+module.exports = InterceptorManager;
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/core/transformData.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+
+/**
+ * Transform the data for a request or a response
+ *
+ * @param {Object|String} data The data to be transformed
+ * @param {Array} headers The headers for the request or response
+ * @param {Array|Function} fns A single function or Array of functions
+ * @returns {*} The resulting transformed data
+ */
+module.exports = function transformData(data, headers, fns) {
+  /*eslint no-param-reassign:0*/
+  utils.forEach(fns, function transform(fn) {
+    data = fn(data, headers);
+  });
+
+  return data;
+};
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/cancel/isCancel.js":[function(require,module,exports) {
+'use strict';
+
+module.exports = function isCancel(value) {
+  return !!(value && value.__CANCEL__);
+};
+
+},{}],"../../node_modules/axios/lib/helpers/normalizeHeaderName.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('../utils');
+
+module.exports = function normalizeHeaderName(headers, normalizedName) {
+  utils.forEach(headers, function processHeader(value, name) {
+    if (name !== normalizedName && name.toUpperCase() === normalizedName.toUpperCase()) {
+      headers[normalizedName] = value;
+      delete headers[name];
+    }
+  });
+};
+
+},{"../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/core/enhanceError.js":[function(require,module,exports) {
+'use strict';
+
+/**
+ * Update an Error with the specified config, error code, and response.
+ *
+ * @param {Error} error The error to update.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The error.
+ */
+module.exports = function enhanceError(error, config, code, request, response) {
+  error.config = config;
+  if (code) {
+    error.code = code;
+  }
+
+  error.request = request;
+  error.response = response;
+  error.isAxiosError = true;
+
+  error.toJSON = function() {
+    return {
+      // Standard
+      message: this.message,
+      name: this.name,
+      // Microsoft
+      description: this.description,
+      number: this.number,
+      // Mozilla
+      fileName: this.fileName,
+      lineNumber: this.lineNumber,
+      columnNumber: this.columnNumber,
+      stack: this.stack,
+      // Axios
+      config: this.config,
+      code: this.code
+    };
+  };
+  return error;
+};
+
+},{}],"../../node_modules/axios/lib/core/createError.js":[function(require,module,exports) {
+'use strict';
+
+var enhanceError = require('./enhanceError');
+
+/**
+ * Create an Error with the specified message, config, error code, request and response.
+ *
+ * @param {string} message The error message.
+ * @param {Object} config The config.
+ * @param {string} [code] The error code (for example, 'ECONNABORTED').
+ * @param {Object} [request] The request.
+ * @param {Object} [response] The response.
+ * @returns {Error} The created error.
+ */
+module.exports = function createError(message, config, code, request, response) {
+  var error = new Error(message);
+  return enhanceError(error, config, code, request, response);
+};
+
+},{"./enhanceError":"../../node_modules/axios/lib/core/enhanceError.js"}],"../../node_modules/axios/lib/core/settle.js":[function(require,module,exports) {
+'use strict';
+
+var createError = require('./createError');
+
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */
+module.exports = function settle(resolve, reject, response) {
+  var validateStatus = response.config.validateStatus;
+  if (!validateStatus || validateStatus(response.status)) {
+    resolve(response);
+  } else {
+    reject(createError(
+      'Request failed with status code ' + response.status,
+      response.config,
+      null,
+      response.request,
+      response
+    ));
+  }
+};
+
+},{"./createError":"../../node_modules/axios/lib/core/createError.js"}],"../../node_modules/axios/lib/helpers/isAbsoluteURL.js":[function(require,module,exports) {
+'use strict';
+
+/**
+ * Determines whether the specified URL is absolute
+ *
+ * @param {string} url The URL to test
+ * @returns {boolean} True if the specified URL is absolute, otherwise false
+ */
+module.exports = function isAbsoluteURL(url) {
+  // A URL is considered absolute if it begins with "<scheme>://" or "//" (protocol-relative URL).
+  // RFC 3986 defines scheme name as a sequence of characters beginning with a letter and followed
+  // by any combination of letters, digits, plus, period, or hyphen.
+  return /^([a-z][a-z\d\+\-\.]*:)?\/\//i.test(url);
+};
+
+},{}],"../../node_modules/axios/lib/helpers/combineURLs.js":[function(require,module,exports) {
+'use strict';
+
+/**
+ * Creates a new URL by combining the specified URLs
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} relativeURL The relative URL
+ * @returns {string} The combined URL
+ */
+module.exports = function combineURLs(baseURL, relativeURL) {
+  return relativeURL
+    ? baseURL.replace(/\/+$/, '') + '/' + relativeURL.replace(/^\/+/, '')
+    : baseURL;
+};
+
+},{}],"../../node_modules/axios/lib/core/buildFullPath.js":[function(require,module,exports) {
+'use strict';
+
+var isAbsoluteURL = require('../helpers/isAbsoluteURL');
+var combineURLs = require('../helpers/combineURLs');
+
+/**
+ * Creates a new URL by combining the baseURL with the requestedURL,
+ * only when the requestedURL is not already an absolute URL.
+ * If the requestURL is absolute, this function returns the requestedURL untouched.
+ *
+ * @param {string} baseURL The base URL
+ * @param {string} requestedURL Absolute or relative URL to combine
+ * @returns {string} The combined full path
+ */
+module.exports = function buildFullPath(baseURL, requestedURL) {
+  if (baseURL && !isAbsoluteURL(requestedURL)) {
+    return combineURLs(baseURL, requestedURL);
+  }
+  return requestedURL;
+};
+
+},{"../helpers/isAbsoluteURL":"../../node_modules/axios/lib/helpers/isAbsoluteURL.js","../helpers/combineURLs":"../../node_modules/axios/lib/helpers/combineURLs.js"}],"../../node_modules/axios/lib/helpers/parseHeaders.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+
+// Headers whose duplicates are ignored by node
+// c.f. https://nodejs.org/api/http.html#http_message_headers
+var ignoreDuplicateOf = [
+  'age', 'authorization', 'content-length', 'content-type', 'etag',
+  'expires', 'from', 'host', 'if-modified-since', 'if-unmodified-since',
+  'last-modified', 'location', 'max-forwards', 'proxy-authorization',
+  'referer', 'retry-after', 'user-agent'
+];
+
+/**
+ * Parse headers into an object
+ *
+ * ```
+ * Date: Wed, 27 Aug 2014 08:58:49 GMT
+ * Content-Type: application/json
+ * Connection: keep-alive
+ * Transfer-Encoding: chunked
+ * ```
+ *
+ * @param {String} headers Headers needing to be parsed
+ * @returns {Object} Headers parsed into an object
+ */
+module.exports = function parseHeaders(headers) {
+  var parsed = {};
+  var key;
+  var val;
+  var i;
+
+  if (!headers) { return parsed; }
+
+  utils.forEach(headers.split('\n'), function parser(line) {
+    i = line.indexOf(':');
+    key = utils.trim(line.substr(0, i)).toLowerCase();
+    val = utils.trim(line.substr(i + 1));
+
+    if (key) {
+      if (parsed[key] && ignoreDuplicateOf.indexOf(key) >= 0) {
+        return;
+      }
+      if (key === 'set-cookie') {
+        parsed[key] = (parsed[key] ? parsed[key] : []).concat([val]);
+      } else {
+        parsed[key] = parsed[key] ? parsed[key] + ', ' + val : val;
+      }
+    }
+  });
+
+  return parsed;
+};
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/helpers/isURLSameOrigin.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs have full support of the APIs needed to test
+  // whether the request URL is of the same origin as current location.
+    (function standardBrowserEnv() {
+      var msie = /(msie|trident)/i.test(navigator.userAgent);
+      var urlParsingNode = document.createElement('a');
+      var originURL;
+
+      /**
+    * Parse a URL to discover it's components
+    *
+    * @param {String} url The URL to be parsed
+    * @returns {Object}
+    */
+      function resolveURL(url) {
+        var href = url;
+
+        if (msie) {
+        // IE needs attribute set twice to normalize properties
+          urlParsingNode.setAttribute('href', href);
+          href = urlParsingNode.href;
+        }
+
+        urlParsingNode.setAttribute('href', href);
+
+        // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+        return {
+          href: urlParsingNode.href,
+          protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
+          host: urlParsingNode.host,
+          search: urlParsingNode.search ? urlParsingNode.search.replace(/^\?/, '') : '',
+          hash: urlParsingNode.hash ? urlParsingNode.hash.replace(/^#/, '') : '',
+          hostname: urlParsingNode.hostname,
+          port: urlParsingNode.port,
+          pathname: (urlParsingNode.pathname.charAt(0) === '/') ?
+            urlParsingNode.pathname :
+            '/' + urlParsingNode.pathname
+        };
+      }
+
+      originURL = resolveURL(window.location.href);
+
+      /**
+    * Determine if a URL shares the same origin as the current location
+    *
+    * @param {String} requestURL The URL to test
+    * @returns {boolean} True if URL shares the same origin, otherwise false
+    */
+      return function isURLSameOrigin(requestURL) {
+        var parsed = (utils.isString(requestURL)) ? resolveURL(requestURL) : requestURL;
+        return (parsed.protocol === originURL.protocol &&
+            parsed.host === originURL.host);
+      };
+    })() :
+
+  // Non standard browser envs (web workers, react-native) lack needed support.
+    (function nonStandardBrowserEnv() {
+      return function isURLSameOrigin() {
+        return true;
+      };
+    })()
+);
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/helpers/cookies.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+
+module.exports = (
+  utils.isStandardBrowserEnv() ?
+
+  // Standard browser envs support document.cookie
+    (function standardBrowserEnv() {
+      return {
+        write: function write(name, value, expires, path, domain, secure) {
+          var cookie = [];
+          cookie.push(name + '=' + encodeURIComponent(value));
+
+          if (utils.isNumber(expires)) {
+            cookie.push('expires=' + new Date(expires).toGMTString());
+          }
+
+          if (utils.isString(path)) {
+            cookie.push('path=' + path);
+          }
+
+          if (utils.isString(domain)) {
+            cookie.push('domain=' + domain);
+          }
+
+          if (secure === true) {
+            cookie.push('secure');
+          }
+
+          document.cookie = cookie.join('; ');
+        },
+
+        read: function read(name) {
+          var match = document.cookie.match(new RegExp('(^|;\\s*)(' + name + ')=([^;]*)'));
+          return (match ? decodeURIComponent(match[3]) : null);
+        },
+
+        remove: function remove(name) {
+          this.write(name, '', Date.now() - 86400000);
+        }
+      };
+    })() :
+
+  // Non standard browser env (web workers, react-native) lack needed support.
+    (function nonStandardBrowserEnv() {
+      return {
+        write: function write() {},
+        read: function read() { return null; },
+        remove: function remove() {}
+      };
+    })()
+);
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/adapters/xhr.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+var settle = require('./../core/settle');
+var buildURL = require('./../helpers/buildURL');
+var buildFullPath = require('../core/buildFullPath');
+var parseHeaders = require('./../helpers/parseHeaders');
+var isURLSameOrigin = require('./../helpers/isURLSameOrigin');
+var createError = require('../core/createError');
+
+module.exports = function xhrAdapter(config) {
+  return new Promise(function dispatchXhrRequest(resolve, reject) {
+    var requestData = config.data;
+    var requestHeaders = config.headers;
+
+    if (utils.isFormData(requestData)) {
+      delete requestHeaders['Content-Type']; // Let the browser set it
+    }
+
+    var request = new XMLHttpRequest();
+
+    // HTTP basic authentication
+    if (config.auth) {
+      var username = config.auth.username || '';
+      var password = config.auth.password || '';
+      requestHeaders.Authorization = 'Basic ' + btoa(username + ':' + password);
+    }
+
+    var fullPath = buildFullPath(config.baseURL, config.url);
+    request.open(config.method.toUpperCase(), buildURL(fullPath, config.params, config.paramsSerializer), true);
+
+    // Set the request timeout in MS
+    request.timeout = config.timeout;
+
+    // Listen for ready state
+    request.onreadystatechange = function handleLoad() {
+      if (!request || request.readyState !== 4) {
+        return;
+      }
+
+      // The request errored out and we didn't get a response, this will be
+      // handled by onerror instead
+      // With one exception: request that using file: protocol, most browsers
+      // will return status as 0 even though it's a successful request
+      if (request.status === 0 && !(request.responseURL && request.responseURL.indexOf('file:') === 0)) {
+        return;
+      }
+
+      // Prepare the response
+      var responseHeaders = 'getAllResponseHeaders' in request ? parseHeaders(request.getAllResponseHeaders()) : null;
+      var responseData = !config.responseType || config.responseType === 'text' ? request.responseText : request.response;
+      var response = {
+        data: responseData,
+        status: request.status,
+        statusText: request.statusText,
+        headers: responseHeaders,
+        config: config,
+        request: request
+      };
+
+      settle(resolve, reject, response);
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle browser request cancellation (as opposed to a manual cancellation)
+    request.onabort = function handleAbort() {
+      if (!request) {
+        return;
+      }
+
+      reject(createError('Request aborted', config, 'ECONNABORTED', request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle low level network errors
+    request.onerror = function handleError() {
+      // Real errors are hidden from us by the browser
+      // onerror should only fire if it's a network error
+      reject(createError('Network Error', config, null, request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Handle timeout
+    request.ontimeout = function handleTimeout() {
+      var timeoutErrorMessage = 'timeout of ' + config.timeout + 'ms exceeded';
+      if (config.timeoutErrorMessage) {
+        timeoutErrorMessage = config.timeoutErrorMessage;
+      }
+      reject(createError(timeoutErrorMessage, config, 'ECONNABORTED',
+        request));
+
+      // Clean up request
+      request = null;
+    };
+
+    // Add xsrf header
+    // This is only done if running in a standard browser environment.
+    // Specifically not if we're in a web worker, or react-native.
+    if (utils.isStandardBrowserEnv()) {
+      var cookies = require('./../helpers/cookies');
+
+      // Add xsrf header
+      var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
+        cookies.read(config.xsrfCookieName) :
+        undefined;
+
+      if (xsrfValue) {
+        requestHeaders[config.xsrfHeaderName] = xsrfValue;
+      }
+    }
+
+    // Add headers to the request
+    if ('setRequestHeader' in request) {
+      utils.forEach(requestHeaders, function setRequestHeader(val, key) {
+        if (typeof requestData === 'undefined' && key.toLowerCase() === 'content-type') {
+          // Remove Content-Type if data is undefined
+          delete requestHeaders[key];
+        } else {
+          // Otherwise add header to the request
+          request.setRequestHeader(key, val);
+        }
+      });
+    }
+
+    // Add withCredentials to request if needed
+    if (!utils.isUndefined(config.withCredentials)) {
+      request.withCredentials = !!config.withCredentials;
+    }
+
+    // Add responseType to request if needed
+    if (config.responseType) {
+      try {
+        request.responseType = config.responseType;
+      } catch (e) {
+        // Expected DOMException thrown by browsers not compatible XMLHttpRequest Level 2.
+        // But, this can be suppressed for 'json' type as it can be parsed by default 'transformResponse' function.
+        if (config.responseType !== 'json') {
+          throw e;
+        }
+      }
+    }
+
+    // Handle progress if needed
+    if (typeof config.onDownloadProgress === 'function') {
+      request.addEventListener('progress', config.onDownloadProgress);
+    }
+
+    // Not all browsers support upload events
+    if (typeof config.onUploadProgress === 'function' && request.upload) {
+      request.upload.addEventListener('progress', config.onUploadProgress);
+    }
+
+    if (config.cancelToken) {
+      // Handle cancellation
+      config.cancelToken.promise.then(function onCanceled(cancel) {
+        if (!request) {
+          return;
+        }
+
+        request.abort();
+        reject(cancel);
+        // Clean up request
+        request = null;
+      });
+    }
+
+    if (requestData === undefined) {
+      requestData = null;
+    }
+
+    // Send the request
+    request.send(requestData);
+  });
+};
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js","./../core/settle":"../../node_modules/axios/lib/core/settle.js","./../helpers/buildURL":"../../node_modules/axios/lib/helpers/buildURL.js","../core/buildFullPath":"../../node_modules/axios/lib/core/buildFullPath.js","./../helpers/parseHeaders":"../../node_modules/axios/lib/helpers/parseHeaders.js","./../helpers/isURLSameOrigin":"../../node_modules/axios/lib/helpers/isURLSameOrigin.js","../core/createError":"../../node_modules/axios/lib/core/createError.js","./../helpers/cookies":"../../node_modules/axios/lib/helpers/cookies.js"}],"../../node_modules/process/browser.js":[function(require,module,exports) {
+
+// shim for using process in browser
+var process = module.exports = {}; // cached from whatever global is present so that test runners that stub it
+// don't break things.  But we need to wrap it in a try catch in case it is
+// wrapped in strict mode code which doesn't define any globals.  It's inside a
+// function because try/catches deoptimize in certain engines.
+
+var cachedSetTimeout;
+var cachedClearTimeout;
+
+function defaultSetTimout() {
+  throw new Error('setTimeout has not been defined');
+}
+
+function defaultClearTimeout() {
+  throw new Error('clearTimeout has not been defined');
+}
+
+(function () {
+  try {
+    if (typeof setTimeout === 'function') {
+      cachedSetTimeout = setTimeout;
+    } else {
+      cachedSetTimeout = defaultSetTimout;
+    }
+  } catch (e) {
+    cachedSetTimeout = defaultSetTimout;
+  }
+
+  try {
+    if (typeof clearTimeout === 'function') {
+      cachedClearTimeout = clearTimeout;
+    } else {
+      cachedClearTimeout = defaultClearTimeout;
+    }
+  } catch (e) {
+    cachedClearTimeout = defaultClearTimeout;
+  }
+})();
+
+function runTimeout(fun) {
+  if (cachedSetTimeout === setTimeout) {
+    //normal enviroments in sane situations
+    return setTimeout(fun, 0);
+  } // if setTimeout wasn't available but was latter defined
+
+
+  if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
+    cachedSetTimeout = setTimeout;
+    return setTimeout(fun, 0);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedSetTimeout(fun, 0);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
+      return cachedSetTimeout.call(null, fun, 0);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
+      return cachedSetTimeout.call(this, fun, 0);
+    }
+  }
+}
+
+function runClearTimeout(marker) {
+  if (cachedClearTimeout === clearTimeout) {
+    //normal enviroments in sane situations
+    return clearTimeout(marker);
+  } // if clearTimeout wasn't available but was latter defined
+
+
+  if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
+    cachedClearTimeout = clearTimeout;
+    return clearTimeout(marker);
+  }
+
+  try {
+    // when when somebody has screwed with setTimeout but no I.E. maddness
+    return cachedClearTimeout(marker);
+  } catch (e) {
+    try {
+      // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
+      return cachedClearTimeout.call(null, marker);
+    } catch (e) {
+      // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
+      // Some versions of I.E. have different rules for clearTimeout vs setTimeout
+      return cachedClearTimeout.call(this, marker);
+    }
+  }
+}
+
+var queue = [];
+var draining = false;
+var currentQueue;
+var queueIndex = -1;
+
+function cleanUpNextTick() {
+  if (!draining || !currentQueue) {
+    return;
+  }
+
+  draining = false;
+
+  if (currentQueue.length) {
+    queue = currentQueue.concat(queue);
+  } else {
+    queueIndex = -1;
+  }
+
+  if (queue.length) {
+    drainQueue();
+  }
+}
+
+function drainQueue() {
+  if (draining) {
+    return;
+  }
+
+  var timeout = runTimeout(cleanUpNextTick);
+  draining = true;
+  var len = queue.length;
+
+  while (len) {
+    currentQueue = queue;
+    queue = [];
+
+    while (++queueIndex < len) {
+      if (currentQueue) {
+        currentQueue[queueIndex].run();
+      }
+    }
+
+    queueIndex = -1;
+    len = queue.length;
+  }
+
+  currentQueue = null;
+  draining = false;
+  runClearTimeout(timeout);
+}
+
+process.nextTick = function (fun) {
+  var args = new Array(arguments.length - 1);
+
+  if (arguments.length > 1) {
+    for (var i = 1; i < arguments.length; i++) {
+      args[i - 1] = arguments[i];
+    }
+  }
+
+  queue.push(new Item(fun, args));
+
+  if (queue.length === 1 && !draining) {
+    runTimeout(drainQueue);
+  }
+}; // v8 likes predictible objects
+
+
+function Item(fun, array) {
+  this.fun = fun;
+  this.array = array;
+}
+
+Item.prototype.run = function () {
+  this.fun.apply(null, this.array);
+};
+
+process.title = 'browser';
+process.env = {};
+process.argv = [];
+process.version = ''; // empty string to avoid regexp issues
+
+process.versions = {};
+
+function noop() {}
+
+process.on = noop;
+process.addListener = noop;
+process.once = noop;
+process.off = noop;
+process.removeListener = noop;
+process.removeAllListeners = noop;
+process.emit = noop;
+process.prependListener = noop;
+process.prependOnceListener = noop;
+
+process.listeners = function (name) {
+  return [];
+};
+
+process.binding = function (name) {
+  throw new Error('process.binding is not supported');
+};
+
+process.cwd = function () {
+  return '/';
+};
+
+process.chdir = function (dir) {
+  throw new Error('process.chdir is not supported');
+};
+
+process.umask = function () {
+  return 0;
+};
+},{}],"../../node_modules/axios/lib/defaults.js":[function(require,module,exports) {
+var process = require("process");
+'use strict';
+
+var utils = require('./utils');
+var normalizeHeaderName = require('./helpers/normalizeHeaderName');
+
+var DEFAULT_CONTENT_TYPE = {
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
+function setContentTypeIfUnset(headers, value) {
+  if (!utils.isUndefined(headers) && utils.isUndefined(headers['Content-Type'])) {
+    headers['Content-Type'] = value;
+  }
+}
+
+function getDefaultAdapter() {
+  var adapter;
+  if (typeof XMLHttpRequest !== 'undefined') {
+    // For browsers use XHR adapter
+    adapter = require('./adapters/xhr');
+  } else if (typeof process !== 'undefined' && Object.prototype.toString.call(process) === '[object process]') {
+    // For node use HTTP adapter
+    adapter = require('./adapters/http');
+  }
+  return adapter;
+}
+
+var defaults = {
+  adapter: getDefaultAdapter(),
+
+  transformRequest: [function transformRequest(data, headers) {
+    normalizeHeaderName(headers, 'Accept');
+    normalizeHeaderName(headers, 'Content-Type');
+    if (utils.isFormData(data) ||
+      utils.isArrayBuffer(data) ||
+      utils.isBuffer(data) ||
+      utils.isStream(data) ||
+      utils.isFile(data) ||
+      utils.isBlob(data)
+    ) {
+      return data;
+    }
+    if (utils.isArrayBufferView(data)) {
+      return data.buffer;
+    }
+    if (utils.isURLSearchParams(data)) {
+      setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+      return data.toString();
+    }
+    if (utils.isObject(data)) {
+      setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+      return JSON.stringify(data);
+    }
+    return data;
+  }],
+
+  transformResponse: [function transformResponse(data) {
+    /*eslint no-param-reassign:0*/
+    if (typeof data === 'string') {
+      try {
+        data = JSON.parse(data);
+      } catch (e) { /* Ignore */ }
+    }
+    return data;
+  }],
+
+  /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */
+  timeout: 0,
+
+  xsrfCookieName: 'XSRF-TOKEN',
+  xsrfHeaderName: 'X-XSRF-TOKEN',
+
+  maxContentLength: -1,
+
+  validateStatus: function validateStatus(status) {
+    return status >= 200 && status < 300;
+  }
+};
+
+defaults.headers = {
+  common: {
+    'Accept': 'application/json, text/plain, */*'
+  }
+};
+
+utils.forEach(['delete', 'get', 'head'], function forEachMethodNoData(method) {
+  defaults.headers[method] = {};
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  defaults.headers[method] = utils.merge(DEFAULT_CONTENT_TYPE);
+});
+
+module.exports = defaults;
+
+},{"./utils":"../../node_modules/axios/lib/utils.js","./helpers/normalizeHeaderName":"../../node_modules/axios/lib/helpers/normalizeHeaderName.js","./adapters/xhr":"../../node_modules/axios/lib/adapters/xhr.js","./adapters/http":"../../node_modules/axios/lib/adapters/xhr.js","process":"../../node_modules/process/browser.js"}],"../../node_modules/axios/lib/core/dispatchRequest.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+var transformData = require('./transformData');
+var isCancel = require('../cancel/isCancel');
+var defaults = require('../defaults');
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+function throwIfCancellationRequested(config) {
+  if (config.cancelToken) {
+    config.cancelToken.throwIfRequested();
+  }
+}
+
+/**
+ * Dispatch a request to the server using the configured adapter.
+ *
+ * @param {object} config The config that is to be used for the request
+ * @returns {Promise} The Promise to be fulfilled
+ */
+module.exports = function dispatchRequest(config) {
+  throwIfCancellationRequested(config);
+
+  // Ensure headers exist
+  config.headers = config.headers || {};
+
+  // Transform request data
+  config.data = transformData(
+    config.data,
+    config.headers,
+    config.transformRequest
+  );
+
+  // Flatten headers
+  config.headers = utils.merge(
+    config.headers.common || {},
+    config.headers[config.method] || {},
+    config.headers
+  );
+
+  utils.forEach(
+    ['delete', 'get', 'head', 'post', 'put', 'patch', 'common'],
+    function cleanHeaderConfig(method) {
+      delete config.headers[method];
+    }
+  );
+
+  var adapter = config.adapter || defaults.adapter;
+
+  return adapter(config).then(function onAdapterResolution(response) {
+    throwIfCancellationRequested(config);
+
+    // Transform response data
+    response.data = transformData(
+      response.data,
+      response.headers,
+      config.transformResponse
+    );
+
+    return response;
+  }, function onAdapterRejection(reason) {
+    if (!isCancel(reason)) {
+      throwIfCancellationRequested(config);
+
+      // Transform response data
+      if (reason && reason.response) {
+        reason.response.data = transformData(
+          reason.response.data,
+          reason.response.headers,
+          config.transformResponse
+        );
+      }
+    }
+
+    return Promise.reject(reason);
+  });
+};
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js","./transformData":"../../node_modules/axios/lib/core/transformData.js","../cancel/isCancel":"../../node_modules/axios/lib/cancel/isCancel.js","../defaults":"../../node_modules/axios/lib/defaults.js"}],"../../node_modules/axios/lib/core/mergeConfig.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('../utils');
+
+/**
+ * Config-specific merge-function which creates a new config-object
+ * by merging two configuration objects together.
+ *
+ * @param {Object} config1
+ * @param {Object} config2
+ * @returns {Object} New object resulting from merging config2 to config1
+ */
+module.exports = function mergeConfig(config1, config2) {
+  // eslint-disable-next-line no-param-reassign
+  config2 = config2 || {};
+  var config = {};
+
+  var valueFromConfig2Keys = ['url', 'method', 'params', 'data'];
+  var mergeDeepPropertiesKeys = ['headers', 'auth', 'proxy'];
+  var defaultToConfig2Keys = [
+    'baseURL', 'url', 'transformRequest', 'transformResponse', 'paramsSerializer',
+    'timeout', 'withCredentials', 'adapter', 'responseType', 'xsrfCookieName',
+    'xsrfHeaderName', 'onUploadProgress', 'onDownloadProgress',
+    'maxContentLength', 'validateStatus', 'maxRedirects', 'httpAgent',
+    'httpsAgent', 'cancelToken', 'socketPath'
+  ];
+
+  utils.forEach(valueFromConfig2Keys, function valueFromConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    }
+  });
+
+  utils.forEach(mergeDeepPropertiesKeys, function mergeDeepProperties(prop) {
+    if (utils.isObject(config2[prop])) {
+      config[prop] = utils.deepMerge(config1[prop], config2[prop]);
+    } else if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (utils.isObject(config1[prop])) {
+      config[prop] = utils.deepMerge(config1[prop]);
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  utils.forEach(defaultToConfig2Keys, function defaultToConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  var axiosKeys = valueFromConfig2Keys
+    .concat(mergeDeepPropertiesKeys)
+    .concat(defaultToConfig2Keys);
+
+  var otherKeys = Object
+    .keys(config2)
+    .filter(function filterAxiosKeys(key) {
+      return axiosKeys.indexOf(key) === -1;
+    });
+
+  utils.forEach(otherKeys, function otherKeysDefaultToConfig2(prop) {
+    if (typeof config2[prop] !== 'undefined') {
+      config[prop] = config2[prop];
+    } else if (typeof config1[prop] !== 'undefined') {
+      config[prop] = config1[prop];
+    }
+  });
+
+  return config;
+};
+
+},{"../utils":"../../node_modules/axios/lib/utils.js"}],"../../node_modules/axios/lib/core/Axios.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./../utils');
+var buildURL = require('../helpers/buildURL');
+var InterceptorManager = require('./InterceptorManager');
+var dispatchRequest = require('./dispatchRequest');
+var mergeConfig = require('./mergeConfig');
+
+/**
+ * Create a new instance of Axios
+ *
+ * @param {Object} instanceConfig The default config for the instance
+ */
+function Axios(instanceConfig) {
+  this.defaults = instanceConfig;
+  this.interceptors = {
+    request: new InterceptorManager(),
+    response: new InterceptorManager()
+  };
+}
+
+/**
+ * Dispatch a request
+ *
+ * @param {Object} config The config specific for this request (merged with this.defaults)
+ */
+Axios.prototype.request = function request(config) {
+  /*eslint no-param-reassign:0*/
+  // Allow for axios('example/url'[, config]) a la fetch API
+  if (typeof config === 'string') {
+    config = arguments[1] || {};
+    config.url = arguments[0];
+  } else {
+    config = config || {};
+  }
+
+  config = mergeConfig(this.defaults, config);
+
+  // Set config.method
+  if (config.method) {
+    config.method = config.method.toLowerCase();
+  } else if (this.defaults.method) {
+    config.method = this.defaults.method.toLowerCase();
+  } else {
+    config.method = 'get';
+  }
+
+  // Hook up interceptors middleware
+  var chain = [dispatchRequest, undefined];
+  var promise = Promise.resolve(config);
+
+  this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+    chain.unshift(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+    chain.push(interceptor.fulfilled, interceptor.rejected);
+  });
+
+  while (chain.length) {
+    promise = promise.then(chain.shift(), chain.shift());
+  }
+
+  return promise;
+};
+
+Axios.prototype.getUri = function getUri(config) {
+  config = mergeConfig(this.defaults, config);
+  return buildURL(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
+};
+
+// Provide aliases for supported request methods
+utils.forEach(['delete', 'get', 'head', 'options'], function forEachMethodNoData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url
+    }));
+  };
+});
+
+utils.forEach(['post', 'put', 'patch'], function forEachMethodWithData(method) {
+  /*eslint func-names:0*/
+  Axios.prototype[method] = function(url, data, config) {
+    return this.request(utils.merge(config || {}, {
+      method: method,
+      url: url,
+      data: data
+    }));
+  };
+});
+
+module.exports = Axios;
+
+},{"./../utils":"../../node_modules/axios/lib/utils.js","../helpers/buildURL":"../../node_modules/axios/lib/helpers/buildURL.js","./InterceptorManager":"../../node_modules/axios/lib/core/InterceptorManager.js","./dispatchRequest":"../../node_modules/axios/lib/core/dispatchRequest.js","./mergeConfig":"../../node_modules/axios/lib/core/mergeConfig.js"}],"../../node_modules/axios/lib/cancel/Cancel.js":[function(require,module,exports) {
+'use strict';
+
+/**
+ * A `Cancel` is an object that is thrown when an operation is canceled.
+ *
+ * @class
+ * @param {string=} message The message.
+ */
+function Cancel(message) {
+  this.message = message;
+}
+
+Cancel.prototype.toString = function toString() {
+  return 'Cancel' + (this.message ? ': ' + this.message : '');
+};
+
+Cancel.prototype.__CANCEL__ = true;
+
+module.exports = Cancel;
+
+},{}],"../../node_modules/axios/lib/cancel/CancelToken.js":[function(require,module,exports) {
+'use strict';
+
+var Cancel = require('./Cancel');
+
+/**
+ * A `CancelToken` is an object that can be used to request cancellation of an operation.
+ *
+ * @class
+ * @param {Function} executor The executor function.
+ */
+function CancelToken(executor) {
+  if (typeof executor !== 'function') {
+    throw new TypeError('executor must be a function.');
+  }
+
+  var resolvePromise;
+  this.promise = new Promise(function promiseExecutor(resolve) {
+    resolvePromise = resolve;
+  });
+
+  var token = this;
+  executor(function cancel(message) {
+    if (token.reason) {
+      // Cancellation has already been requested
+      return;
+    }
+
+    token.reason = new Cancel(message);
+    resolvePromise(token.reason);
+  });
+}
+
+/**
+ * Throws a `Cancel` if cancellation has been requested.
+ */
+CancelToken.prototype.throwIfRequested = function throwIfRequested() {
+  if (this.reason) {
+    throw this.reason;
+  }
+};
+
+/**
+ * Returns an object that contains a new `CancelToken` and a function that, when called,
+ * cancels the `CancelToken`.
+ */
+CancelToken.source = function source() {
+  var cancel;
+  var token = new CancelToken(function executor(c) {
+    cancel = c;
+  });
+  return {
+    token: token,
+    cancel: cancel
+  };
+};
+
+module.exports = CancelToken;
+
+},{"./Cancel":"../../node_modules/axios/lib/cancel/Cancel.js"}],"../../node_modules/axios/lib/helpers/spread.js":[function(require,module,exports) {
+'use strict';
+
+/**
+ * Syntactic sugar for invoking a function and expanding an array for arguments.
+ *
+ * Common use case would be to use `Function.prototype.apply`.
+ *
+ *  ```js
+ *  function f(x, y, z) {}
+ *  var args = [1, 2, 3];
+ *  f.apply(null, args);
+ *  ```
+ *
+ * With `spread` this example can be re-written.
+ *
+ *  ```js
+ *  spread(function(x, y, z) {})([1, 2, 3]);
+ *  ```
+ *
+ * @param {Function} callback
+ * @returns {Function}
+ */
+module.exports = function spread(callback) {
+  return function wrap(arr) {
+    return callback.apply(null, arr);
+  };
+};
+
+},{}],"../../node_modules/axios/lib/axios.js":[function(require,module,exports) {
+'use strict';
+
+var utils = require('./utils');
+var bind = require('./helpers/bind');
+var Axios = require('./core/Axios');
+var mergeConfig = require('./core/mergeConfig');
+var defaults = require('./defaults');
+
+/**
+ * Create an instance of Axios
+ *
+ * @param {Object} defaultConfig The default config for the instance
+ * @return {Axios} A new instance of Axios
+ */
+function createInstance(defaultConfig) {
+  var context = new Axios(defaultConfig);
+  var instance = bind(Axios.prototype.request, context);
+
+  // Copy axios.prototype to instance
+  utils.extend(instance, Axios.prototype, context);
+
+  // Copy context to instance
+  utils.extend(instance, context);
+
+  return instance;
+}
+
+// Create the default instance to be exported
+var axios = createInstance(defaults);
+
+// Expose Axios class to allow class inheritance
+axios.Axios = Axios;
+
+// Factory for creating new instances
+axios.create = function create(instanceConfig) {
+  return createInstance(mergeConfig(axios.defaults, instanceConfig));
+};
+
+// Expose Cancel & CancelToken
+axios.Cancel = require('./cancel/Cancel');
+axios.CancelToken = require('./cancel/CancelToken');
+axios.isCancel = require('./cancel/isCancel');
+
+// Expose all/spread
+axios.all = function all(promises) {
+  return Promise.all(promises);
+};
+axios.spread = require('./helpers/spread');
+
+module.exports = axios;
+
+// Allow use of default import syntax in TypeScript
+module.exports.default = axios;
+
+},{"./utils":"../../node_modules/axios/lib/utils.js","./helpers/bind":"../../node_modules/axios/lib/helpers/bind.js","./core/Axios":"../../node_modules/axios/lib/core/Axios.js","./core/mergeConfig":"../../node_modules/axios/lib/core/mergeConfig.js","./defaults":"../../node_modules/axios/lib/defaults.js","./cancel/Cancel":"../../node_modules/axios/lib/cancel/Cancel.js","./cancel/CancelToken":"../../node_modules/axios/lib/cancel/CancelToken.js","./cancel/isCancel":"../../node_modules/axios/lib/cancel/isCancel.js","./helpers/spread":"../../node_modules/axios/lib/helpers/spread.js"}],"../../node_modules/axios/index.js":[function(require,module,exports) {
+module.exports = require('./lib/axios');
+},{"./lib/axios":"../../node_modules/axios/lib/axios.js"}],"js/components/general/Form.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Tooltip To Insert
+const tooltip = '<div class="input__tooltip hidden"><p></p></div>'; // Icons will only show up in production because currently parcel is bundling all of the files and hashing them. This function works however
+
+const icons = '<svg><use xlink:href="img/icons.svg#close"></use></svg><svg><use xlink:href="img/icons.svg#checkmark-circle"></use></svg>';
+const eye = '<svg class="toggle" data-visible="0"><use xlink:href="img/icons.svg#eye"></use></svg>'; // Stored Regex Expressions
+
+const regex = {
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+  name: /^[a-zA-Z-'. ]+$/
+}; // Stored Error and Success Messages
+
+const messages = {
+  defaults: {
+    success: 'Looks great!',
+    empty: 'This field is required',
+    fail: 'This field is invalid',
+    short: 'This must be at least %L% characters'
+  },
+  email: {
+    empty: 'Please enter your email',
+    fail: "Email may be missing the '@' or '.'"
+  },
+  name: {
+    success: 'Nice to meet you!',
+    empty: 'Please tell us your name',
+    fail: 'Please do not include any numbers or special characters'
+  },
+  message: {
+    empty: 'Please enter a message',
+    short: 'Your message must be at least %L% characters'
+  },
+  password: {
+    success: 'Perfection',
+    empty: 'Please enter a password',
+    short: 'Your password must be at least %L% characters'
+  }
+}; // Filter Inputs With Regex
+
+const filterInput = (element, regex) => {
+  let input = element;
+  if (!$.dreaming(element)) input = $(element);
+  const events = ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"];
+
+  const filter = val => regex.test(val) || !val;
+
+  events.forEach(event => {
+    input.on(event, function () {
+      if (filter(this.value)) {
+        this.oldValue = this.value;
+        this.oldSelectionStart = this.selectionStart;
+        this.oldSelectionEnd = this.selectionEnd;
+      } else if (this.hasOwnProperty("oldValue")) {
+        this.value = this.oldValue;
+        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+      } else {
+        this.value = "";
+      }
+    });
+  });
+};
+
+class Field {
+  constructor(props) {
+    // Create Element
+    const e = $.dreaming(props.field) ? props.field : $(props.field); // Insert Tooltip
+
+    e.insert(tooltip); // Insert Icons
+
+    if (props.icons) e.insert(icons); // Define Input Nodes
+
+    this.nodes = {
+      label: e.children('h6'),
+      tooltip: e.children('.input__tooltip'),
+      message: e.children('.input__tooltip > p'),
+      input: e.children('input, textarea'),
+      field: e
+    };
+    const type = e.data('type'); // Define Input Properties
+
+    this.props = {
+      type,
+      name: e.data('name') || type,
+      label: this.nodes.label.text(),
+      symbiotic: props.symbiotic || false,
+      required: e.has('data-required'),
+      requiredLength: e.data('min', 'int') || 0,
+      regex: regex[type] || false
+    };
+    const msgs = messages[this.props.type];
+    const df = messages.defaults;
+    this.messages = {
+      success: msgs.success || df.success,
+      errors: {
+        empty: msgs.empty || df.empty,
+        fail: msgs.fail || df.fail,
+        short: (msgs.short || df.short).replace('%L%', this.props.requiredLength)
+      }
+    }; // Define Symbiotic Input Parent
+
+    if (props.symbiotic) this.parent = props.parent; // Define Initial Node Value
+
+    this.value = this.nodes.input.val();
+    this.error = ''; // Define Initial State
+
+    this.state = {
+      empty: !this.value ? true : false,
+      touched: false,
+      focused: false,
+      blurred: false,
+      valid: !this.props.required,
+      popupShown: false,
+      forcePopup: false
+    }; // Validate Initial Value
+
+    if (!this.state.empty) this.validate();
+    this.attachListeners();
+  }
+
+  attachListeners() {
+    this.nodes.input.on('input blur focus', e => this.update(e));
+
+    switch (this.props.type) {
+      case 'name':
+        filterInput(this.nodes.input, regex.name);
+        break;
+
+      case 'password':
+        this.attachToggle();
+        break;
+    }
+  }
+
+  attachToggle() {
+    const toggle = $.html(eye);
+    this.nodes.field.append(toggle);
+    console.log(toggle.e().innerHTML);
+    toggle.click(() => {
+      const currentlyVisible = toggle.data('visible', 'int');
+      let icon = toggle.html();
+      let type = 'text';
+
+      if (currentlyVisible) {
+        type = 'password';
+        icon = icon.replace('#eye-off', '#eye');
+      } else icon = icon.replace('#eye', '#eye-off');
+
+      toggle.setData('visible', type === 'text' ? 1 : 0);
+      this.nodes.input.set('type', type);
+      toggle.toggle('visible', type === 'text');
+      toggle.html(icon);
+    });
+  }
+
+  update(e) {
+    if (e && e.type === 'blur') this.state.touched = true;
+    const val = e ? e.target.value : this.value;
+    this.validate(val); // Remove Existing Clases
+
+    this.nodes.field.removeClass('valid error'); // Update Label Text
+
+    if (val && this.state.valid) this.nodes.label.text(this.messages.success);else this.nodes.label.text(this.props.label); // Show or Hide Popups
+
+    if (this.state.touched) {
+      // Set Error Class
+      this.nodes.field.addClass(this.error ? 'error' : 'valid'); // Show Popup
+
+      if (this.error) this.showPopup(); // Clear popup
+
+      if (this.state.valid) this.clearPopup();
+    } // Pass control to parent if parent
+
+
+    if (this.props.symbiotic) this.parent.update();
+  }
+
+  clear() {
+    this.nodes.input.setVal('');
+    this.value = '';
+  }
+
+  validate(val) {
+    let valid = true;
+    const value = val || this.nodes.input.val();
+    let error = '';
+
+    if (!value && this.props.required) {
+      valid = false;
+      error = 'empty';
+      this.state.empty = true;
+    } else if (value.length < this.props.requiredLength) {
+      error = 'short';
+      valid = false;
+    } else if (this.props.regex) {
+      if (!this.props.regex.test(value)) {
+        error = 'fail';
+        valid = false;
+      }
+    }
+
+    this.error = error;
+    this.state.valid = valid;
+    this.value = value;
+  }
+
+  showPopup() {
+    if (this.state.popupShown) return this.updatePopup();
+    const message = this.error ? this.messages.errors[this.error] : this.messages.success;
+    if (this.state.valid) return this.clearPopup();
+    this.nodes.message.text(message);
+    this.nodes.tooltip.removeClass('hidden');
+    this.state.popupShown = true;
+  }
+
+  updatePopup() {
+    this.nodes.message.text(this.messages.errors[this.error]);
+  }
+
+  clearPopup() {
+    if (!this.state.popupShown) return;
+    const isActive = document.activeElement === this.nodes.input.e();
+    if (!this.state.valid && isActive) return;
+    this.nodes.tooltip.addClass('hidden');
+    this.state.popupShown = false;
+  }
+
+  forceTouch() {
+    this.state.touched = true;
+    this.update();
+  }
+
+}
+
+class Input {
+  constructor(input) {
+    // Create Element
+    this.element = $.dreaming(input) ? input : $(input); // Create Variables
+
+    const children = this.element.children('.input__field');
+    const insertIcons = this.element.data('icons', 'int'); // Set Properties
+
+    this.props = {
+      multipart: children.length > 1,
+      fields: children.length,
+      name: this.element.data('name')
+    }; // Set Initial State
+
+    this.state = {
+      empty: true,
+      touched: false,
+      focused: false,
+      valid: false
+    };
+    this.fields = {};
+    children.forEach(child => {
+      const field = new Field({
+        parent: this,
+        field: child,
+        icons: insertIcons,
+        symbiotic: true
+      });
+      this.fields[field.props.name] = field;
+    });
+  }
+
+  clear(name) {
+    if (name) this.fields[name].clear();else $.each(this.fields, field => this.fields[field].clear());
+  }
+
+  update() {
+    let allValid = true;
+    let allTouched = true;
+    let touched = false;
+    $.each(this.fields, name => {
+      const state = this.fields[name].state;
+      if (!state.valid) allValid = false;
+      if (!state.touched) allTouched = false;
+      if (state.touched) touched = true;
+    });
+    this.element.removeClass('valid error');
+
+    if (!allValid && allTouched) {
+      this.element.addClass('error');
+      this.state.valid = false;
+    } else if (allValid && allTouched) {
+      this.element.addClass('valid');
+      this.state.valid = true;
+    }
+
+    if (touched) this.state.touched = true;
+  }
+
+  validate() {
+    $.each(this.fields, name => this.fields[name].validate());
+  }
+
+  showPopup() {
+    $.each(this.fields, name => this.fields[name].showPopup());
+  }
+
+  clearPopup() {
+    $.each(this.fields, name => this.fields[name].clearPopup());
+  }
+
+  forceTouch() {
+    $.each(this.fields, name => this.fields[name].forceTouch());
+    this.state.touched = true;
+  }
+
+}
+
+class Form {
+  constructor(selector, container) {
+    this.fields = {};
+    this.values = {};
+    this.form = container ? $(container).children(selector) : $(selector);
+  }
+
+  init() {
+    this.addFields(); // Prevent Form Submission
+
+    this.form.prevent('submit', () => {
+      let allValid = true;
+      $.each(this.fields, name => {
+        this.fields[name].validate();
+        if (!this.fields[name].state.valid) allValid = false;
+      });
+
+      if (!allValid) {
+        this.showPopups();
+        $.each(this.fields, name => this.fields[name].forceTouch());
+        if (this.onValidationFail) this.onValidationFail();
+      }
+
+      if (allValid) {
+        this.clearPopups();
+        if (this.onValidationSuccess) this.onValidationSuccess();
+      }
+    });
+    this.listenForFocus();
+  }
+
+  addFields() {
+    this.form.children('.input').forEach(child => {
+      const input = new Input(child);
+      this.fields[input.props.name] = input;
+    });
+    this.form.children('.textarea').forEach(child => {
+      const field = new Field({
+        field: child
+      });
+      this.fields[field.props.name] = field;
+    });
+  }
+
+  listenForFocus() {
+    this.form.listenFor('focusout', 'input, textarea', e => {
+      this.clearPopups();
+    });
+    this.form.listenFor('focusin', 'input, textarea', e => {
+      this.clearPopups();
+    });
+  }
+
+  clearPopups() {
+    $.each(this.fields, name => this.fields[name].clearPopup());
+  }
+
+  showPopups() {
+    $.each(this.fields, name => this.fields[name].showPopup());
+  }
+
+  async post(endpoint, data) {
+    if (!endpoint && !this.endpoint) console.warn('Please specify and endpoint');
+    const res = await (0, _axios.default)({
+      method: 'POST',
+      url: endpoint || this.endpoint,
+      data
+    });
+    return res;
+  }
+
+}
+
+exports.default = Form;
+},{"axios":"../../node_modules/axios/index.js"}],"js/components/general/ContactForm.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _Form = _interopRequireDefault(require("./Form"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class ContactForm extends _Form.default {
+  constructor(options) {
+    super(options.selector, options.container);
+    this.elements = {
+      input: this.form.children('.input'),
+      textarea: this.form.children('.textarea')
+    };
+    console.log(this.fields);
+  }
+
+  onValidationFail() {
+    console.log('we validated the WHOLE fooking form m*ty');
+  }
+
+  onValidationSuccess() {
+    console.log('SUCCESSSSSSS');
+  }
+
+}
+
+exports.default = ContactForm;
+},{"./Form":"js/components/general/Form.js"}],"js/Page.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -9908,13 +12815,22 @@ var _Scroll = _interopRequireDefault(require("./components/general/Scroll"));
 
 var _Navbar = _interopRequireDefault(require("./components/general/Navbar"));
 
-var _Footer = _interopRequireDefault(require("./components/general/Footer"));
+var _Footer2 = _interopRequireDefault(require("./components/general/Footer"));
+
+var _Typewriter2 = _interopRequireDefault(require("./components/general/Typewriter"));
+
+var _DraggableSlider2 = _interopRequireDefault(require("./components/general/DraggableSlider"));
+
+var _ContactForm2 = _interopRequireDefault(require("./components/general/ContactForm"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Import Components
-const components = {
-  scroll: opts => new _Scroll.default(opts)
+const componentsRegistry = {
+  Typewriter: d => new _Typewriter2.default(d),
+  DraggableSlider: d => new _DraggableSlider2.default(d),
+  ContactForm: d => new _ContactForm2.default(d),
+  Footer: d => new _Footer2.default(d)
 }; // Create Page Class
 
 class Page {
@@ -9932,14 +12848,22 @@ class Page {
       namespace: this.elements.container.dataset.barbaNamespace,
       isMobile: null,
       menuIsOpen: false,
-      initialPage: (_props$initialPage = props.initialPage) !== null && _props$initialPage !== void 0 ? _props$initialPage : false
+      initialPage: (_props$initialPage = props.initialPage) !== null && _props$initialPage !== void 0 ? _props$initialPage : false,
+      url: window.location.href
     };
-    this.components = [];
+    this.components = {
+      registrar: [],
+      mounted: {}
+    };
+    this.barba = props.barba;
   }
 
   afterLoad() {}
 
   init() {
+    // Update URL
+    this.state.url = this.barba.url.clean();
+
     if (this.state.initialPage) {
       // 1. Create Preloader
       const preloader = new _Preloader.default(); // 1. Subscribe to Preloader Events
@@ -9952,7 +12876,7 @@ class Page {
 
     this.scroll = new _Scroll.default(this);
     this.navbar = new _Navbar.default(this.scroll);
-    this.footer = new _Footer.default(this.scroll);
+    return this;
   }
 
   freeze() {
@@ -9973,8 +12897,9 @@ class Page {
 
   start() {
     this.scroll.init();
-    this.navbar.init(this.state.namespace);
-    this.footer.init(this.elements.container, this.state.namespace);
+    this.navbar.init(this.state.namespace); // Mount Remaining Components
+
+    this.mountComponents();
   }
 
   insertSlide() {
@@ -9982,10 +12907,31 @@ class Page {
     this.elements.body.append(this.elements.slide);
   }
 
+  addComponent() {
+    for (var _len = arguments.length, components = new Array(_len), _key = 0; _key < _len; _key++) {
+      components[_key] = arguments[_key];
+    }
+
+    components.forEach(c => {
+      this.components.registrar.push({
+        name: c.name,
+        data: c.data
+      });
+      this.components.mounted[c.name] = componentsRegistry[c.name](c.data);
+    });
+    console.log(this.components);
+  }
+
+  mountComponents() {
+    this.components.registrar.forEach(component => {
+      this.components.mounted[component.name].init();
+    });
+  }
+
 }
 
 exports.default = Page;
-},{"./components/general/Preloader":"js/components/general/Preloader.js","./components/general/Scroll":"js/components/general/Scroll.js","./components/general/Navbar":"js/components/general/Navbar.js","./components/general/Footer":"js/components/general/Footer.js"}],"js/index.js":[function(require,module,exports) {
+},{"./components/general/Preloader":"js/components/general/Preloader.js","./components/general/Scroll":"js/components/general/Scroll.js","./components/general/Navbar":"js/components/general/Navbar.js","./components/general/Footer":"js/components/general/Footer.js","./components/general/Typewriter":"js/components/general/Typewriter.js","./components/general/DraggableSlider":"js/components/general/DraggableSlider.js","./components/general/ContactForm":"js/components/general/ContactForm.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
 require("regenerator-runtime/runtime");
@@ -10020,10 +12966,9 @@ window.addEventListener('DOMContentLoaded', () => {
   }; // Create New Page
 
   const page = new _Page.default({
-    initialPage: true
-  }); // Initialize Page
-
-  page.init();
+    initialPage: true,
+    barba: _core.default
+  }).init();
 
   _core.default.init({
     transitions: [// Default Transition
@@ -10069,16 +13014,44 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
     }],
-    views: []
+    views: [{
+      namespace: 'home',
+
+      afterEnter(_ref2) {
+        let {
+          next
+        } = _ref2;
+        page.addComponent({
+          name: 'Typewriter',
+          data: '#typewrite'
+        }, {
+          name: 'DraggableSlider',
+          data: {
+            selector: '.reviews__carousel',
+            activeClass: 'dragging'
+          }
+        }, {
+          name: 'ContactForm',
+          data: {
+            selector: '#contact-form',
+            container: next.container
+          }
+        }, {
+          name: 'Footer',
+          data: page
+        });
+      }
+
+    }]
   }); // Attach Barba Hooks
 
 
   _core.default.hooks.beforeLeave(() => page.freeze());
 
-  _core.default.hooks.afterLeave((_ref2) => {
+  _core.default.hooks.afterLeave((_ref3) => {
     let {
       next
-    } = _ref2;
+    } = _ref3;
     return page.refresh(next);
   });
 
@@ -10112,7 +13085,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60814" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62088" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -3,7 +3,7 @@
 
 export default class Navbar {
 
-    constructor(scrollHandler) {
+    constructor(scroll) {
 
         this.main = $('#navbar');
         this.links = this.main.children('a[href]');
@@ -16,10 +16,10 @@ export default class Navbar {
 
         this.toggle = $('#nav-toggle');
         this.checkbox = this.toggle.nodes();
-        this.icon = $('#nav-icon');
+        this.icon = $('#nav-icon'); 
         this.branding = $('#nav-brand');
 
-        this.scrollHandler = scrollHandler;
+        this.scroll = scroll;
 
         this.isOpen = false;
 
@@ -36,7 +36,7 @@ export default class Navbar {
         this.links.prevent('click', e => {
             const page = this.namespace === 'home' ? '' : this.namespace;
             const target = e.target.href.split('/')[3];
-            if (target === page) this.scrollHandler.toTop();
+            if (target === page) this.scroll.toTop();
         });
 
     }
@@ -48,7 +48,7 @@ export default class Navbar {
     }
 
 
-    close() {
+    async close() {
         if (!this.isOpen) return;
         this.checkbox.checked = false;
         this.toggleDrawer(false);
@@ -58,12 +58,12 @@ export default class Navbar {
     toggleDrawer(open) {
         if (open) {
             this.branding.hide();
-            this.scrollHandler.pause();
+            this.scroll.pause();
         }
 
         else {
             this.branding.show();
-            this.scrollHandler.resume();
+            this.scroll.resume();
         }
 
         this.icon.toggle('open', open);

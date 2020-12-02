@@ -255,6 +255,12 @@ body {
   width: 100vw;
   background-color: var(--bg-light);
 }
+body.fixed {
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  position: fixed;
+}
 @media (prefers-color-scheme: dark) {
   body {
     background-color: var(--bg-dark);

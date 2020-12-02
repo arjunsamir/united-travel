@@ -1,12 +1,12 @@
 export default class DraggableSlider {
 
-    constructor(selector, activeClass) {
+    constructor(options) {
 
         // Define Active Class
-        this.activeClass = activeClass;
+        this.activeClass = options.activeClass;
 
         // Define Slider
-        this.slider = $(selector);
+        this.slider = $(options.selector);
         this.sliderElem = this.slider.nodes();
 
         // Define State Variables

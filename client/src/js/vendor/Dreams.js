@@ -183,6 +183,18 @@ class Dream {
     }
 
 
+    pop() {
+        this.elements.forEach(e => e.removeChild(e.lastChild));
+    }
+
+    idx(idx) {
+        const node = [this.elements[idx]];
+
+        return this.newCycle(node, this.selector);
+
+    }
+
+
 
 
 
@@ -263,9 +275,9 @@ class Dream {
 
         const key = this.constructor.getElementKey( attr );
 
-        this.elements.forEach( e => e[ key ] = value );
+        this.elements.forEach(e => e.setAttribute(key, value));
 
-        return this.cycle();
+        return this;
 
     }
 
@@ -545,27 +557,38 @@ class Dream {
         return this.cycle();
     }
 
+    kill() {
+
+        this.elements = this.elements.map(el => {
+            const clone = el.cloneNode(true);
+            el.parentNode.replaceChild(clone, el);
+            return clone;
+        });
+
+        return this.cycle();
+    }
+
 
     // Remove Event Listeners
     off(shallow) {
         this.elements.forEach( element => element.removeEventListener( eventType, eventAction ));
 
-        this.elements.forEach(element => {
+        // this.elements.forEach(element => {
 
-            let clone;
+        //     let clone;
 
-            if (!shallow) {
-                clone = element.cloneNode(true);
-            }
+        //     if (!shallow) {
+        //         clone = element.cloneNode(true);
+        //     }
 
-            else {
-                clone = element.cloneNode(false);
-                while (element.hasChildNodes()) clone.appendChild(element.firstChild);
-            }
+        //     else {
+        //         clone = element.cloneNode(false);
+        //         while (element.hasChildNodes()) clone.appendChild(element.firstChild);
+        //     }
             
-            element.parentNode.replaceChild(clone, element);
+        //     element.parentNode.replaceChild(clone, element);
             
-        });
+        // });
 
         return this;
     }
@@ -642,6 +665,19 @@ class Dream {
     }
 
 
+    // On Resize
+    onresize(callback, bind) {
+
+        const observer = new ResizeObserver(bind ? callback : () => callback());
+
+        this.elements.forEach(element => {
+            observer.observe(element);
+        });
+
+        return this;
+    }
+
+
 
 
     /* -------------------------- ELEMENT ARRAY METHODS -------------------------- */
@@ -664,7 +700,16 @@ class Dream {
     // Filter Function
     filter( test ) {
         this.elements = Array.from( this.elements ).filter( test );
-        return this.cycle();
+        this.length = this.elements.length;
+        return this;
+    }
+
+
+    concat(otherDream) {
+
+        const elements = [...this.elements, ...otherDream.elements];
+
+        return this.newCycle(elements, `${this.selector || ''}${this.selector ? ', ' : ' '}${otherDream.selector || ''}`);
     }
 
 
@@ -771,45 +816,6 @@ initDream.html = markup => {
 }
 
 
-// // Smooth Page Scrolling To Target
-// initDream.scroll = ( target, time, offset ) => {
-        
-//     const easeInCubic = (t) => { return t*t*t };
-    
-//     const scrollToElem = (start, stamp, duration, scrollEndElemTop, startScrollOffset) => {
-//         const runtime = stamp - start;
-//         let progress = runtime / duration;
-//         const ease = easeInCubic(progress);
-
-//         progress = Math.min(progress, 1);
-//         //console.log(startScrollOffset,startScrollOffset + (scrollEndElemTop * ease));
-
-//         const newScrollOffset = startScrollOffset + (scrollEndElemTop * ease);
-        
-//         window.scroll(0, startScrollOffset + (scrollEndElemTop * ease));
-
-//         if(runtime < duration){
-//             requestAnimationFrame((timestamp) => {
-//                 const stamp = new Date().getTime();
-//                 scrollToElem(start, stamp, duration, scrollEndElemTop, startScrollOffset);
-//             });
-//         }
-//     }
-    
-//     const animate = requestAnimationFrame(() => {
-//         const stamp = new Date().getTime();
-//         const duration = time;
-//         const start = stamp;
-      
-//         const startScrollOffset = window.pageYOffset;
-        
-//         const scrollEndElemTop = target.getBoundingClientRect().top + offset;
-        
-//         scrollToElem(start, stamp, duration, scrollEndElemTop, startScrollOffset);
-//         // scrollToElem(scrollEndElemTop);
-//     });
-
-// };
 
 
 // Link Timer Class To Dreams

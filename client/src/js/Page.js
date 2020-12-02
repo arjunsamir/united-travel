@@ -3,10 +3,16 @@ import Preloader from './components/general/Preloader';
 import Scroll from './components/general/Scroll';
 import Navbar from './components/general/Navbar';
 import Footer from './components/general/Footer';
+import Typewriter from './components/general/Typewriter';
+import DraggableSlider from './components/general/DraggableSlider';
+import ContactForm from './components/general/ContactForm';
 
 
-const components = {
-    scroll: opts => new Scroll(opts)
+const componentsRegistry = {
+    Typewriter: d => new Typewriter(d),
+    DraggableSlider: d => new DraggableSlider(d),
+    ContactForm: d => new ContactForm(d),
+    Footer: d => new Footer(d)
 }
 
 
@@ -28,10 +34,16 @@ export default class Page {
             namespace: this.elements.container.dataset.barbaNamespace,
             isMobile: null,
             menuIsOpen: false,
-            initialPage: props.initialPage ?? false
+            initialPage: props.initialPage ?? false,
+            url: window.location.href
         }
 
-        this.components = [];
+        this.components = {
+            registrar: [],
+            mounted: {}
+        };
+
+        this.barba = props.barba;
 
     }
 
@@ -44,6 +56,10 @@ export default class Page {
 
 
     init() {
+
+        // Update URL
+        this.state.url = this.barba.url.clean();
+
 
         if (this.state.initialPage) {
 
@@ -61,7 +77,8 @@ export default class Page {
         // Initialize Crucial Modules
         this.scroll = new Scroll(this);
         this.navbar = new Navbar(this.scroll);
-        this.footer = new Footer(this.scroll);
+
+        return this;
 
     }
 
@@ -97,9 +114,12 @@ export default class Page {
 
         this.scroll.init();
         this.navbar.init(this.state.namespace);
-        this.footer.init(this.elements.container, this.state.namespace);
+
+        // Mount Remaining Components
+        this.mountComponents();
         
     }
+
 
     insertSlide() {
         this.elements.slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use xlink:href="img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>');
@@ -107,5 +127,21 @@ export default class Page {
     }
 
 
+    addComponent(...components) {
+
+        components.forEach(c => {
+            this.components.registrar.push({ name: c.name, data: c.data });
+            this.components.mounted[c.name] = componentsRegistry[c.name](c.data);
+        });
+
+        console.log(this.components);
+    }
+
+    mountComponents() {
+
+        this.components.registrar.forEach(component => {
+            this.components.mounted[component.name].init();
+        })
+    }
 
 }

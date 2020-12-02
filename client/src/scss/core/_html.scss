@@ -23,6 +23,13 @@ body {
     width: 100vw;
     background-color: var(--bg-light);
 
+    &.fixed {
+        height: 100vh;
+        width: 100%;
+        overflow: hidden;
+        position: fixed;
+    }
+
     @include dark {
         background-color: var(--bg-dark);
     }

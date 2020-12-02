@@ -8,10 +8,12 @@ export default class Typewriter {
 
         this.loopNum = 0;
         this.text = '';
+        
+    }
 
+    init() {
         this.tick();
         this.isDeleting = false;
-        
     }
 
     tick() {

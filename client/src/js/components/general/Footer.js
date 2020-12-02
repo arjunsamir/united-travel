@@ -1,25 +1,25 @@
 export default class Footer {
 
-    constructor(scroll) {
+    constructor(page) {
 
-        this.scroll = scroll;
+        this.page = page;
+
+        console.log(this);
         
     }
 
-    init(container, namespace) {
-        this.namespace = namespace;
-        this.selectElements(container);
+    init() {
+        
+        this.namespace = this.page.state.namespace;
+        this.links = $(this.page.elements.container).children('.footer__nav a');
+
         this.attachListeners();
     }
 
-    update(container, namespace) {
-        this.init(container, namespace);
-    }
-
-    selectElements(container) {
-        this.container = container ? $(container).children('footer.footer') : $('footer.footer');
-        this.links = this.container.children('.footer__nav a');
-    }
+    // selectElements(container) {
+    //     this.container = container ? $(container).children('footer.footer') : $('footer.footer');
+    //     this.links = this.container.children('.footer__nav a');
+    // }
 
     attachListeners() {
 

@@ -439,6 +439,10 @@ export default class Form {
 
         this.form = container ? $(container).children(selector) : $(selector);
 
+    }
+
+    init() {
+
         this.addFields();
 
         // Prevent Form Submission
@@ -465,7 +469,7 @@ export default class Form {
         });
 
         this.listenForFocus();
-
+        
     }
 
 
