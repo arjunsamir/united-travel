@@ -410,7 +410,6 @@ class Input {
     }
 
     validate() {
-
         $.each(this.fields, name => this.fields[name].validate());
     }
 
@@ -428,6 +427,15 @@ class Input {
     }
 }
 
+class Options {
+
+    constructor(selector) {
+        
+    }
+
+
+
+}
 
 
 export default class Form {
@@ -441,6 +449,7 @@ export default class Form {
 
     }
 
+    
     init() {
 
         this.addFields();
@@ -504,12 +513,14 @@ export default class Form {
 
 
     clearPopups() {
-        $.each(this.fields, name => this.fields[name].clearPopup());
+        $.each(this.fields, name => this.fields[name].clearPopup ? this.fields[name].clearPopup() : '');
     }
 
+
     showPopups() {
-        $.each(this.fields, name => this.fields[name].showPopup());
+        $.each(this.fields, name => this.fields[name].showPopup ? this.fields[name].showPopup() : '');
     }
+
 
     async post(endpoint, data) {
 

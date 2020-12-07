@@ -12,7 +12,7 @@
     overflow: hidden;
     z-index: -1;
 
-    &, &__overlay, &__player, &__fallback {
+    &, &__overlay, &__player, &__fallback, &__preload {
         @include absoluteFull;
     }
 
@@ -24,6 +24,17 @@
         @include dark {
             background-color: rgba(black, .4);
         }
+    }
+
+    &__preload {
+        z-index: 10;
+        background-color: #000;
+        opacity: 1;
+        transition: opacity .75s ease;
+    }
+
+    &.ready &__preload {
+        opacity: 0;
     }
 
     &__fallback {

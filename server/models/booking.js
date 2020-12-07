@@ -4,49 +4,45 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
     status: {
         type: String,
-        enum: ['Booked', 'Paid', 'Cancelled', 'Refunded', 'Completed']
+        default: 'Pending',
+        enum: ['Pending', 'Paid', 'Cancelled', 'Refunded', 'Completed']
     },
     schedule: {
         pickup: Date,
         dropoff: Date
     },
     origin: {
-        id: String,
-        point: {
-            type: {
-                type: String,
-                default: 'Point',
-                enum: ['Point']
-            },
-            coordinates: [Number]
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
         },
-        address: String,
-        notes: String
+        placeId: String,
+        coordinates: [Number],
+        address: String
     },
     destination: {
-        id: String,
-        point: {
-            type: {
-                type: String,
-                default: 'Point',
-                enum: ['Point']
-            },
-            coordinates: [Number]
+        type: {
+            type: String,
+            default: 'Point',
+            enum: ['Point']
         },
-        address: String,
-        notes: String
+        placeId: String,
+        coordinates: [Number],
+        address: String
     },
-    details: {
-        airportRide: Boolean,
+    route: {
         distance: Number,
         eta: String
     },
+    airportRide: Boolean,
     flight: {
         type: {
             type: String,
             enum: ['Arriving', 'Departing']
         },
         number: String,
+        airline: String,
         airport: String
     },
     passengers: {

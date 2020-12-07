@@ -3,41 +3,50 @@
 
 export default class Navbar {
 
-    constructor(scroll) {
+    constructor(page) {
 
+        this.scroll = page.scroll;
+        this.namespace = page.state.namespace;
+
+        this.isOpen = false;
+
+        // Define Main Elements
         this.main = $('#navbar');
         this.links = this.main.children('a[href]');
 
+        // Define User Elements
         this.userElems = {
             pics: this.main.children('.navbar-profile-pic'),
             name: this.main.children('.navbar-user-name'),
             email: this.main.children('.navbar-user-email')
         };
 
+        // Define Navbar Elements
         this.toggle = $('#nav-toggle');
         this.checkbox = this.toggle.nodes();
         this.icon = $('#nav-icon'); 
         this.branding = $('#nav-brand');
 
-        this.scroll = scroll;
+        this.links.forEach(link => {
 
-        this.isOpen = false;
+            link.classList.remove('active');
+
+            const ns = link.dataset.navNamespace;
+
+            if (ns && ns == this.namespace) link.classList.add('active');
+
+        });
+
+        this.reset();
 
     }
 
-    init(namespace) {
+    init() {
 
+        this.links = this.main.children('a[href]');
+
+        // Attach Event Listener For Navigation Toggle
         this.toggle.on('change', e => this.toggleDrawer(e.target.checked));
-
-        this.namespace = namespace;
-        this.setActive();
-
-        this.links.children().css({'pointer-events': 'none'})
-        this.links.prevent('click', e => {
-            const page = this.namespace === 'home' ? '' : this.namespace;
-            const target = e.target.href.split('/')[3];
-            if (target === page) this.scroll.toTop();
-        });
 
     }
 
@@ -72,22 +81,6 @@ export default class Navbar {
     }
 
 
-    update(namespace) {
-        this.namespace = namespace;
-        this.setActive();
-    }
-
-    setActive() {
-
-        this.links.removeClass('active');
-
-        this.links.forEach(link => {
-            if (link.href.split('/')[3] === this.namespace) link.classList.add('active');
-        });
-
-    }
-
-
     applyThemeChange(themes) {
 
         const navbar = this.main.e();
@@ -107,16 +100,19 @@ export default class Navbar {
     applyTheme(themes) {
         this.resetTheme()
         this.applyThemeChange(themes);
+        return this;
     }
 
 
     forceLayout(device) {
         this.resetLayout();
         this.main.addClass(`${device || 'mobile'}-layout`);
+        return this;
     }
 
 
     resetLayout() {
+        this.main.removeClass('opaque');
         this.main.removeClass('mobile-layout tablet-layout');
     }
 

@@ -25,10 +25,15 @@
 
     &__branding {
 
-        @include flexCenter;
 
-        @include dark {
-            color: var(--white);
+        @include link {
+
+            @include flexCenter;
+
+            color: var(--jet);
+
+            @include dark { color: var(--white); }
+
         }
 
         svg {
@@ -52,6 +57,7 @@
 
     }
 
+    
     &__sponsor {
 
         @include flexCenter;
@@ -83,6 +89,7 @@
         }
 
     }
+
 
     &__main {
 

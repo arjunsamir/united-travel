@@ -96,7 +96,6 @@
         padding: 4rem;
 
         background-color: var(--primary);
-        transition: bottom $dt, box-shadow $dt;
 
         &, &:link, &:visited {
             color: var(--white);
@@ -109,13 +108,16 @@
             @include dark {
                 color: var(--jet);
             }
+
+            transition: bottom $dt, box-shadow $dt;
+
+            &:hover {
+                opacity: 1;
+                bottom: -1.5rem;
+                box-shadow: var(--window-shadow);
+            }
         }
 
-        &:hover {
-            opacity: 1;
-            bottom: -1.5rem;
-            box-shadow: var(--window-shadow);
-        }
 
         h6 {
             margin-bottom: 1.5rem;

@@ -1,5 +1,6 @@
 .carat-btn {
     display: flex;
+    align-items: center;
     cursor: pointer;
 
     transition: color $dt, opacity $dt;
@@ -9,10 +10,14 @@
     svg {
         height: 1.6rem;
         width: 1.6rem;
-        margin-left: .5rem;
+        
         stroke: currentColor;
         fill: transparent;
     }
+
+    svg:first-child { margin-right: .5rem; }
+    svg:last-child { margin-left: .5rem; }
+
 }
 
 .btn, .carat-btn {

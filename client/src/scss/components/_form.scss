@@ -291,3 +291,71 @@
     }
 
 }
+
+.select-tile {
+
+    display: block;
+    cursor: pointer;
+
+    input {
+        display: none;
+    }
+
+    &__container {
+
+        padding: 2rem 1.5rem;
+        border: 2px solid var(--text-light);
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        --h-col: var(--jet);
+        --p-col: var(--text-dark);
+        --b-col: var(--jet);
+
+        --h-col-focus: var(--white);
+        --p-col-focus: rgba(255, 255, 255, .7);
+
+        @include dark {
+            --h-col: var(--white);
+            --p-col-focus: var(--text-dark);
+            --h-col-focus: var(--card-dark);
+            --b-col: var(--white);
+        }
+
+        transition: background .3s ease, border .3s ease;
+
+        h4, p {
+            transition: color .3s ease;
+            user-select: none;
+        }
+
+        &:hover {
+            border-color: var(--h-col);
+        }
+    }
+
+    input:checked + &__container {
+        border-color: var(--b-col);
+        background-color: var(--b-col);
+
+        --h-col: var(--h-col-focus);
+        --p-col: var(--p-col-focus);
+    }
+
+    &__title {
+        font-size: 1.8rem;
+        color: var(--h-col);
+
+        &:not(:last-child) {
+            margin-bottom: 1rem;
+        }
+    }
+
+    &__text {
+        font-size: 1.4rem;
+        color: var(--p-col);
+    }
+
+}

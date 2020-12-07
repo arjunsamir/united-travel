@@ -19,6 +19,8 @@ export default class Preloader {
             if (this.pageState == 'complete') this.onPageLoad();
         });
 
+        return this;
+
     }
 
 
@@ -70,6 +72,11 @@ export default class Preloader {
         this.callbacks.forEach(item => {
             if (item.event === event) item.callback();
         });
+    }
+
+    after(callback) {
+        this.subscribe('after', callback);
+        return this;
     }
 
 }

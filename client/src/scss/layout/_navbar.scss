@@ -48,7 +48,7 @@
         --nav-brand-color: var(--color-brand-dark);
     }
 
-    transition: background $smooth $cubic, transform $smooth $cubic;
+    transition: background $smooth ease, transform $smooth $cubic;
 
     transform: translate3d(0,0,0);
 
@@ -184,7 +184,6 @@
                 &.active {
                     @include link {
                         color: var(--primary);
-                        font-weight: 700;
                     }
                 }
             }
@@ -271,6 +270,8 @@
 
         display: none;
 
+        cursor: pointer;
+
         @include respond(tab-port) {
             display: block;
         }
@@ -316,7 +317,6 @@
             &.active {
                 @include link {
                     color: var(--primary);
-                    font-weight: 700;
                 }
             }
         }
@@ -424,7 +424,6 @@
                     &.active {
                         @include link {
                             color: var(--primary);
-                            font-weight: 700;
                         }
                     }
 

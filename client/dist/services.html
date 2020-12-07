@@ -9,7 +9,7 @@
     <link rel="stylesheet" type="text/css" href="/main.77bb5cfd.css">
 </head>
 
-<body class="services-page preload" data-barba="wrapper">
+<body class="fixed" data-barba="wrapper">
 
     <!-- Preloader -->
     <section class="preloader" id="preloader">
@@ -23,6 +23,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar logged-in-na" id="navbar">
 
+    <!-- Branding -->
     <a href="/" class="navbar__brand" id="nav-brand">
 
         <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
@@ -30,13 +31,19 @@
 
     </a>
 
+
+    <!-- Mobile Menu Toggle -->
     <label for="nav-toggle" class="navbar__icon" id="nav-icon" aria-label="Toggle Navigation Menu">
         <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
         <svg><use xlink:href="/icons.a0140bae.svg#close"></use></svg>
     </label>
 
+
+    <!-- Hidden Checkbox Toggle -->
     <input type="checkbox" id="nav-toggle" class="navbar__checkbox">
 
+
+    <!-- Mobile Nav Layout -->
     <div class="navbar__mobile">
 
         <div class="navbar__mobile-account">
@@ -71,9 +78,9 @@
         <div class="navbar__mobile-links">
             <ul>
                 <li><a class="nb-link" href="/">Home</a></li>
-                <li><a class="nb-link" href="/services" id="services-mobile-link">Services</a></li>
-                <li><a class="nb-link" href="/about">About Us</a></li>
-                <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                <li><a class="nb-link" data-nav-namespace="services" href="/services" id="services-mobile-link">Services</a></li>
+                <li><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+                <li><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
                 <!-- <li><a class="nb-link" href="/search">My Trips</a></li> -->
                 <li><a class="nb-link" href="/book">Book Now</a></li>
             </ul>
@@ -90,6 +97,8 @@
 
     </div>
 
+
+    <!-- Desktop Nav Layout -->
     <div class="navbar__main">
 
         <div class="navbar__action">
@@ -108,9 +117,9 @@
         <span class="navbar__divider">|</span>
 
         <ul class="navbar__links">
-            <li class="navbar__link"><a class="nb-link" href="/services">Services</a></li>
-            <li class="navbar__link"><a class="nb-link" href="/about">About Us</a></li>
-            <li class="navbar__link"><a class="nb-link" href="/fleet">Our Fleet</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="services" href="/services">Services</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
         </ul>
 
         <div class="navbar__action tablet">
@@ -120,9 +129,9 @@
             </button>
             <div class="navbar__dropdown">
                 <ul>
-                    <li><a class="nb-link" href="/services">Services</a></li>
-                    <li><a class="nb-link" href="/about">About Us</a></li>
-                    <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                    <li><a class="nb-link" data-nav-namespace="services" href="/services">Services</a></li>
+                    <li><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+                    <li><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
                 </ul>
             </div>
         </div>
@@ -160,7 +169,6 @@
 
     </div>
 
-
 </nav>
 
 
@@ -183,7 +191,7 @@
                 <h2 class="header__headline" id="navbar-collapse">Our <span>services</span></h2>
             </div>
 
-            <a class="header__cta" data-scroll="" data-scroll-speed=".4">
+            <a class="header__cta">
                 <div class="carat-btn lt-light dk-dark">
                     <h6>Book a ride now</h6>
                     <svg>
@@ -438,12 +446,12 @@
         <!-- Footer -->
         <footer class="footer">
 
-    <div class="footer__branding">
+    <a href="/" class="footer__branding">
 
         <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
         <h5>United Travel LLC</h5>
 
-    </div>
+    </a>
 
     <a href="https://www.arjunsamir.com" class="footer__sponsor">Designed On Day FiftyFive</a>
 

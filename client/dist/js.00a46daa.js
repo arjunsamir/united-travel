@@ -6903,82 +6903,7 @@ var define;
 !function(t,n){"object"==typeof exports&&"undefined"!=typeof module?module.exports=n():"function"==typeof define&&define.amd?define(n):(t=t||self).barba=n()}(this,(function(){function t(t,n){for(var r=0;r<n.length;r++){var e=n[r];e.enumerable=e.enumerable||!1,e.configurable=!0,"value"in e&&(e.writable=!0),Object.defineProperty(t,e.key,e)}}function n(n,r,e){return r&&t(n.prototype,r),e&&t(n,e),n}function r(){return(r=Object.assign||function(t){for(var n=1;n<arguments.length;n++){var r=arguments[n];for(var e in r)Object.prototype.hasOwnProperty.call(r,e)&&(t[e]=r[e])}return t}).apply(this,arguments)}function e(t,n){t.prototype=Object.create(n.prototype),t.prototype.constructor=t,t.__proto__=n}function i(t){return(i=Object.setPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__||Object.getPrototypeOf(t)})(t)}function o(t,n){return(o=Object.setPrototypeOf||function(t,n){return t.__proto__=n,t})(t,n)}function u(t,n,r){return(u=function(){if("undefined"==typeof Reflect||!Reflect.construct)return!1;if(Reflect.construct.sham)return!1;if("function"==typeof Proxy)return!0;try{return Date.prototype.toString.call(Reflect.construct(Date,[],(function(){}))),!0}catch(t){return!1}}()?Reflect.construct:function(t,n,r){var e=[null];e.push.apply(e,n);var i=new(Function.bind.apply(t,e));return r&&o(i,r.prototype),i}).apply(null,arguments)}function f(t){var n="function"==typeof Map?new Map:void 0;return(f=function(t){if(null===t||-1===Function.toString.call(t).indexOf("[native code]"))return t;if("function"!=typeof t)throw new TypeError("Super expression must either be null or a function");if(void 0!==n){if(n.has(t))return n.get(t);n.set(t,r)}function r(){return u(t,arguments,i(this).constructor)}return r.prototype=Object.create(t.prototype,{constructor:{value:r,enumerable:!1,writable:!0,configurable:!0}}),o(r,t)})(t)}function s(t,n){try{var r=t()}catch(t){return n(t)}return r&&r.then?r.then(void 0,n):r}"undefined"!=typeof Symbol&&(Symbol.iterator||(Symbol.iterator=Symbol("Symbol.iterator"))),"undefined"!=typeof Symbol&&(Symbol.asyncIterator||(Symbol.asyncIterator=Symbol("Symbol.asyncIterator")));var c,a="2.9.7",h=function(){};!function(t){t[t.off=0]="off",t[t.error=1]="error",t[t.warning=2]="warning",t[t.info=3]="info",t[t.debug=4]="debug"}(c||(c={}));var v=c.off,l=function(){function t(t){this.t=t}t.getLevel=function(){return v},t.setLevel=function(t){return v=c[t]};var n=t.prototype;return n.error=function(){for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];this.i(console.error,c.error,n)},n.warn=function(){for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];this.i(console.warn,c.warning,n)},n.info=function(){for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];this.i(console.info,c.info,n)},n.debug=function(){for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];this.i(console.log,c.debug,n)},n.i=function(n,r,e){r<=t.getLevel()&&n.apply(console,["["+this.t+"] "].concat(e))},t}(),d=O,m=E,p=g,w=x,b=T,y="/",P=new RegExp(["(\\\\.)","(?:\\:(\\w+)(?:\\(((?:\\\\.|[^\\\\()])+)\\))?|\\(((?:\\\\.|[^\\\\()])+)\\))([+*?])?"].join("|"),"g");function g(t,n){for(var r,e=[],i=0,o=0,u="",f=n&&n.delimiter||y,s=n&&n.whitelist||void 0,c=!1;null!==(r=P.exec(t));){var a=r[0],h=r[1],v=r.index;if(u+=t.slice(o,v),o=v+a.length,h)u+=h[1],c=!0;else{var l="",d=r[2],m=r[3],p=r[4],w=r[5];if(!c&&u.length){var b=u.length-1,g=u[b];(!s||s.indexOf(g)>-1)&&(l=g,u=u.slice(0,b))}u&&(e.push(u),u="",c=!1);var E=m||p,x=l||f;e.push({name:d||i++,prefix:l,delimiter:x,optional:"?"===w||"*"===w,repeat:"+"===w||"*"===w,pattern:E?A(E):"[^"+k(x===f?x:x+f)+"]+?"})}}return(u||o<t.length)&&e.push(u+t.substr(o)),e}function E(t,n){return function(r,e){var i=t.exec(r);if(!i)return!1;for(var o=i[0],u=i.index,f={},s=e&&e.decode||decodeURIComponent,c=1;c<i.length;c++)if(void 0!==i[c]){var a=n[c-1];f[a.name]=a.repeat?i[c].split(a.delimiter).map((function(t){return s(t,a)})):s(i[c],a)}return{path:o,index:u,params:f}}}function x(t,n){for(var r=new Array(t.length),e=0;e<t.length;e++)"object"==typeof t[e]&&(r[e]=new RegExp("^(?:"+t[e].pattern+")$",R(n)));return function(n,e){for(var i="",o=e&&e.encode||encodeURIComponent,u=!e||!1!==e.validate,f=0;f<t.length;f++){var s=t[f];if("string"!=typeof s){var c,a=n?n[s.name]:void 0;if(Array.isArray(a)){if(!s.repeat)throw new TypeError('Expected "'+s.name+'" to not repeat, but got array');if(0===a.length){if(s.optional)continue;throw new TypeError('Expected "'+s.name+'" to not be empty')}for(var h=0;h<a.length;h++){if(c=o(a[h],s),u&&!r[f].test(c))throw new TypeError('Expected all "'+s.name+'" to match "'+s.pattern+'"');i+=(0===h?s.prefix:s.delimiter)+c}}else if("string"!=typeof a&&"number"!=typeof a&&"boolean"!=typeof a){if(!s.optional)throw new TypeError('Expected "'+s.name+'" to be '+(s.repeat?"an array":"a string"))}else{if(c=o(String(a),s),u&&!r[f].test(c))throw new TypeError('Expected "'+s.name+'" to match "'+s.pattern+'", but got "'+c+'"');i+=s.prefix+c}}else i+=s}return i}}function k(t){return t.replace(/([.+*?=^!:${}()[\]|/\\])/g,"\\$1")}function A(t){return t.replace(/([=!:$/()])/g,"\\$1")}function R(t){return t&&t.sensitive?"":"i"}function T(t,n,r){for(var e=(r=r||{}).strict,i=!1!==r.start,o=!1!==r.end,u=r.delimiter||y,f=[].concat(r.endsWith||[]).map(k).concat("$").join("|"),s=i?"^":"",c=0;c<t.length;c++){var a=t[c];if("string"==typeof a)s+=k(a);else{var h=a.repeat?"(?:"+a.pattern+")(?:"+k(a.delimiter)+"(?:"+a.pattern+"))*":a.pattern;n&&n.push(a),s+=a.optional?a.prefix?"(?:"+k(a.prefix)+"("+h+"))?":"("+h+")?":k(a.prefix)+"("+h+")"}}if(o)e||(s+="(?:"+k(u)+")?"),s+="$"===f?"$":"(?="+f+")";else{var v=t[t.length-1],l="string"==typeof v?v[v.length-1]===u:void 0===v;e||(s+="(?:"+k(u)+"(?="+f+"))?"),l||(s+="(?="+k(u)+"|"+f+")")}return new RegExp(s,R(r))}function O(t,n,r){return t instanceof RegExp?function(t,n){if(!n)return t;var r=t.source.match(/\((?!\?)/g);if(r)for(var e=0;e<r.length;e++)n.push({name:e,prefix:null,delimiter:null,optional:!1,repeat:!1,pattern:null});return t}(t,n):Array.isArray(t)?function(t,n,r){for(var e=[],i=0;i<t.length;i++)e.push(O(t[i],n,r).source);return new RegExp("(?:"+e.join("|")+")",R(r))}(t,n,r):function(t,n,r){return T(g(t,r),n,r)}(t,n,r)}d.match=function(t,n){var r=[];return E(O(t,r,n),r)},d.regexpToFunction=m,d.parse=p,d.compile=function(t,n){return x(g(t,n),n)},d.tokensToFunction=w,d.tokensToRegExp=b;var S={container:"container",history:"history",namespace:"namespace",prefix:"data-barba",prevent:"prevent",wrapper:"wrapper"},j=new(function(){function t(){this.o=S,this.u=new DOMParser}var n=t.prototype;return n.toString=function(t){return t.outerHTML},n.toDocument=function(t){return this.u.parseFromString(t,"text/html")},n.toElement=function(t){var n=document.createElement("div");return n.innerHTML=t,n},n.getHtml=function(t){return void 0===t&&(t=document),this.toString(t.documentElement)},n.getWrapper=function(t){return void 0===t&&(t=document),t.querySelector("["+this.o.prefix+'="'+this.o.wrapper+'"]')},n.getContainer=function(t){return void 0===t&&(t=document),t.querySelector("["+this.o.prefix+'="'+this.o.container+'"]')},n.removeContainer=function(t){document.body.contains(t)&&t.parentNode.removeChild(t)},n.addContainer=function(t,n){var r=this.getContainer();r?this.s(t,r):n.appendChild(t)},n.getNamespace=function(t){void 0===t&&(t=document);var n=t.querySelector("["+this.o.prefix+"-"+this.o.namespace+"]");return n?n.getAttribute(this.o.prefix+"-"+this.o.namespace):null},n.getHref=function(t){if(t.tagName&&"a"===t.tagName.toLowerCase()){if("string"==typeof t.href)return t.href;var n=t.getAttribute("href")||t.getAttribute("xlink:href");if(n)return this.resolveUrl(n.baseVal||n)}return null},n.resolveUrl=function(){for(var t=arguments.length,n=new Array(t),r=0;r<t;r++)n[r]=arguments[r];var e=n.length;if(0===e)throw new Error("resolveUrl requires at least one argument; got none.");var i=document.createElement("base");if(i.href=arguments[0],1===e)return i.href;var o=document.getElementsByTagName("head")[0];o.insertBefore(i,o.firstChild);for(var u,f=document.createElement("a"),s=1;s<e;s++)f.href=arguments[s],i.href=u=f.href;return o.removeChild(i),u},n.s=function(t,n){n.parentNode.insertBefore(t,n.nextSibling)},t}()),M=new(function(){function t(){this.h=[],this.v=-1}var e=t.prototype;return e.init=function(t,n){this.l="barba";var r={ns:n,scroll:{x:window.scrollX,y:window.scrollY},url:t};this.h.push(r),this.v=0;var e={from:this.l,index:0,states:[].concat(this.h)};window.history&&window.history.replaceState(e,"",t)},e.change=function(t,n,r){if(r&&r.state){var e=r.state,i=e.index;n=this.m(this.v-i),this.replace(e.states),this.v=i}else this.add(t,n);return n},e.add=function(t,n){var r=this.size,e=this.p(n),i={ns:"tmp",scroll:{x:window.scrollX,y:window.scrollY},url:t};this.h.push(i),this.v=r;var o={from:this.l,index:r,states:[].concat(this.h)};switch(e){case"push":window.history&&window.history.pushState(o,"",t);break;case"replace":window.history&&window.history.replaceState(o,"",t)}},e.update=function(t,n){var e=n||this.v,i=r({},this.get(e),{},t);this.set(e,i)},e.remove=function(t){t?this.h.splice(t,1):this.h.pop(),this.v--},e.clear=function(){this.h=[],this.v=-1},e.replace=function(t){this.h=t},e.get=function(t){return this.h[t]},e.set=function(t,n){return this.h[t]=n},e.p=function(t){var n="push",r=t,e=S.prefix+"-"+S.history;return r.hasAttribute&&r.hasAttribute(e)&&(n=r.getAttribute(e)),n},e.m=function(t){return Math.abs(t)>1?t>0?"forward":"back":0===t?"popstate":t>0?"back":"forward"},n(t,[{key:"current",get:function(){return this.h[this.v]}},{key:"state",get:function(){return this.h[this.h.length-1]}},{key:"previous",get:function(){return this.v<1?null:this.h[this.v-1]}},{key:"size",get:function(){return this.h.length}}]),t}()),L=function(t,n){try{var r=function(){if(!n.next.html)return Promise.resolve(t).then((function(t){var r=n.next;if(t){var e=j.toElement(t);r.namespace=j.getNamespace(e),r.container=j.getContainer(e),r.html=t,M.update({ns:r.namespace});var i=j.toDocument(t);document.title=i.title}}))}();return Promise.resolve(r&&r.then?r.then((function(){})):void 0)}catch(t){return Promise.reject(t)}},$=d,_={__proto__:null,update:L,nextTick:function(){return new Promise((function(t){window.requestAnimationFrame(t)}))},pathToRegexp:$},q=function(){return window.location.origin},B=function(t){return void 0===t&&(t=window.location.href),U(t).port},U=function(t){var n,r=t.match(/:\d+/);if(null===r)/^http/.test(t)&&(n=80),/^https/.test(t)&&(n=443);else{var e=r[0].substring(1);n=parseInt(e,10)}var i,o=t.replace(q(),""),u={},f=o.indexOf("#");f>=0&&(i=o.slice(f+1),o=o.slice(0,f));var s=o.indexOf("?");return s>=0&&(u=D(o.slice(s+1)),o=o.slice(0,s)),{hash:i,path:o,port:n,query:u}},D=function(t){return t.split("&").reduce((function(t,n){var r=n.split("=");return t[r[0]]=r[1],t}),{})},F=function(t){return void 0===t&&(t=window.location.href),t.replace(/(\/#.*|\/|#.*)$/,"")},H={__proto__:null,getHref:function(){return window.location.href},getOrigin:q,getPort:B,getPath:function(t){return void 0===t&&(t=window.location.href),U(t).path},parse:U,parseQuery:D,clean:F};function I(t,n,r){return void 0===n&&(n=2e3),new Promise((function(e,i){var o=new XMLHttpRequest;o.onreadystatechange=function(){if(o.readyState===XMLHttpRequest.DONE)if(200===o.status)e(o.responseText);else if(o.status){var n={status:o.status,statusText:o.statusText};r(t,n),i(n)}},o.ontimeout=function(){var e=new Error("Timeout error ["+n+"]");r(t,e),i(e)},o.onerror=function(){var n=new Error("Fetch error");r(t,n),i(n)},o.open("GET",t),o.timeout=n,o.setRequestHeader("Accept","text/html,application/xhtml+xml,application/xml"),o.setRequestHeader("x-barba","yes"),o.send()}))}var C=function(t){return!!t&&("object"==typeof t||"function"==typeof t)&&"function"==typeof t.then};function N(t,n){return void 0===n&&(n={}),function(){for(var r=arguments.length,e=new Array(r),i=0;i<r;i++)e[i]=arguments[i];var o=!1,u=new Promise((function(r,i){n.async=function(){return o=!0,function(t,n){t?i(t):r(n)}};var u=t.apply(n,e);o||(C(u)?u.then(r,i):r(u))}));return u}}var X=new(function(t){function n(){var n;return(n=t.call(this)||this).logger=new l("@barba/core"),n.all=["ready","page","reset","currentAdded","currentRemoved","nextAdded","nextRemoved","beforeOnce","once","afterOnce","before","beforeLeave","leave","afterLeave","beforeEnter","enter","afterEnter","after"],n.registered=new Map,n.init(),n}e(n,t);var r=n.prototype;return r.init=function(){var t=this;this.registered.clear(),this.all.forEach((function(n){t[n]||(t[n]=function(r,e){t.registered.has(n)||t.registered.set(n,new Set),t.registered.get(n).add({ctx:e||{},fn:r})})}))},r.do=function(t){for(var n=this,r=arguments.length,e=new Array(r>1?r-1:0),i=1;i<r;i++)e[i-1]=arguments[i];if(this.registered.has(t)){var o=Promise.resolve();return this.registered.get(t).forEach((function(t){o=o.then((function(){return N(t.fn,t.ctx).apply(void 0,e)}))})),o.catch((function(r){n.logger.debug("Hook error ["+t+"]"),n.logger.error(r)}))}return Promise.resolve()},r.clear=function(){var t=this;this.all.forEach((function(n){delete t[n]})),this.init()},r.help=function(){this.logger.info("Available hooks: "+this.all.join(","));var t=[];this.registered.forEach((function(n,r){return t.push(r)})),this.logger.info("Registered hooks: "+t.join(","))},n}(h)),z=function(){function t(t){if(this.P=[],"boolean"==typeof t)this.g=t;else{var n=Array.isArray(t)?t:[t];this.P=n.map((function(t){return $(t)}))}}return t.prototype.checkHref=function(t){if("boolean"==typeof this.g)return this.g;var n=U(t).path;return this.P.some((function(t){return null!==t.exec(n)}))},t}(),G=function(t){function n(n){var r;return(r=t.call(this,n)||this).k=new Map,r}e(n,t);var i=n.prototype;return i.set=function(t,n,r){return this.k.set(t,{action:r,request:n}),{action:r,request:n}},i.get=function(t){return this.k.get(t)},i.getRequest=function(t){return this.k.get(t).request},i.getAction=function(t){return this.k.get(t).action},i.has=function(t){return!this.checkHref(t)&&this.k.has(t)},i.delete=function(t){return this.k.delete(t)},i.update=function(t,n){var e=r({},this.k.get(t),{},n);return this.k.set(t,e),e},n}(z),Q=function(){return!window.history.pushState},W=function(t){return!t.el||!t.href},J=function(t){var n=t.event;return n.which>1||n.metaKey||n.ctrlKey||n.shiftKey||n.altKey},K=function(t){var n=t.el;return n.hasAttribute("target")&&"_blank"===n.target},V=function(t){var n=t.el;return void 0!==n.protocol&&window.location.protocol!==n.protocol||void 0!==n.hostname&&window.location.hostname!==n.hostname},Y=function(t){var n=t.el;return void 0!==n.port&&B()!==B(n.href)},Z=function(t){var n=t.el;return n.getAttribute&&"string"==typeof n.getAttribute("download")},tt=function(t){return t.el.hasAttribute(S.prefix+"-"+S.prevent)},nt=function(t){return Boolean(t.el.closest("["+S.prefix+"-"+S.prevent+'="all"]'))},rt=function(t){var n=t.href;return F(n)===F()&&B(n)===B()},et=function(t){function n(n){var r;return(r=t.call(this,n)||this).suite=[],r.tests=new Map,r.init(),r}e(n,t);var r=n.prototype;return r.init=function(){this.add("pushState",Q),this.add("exists",W),this.add("newTab",J),this.add("blank",K),this.add("corsDomain",V),this.add("corsPort",Y),this.add("download",Z),this.add("preventSelf",tt),this.add("preventAll",nt),this.add("sameUrl",rt,!1)},r.add=function(t,n,r){void 0===r&&(r=!0),this.tests.set(t,n),r&&this.suite.push(t)},r.run=function(t,n,r,e){return this.tests.get(t)({el:n,event:r,href:e})},r.checkLink=function(t,n,r){var e=this;return this.suite.some((function(i){return e.run(i,t,n,r)}))},n}(z),it=function(t){function n(r,e){var i;void 0===e&&(e="Barba error");for(var o=arguments.length,u=new Array(o>2?o-2:0),f=2;f<o;f++)u[f-2]=arguments[f];return(i=t.call.apply(t,[this].concat(u))||this).error=r,i.label=e,Error.captureStackTrace&&Error.captureStackTrace(function(t){if(void 0===t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return t}(i),n),i.name="BarbaError",i}return e(n,t),n}(f(Error)),ot=function(){function t(t){void 0===t&&(t=[]),this.logger=new l("@barba/core"),this.all=[],this.page=[],this.once=[],this.A=[{name:"namespace",type:"strings"},{name:"custom",type:"function"}],t&&(this.all=this.all.concat(t)),this.update()}var n=t.prototype;return n.add=function(t,n){switch(t){case"rule":this.A.splice(n.position||0,0,n.value);break;case"transition":default:this.all.push(n)}this.update()},n.resolve=function(t,n){var r=this;void 0===n&&(n={});var e=n.once?this.once:this.page;e=e.filter(n.self?function(t){return t.name&&"self"===t.name}:function(t){return!t.name||"self"!==t.name});var i=new Map,o=e.find((function(e){var o=!0,u={};return!(!n.self||"self"!==e.name)||(r.A.reverse().forEach((function(n){o&&(o=r.R(e,n,t,u),e.from&&e.to&&(o=r.R(e,n,t,u,"from")&&r.R(e,n,t,u,"to")),e.from&&!e.to&&(o=r.R(e,n,t,u,"from")),!e.from&&e.to&&(o=r.R(e,n,t,u,"to")))})),i.set(e,u),o)})),u=i.get(o),f=[];if(f.push(n.once?"once":"page"),n.self&&f.push("self"),u){var s,c=[o];Object.keys(u).length>0&&c.push(u),(s=this.logger).info.apply(s,["Transition found ["+f.join(",")+"]"].concat(c))}else this.logger.info("No transition found ["+f.join(",")+"]");return o},n.update=function(){var t=this;this.all=this.all.map((function(n){return t.T(n)})).sort((function(t,n){return t.priority-n.priority})).reverse().map((function(t){return delete t.priority,t})),this.page=this.all.filter((function(t){return void 0!==t.leave||void 0!==t.enter})),this.once=this.all.filter((function(t){return void 0!==t.once}))},n.R=function(t,n,r,e,i){var o=!0,u=!1,f=t,s=n.name,c=s,a=s,h=s,v=i?f[i]:f,l="to"===i?r.next:r.current;if(i?v&&v[s]:v[s]){switch(n.type){case"strings":default:var d=Array.isArray(v[c])?v[c]:[v[c]];l[c]&&-1!==d.indexOf(l[c])&&(u=!0),-1===d.indexOf(l[c])&&(o=!1);break;case"object":var m=Array.isArray(v[a])?v[a]:[v[a]];l[a]?(l[a].name&&-1!==m.indexOf(l[a].name)&&(u=!0),-1===m.indexOf(l[a].name)&&(o=!1)):o=!1;break;case"function":v[h](r)?u=!0:o=!1}u&&(i?(e[i]=e[i]||{},e[i][s]=f[i][s]):e[s]=f[s])}return o},n.O=function(t,n,r){var e=0;return(t[n]||t.from&&t.from[n]||t.to&&t.to[n])&&(e+=Math.pow(10,r),t.from&&t.from[n]&&(e+=1),t.to&&t.to[n]&&(e+=2)),e},n.T=function(t){var n=this;t.priority=0;var r=0;return this.A.forEach((function(e,i){r+=n.O(t,e.name,i+1)})),t.priority=r,t},t}(),ut=function(){function t(t){void 0===t&&(t=[]),this.logger=new l("@barba/core"),this.S=!1,this.store=new ot(t)}var r=t.prototype;return r.get=function(t,n){return this.store.resolve(t,n)},r.doOnce=function(t){var n=t.data,r=t.transition;try{var e=function(){i.S=!1},i=this,o=r||{};i.S=!0;var u=s((function(){return Promise.resolve(i.j("beforeOnce",n,o)).then((function(){return Promise.resolve(i.once(n,o)).then((function(){return Promise.resolve(i.j("afterOnce",n,o)).then((function(){}))}))}))}),(function(t){i.S=!1,i.logger.debug("Transition error [before/after/once]"),i.logger.error(t)}));return Promise.resolve(u&&u.then?u.then(e):e())}catch(t){return Promise.reject(t)}},r.doPage=function(t){var n=t.data,r=t.transition,e=t.page,i=t.wrapper;try{var o=function(t){if(u)return t;f.S=!1},u=!1,f=this,c=r||{},a=!0===c.sync||!1;f.S=!0;var h=s((function(){function t(){return Promise.resolve(f.j("before",n,c)).then((function(){var t=!1;function r(r){return t?r:Promise.resolve(f.remove(n)).then((function(){return Promise.resolve(f.j("after",n,c)).then((function(){}))}))}var o=function(){if(a)return s((function(){return Promise.resolve(f.add(n,i)).then((function(){return Promise.resolve(f.j("beforeLeave",n,c)).then((function(){return Promise.resolve(f.j("beforeEnter",n,c)).then((function(){return Promise.resolve(Promise.all([f.leave(n,c),f.enter(n,c)])).then((function(){return Promise.resolve(f.j("afterLeave",n,c)).then((function(){return Promise.resolve(f.j("afterEnter",n,c)).then((function(){}))}))}))}))}))}))}),(function(t){if(f.M(t))throw new it(t,"Transition error [sync]")}));var r=function(r){return t?r:s((function(){var t=function(){if(!1!==o)return Promise.resolve(f.add(n,i)).then((function(){return Promise.resolve(f.j("beforeEnter",n,c)).then((function(){return Promise.resolve(f.enter(n,c,o)).then((function(){return Promise.resolve(f.j("afterEnter",n,c)).then((function(){}))}))}))}))}();if(t&&t.then)return t.then((function(){}))}),(function(t){if(f.M(t))throw new it(t,"Transition error [before/after/enter]")}))},o=!1,u=s((function(){return Promise.resolve(f.j("beforeLeave",n,c)).then((function(){return Promise.resolve(Promise.all([f.leave(n,c),L(e,n)]).then((function(t){return t[0]}))).then((function(t){return o=t,Promise.resolve(f.j("afterLeave",n,c)).then((function(){}))}))}))}),(function(t){if(f.M(t))throw new it(t,"Transition error [before/after/leave]")}));return u&&u.then?u.then(r):r(u)}();return o&&o.then?o.then(r):r(o)}))}var r=function(){if(a)return Promise.resolve(L(e,n)).then((function(){}))}();return r&&r.then?r.then(t):t()}),(function(t){if(f.S=!1,t.name&&"BarbaError"===t.name)throw f.logger.debug(t.label),f.logger.error(t.error),t;throw f.logger.debug("Transition error [page]"),f.logger.error(t),t}));return Promise.resolve(h&&h.then?h.then(o):o(h))}catch(t){return Promise.reject(t)}},r.once=function(t,n){try{return Promise.resolve(X.do("once",t,n)).then((function(){return n.once?N(n.once,n)(t):Promise.resolve()}))}catch(t){return Promise.reject(t)}},r.leave=function(t,n){try{return Promise.resolve(X.do("leave",t,n)).then((function(){return n.leave?N(n.leave,n)(t):Promise.resolve()}))}catch(t){return Promise.reject(t)}},r.enter=function(t,n,r){try{return Promise.resolve(X.do("enter",t,n)).then((function(){return n.enter?N(n.enter,n)(t,r):Promise.resolve()}))}catch(t){return Promise.reject(t)}},r.add=function(t,n){try{return j.addContainer(t.next.container,n),X.do("nextAdded",t),Promise.resolve()}catch(t){return Promise.reject(t)}},r.remove=function(t){try{return j.removeContainer(t.current.container),X.do("currentRemoved",t),Promise.resolve()}catch(t){return Promise.reject(t)}},r.M=function(t){return t.message?!/Timeout error|Fetch error/.test(t.message):!t.status},r.j=function(t,n,r){try{return Promise.resolve(X.do(t,n,r)).then((function(){return r[t]?N(r[t],r)(n):Promise.resolve()}))}catch(t){return Promise.reject(t)}},n(t,[{key:"isRunning",get:function(){return this.S},set:function(t){this.S=t}},{key:"hasOnce",get:function(){return this.store.once.length>0}},{key:"hasSelf",get:function(){return this.store.all.some((function(t){return"self"===t.name}))}},{key:"shouldWait",get:function(){return this.store.all.some((function(t){return t.to&&!t.to.route||t.sync}))}}]),t}(),ft=function(){function t(t){var n=this;this.names=["beforeLeave","afterLeave","beforeEnter","afterEnter"],this.byNamespace=new Map,0!==t.length&&(t.forEach((function(t){n.byNamespace.set(t.namespace,t)})),this.names.forEach((function(t){X[t](n.L(t))})))}return t.prototype.L=function(t){var n=this;return function(r){var e=t.match(/enter/i)?r.next:r.current,i=n.byNamespace.get(e.namespace);return i&&i[t]?N(i[t],i)(r):Promise.resolve()}},t}();Element.prototype.matches||(Element.prototype.matches=Element.prototype.msMatchesSelector||Element.prototype.webkitMatchesSelector),Element.prototype.closest||(Element.prototype.closest=function(t){var n=this;do{if(n.matches(t))return n;n=n.parentElement||n.parentNode}while(null!==n&&1===n.nodeType);return null});var st={container:null,html:"",namespace:"",url:{hash:"",href:"",path:"",port:null,query:{}}};return new(function(){function t(){this.version=a,this.schemaPage=st,this.Logger=l,this.logger=new l("@barba/core"),this.plugins=[],this.hooks=X,this.dom=j,this.helpers=_,this.history=M,this.request=I,this.url=H}var e=t.prototype;return e.use=function(t,n){var r=this.plugins;r.indexOf(t)>-1?this.logger.warn("Plugin ["+t.name+"] already installed."):"function"==typeof t.install?(t.install(this,n),r.push(t)):this.logger.warn("Plugin ["+t.name+'] has no "install" method.')},e.init=function(t){var n=void 0===t?{}:t,e=n.transitions,i=void 0===e?[]:e,o=n.views,u=void 0===o?[]:o,f=n.schema,s=void 0===f?S:f,c=n.requestError,a=n.timeout,h=void 0===a?2e3:a,v=n.cacheIgnore,d=void 0!==v&&v,m=n.prefetchIgnore,p=void 0!==m&&m,w=n.preventRunning,b=void 0!==w&&w,y=n.prevent,P=void 0===y?null:y,g=n.debug,E=n.logLevel;if(l.setLevel(!0===(void 0!==g&&g)?"debug":void 0===E?"off":E),this.logger.info(this.version),Object.keys(s).forEach((function(t){S[t]&&(S[t]=s[t])})),this.$=c,this.timeout=h,this.cacheIgnore=d,this.prefetchIgnore=p,this.preventRunning=b,this._=this.dom.getWrapper(),!this._)throw new Error("[@barba/core] No Barba wrapper found");this._.setAttribute("aria-live","polite"),this.q();var x=this.data.current;if(!x.container)throw new Error("[@barba/core] No Barba container found");if(this.cache=new G(d),this.prevent=new et(p),this.transitions=new ut(i),this.views=new ft(u),null!==P){if("function"!=typeof P)throw new Error("[@barba/core] Prevent should be a function");this.prevent.add("preventCustom",P)}this.history.init(x.url.href,x.namespace),this.B=this.B.bind(this),this.U=this.U.bind(this),this.D=this.D.bind(this),this.F(),this.plugins.forEach((function(t){return t.init()}));var k=this.data;k.trigger="barba",k.next=k.current,k.current=r({},this.schemaPage),this.hooks.do("ready",k),this.once(k),this.q()},e.destroy=function(){this.q(),this.H(),this.history.clear(),this.hooks.clear(),this.plugins=[]},e.force=function(t){window.location.assign(t)},e.go=function(t,n,r){var e;if(void 0===n&&(n="barba"),this.transitions.isRunning)this.force(t);else if(!(e="popstate"===n?this.history.current&&this.url.getPath(this.history.current.url)===this.url.getPath(t):this.prevent.run("sameUrl",null,null,t))||this.transitions.hasSelf)return n=this.history.change(t,n,r),r&&(r.stopPropagation(),r.preventDefault()),this.page(t,n,e)},e.once=function(t){try{var n=this;return Promise.resolve(n.hooks.do("beforeEnter",t)).then((function(){function r(){return Promise.resolve(n.hooks.do("afterEnter",t)).then((function(){}))}var e=function(){if(n.transitions.hasOnce){var r=n.transitions.get(t,{once:!0});return Promise.resolve(n.transitions.doOnce({transition:r,data:t})).then((function(){}))}}();return e&&e.then?e.then(r):r()}))}catch(t){return Promise.reject(t)}},e.page=function(t,n,e){try{var i=function(){var t=o.data;return Promise.resolve(o.hooks.do("page",t)).then((function(){var n=s((function(){var n=o.transitions.get(t,{once:!1,self:e});return Promise.resolve(o.transitions.doPage({data:t,page:u,transition:n,wrapper:o._})).then((function(){o.q()}))}),(function(){0===l.getLevel()&&o.force(t.current.url.href)}));if(n&&n.then)return n.then((function(){}))}))},o=this;o.data.next.url=r({href:t},o.url.parse(t)),o.data.trigger=n;var u=o.cache.has(t)?o.cache.update(t,{action:"click"}).request:o.cache.set(t,o.request(t,o.timeout,o.onRequestError.bind(o,n)),"click").request,f=function(){if(o.transitions.shouldWait)return Promise.resolve(L(u,o.data)).then((function(){}))}();return Promise.resolve(f&&f.then?f.then(i):i())}catch(t){return Promise.reject(t)}},e.onRequestError=function(t){this.transitions.isRunning=!1;for(var n=arguments.length,r=new Array(n>1?n-1:0),e=1;e<n;e++)r[e-1]=arguments[e];var i=r[0],o=r[1],u=this.cache.getAction(i);return this.cache.delete(i),!(this.$&&!1===this.$(t,u,i,o)||("click"===u&&this.force(i),1))},e.prefetch=function(t){var n=this;this.cache.has(t)||this.cache.set(t,this.request(t,this.timeout,this.onRequestError.bind(this,"barba")).catch((function(t){n.logger.error(t)})),"prefetch")},e.F=function(){!0!==this.prefetchIgnore&&(document.addEventListener("mouseover",this.B),document.addEventListener("touchstart",this.B)),document.addEventListener("click",this.U),window.addEventListener("popstate",this.D)},e.H=function(){!0!==this.prefetchIgnore&&(document.removeEventListener("mouseover",this.B),document.removeEventListener("touchstart",this.B)),document.removeEventListener("click",this.U),window.removeEventListener("popstate",this.D)},e.B=function(t){var n=this,r=this.I(t);if(r){var e=this.dom.getHref(r);this.prevent.checkHref(e)||this.cache.has(e)||this.cache.set(e,this.request(e,this.timeout,this.onRequestError.bind(this,r)).catch((function(t){n.logger.error(t)})),"enter")}},e.U=function(t){var n=this.I(t);if(n)return this.transitions.isRunning&&this.preventRunning?(t.preventDefault(),void t.stopPropagation()):void this.go(this.dom.getHref(n),n,t)},e.D=function(t){this.go(this.url.getHref(),"popstate",t)},e.I=function(t){for(var n=t.target;n&&!this.dom.getHref(n);)n=n.parentNode;if(n&&!this.prevent.checkLink(n,t,this.dom.getHref(n)))return n},e.q=function(){var t=this.url.getHref(),n={container:this.dom.getContainer(),html:this.dom.getHtml(),namespace:this.dom.getNamespace(),url:r({href:t},this.url.parse(t))};this.C={current:n,next:r({},this.schemaPage),trigger:void 0},this.hooks.do("reset",this.data)},n(t,[{key:"data",get:function(){return this.C}},{key:"wrapper",get:function(){return this._}}]),t}())}));
 
 
-},{}],"js/components/general/Preloader.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-var _gsap = _interopRequireDefault(require("gsap"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-class Preloader {
-  constructor() {
-    this.pageState = 'loading';
-    this.callbacks = [];
-    this.preloader = $('#preloader');
-  }
-
-  init() {
-    $(document).on('readystatechange', () => {
-      this.pageState = document.readyState;
-      if (this.pageState == 'complete') this.onPageLoad();
-    });
-  }
-
-  onPageLoad() {
-    // 1. Fire Before Events
-    this.fire('before'); // 2. Create Timeline 
-
-    const tl = _gsap.default.timeline(gsapDefaults); // 3. Add Load Complete Class
-
-
-    this.preloader.addClass('load-complete'); // 4. Fade Out Logo
-
-    tl.to(this.preloader.children('.preloader__content').e(), {
-      opacity: 0,
-      duration: .75,
-      delay: .5
-    }); // 5. Fade Out Preloader
-
-    tl.to(this.preloader.e(), {
-      opacity: 0,
-      duration: .5
-    }); // 6. Subscribe To Completed Animation Callback
-
-    tl.eventCallback('onComplete', () => this.onComplete());
-  }
-
-  onComplete() {
-    // 1. Execute Callback Functions
-    this.fire('after'); // 2. Remove Preloader Element
-
-    $.delay(500).then(() => {
-      if (this.preloader) this.preloader.remove();
-      this.preloader = null;
-    });
-  }
-
-  subscribe(event, callback) {
-    this.callbacks.push({
-      event,
-      callback
-    });
-  }
-
-  fire(event) {
-    this.callbacks.forEach(item => {
-      if (item.event === event) item.callback();
-    });
-  }
-
-}
-
-exports.default = Preloader;
-},{"gsap":"../../node_modules/gsap/index.js"}],"../../node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js":[function(require,module,exports) {
+},{}],"../../node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js":[function(require,module,exports) {
 var global = arguments[3];
 "use strict";
 
@@ -10119,37 +10044,31 @@ class Scroll {
     const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
     const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
     this.scrollMultiplier = isMac && isFirefox ? 4.8 : 1.2;
-    this.smoothScrollMultiplier = .25;
+    this.smoothScrollMultiplier = .18;
     this.scrollEase = [0.00, 0.28, 1.00, 0.69];
     this.lerp = .2;
     this.page = page;
   }
 
-  setValues() {
-    // Define Initial Values
+  init() {
+    // Define Elements
+    this.body = this.page.elements.body;
+    this.container = this.page.elements.container; // Attach Scroll Events
+
+    this.attachEvents();
+    this.locomotive.on('scroll', e => this.onScroll(~~e.scroll.y)); // Define Initial Values
+
     this.navbar = $('#navbar');
     this.anchor = $('#navbar-collapse');
     this.hidden = false;
     this.opacity = 0;
     this.position = window.pageXOffset;
-    this.threshold = 250;
+    this.threshold = 250; // Define Scroll Limits
+
     this.limits = {
       top: 0,
       bottom: this.locomotive.scroll.instance.limit
-    };
-  }
-
-  init(container) {
-    // Define Elements
-    this.body = $('body');
-    this.container = container !== null && container !== void 0 ? container : $('main').e(); // Define Links
-
-    this.links = $(this.container).children('a[href]').concat($('#navbar a').kill()); // Attach Scroll Events
-
-    this.attachEvents();
-    this.locomotive.on('scroll', e => this.onScroll(~~e.scroll.y)); // Set Initial Values
-
-    this.setValues(); // Update Values
+    }; // Update Values
 
     this.position = this.locomotive.scroll.instance.scroll.y;
     this.threshold = this.anchor.top() - this.navbar.height(); // Determine If Mobile
@@ -10159,9 +10078,8 @@ class Scroll {
     if (this.isMobile) this.body.removeClass('fixed');
   }
 
-  refresh(container) {
+  destroy() {
     this.locomotive.destroy();
-    this.init(container);
   }
 
   attachEvents() {
@@ -10172,25 +10090,33 @@ class Scroll {
       multiplier: this.scrollMultiplier,
       lerp: this.lerp,
       scrollFromAnywhere: true
-    }); // Filter Out Relative Links
+    }); // Define Links
+
+    this.links = $(this.container).children('a[href]').concat($('#navbar a').kill()); // Filter Out Relative Links
 
     this.links.filter(link => {
-      if (this.page.state.url == link.href) return link;else if (link.href.includes('#') && !link.href.split('#')[1]) return link;else return null;
+      // Remove Prevent Class From All Links
+      link.classList.remove('prevent'); // Get Href and strip off ending Slash
+
+      let href = link.href;
+      if (href.endsWith('/')) href = href.slice(0, -1); // Determine if href matches url
+
+      const match = {
+        exact: this.page.state.url == href,
+        hash: href.includes('#') && !href.split('#')[1]
+      }; // If There is no match then filter out link
+
+      if (!match.exact && !match.hash) return null; // Add Prevent class to remaining links
+
+      link.classList.add('prevent'); // Add Event Listener To Link
+
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        this.to('top');
+      }); // Return Link To Filtered array
+
+      return link;
     });
-    this.links.prevent('click', e => {
-      console.log(e);
-    });
-    console.log(this.links); // Attach Scroll Event Listeners
-    // this.links.filter(link => link.href.includes('#')).prevent('click', e => {
-    //     const href = e.target.closest('a').href.split('#')[1];
-    //     const target = href ? `#${href}` : 'top';
-    //     // const currentPosition = this.locomotive.scroll.instance.scroll.y;
-    //     // const targetPosition = href ? $(target).position().top : 0;
-    //     // const delta = Math.abs(currentPosition - targetPosition);
-    //     // const duration = Math.floor(delta * this.smoothScrollMultiplier);
-    //     // this.page.navbar.close(200).then(() => this.to(target, duration));
-    //     this.to(target);
-    // });
   }
 
   onScroll(y) {
@@ -10231,12 +10157,14 @@ class Scroll {
     if (this.isMobile) this.body.removeClass('fixed');
   }
 
-  async to(target, options, callback) {
+  async to(target) {
     var _options$duration, _options$offset, _Math$floor;
 
+    let options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    let callback = arguments.length > 2 ? arguments[2] : undefined;
     let t = target;
-    let duration = (_options$duration = options.duration) !== null && _options$duration !== void 0 ? _options$duration : 1000;
-    const easing = this.scrollEase;
+    let duration = (_options$duration = options.duration) !== null && _options$duration !== void 0 ? _options$duration : 1000; //const easing = this.scrollEase;
+
     const offset = (_options$offset = options.offset) !== null && _options$offset !== void 0 ? _options$offset : 0;
 
     if (typeof t == 'string') {
@@ -10254,85 +10182,13 @@ class Scroll {
     this.locomotive.scrollTo(t, {
       offset,
       duration,
-      easing,
       callback
     });
     await $.delay(duration);
     return 'Scrolling Complete';
   }
 
-} // class ScrollyBitch {
-//     constructor(page) {
-//         this.setInitialValues();
-//         this.page = page;
-//     }
-//     init(container) {
-//         this.locomotive = new LocomotiveScroll({
-//             el: container ?? this.page.elements.container,
-//             smooth: true,
-//             lerp: .2
-//         });
-//         // ~~ instead of Math.floor();
-//         this.locomotive.on('scroll', e => this.onScroll(~~e.scroll.y));
-//         // Set Position & Threshold
-//         this.position = this.locomotive.scroll.instance.scroll.y;
-//         this.threshold = this.anchor.top() - this.navbar.height();
-//     }
-//     setInitialValues() {
-//         this.navbar = $('#navbar');
-//         this.anchor = $('#navbar-collapse');
-//         this.hidden = false;
-//         this.opacity = 0;
-//         this.position = window.pageXOffset;
-//         this.threshold = 250;
-//     }
-//     pause() {
-//         this.locomotive.stop();
-//     }
-//     resume() {
-//         this.locomotive.start();
-//     }
-//     shutDown() {
-//         this.navbar.toggle('opaque', false);
-//         this.navbar.toggle('hidden', false);
-//         this.locomotive.stop();
-//         this.locomotive.destroy();
-//         $('.c-scrollbar').remove();
-//     }
-//     reboot(container) {
-//         this.setInitialValues();
-//         this.init(container);
-//     }
-//     update() {
-//         this.locomotive.update();
-//     }
-//     onScroll(y) {
-//         if (y === this.position) return;
-//         const opaque = y > this.threshold;
-//         const hide = opaque && y > this.position;
-//         if (hide && !this.hidden) {
-//             this.navbar.toggle('hidden', true);
-//             this.hidden = true;
-//         }
-//         else if (!hide && this.hidden) {
-//             this.navbar.toggle('hidden', false);
-//             this.hidden = false;
-//         }
-//         if (opaque && !this.opacity) {
-//             this.navbar.toggle('opaque', true);
-//             this.opacity = 1;
-//         }
-//         else if (!opaque && this.opacity) {
-//             this.navbar.toggle('opaque', false);
-//             this.opacity = 0;
-//         }
-//         this.position = y;
-//     }
-//     toTop(duration) {
-//         this.locomotive.scrollTo('top', 0, duration || 800);
-//     }
-// }
-
+}
 
 exports.default = Scroll;
 },{"locomotive-scroll":"../../node_modules/locomotive-scroll/dist/locomotive-scroll.esm.js"}],"js/components/general/Navbar.js":[function(require,module,exports) {
@@ -10345,34 +10201,36 @@ exports.default = void 0;
 
 //import { dream as $ } from '../vendor/Dreams';
 class Navbar {
-  constructor(scroll) {
+  constructor(page) {
+    this.scroll = page.scroll;
+    this.namespace = page.state.namespace;
+    this.isOpen = false; // Define Main Elements
+
     this.main = $('#navbar');
-    this.links = this.main.children('a[href]');
+    this.links = this.main.children('a[href]'); // Define User Elements
+
     this.userElems = {
       pics: this.main.children('.navbar-profile-pic'),
       name: this.main.children('.navbar-user-name'),
       email: this.main.children('.navbar-user-email')
-    };
+    }; // Define Navbar Elements
+
     this.toggle = $('#nav-toggle');
     this.checkbox = this.toggle.nodes();
     this.icon = $('#nav-icon');
     this.branding = $('#nav-brand');
-    this.scroll = scroll;
-    this.isOpen = false;
+    this.links.forEach(link => {
+      link.classList.remove('active');
+      const ns = link.dataset.navNamespace;
+      if (ns && ns == this.namespace) link.classList.add('active');
+    });
+    this.reset();
   }
 
-  init(namespace) {
+  init() {
+    this.links = this.main.children('a[href]'); // Attach Event Listener For Navigation Toggle
+
     this.toggle.on('change', e => this.toggleDrawer(e.target.checked));
-    this.namespace = namespace;
-    this.setActive();
-    this.links.children().css({
-      'pointer-events': 'none'
-    });
-    this.links.prevent('click', e => {
-      const page = this.namespace === 'home' ? '' : this.namespace;
-      const target = e.target.href.split('/')[3];
-      if (target === page) this.scroll.toTop();
-    });
   }
 
   open() {
@@ -10400,18 +10258,6 @@ class Navbar {
     this.isOpen = open;
   }
 
-  update(namespace) {
-    this.namespace = namespace;
-    this.setActive();
-  }
-
-  setActive() {
-    this.links.removeClass('active');
-    this.links.forEach(link => {
-      if (link.href.split('/')[3] === this.namespace) link.classList.add('active');
-    });
-  }
-
   applyThemeChange(themes) {
     const navbar = this.main.e();
     themes.forEach(theme => {
@@ -10424,14 +10270,17 @@ class Navbar {
   applyTheme(themes) {
     this.resetTheme();
     this.applyThemeChange(themes);
+    return this;
   }
 
   forceLayout(device) {
     this.resetLayout();
     this.main.addClass("".concat(device || 'mobile', "-layout"));
+    return this;
   }
 
   resetLayout() {
+    this.main.removeClass('opaque');
     this.main.removeClass('mobile-layout tablet-layout');
   }
 
@@ -10475,44 +10324,6 @@ class Navbar {
 }
 
 exports.default = Navbar;
-},{}],"js/components/general/Footer.js":[function(require,module,exports) {
-"use strict";
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.default = void 0;
-
-class Footer {
-  constructor(page) {
-    this.page = page;
-    console.log(this);
-  }
-
-  init() {
-    this.namespace = this.page.state.namespace;
-    this.links = $(this.page.elements.container).children('.footer__nav a');
-    this.attachListeners();
-  } // selectElements(container) {
-  //     this.container = container ? $(container).children('footer.footer') : $('footer.footer');
-  //     this.links = this.container.children('.footer__nav a');
-  // }
-
-
-  attachListeners() {
-    this.links.children().css({
-      'pointer-events': 'none'
-    });
-    this.links.prevent('click', e => {
-      const page = this.namespace === 'home' ? '' : this.namespace;
-      const target = e.target.href.split('/')[3];
-      if (target === page) this.scroll.toTop();
-    });
-  }
-
-}
-
-exports.default = Footer;
 },{}],"js/components/general/Typewriter.js":[function(require,module,exports) {
 "use strict";
 
@@ -10522,8 +10333,8 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 class Typewriter {
-  constructor(selector) {
-    this.element = $(selector);
+  constructor(selector, container) {
+    this.element = $(container).children(selector);
     this.words = this.element.data('words', 'json');
     this.period = this.element.data('period', 'int') || 2000;
     this.loopNum = 0;
@@ -10567,11 +10378,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 
 class DraggableSlider {
-  constructor(options) {
+  constructor(options, container) {
     // Define Active Class
     this.activeClass = options.activeClass; // Define Slider
 
-    this.slider = $(options.selector);
+    this.slider = $(container).children(options.selector);
     this.sliderElem = this.slider.nodes(); // Define State Variables
 
     this.isDragging = false;
@@ -12694,6 +12505,11 @@ class Input {
 
 }
 
+class Options {
+  constructor(selector) {}
+
+}
+
 class Form {
   constructor(selector, container) {
     this.fields = {};
@@ -12748,11 +12564,11 @@ class Form {
   }
 
   clearPopups() {
-    $.each(this.fields, name => this.fields[name].clearPopup());
+    $.each(this.fields, name => this.fields[name].clearPopup ? this.fields[name].clearPopup() : '');
   }
 
   showPopups() {
-    $.each(this.fields, name => this.fields[name].showPopup());
+    $.each(this.fields, name => this.fields[name].showPopup ? this.fields[name].showPopup() : '');
   }
 
   async post(endpoint, data) {
@@ -12781,13 +12597,12 @@ var _Form = _interopRequireDefault(require("./Form"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 class ContactForm extends _Form.default {
-  constructor(options) {
-    super(options.selector, options.container);
+  constructor(selector, container) {
+    super(selector, container);
     this.elements = {
       input: this.form.children('.input'),
       textarea: this.form.children('.textarea')
-    };
-    console.log(this.fields);
+    }; // console.log(this.fields);
   }
 
   onValidationFail() {
@@ -12801,7 +12616,7 @@ class ContactForm extends _Form.default {
 }
 
 exports.default = ContactForm;
-},{"./Form":"js/components/general/Form.js"}],"js/Page.js":[function(require,module,exports) {
+},{"./Form":"js/components/general/Form.js"}],"js/components/app/AuthForm.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -12809,13 +12624,1372 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var _Preloader = _interopRequireDefault(require("./components/general/Preloader"));
+var _Form = _interopRequireDefault(require("../general/Form"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class AuthForm extends _Form.default {
+  constructor(props, container) {
+    // 1. Call Super
+    super(props.selector, container);
+    console.log(this);
+    this.endpoint = props.endpoint;
+    this.navbar = props.page.navbar;
+    this.navigator = props.page.barba;
+    this.google = {
+      config: {
+        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin'
+      },
+      button: $('#google-auth-btn')
+    };
+    this.facebook = {
+      config: {
+        client_id: '274042323746865',
+        scope: {
+          scope: 'email',
+          return_scopes: true
+        },
+        fields: {
+          fields: 'email,name,first_name,last_name,middle_name,short_name'
+        }
+      },
+      button: $('#facebook-auth-btn')
+    };
+    this.affiliate = {};
+    this.loadOAuth();
+  }
+
+  async loadOAuth() {
+    window.fbAsyncInit = () => {
+      window.FB.init({
+        appId: this.facebook.config.client_id,
+        cookie: true,
+        xfbml: true,
+        version: 'v7.0'
+      });
+    };
+
+    const ref = document.querySelectorAll('script')[0];
+
+    const insertScript = (id, src) => {
+      if ($("#".concat(id)).length) return true;
+      const js = document.createElement('script');
+      js.id = id;
+      js.src = src;
+      return new Promise(resolve => {
+        js.addEventListener('load', () => resolve());
+        ref.parentNode.insertBefore(js, ref);
+      });
+    };
+
+    const facebook = insertScript('facebook-jssdk', 'https://connect.facebook.net/en_US/sdk.js');
+    const google = insertScript('google-oauth', 'https://apis.google.com/js/api:client.js');
+    await Promise.all([facebook, google]);
+    this.google.api = window.gapi; // Attach Listeners
+
+    this.google.api.load('auth2', () => {
+      this.google.auth = this.google.api.auth2.init(this.google.config);
+      this.google.auth.attachClickHandler(this.google.button.e(), {}, user => this.authenticateGoogleUser(user));
+    });
+    this.facebook.button.click(() => {
+      window.FB.login(() => this.authenticateFacebookUser(), this.facebook.config.scope);
+    });
+  }
+
+  async authenticateFacebookUser() {
+    const user = {};
+    const info = new Promise(resolve => {
+      window.FB.api('/me', this.facebook.config.fields, data => {
+        user.name = data.name;
+        user.email = data.email;
+        user.preferredName = data.short_name || data.first_name;
+        user.facebookID = data.id;
+        resolve(data);
+      });
+    });
+    const photo = new Promise(resolve => {
+      window.FB.api('/me/picture', {
+        redirect: false,
+        height: '250',
+        width: '250',
+        type: 'normal'
+      }, data => {
+        user.photo = data.data.url;
+        resolve(data.data);
+      });
+    });
+    await Promise.all([info, photo]);
+    this.authenticate('/auth/facebook', user);
+  }
+
+  authenticateGoogleUser(user) {
+    const data = {
+      token: user.getAuthResponse().id_token
+    };
+    this.authenticate('/auth/google', data);
+  }
+
+  async authenticate(endpoint, data) {
+    if (this.affiliate.code) data.referredBy = this.affiliate.code;
+    const res = await this.post(endpoint, data);
+    console.log('request has been completed');
+    console.log(res);
+    if (res.status !== 200) return this.handleOAuthError();
+    const target = this.navigator.history.previous ? this.navigator.history.previous.url : '/';
+    this.navbar.login(res.data.data.user);
+    this.navigator.go(target);
+  }
+
+  handleOAuthError() {
+    console.log('An unknown error has occurred');
+  }
+
+}
+
+exports.default = AuthForm;
+},{"../general/Form":"js/components/general/Form.js"}],"js/vendor/HelloWeek.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.el = exports.createElement = h;
+exports.render = render;
+exports.HelloWeek = exports.default = void 0;
+
+function _objectWithoutProperties(source, excluded) { if (source == null) return {}; var target = _objectWithoutPropertiesLoose(source, excluded); var key, i; if (Object.getOwnPropertySymbols) { var sourceSymbolKeys = Object.getOwnPropertySymbols(source); for (i = 0; i < sourceSymbolKeys.length; i++) { key = sourceSymbolKeys[i]; if (excluded.indexOf(key) >= 0) continue; if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue; target[key] = source[key]; } } return target; }
+
+function _objectWithoutPropertiesLoose(source, excluded) { if (source == null) return {}; var target = {}; var sourceKeys = Object.keys(source); var key, i; for (i = 0; i < sourceKeys.length; i++) { key = sourceKeys[i]; if (excluded.indexOf(key) >= 0) continue; target[key] = source[key]; } return target; }
+
+const cssClasses = {
+  CALENDAR: 'hello-week',
+  DAY: 'day',
+  MONTH: 'month',
+  NAVIGATION: 'navigation',
+  NEXT: 'next',
+  PERIOD: 'period',
+  PREV: 'prev',
+  RTL: 'rtl',
+  WEEK: 'week'
+};
+const cssStates = {
+  IS_BEGIN_RANGE: 'is-begin-range',
+  IS_DISABLED: 'is-disabled',
+  IS_END_RANGE: 'is-end-range',
+  IS_HIGHLIGHT: 'is-highlight',
+  IS_SELECTED: 'is-selected',
+  IS_RANGE: 'is-range',
+  IS_TODAY: 'is-today',
+  IS_WEEKEND: 'is-weekend'
+};
+const daysWeek = {
+  FRIDAY: 5,
+  MONDAY: 1,
+  SATURDAY: 6,
+  SUNDAY: 0,
+  THURSDAY: 4,
+  TUESDAY: 2,
+  WEDNESDAY: 3
+};
+const margins = {
+  RIGHT: 'margin-right',
+  LEFT: 'margin-left'
+};
+const defaults = {
+  selector: '.hello-week',
+  lang: 'en',
+  langFolder: './langs/',
+  format: 'DD/MM/YYYY',
+  monthShort: false,
+  weekShort: true,
+  defaultDate: null,
+  minDate: null,
+  maxDate: null,
+  disableDaysOfWeek: null,
+  timezoneOffset: new Date().getTimezoneOffset(),
+  disableDates: null,
+  weekStart: 0,
+  daysSelected: null,
+  daysHighlight: null,
+  multiplePick: false,
+  disablePastDays: true,
+  todayHighlight: true,
+  range: false,
+  locked: false,
+  rtl: false,
+  nav: ['◀', '▶'],
+  beforeLoad: () => {},
+  onLoad: () => {},
+  onNavigation: () => {},
+  onSelect: data => data,
+  beforeCreateDay: data => data
+};
+
+function isDef(val) {
+  return val !== undefined && val !== null;
+}
+
+function isObject(obj) {
+  return obj !== null && typeof obj === 'object';
+}
+
+function isArray(obj) {
+  return obj !== null && Array.isArray(obj);
+}
+
+function isFuncation(func) {
+  return typeof func === 'function';
+}
+
+function isString(val) {
+  return typeof val === 'string';
+}
+
+function setAttr(el, name, value) {
+  return el.setAttribute(name, value);
+}
+
+function addClass(el, className) {
+  return el.classList.add(className);
+}
+
+function removeClass(el, className) {
+  return el.classList.remove(className);
+}
+
+function toggleClass(el, className) {
+  return el.classList.toggle(className);
+}
+
+function existElement(className, where) {
+  return isDef(where) ? where.querySelector(".".concat(className)) : document.querySelector(".".concat(className));
+}
+
+function dataProps(vnode, node, name) {
+  for (const prop of Object.keys(vnode.attributes[name])) {
+    setAttr(node, "data-".concat(prop), vnode.attributes[name][prop]);
+  }
+}
+
+function classProps(vnode, node, name) {
+  if (isString(vnode.attributes[name])) {
+    node.className = vnode.attributes[name];
+  } else if (isArray(vnode.attributes[name])) {
+    vnode.attributes[name].forEach(value => {
+      addClass(node, value);
+    });
+  }
+}
+
+function styleProps(vnode, node, name) {
+  if (isString(vnode.attributes[name])) {
+    node.style = vnode.attributes[name];
+  } else if (isObject(vnode.attributes[name])) {
+    for (const prop of Object.keys(vnode.attributes[name])) {
+      node.style[prop] = vnode.attributes[name][prop];
+    }
+  }
+}
+
+function diffProps(vnode, node) {
+  for (const name of Object.keys(vnode.attributes)) {
+    if (name === 'class') {
+      classProps(vnode, node, name);
+    } else if (name === 'style') {
+      styleProps(vnode, node, name);
+    } else if (name === 'data') {
+      dataProps(vnode, node, name);
+    } else {
+      setAttr(node, name, vnode.attributes[name]);
+    }
+  }
+}
+
+function h(nodeName, attributes) {
+  const vnode = {
+    nodeName
+  };
+  if (attributes) vnode.attributes = attributes;
+
+  for (var _len = arguments.length, args = new Array(_len > 2 ? _len - 2 : 0), _key = 2; _key < _len; _key++) {
+    args[_key - 2] = arguments[_key];
+  }
+
+  if (args.length) vnode.children = [].concat(...args);
+  return vnode;
+}
+
+function render(vnode, parentDom) {
+  if (vnode.split) return document.createTextNode(vnode);
+  const node = document.createElement(vnode.nodeName);
+
+  if (isDef(vnode.attributes)) {
+    diffProps(vnode, node);
+  }
+
+  (vnode.children || []).forEach(c => node.appendChild(render(c)));
+  return parentDom ? parentDom.appendChild(node) : node;
+}
+
+function extend(to, from) {
+  return Object.assign(to, from);
+}
+
+function getIndexForEventTarget(daysOfMonth, target) {
+  return Array.prototype.slice.call(daysOfMonth).indexOf(target) + 1;
+}
+
+function createStore(state) {
+  let listeners = [];
+  state = state || {};
+
+  function unsubscribe(listener) {
+    const out = [];
+
+    for (const i of listeners) {
+      if (listeners[i] === listener) {
+        listener = null;
+      } else {
+        out.push(listeners[i]);
+      }
+    }
+
+    listeners = out;
+  }
+
+  function setState(update, overwrite) {
+    state = overwrite ? update : extend(extend({}, state), update);
+    const currentListeners = listeners;
+
+    for (const i of currentListeners) {
+      currentListeners[i](state);
+    }
+  }
+
+  return {
+    setState,
+
+    subscribe(listener) {
+      listeners.push(listener);
+      return () => {
+        unsubscribe(listener);
+      };
+    },
+
+    unsubscribe,
+
+    getState() {
+      return state;
+    }
+
+  };
+}
+
+const useOptions = {
+  store: createStore(defaults),
+
+  set(options) {
+    this.store.setState(options);
+  },
+
+  get() {
+    return this.store.getState();
+  }
+
+};
+const useLangs = {
+  store: createStore({}),
+
+  set(options) {
+    this.store.setState(options);
+  },
+
+  get() {
+    return this.store.getState();
+  }
+
+};
+
+function setTimeZone(date, timezoneOffset) {
+  const dt = isDef(date) ? new Date(date) : new Date();
+  timezoneOffset = timezoneOffset ? timezoneOffset : dt.getTimezoneOffset();
+  dt.setTime(dt.getTime() + timezoneOffset * 60 * 1000); //console.log(dt);
+
+  return dt;
+}
+
+function defaultFormat(day, month, year) {
+  return "".concat(year, "-").concat(('0' + (month + 1)).slice(-2), "-").concat(('0' + day).slice(-2));
+}
+
+function toDate(date, timezoneOffset) {
+  const dt = setTimeZone(date, timezoneOffset);
+  return defaultFormat(dt.getDate(), dt.getMonth(), dt.getFullYear());
+}
+
+function formatDate(date, formats, timezoneOffset) {
+  const {
+    format
+  } = useOptions.get();
+  const {
+    months,
+    monthsShort
+  } = useLangs.get();
+  const dt = setTimeZone(date, timezoneOffset);
+  formats = formats ? formats : format;
+  formats = formats.replace('dd', dt.getDate().toString());
+  formats = formats.replace('DD', (dt.getDate() > 9 ? dt.getDate() : '0' + dt.getDate()).toString());
+  formats = formats.replace('mm', (dt.getMonth() + 1).toString());
+  formats = formats.replace('MMM', months[dt.getMonth()]);
+  formats = formats.replace('MM', (dt.getMonth() + 1 > 9 ? dt.getMonth() + 1 : '0' + (dt.getMonth() + 1)).toString());
+  formats = formats.replace('mmm', monthsShort[dt.getMonth()]);
+  formats = formats.replace('yyyy', dt.getFullYear().toString());
+  formats = formats.replace('YYYY', dt.getFullYear().toString());
+  formats = formats.replace('YY', dt.getFullYear().toString().substring(2));
+  formats = formats.replace('yy', dt.getFullYear().toString().substring(2));
+  return formats;
+}
+
+function formatDateToCompare(date) {
+  const dt = new Date(date);
+  return Number('' + dt.getFullYear() + (dt.getMonth() + 1) + (dt.getDate() > 9 ? dt.getDate() : '0' + dt.getDate()).toString());
+}
+
+function isAfter(input, date) {
+  return formatDateToCompare(input) > formatDateToCompare(date);
+}
+
+function isBefore(input, date) {
+  return formatDateToCompare(input) < formatDateToCompare(date);
+}
+
+function isBetween(to, from, date) {
+  return isAfter(date, to) && isBefore(date, from);
+}
+
+function isSame(input, date) {
+  return formatDateToCompare(input) === formatDateToCompare(date);
+}
+
+function isSameOrAfter(input, date) {
+  return isSame(input, date) || isAfter(input, date);
+}
+
+function isSameOrBefore(input, date) {
+  const sam = isSame(input, date) || isBefore(input, date); //console.log(sam);
+
+  return sam; //return isSame(input, date) || isBefore(input, date);
+}
+
+function template(options, args) {
+  const self = {};
+
+  if (!isDef(options.selector)) {
+    throw new Error('You need to specify a selector!');
+  }
+
+  if (isString(options.selector)) {
+    self.selector = options.selector ? document.querySelector(options.selector) : options.selector;
+  } else {
+    self.selector = options.selector;
+  }
+
+  if (!isDef(self.selector)) {
+    self.selector = render(h('div', {
+      class: [options.selector, cssClasses.CALENDAR]
+    }));
+  } else {
+    if (options.selector !== cssClasses.CALENDAR) {
+      addClass(self.selector, cssClasses.CALENDAR);
+    }
+  }
+
+  self.calendar = {};
+  self.calendar.navigation = existElement(cssClasses.NAVIGATION, self.selector);
+
+  if (!isDef(self.calendar.navigation)) {
+    self.calendar.navigation = render(h('div', {
+      class: cssClasses.NAVIGATION
+    }), self.selector);
+  }
+
+  if (isDef(options.nav[0])) {
+    self.calendar.prevMonth = render(h('div', {
+      class: cssClasses.PREV
+    }, options.nav[0]), self.calendar.navigation);
+    self.calendar.prevMonth.addEventListener('click', () => args.prev.cb());
+  }
+
+  self.calendar.period = existElement(cssClasses.PERIOD, self.selector);
+
+  if (!isDef(self.calendar.period)) {
+    self.calendar.period = render(h('div', {
+      class: cssClasses.PERIOD
+    }), self.calendar.navigation);
+  }
+
+  if (isDef(options.nav[1])) {
+    self.calendar.nextMonth = render(h('div', {
+      class: cssClasses.NEXT
+    }, options.nav[1]), self.calendar.navigation);
+    self.calendar.nextMonth.addEventListener('click', () => args.next.cb());
+  }
+
+  self.calendar.week = existElement(cssClasses.WEEK, self.selector);
+
+  if (!isDef(self.calendar.week)) {
+    self.calendar.week = render(h('div', {
+      class: cssClasses.WEEK
+    }), self.selector);
+  }
+
+  self.calendar.month = existElement(cssClasses.MONTH, self.selector);
+
+  if (!isDef(self.calendar.month)) {
+    self.calendar.month = render(h('div', {
+      class: cssClasses.MONTH
+    }), self.selector);
+  }
+
+  if (options.rtl) {
+    addClass(self.calendar.week, cssClasses.RTL);
+    addClass(self.calendar.month, cssClasses.RTL);
+  }
+
+  return self;
+}
+
+function getIntervalOfDates(startDate, endDate) {
+  const dates = [];
+  let currentDate = startDate;
+
+  const addDays = function addDays(days) {
+    const dt = new Date(this.valueOf());
+    dt.setDate(dt.getDate() + days);
+    return dt.getTime();
+  };
+
+  while (currentDate <= endDate) {
+    dates.push(formatDate(currentDate));
+    currentDate = addDays.call(currentDate, 1);
+  }
+
+  return dates;
+}
+
+function date(dt) {
+  if (isDef(dt)) {
+    return new Date(dt);
+  }
+
+  return new Date();
+}
+
+function setMinDate(dt) {
+  const min = date(dt);
+  return toDate(min.setDate(min.getDate() - 1));
+}
+
+function setMaxDate(dt) {
+  const max = date(dt);
+  return toDate(max.setDate(max.getDate() + 1));
+}
+
+class HelloWeek {
+  constructor(options) {
+    this.todayDate = toDate(new Date());
+    this.date = new Date();
+    this.intervalRange = {};
+    this.daysSelected = [];
+    this.langs = useLangs;
+    this.options = useOptions;
+    this.options.set(options);
+    const {
+      calendar,
+      selector
+    } = template(this.options.get(), {
+      prev: {
+        cb: () => this.prev()
+      },
+      next: {
+        cb: () => this.next()
+      }
+    });
+    this.selector = selector;
+    this.calendar = calendar;
+    this.beforeCreate();
+  }
+
+  destroy() {
+    this.removeStatesClass();
+    this.selector.remove();
+  }
+
+  prev() {
+    const {
+      onNavigation
+    } = this.options.get();
+    const prevMonth = this.date.getMonth() - 1;
+    this.date.setMonth(prevMonth);
+    this.update();
+    onNavigation();
+  }
+
+  next() {
+    const {
+      onNavigation
+    } = this.options.get();
+    const nextMonth = this.date.getMonth() + 1;
+    this.date.setMonth(nextMonth);
+    this.update();
+    onNavigation();
+  }
+
+  prevYear() {
+    const {
+      onNavigation
+    } = this.options.get();
+    const prevYear = this.date.getFullYear() - 1;
+    this.date.setFullYear(prevYear);
+    this.update();
+    onNavigation();
+  }
+
+  nextYear() {
+    const {
+      onNavigation
+    } = this.options.get();
+    const nextYear = this.date.getFullYear() + 1;
+    this.date.setFullYear(nextYear);
+    this.update();
+    onNavigation();
+  }
+
+  update() {
+    this.clearCalendar();
+    this.mounted();
+  }
+
+  goToDate() {
+    let date = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : this.todayDate;
+    this.date = new Date(date);
+    this.date.setDate(1);
+    this.update();
+  }
+
+  getDaySelected() {
+    const {
+      format
+    } = this.options.get();
+    return this.daysSelected.sort((a, b) => formatDateToCompare(a) - formatDateToCompare(b)).map(day => formatDate(day, format));
+  }
+
+  getLastDaySelected() {
+    return this.lastSelectedDay;
+  }
+
+  getDaysHighlight() {
+    return this.daysHighlight;
+  }
+
+  getMonth() {
+    return this.date.getMonth() + 1;
+  }
+
+  getYear() {
+    return this.date.getFullYear();
+  }
+
+  setOptions(options, callback) {
+    if (isObject(options)) {
+      this.options.set(options);
+    }
+
+    if (isFuncation(callback)) {
+      this.options.set(callback(this.options.get()));
+    }
+
+    this.update();
+  }
+
+  setDaysHighlight(daysHighlight) {
+    this.daysHighlight = [...this.daysHighlight, ...daysHighlight];
+    this.update();
+  }
+
+  setIntervalRange(value) {
+    const {
+      range
+    } = this.options.get();
+
+    if (range && value && isArray(value)) {
+      const [begin, end] = value;
+      this.intervalRange = {
+        begin,
+        end
+      };
+    }
+  }
+
+  setMinDate(date) {
+    this.options.set({
+      minDate: setMinDate(date)
+    });
+  }
+
+  setMaxDate(date) {
+    this.options.set({
+      maxDate: setMaxDate(date)
+    });
+  }
+
+  beforeCreate() {
+    const {
+      rtl,
+      langFolder,
+      lang
+    } = this.options.get();
+    this.isRTL = rtl ? margins.RIGHT : margins.LEFT;
+    import(langFolder + lang + '.js').then(data => data).then(data => {
+      this.langs.set(data.default);
+    }).then(() => this.beforeMount());
+  }
+
+  beforeMount() {
+    const {
+      daysHighlight,
+      daysSelected,
+      defaultDate,
+      timezoneOffset,
+      minDate,
+      maxDate,
+      beforeLoad,
+      onLoad
+    } = this.options.get();
+    this.daysHighlight = daysHighlight ? daysHighlight : [];
+    this.daysSelected = daysSelected ? daysSelected : [];
+    beforeLoad();
+
+    if (defaultDate) {
+      this.date = setTimeZone(defaultDate, timezoneOffset);
+      this.defaultDate = setTimeZone(defaultDate, timezoneOffset);
+      this.defaultDate.setDate(this.defaultDate.getDate());
+    }
+
+    this.date.setDate(1);
+
+    if (minDate) {
+      this.setMinDate(minDate);
+    }
+
+    if (maxDate) {
+      this.setMaxDate(maxDate);
+    }
+
+    this.mounted();
+    onLoad();
+  }
+
+  selectDay(callback) {
+    const {
+      range
+    } = this.options.get();
+    this.daysOfMonth = this.selector.querySelectorAll('.' + cssClasses.MONTH + ' .' + cssClasses.DAY);
+
+    for (const i of Object.keys(this.daysOfMonth)) {
+      this.handleClickInteraction(this.daysOfMonth[i], callback);
+
+      if (range) {
+        this.handleMouseInteraction(this.daysOfMonth[i]);
+      }
+    }
+  }
+
+  handleClickInteraction(target, callback) {
+    const {
+      range,
+      multiplePick,
+      onSelect
+    } = this.options.get();
+    target.addEventListener('click', event => {
+      const index = getIndexForEventTarget(this.daysOfMonth, event.target);
+
+      if (this.days[index].locked) {
+        return;
+      }
+
+      this.lastSelectedDay = this.days[index].date;
+
+      if (!range) {
+        if (multiplePick) {
+          if (this.days[index].date) {
+            this.daysSelected = this.daysSelected.filter(day => formatDateToCompare(day) !== formatDateToCompare(this.lastSelectedDay));
+          }
+
+          if (!this.days[index].isSelected) {
+            this.daysSelected.push(this.lastSelectedDay);
+          }
+        } else {
+          if (!this.days[index].locked) {
+            this.removeStatesClass();
+          }
+
+          this.daysSelected = [];
+          this.daysSelected.push(this.lastSelectedDay);
+        }
+      }
+
+      toggleClass(event.target, cssStates.IS_SELECTED);
+      this.days[index].isSelected = !this.days[index].isSelected;
+
+      if (range) {
+        if (this.intervalRange.begin && this.intervalRange.end) {
+          this.intervalRange = {};
+          this.removeStatesClass();
+        }
+
+        if (this.intervalRange.begin && !this.intervalRange.end) {
+          this.intervalRange.end = this.days[index].date;
+          this.daysSelected = getIntervalOfDates(this.intervalRange.begin, this.intervalRange.end);
+          addClass(event.target, cssStates.IS_END_RANGE);
+
+          if (this.intervalRange.begin > this.intervalRange.end) {
+            this.intervalRange = {};
+            this.removeStatesClass();
+          }
+        }
+
+        if (!this.intervalRange.begin) {
+          this.intervalRange.begin = this.days[index].date;
+        }
+
+        addClass(event.target, cssStates.IS_SELECTED);
+      }
+
+      onSelect(this.days[index]);
+
+      if (callback) {
+        callback(this.days[index]);
+      }
+    });
+  }
+
+  handleMouseInteraction(target) {
+    target.addEventListener('mouseover', event => {
+      const index = getIndexForEventTarget(this.daysOfMonth, event.target);
+
+      if (!this.intervalRange.begin || this.intervalRange.begin && this.intervalRange.end) {
+        return;
+      }
+
+      this.removeStatesClass();
+
+      for (let i = 1; i <= Object.keys(this.days).length; i++) {
+        this.days[i].isSelected = false;
+
+        if (isSameOrAfter(this.days[index].date, this.intervalRange.begin)) {
+          if (isSameOrAfter(this.days[i].date, this.intervalRange.begin) && isSameOrBefore(this.days[i].date, this.days[index].date)) {
+            addClass(this.days[i].element, cssStates.IS_SELECTED);
+            addClass(this.days[i].element, cssStates.IS_RANGE);
+
+            if (isSame(this.days[i].date, this.intervalRange.begin)) {
+              addClass(this.days[i].element, cssStates.IS_BEGIN_RANGE);
+            }
+          }
+        }
+      }
+    });
+  }
+
+  creatWeek(dayShort) {
+    render(h('span', {
+      class: cssClasses.DAY
+    }, dayShort), this.calendar.week);
+  }
+
+  createMonth() {
+    const currentMonth = this.date.getMonth();
+
+    while (this.date.getMonth() === currentMonth) {
+      this.createDay(this.date);
+      this.date.setDate(this.date.getDate() + 1);
+    }
+
+    this.date.setMonth(this.date.getMonth() - 1);
+    this.selectDay();
+  }
+
+  createDay(date) {
+    const num = date.getDate();
+    const day = date.getDay();
+    let dayOptions = {
+      day: num,
+      date: toDate(date),
+      isWeekend: false,
+      locked: false,
+      isToday: false,
+      isRange: false,
+      isSelected: false,
+      isHighlight: false,
+      events: undefined,
+      attributes: {
+        class: [cssClasses.DAY],
+        style: {}
+      },
+      node: undefined,
+      element: undefined
+    };
+    const {
+      locked,
+      disableDaysOfWeek,
+      disablePastDays,
+      minDate,
+      maxDate,
+      disableDates,
+      todayHighlight,
+      weekStart,
+      beforeCreateDay
+    } = this.options.get();
+    this.days = this.days || {};
+
+    if (day === daysWeek.SUNDAY || day === daysWeek.SATURDAY) {
+      dayOptions.attributes.class.push(cssStates.IS_WEEKEND);
+      dayOptions.isWeekend = true;
+    }
+
+    if (locked || disableDaysOfWeek && disableDaysOfWeek.includes(day) || disablePastDays && isSameOrBefore(this.date, this.todayDate) || minDate && isSameOrAfter(minDate, dayOptions.date) || maxDate && isSameOrBefore(maxDate, dayOptions.date)) {
+      dayOptions.attributes.class.push(cssStates.IS_DISABLED);
+      dayOptions.locked = true;
+    }
+
+    if (disableDates) {
+      this.disabledDays(dayOptions);
+    }
+
+    if (isSame(this.todayDate, dayOptions.date)) {
+      dayOptions.isToday = true;
+
+      if (todayHighlight) {
+        dayOptions.attributes.class.push(cssStates.IS_TODAY);
+      }
+    }
+
+    this.daysSelected.find(daySelected => {
+      if (isSame(daySelected, dayOptions.date)) {
+        dayOptions.attributes.class.push(cssStates.IS_SELECTED);
+        dayOptions.isSelected = true;
+      }
+    });
+
+    if (isBetween(this.intervalRange.begin, this.intervalRange.end, dayOptions.date)) {
+      dayOptions.attributes.class.push(cssStates.IS_RANGE);
+      dayOptions.isRange = true;
+    }
+
+    if (isSame(dayOptions.date, this.intervalRange.begin)) {
+      dayOptions.attributes.class.push(cssStates.IS_BEGIN_RANGE);
+    }
+
+    if (isSame(dayOptions.date, this.intervalRange.end)) {
+      dayOptions.attributes.class.push(cssStates.IS_END_RANGE);
+    }
+
+    if (this.daysHighlight) {
+      this.highlightDays(dayOptions);
+    }
+
+    if (dayOptions.day === 1) {
+      if (weekStart === daysWeek.SUNDAY) {
+        dayOptions.attributes.style[this.isRTL] = day * (100 / Object.keys(daysWeek).length) + '%';
+      } else {
+        if (day === daysWeek.SUNDAY) {
+          dayOptions.attributes.style[this.isRTL] = (Object.keys(daysWeek).length - weekStart) * (100 / Object.keys(daysWeek).length) + '%';
+        } else {
+          dayOptions.attributes.style[this.isRTL] = (day - 1) * (100 / Object.keys(daysWeek).length) + '%';
+        }
+      }
+    }
+
+    dayOptions.node = h('div', dayOptions.attributes, dayOptions.day.toString());
+    dayOptions = beforeCreateDay(dayOptions);
+    dayOptions.element = render(dayOptions.node, this.calendar.month);
+    this.days[dayOptions.day] = dayOptions;
+  }
+
+  disabledDays(dayOptions) {
+    const {
+      disableDates
+    } = this.options.get();
+
+    if (isArray(disableDates[0])) {
+      disableDates.map(date => {
+        if (isSameOrAfter(dayOptions.date, date[0]) && isSameOrBefore(dayOptions.date, date[1])) {
+          dayOptions.attributes.class.push(cssStates.IS_DISABLED);
+          dayOptions.locked = true;
+        }
+      });
+    } else {
+      disableDates.map(date => {
+        if (isSame(dayOptions.date, date)) {
+          dayOptions.attributes.class.push(cssStates.IS_DISABLED);
+          dayOptions.locked = true;
+        }
+      });
+    }
+  }
+
+  highlightDays(dayOptions) {
+    for (const day in this.daysHighlight) {
+      if (this.daysHighlight[day].days[0] instanceof Array) {
+        this.daysHighlight[day].days.map(date => {
+          if (isSameOrAfter(dayOptions.date, date[0]) && isSameOrBefore(dayOptions.date, date[1])) {
+            this.computedAttributes(day, dayOptions);
+          }
+        });
+      } else {
+        this.daysHighlight[day].days.map(date => {
+          if (isSame(dayOptions.date, date)) {
+            this.computedAttributes(day, dayOptions);
+          }
+        });
+      }
+    }
+  }
+
+  computedAttributes(day, dayOptions) {
+    const _this$daysHighlight$d = this.daysHighlight[day],
+          {
+      attributes
+    } = _this$daysHighlight$d,
+          rest = _objectWithoutProperties(_this$daysHighlight$d, ["attributes"]);
+
+    delete rest.days;
+    dayOptions = extend(dayOptions, rest);
+
+    for (const key in attributes) {
+      if (dayOptions.attributes[key] && attributes[key]) {
+        dayOptions.attributes[key] = extend(dayOptions.attributes[key], attributes[key]);
+      } else if (attributes[key]) {
+        dayOptions.attributes[key] = attributes[key];
+      }
+    }
+
+    dayOptions.attributes.class.push(cssStates.IS_HIGHLIGHT);
+    dayOptions.isHighlight = true;
+  }
+
+  monthsAsString(monthIndex) {
+    const {
+      monthShort
+    } = this.options.get();
+    const {
+      monthsShort,
+      months
+    } = this.langs.get();
+    return monthShort ? monthsShort[monthIndex] : months[monthIndex];
+  }
+
+  weekAsString(weekIndex) {
+    const {
+      weekShort
+    } = this.options.get();
+    const {
+      daysShort,
+      days
+    } = this.langs.get();
+    return weekShort ? daysShort[weekIndex] : days[weekIndex];
+  }
+
+  mounted() {
+    if (this.calendar.period) {
+      this.calendar.period.innerHTML = this.monthsAsString(this.date.getMonth()) + ' ' + this.date.getFullYear();
+    }
+
+    const listDays = [];
+    const {
+      weekStart
+    } = this.options.get();
+    const {
+      daysShort
+    } = this.langs.get();
+    this.calendar.week.textContent = '';
+
+    for (let i = weekStart; i < daysShort.length; i++) {
+      listDays.push(i);
+    }
+
+    for (let i = 0; i < weekStart; i++) {
+      listDays.push(i);
+    }
+
+    for (const day of listDays) {
+      this.creatWeek(this.weekAsString(day));
+    }
+
+    this.createMonth();
+  }
+
+  clearCalendar() {
+    this.calendar.month.textContent = '';
+  }
+
+  removeStatesClass() {
+    for (const i of Object.keys(this.daysOfMonth)) {
+      removeClass(this.daysOfMonth[i], cssStates.IS_SELECTED);
+      removeClass(this.daysOfMonth[i], cssStates.IS_RANGE);
+      removeClass(this.daysOfMonth[i], cssStates.IS_BEGIN_RANGE);
+      removeClass(this.daysOfMonth[i], cssStates.IS_END_RANGE);
+      this.days[+i + 1].isSelected = false;
+    }
+  }
+
+}
+
+const HelloWeek$1 = HelloWeek;
+exports.HelloWeek = HelloWeek$1;
+window.HelloWeek = HelloWeek$1;
+var _default = HelloWeek;
+exports.default = _default;
+},{}],"js/components/app/Map.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+const API_KEY = 'AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY';
+
+const loadMapScript = () => new Promise(resolve => {
+  const scriptId = 'google-maps-sdk';
+  const ref = document.querySelectorAll('script')[0];
+  if (document.getElementById(scriptId)) return resolve();
+  const js = document.createElement('script');
+  js.id = scriptId;
+  js.src = "https://maps.googleapis.com/maps/api/js?key=".concat(API_KEY, "&libraries=places");
+  js.addEventListener('load', resolve);
+  ref.parentNode.insertBefore(js, ref);
+});
+
+const defaultMapOptions = {
+  zoomControl: false,
+  mapTypeControl: false,
+  scaleControl: false,
+  streetViewControl: false,
+  rotateControl: false,
+  fullscreenControl: false,
+  center: {
+    lat: 28.540791,
+    lng: -81.380352
+  },
+  zoom: 13,
+  mapTypeId: 'roadmap'
+};
+
+class Map {
+  constructor(options, container) {
+    this.options = {
+      map: options !== null && options !== void 0 ? options : defaultMapOptions,
+      directions: {
+        origin: {
+          placeId: null
+        },
+        destination: {
+          placeId: null
+        },
+        travelMode: 'DRIVING',
+        drivingOptions: {
+          departureTime: new Date('June 22 2020 12:30'),
+          trafficModel: 'pessimistic'
+        }
+      }
+    };
+    this.state = {
+      current: 'origin',
+      markers: []
+    };
+    this.elements = {
+      map: container.children('#booking-map'),
+      searchBox: container.children('#booking-map-search-box')
+    };
+  }
+
+  placeMarkers() {
+    [this.origin, this.destination].filter(place => place).forEach(place => {
+      if (!place.geometry) return;
+      const icon = {
+        url: place.icon ? place.icon : 'https://maps.gstatic.com/mapfiles/place_api/icons/airport-71.png',
+        size: new google.maps.Size(71, 71),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(25, 25)
+      };
+      this.markers.push(new google.maps.Marker({
+        title: place.name,
+        position: place.geometry.location,
+        animation: google.maps.Animation.DROP,
+        map: this.map,
+        icon
+      }));
+      if (place.geometry.viewport) this.bounds.union(place.geometry.viewport);else this.bounds.extend(place.geometry.location);
+    });
+  }
+
+  async load() {
+    await loadMapScript(); // Initialize New Map Objects
+
+    this.map = new google.maps.Map(this.elements.map, this.options.map);
+    this.searchBox = new google.maps.places.SearchBox(this.elements.searchBox);
+    this.geocoder = new google.maps.Geocoder();
+    this.service = new google.maps.DirectionsService();
+    this.renderer = new google.maps.DirectionsRenderer();
+    this.dir.renderer.setMap(this.map);
+    return 'loaded map successfully';
+  }
+
+}
+
+exports.default = Map;
+},{}],"js/data/sampleBooking.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = {
+  airportRide: false,
+  schedule: {
+    pickup: null,
+    dropoff: null
+  },
+  origin: {
+    placeId: '',
+    coordinates: [],
+    address: ''
+  },
+  destination: {
+    placeId: '',
+    coordinates: [],
+    address: ''
+  },
+  route: {
+    distance: 0,
+    eta: ''
+  },
+  flight: {
+    type: '',
+    number: '',
+    airline: '',
+    airport: ''
+  },
+  passengers: {
+    total: 0,
+    adults: 0,
+    children: 0,
+    infants: 0
+  },
+  luggage: {
+    total: 0,
+    small: 0,
+    medium: 0,
+    large: 0
+  },
+  vehicle: ''
+};
+exports.default = _default;
+},{}],"js/data/vehicles.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _axios = _interopRequireDefault(require("axios"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = async () => {
+  return [];
+};
+
+exports.default = _default;
+},{"axios":"../../node_modules/axios/index.js"}],"js/components/app/BookingApp.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _HelloWeek = _interopRequireDefault(require("../../vendor/HelloWeek"));
+
+var _axios = _interopRequireDefault(require("axios"));
+
+var _Map = _interopRequireDefault(require("./Map"));
+
+var _AuthForm = _interopRequireDefault(require("./AuthForm"));
+
+var _sampleBooking = _interopRequireDefault(require("../../data/sampleBooking"));
+
+var _vehicles = _interopRequireDefault(require("../../data/vehicles"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+class BookingApp {
+  constructor(props, container) {
+    // Assign Sample Data
+    this.data = _objectSpread({}, _sampleBooking.default); // Refrence Data For Booking
+
+    this.refData = {
+      pickup: {
+        date: null,
+        time: null
+      },
+      dropoff: {
+        date: null,
+        time: null
+      }
+    }; // Assign App Data
+
+    this.appData = {
+      loaded: false,
+      vehicles: []
+    };
+    this.elements = {
+      container,
+      forwardButton: $(container).children('#booking-forward'),
+      backButton: $(container).children('#booking-back')
+    };
+    console.log(this);
+  }
+
+  load() {}
+
+  init() {// Attach Event Listeners to Buttons
+  }
+
+}
+
+exports.default = BookingApp;
+},{"../../vendor/HelloWeek":"js/vendor/HelloWeek.js","axios":"../../node_modules/axios/index.js","./Map":"js/components/app/Map.js","./AuthForm":"js/components/app/AuthForm.js","../../data/sampleBooking":"js/data/sampleBooking.js","../../data/vehicles":"js/data/vehicles.js"}],"js/Page.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
 
 var _Scroll = _interopRequireDefault(require("./components/general/Scroll"));
 
 var _Navbar = _interopRequireDefault(require("./components/general/Navbar"));
-
-var _Footer2 = _interopRequireDefault(require("./components/general/Footer"));
 
 var _Typewriter2 = _interopRequireDefault(require("./components/general/Typewriter"));
 
@@ -12823,19 +13997,24 @@ var _DraggableSlider2 = _interopRequireDefault(require("./components/general/Dra
 
 var _ContactForm2 = _interopRequireDefault(require("./components/general/ContactForm"));
 
+var _AuthForm2 = _interopRequireDefault(require("./components/app/AuthForm"));
+
+var _BookingApp2 = _interopRequireDefault(require("./components/app/BookingApp"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Import Components
 const componentsRegistry = {
-  Typewriter: d => new _Typewriter2.default(d),
-  DraggableSlider: d => new _DraggableSlider2.default(d),
-  ContactForm: d => new _ContactForm2.default(d),
-  Footer: d => new _Footer2.default(d)
+  Typewriter: (dta, ctn) => new _Typewriter2.default(dta !== null && dta !== void 0 ? dta : '#typewrite', ctn),
+  DraggableSlider: (dta, ctn) => new _DraggableSlider2.default(dta, ctn),
+  ContactForm: (dta, ctn) => new _ContactForm2.default(dta !== null && dta !== void 0 ? dta : '#contact-form', ctn),
+  AuthForm: (dta, ctn) => new _AuthForm2.default(dta, ctn),
+  BookingApp: (dta, ctn) => new _BookingApp2.default(dta !== null && dta !== void 0 ? dta : '', ctn)
 }; // Create Page Class
 
 class Page {
   constructor(props) {
-    var _props$smoothScroll, _props$container, _props$initialPage;
+    var _props$smoothScroll, _props$container, _props$barba$url$clea;
 
     this.options = {
       smoothScroll: (_props$smoothScroll = props.smoothScroll) !== null && _props$smoothScroll !== void 0 ? _props$smoothScroll : true
@@ -12848,8 +14027,7 @@ class Page {
       namespace: this.elements.container.dataset.barbaNamespace,
       isMobile: null,
       menuIsOpen: false,
-      initialPage: (_props$initialPage = props.initialPage) !== null && _props$initialPage !== void 0 ? _props$initialPage : false,
-      url: window.location.href
+      url: (_props$barba$url$clea = props.barba.url.clean()) !== null && _props$barba$url$clea !== void 0 ? _props$barba$url$clea : window.location.href
     };
     this.components = {
       registrar: [],
@@ -12858,53 +14036,38 @@ class Page {
     this.barba = props.barba;
   }
 
-  afterLoad() {}
-
   init() {
-    // Update URL
-    this.state.url = this.barba.url.clean();
-
-    if (this.state.initialPage) {
-      // 1. Create Preloader
-      const preloader = new _Preloader.default(); // 1. Subscribe to Preloader Events
-
-      preloader.subscribe('after', () => this.start()); // 2. Initialize Preloader
-
-      preloader.init();
-    } // Initialize Crucial Modules
-
+    // Add Namespace Class to body
+    this.elements.body.addClass("".concat(this.state.namespace, "-page")); // Initialize Crucial Modules
 
     this.scroll = new _Scroll.default(this);
-    this.navbar = new _Navbar.default(this.scroll);
+    this.navbar = new _Navbar.default(this); // Return Class Instance
+
     return this;
   }
 
-  freeze() {
-    return new Promise(resolve => {
-      this.scroll.pause();
-      resolve();
-    });
-  }
+  async destroy() {
+    // Hide Page
+    $(this.elements.container).css({
+      display: 'none'
+    }); // Remove Page Class From Body
 
-  destroy() {}
+    this.elements.body.removeClass(Array.from(this.elements.body.e().classList).filter(name => name.includes('page')).join(' ')); // Add Fixed Class
 
-  refresh(next) {
-    this.destroy();
-    return new Page({
-      container: next.container
-    });
+    this.elements.body.addClass('fixed'); // Destroy Scroll Instance
+
+    this.scroll.destroy(); // Return From Async Function
+
+    return;
   }
 
   start() {
     this.scroll.init();
-    this.navbar.init(this.state.namespace); // Mount Remaining Components
+    this.navbar.init(); // Mount Remaining Components
 
-    this.mountComponents();
-  }
-
-  insertSlide() {
-    this.elements.slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use xlink:href="img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>');
-    this.elements.body.append(this.elements.slide);
+    this.components.registrar.forEach(component => {
+      this.components.mounted[component.name].init();
+    });
   }
 
   addComponent() {
@@ -12912,26 +14075,106 @@ class Page {
       components[_key] = arguments[_key];
     }
 
-    components.forEach(c => {
-      this.components.registrar.push({
-        name: c.name,
-        data: c.data
-      });
-      this.components.mounted[c.name] = componentsRegistry[c.name](c.data);
-    });
-    console.log(this.components);
-  }
+    components.forEach(component => {
+      var _comp$data;
 
-  mountComponents() {
-    this.components.registrar.forEach(component => {
-      this.components.mounted[component.name].init();
+      const comp = typeof component == 'string' ? {
+        name: component
+      } : component;
+      this.components.registrar.push({
+        name: comp.name,
+        data: comp.data
+      });
+      this.components.mounted[comp.name] = componentsRegistry[comp.name]((_comp$data = comp.data) !== null && _comp$data !== void 0 ? _comp$data : null, this.elements.container);
+      if (this.components.mounted[comp.name].load) this.components.mounted[comp.name].load();
     });
   }
 
 }
 
 exports.default = Page;
-},{"./components/general/Preloader":"js/components/general/Preloader.js","./components/general/Scroll":"js/components/general/Scroll.js","./components/general/Navbar":"js/components/general/Navbar.js","./components/general/Footer":"js/components/general/Footer.js","./components/general/Typewriter":"js/components/general/Typewriter.js","./components/general/DraggableSlider":"js/components/general/DraggableSlider.js","./components/general/ContactForm":"js/components/general/ContactForm.js"}],"js/index.js":[function(require,module,exports) {
+},{"./components/general/Scroll":"js/components/general/Scroll.js","./components/general/Navbar":"js/components/general/Navbar.js","./components/general/Typewriter":"js/components/general/Typewriter.js","./components/general/DraggableSlider":"js/components/general/DraggableSlider.js","./components/general/ContactForm":"js/components/general/ContactForm.js","./components/app/AuthForm":"js/components/app/AuthForm.js","./components/app/BookingApp":"js/components/app/BookingApp.js"}],"js/components/general/Preloader.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _gsap = _interopRequireDefault(require("gsap"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+class Preloader {
+  constructor() {
+    this.pageState = 'loading';
+    this.callbacks = [];
+    this.preloader = $('#preloader');
+  }
+
+  init() {
+    $(document).on('readystatechange', () => {
+      this.pageState = document.readyState;
+      if (this.pageState == 'complete') this.onPageLoad();
+    });
+    return this;
+  }
+
+  onPageLoad() {
+    // 1. Fire Before Events
+    this.fire('before'); // 2. Create Timeline 
+
+    const tl = _gsap.default.timeline(gsapDefaults); // 3. Add Load Complete Class
+
+
+    this.preloader.addClass('load-complete'); // 4. Fade Out Logo
+
+    tl.to(this.preloader.children('.preloader__content').e(), {
+      opacity: 0,
+      duration: .75,
+      delay: .5
+    }); // 5. Fade Out Preloader
+
+    tl.to(this.preloader.e(), {
+      opacity: 0,
+      duration: .5
+    }); // 6. Subscribe To Completed Animation Callback
+
+    tl.eventCallback('onComplete', () => this.onComplete());
+  }
+
+  onComplete() {
+    // 1. Execute Callback Functions
+    this.fire('after'); // 2. Remove Preloader Element
+
+    $.delay(500).then(() => {
+      if (this.preloader) this.preloader.remove();
+      this.preloader = null;
+    });
+  }
+
+  subscribe(event, callback) {
+    this.callbacks.push({
+      event,
+      callback
+    });
+  }
+
+  fire(event) {
+    this.callbacks.forEach(item => {
+      if (item.event === event) item.callback();
+    });
+  }
+
+  after(callback) {
+    this.subscribe('after', callback);
+    return this;
+  }
+
+}
+
+exports.default = Preloader;
+},{"gsap":"../../node_modules/gsap/index.js"}],"js/index.js":[function(require,module,exports) {
 "use strict";
 
 require("regenerator-runtime/runtime");
@@ -12944,10 +14187,11 @@ var _core = _interopRequireDefault(require("@barba/core"));
 
 var _Page = _interopRequireDefault(require("./Page"));
 
+var _Preloader = _interopRequireDefault(require("./components/general/Preloader"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-// Import Runtime
-// Import GSAP
+// Import Runtime & GSAP
 // Import Modules
 // Define Global Variables
 window.$ = _Dreams.dream;
@@ -12955,41 +14199,63 @@ window.gsapDefaults = {
   defaults: {
     ease: 'power1.inOut'
   }
+}; // Define Module Global Variables
+
+let slide, page; // Insert Slide In Page
+
+const insertSlide = () => {
+  // Create Slide Element
+  slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use xlink:href="img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>'); // Append Slide Element
+
+  page.elements.body.append(slide);
+}; // Define Function to refresh page
+
+
+const refreshPageEvents = (_ref) => {
+  let {
+    next
+  } = _ref;
+  page.destroy();
+  page = new _Page.default({
+    barba: _core.default,
+    container: next.container
+  }).init();
+}; // Start Page Functions
+
+
+const startPage = data => {
+  // Start Page Events
+  page.start(); // Get Video Backgrounds
+
+  const videos = $(data ? data.next.container : 'main').children('.bg-video'); // Return if no videos on the page
+
+  if (!videos.length) return; //Autoplay Videos After transition
+
+  videos.children('video[autoplay]').forEach(video => video.play()); // Add Ready Class To Videos
+
+  videos.addClass('ready');
 }; // Start Load Page
 
-window.addEventListener('DOMContentLoaded', () => {
-  // Define Pages
-  const pages = {
-    main: ['home', 'about', 'services', 'fleet'],
-    auth: ['login', 'signup', 'account'],
-    booking: ['booking']
-  }; // Create New Page
 
-  const page = new _Page.default({
-    initialPage: true,
+window.addEventListener('DOMContentLoaded', () => {
+  // Create New Page
+  page = new _Page.default({
     barba: _core.default
-  }).init();
+  }).init(); // Create Preloader
+
+  new _Preloader.default().after(startPage).init(); // Initialize Barba.JS
 
   _core.default.init({
-    transitions: [// Default Transition
-    {
-      before() {
-        return new Promise(resolve => {
-          page.insertSlide();
-          resolve();
-        });
-      },
+    // Define Page Transition
+    transitions: [{
+      name: 'default-transition',
 
-      leave(_ref) {
-        let {
-          current
-        } = _ref;
+      // Animate Slide Into Place
+      leave() {
         return new Promise(resolve => {
-          console.log(page.elements.slide);
-
           const tl = _gsap.default.timeline(gsapDefaults);
 
-          tl.to(page.elements.slide.e(), {
+          tl.to(slide.e(), {
             y: 0,
             duration: .5
           });
@@ -12997,15 +14263,16 @@ window.addEventListener('DOMContentLoaded', () => {
         });
       },
 
-      after() {
+      // Animate Slide Away to reveal new page
+      enter() {
         return new Promise(resolve => {
           const tl = _gsap.default.timeline(gsapDefaults);
 
-          tl.to(page.elements.slide.children('.preloader__content').e(), {
+          tl.to(slide.children('.preloader__content').e(), {
             duration: .5,
             opacity: 0
           });
-          tl.to(page.elements.slide.e(), {
+          tl.to(slide.e(), {
             duration: .5,
             y: '-100vh'
           });
@@ -13014,50 +14281,108 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
     }],
-    views: [{
+    // Register JavaScript Components For Different Pages
+    views: [// Home Namespace
+    {
       namespace: 'home',
 
-      afterEnter(_ref2) {
+      beforeEnter(_ref2) {
         let {
           next
         } = _ref2;
-        page.addComponent({
-          name: 'Typewriter',
-          data: '#typewrite'
-        }, {
+        page.addComponent('Typewriter', 'ContactForm', {
           name: 'DraggableSlider',
           data: {
             selector: '.reviews__carousel',
             activeClass: 'dragging'
           }
-        }, {
-          name: 'ContactForm',
-          data: {
-            selector: '#contact-form',
-            container: next.container
-          }
-        }, {
-          name: 'Footer',
-          data: page
         });
       }
 
-    }]
-  }); // Attach Barba Hooks
+    }, // Services Namespace
+    {
+      namespace: 'services',
+
+      beforeEnter() {
+        page.addComponent('ContactForm');
+      }
+
+    }, // About Namespace
+    {
+      namespace: 'about',
+
+      beforeEnter() {
+        page.addComponent('ContactForm');
+      }
+
+    }, // Fleet Namespace
+    {
+      namespace: 'fleet',
+
+      beforeEnter() {
+        page.addComponent('ContactForm');
+      }
+
+    }, // Login Namespace
+    {
+      namespace: 'login',
+
+      beforeEnter() {
+        // Apply Navbar Theme Changes
+        page.navbar.applyTheme([{
+          brand: 'jet'
+        }, {
+          media: 'mobile',
+          brand: 'white'
+        }]).forceLayout('tablet'); // Add Auth Form Component
+
+        page.addComponent({
+          name: 'AuthForm',
+          data: {
+            page,
+            selector: '#login-form'
+          }
+        });
+      }
+
+    }, // Booking Namespace
+    {
+      namespace: 'booking',
+
+      beforeEnter() {
+        // Apply Navbar Theme Changes
+        page.navbar.applyTheme([{
+          brand: 'jet'
+        }]).forceLayout('mobile'); // Add Booking App Component
+
+        page.addComponent({
+          name: 'BookingApp',
+          data: {
+            page
+          }
+        });
+      }
+
+    }],
+    // Prevent Double Clicking Links
+    preventRunning: true,
+    // Prevent Defalut Link Actions
+    prevent: (_ref3) => {
+      let {
+        el
+      } = _ref3;
+      return el.classList && el.classList.contains('prevent');
+    }
+  }); // Attach Global Barba Hooks
 
 
-  _core.default.hooks.beforeLeave(() => page.freeze());
+  _core.default.hooks.beforeLeave(insertSlide);
 
-  _core.default.hooks.afterLeave((_ref3) => {
-    let {
-      next
-    } = _ref3;
-    return page.refresh(next);
-  });
+  _core.default.hooks.afterLeave(refreshPageEvents);
 
-  _core.default.hooks.after(() => page.start());
+  _core.default.hooks.after(startPage);
 });
-},{"regenerator-runtime/runtime":"../../node_modules/regenerator-runtime/runtime.js","gsap":"../../node_modules/gsap/index.js","./vendor/Dreams":"js/vendor/Dreams.js","@barba/core":"../../node_modules/@barba/core/dist/barba.umd.js","./Page":"js/Page.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"regenerator-runtime/runtime":"../../node_modules/regenerator-runtime/runtime.js","gsap":"../../node_modules/gsap/index.js","./vendor/Dreams":"js/vendor/Dreams.js","@barba/core":"../../node_modules/@barba/core/dist/barba.umd.js","./Page":"js/Page.js","./components/general/Preloader":"js/components/general/Preloader.js"}],"../../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -13085,7 +14410,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "62088" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49798" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

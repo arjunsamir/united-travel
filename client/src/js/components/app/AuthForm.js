@@ -2,16 +2,16 @@ import Form from '../general/Form';
 
 export default class AuthForm extends Form {
 
-    constructor(props) {
+    constructor(props, container) {
 
         // 1. Call Super
-        super(props.selector, props.container);
+        super(props.selector, container);
 
         console.log(this);
 
         this.endpoint = props.endpoint;
-        this.navbar = props.navbar;
-        this.navigator = props.barba;
+        this.navbar = props.page.navbar;
+        this.navigator = props.page.barba;
 
         this.google = {
             config: {

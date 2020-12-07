@@ -1,8 +1,8 @@
 export default class Typewriter {
 
-    constructor(selector) {
+    constructor(selector, container) {
 
-        this.element = $(selector);
+        this.element = $(container).children(selector);
         this.words = this.element.data('words', 'json');
         this.period = this.element.data('period', 'int') || 2000;
 

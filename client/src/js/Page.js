@@ -1,18 +1,19 @@
 // Import Components
-import Preloader from './components/general/Preloader';
 import Scroll from './components/general/Scroll';
 import Navbar from './components/general/Navbar';
-import Footer from './components/general/Footer';
 import Typewriter from './components/general/Typewriter';
 import DraggableSlider from './components/general/DraggableSlider';
 import ContactForm from './components/general/ContactForm';
+import AuthForm from './components/app/AuthForm';
+import BookingApp from './components/app/BookingApp';
 
 
 const componentsRegistry = {
-    Typewriter: d => new Typewriter(d),
-    DraggableSlider: d => new DraggableSlider(d),
-    ContactForm: d => new ContactForm(d),
-    Footer: d => new Footer(d)
+    Typewriter: (dta, ctn) => new Typewriter(dta ?? '#typewrite', ctn),
+    DraggableSlider: (dta, ctn) => new DraggableSlider(dta, ctn),
+    ContactForm: (dta, ctn) => new ContactForm(dta ?? '#contact-form', ctn),
+    AuthForm: (dta, ctn) => new AuthForm(dta, ctn),
+    BookingApp: (dta, ctn) => new BookingApp(dta ?? '', ctn)
 }
 
 
@@ -34,8 +35,7 @@ export default class Page {
             namespace: this.elements.container.dataset.barbaNamespace,
             isMobile: null,
             menuIsOpen: false,
-            initialPage: props.initialPage ?? false,
-            url: window.location.href
+            url: props.barba.url.clean() ?? window.location.href
         }
 
         this.components = {
@@ -48,64 +48,37 @@ export default class Page {
     }
 
 
-    afterLoad() {
-
-
-
-    }
-
-
     init() {
 
-        // Update URL
-        this.state.url = this.barba.url.clean();
-
-
-        if (this.state.initialPage) {
-
-            // 1. Create Preloader
-            const preloader = new Preloader();
-
-            // 1. Subscribe to Preloader Events
-            preloader.subscribe('after', () => this.start());
-    
-            // 2. Initialize Preloader
-            preloader.init();
-
-        }
+        // Add Namespace Class to body
+        this.elements.body.addClass(`${this.state.namespace}-page`);
 
         // Initialize Crucial Modules
         this.scroll = new Scroll(this);
-        this.navbar = new Navbar(this.scroll);
+        this.navbar = new Navbar(this);
 
+        // Return Class Instance
         return this;
 
     }
 
 
-    freeze() {
+    async destroy() {
 
-        return new Promise(resolve => {
+        // Hide Page
+        $(this.elements.container).css({ display: 'none' });
 
-            this.scroll.pause();
+        // Remove Page Class From Body
+        this.elements.body.removeClass(Array.from(this.elements.body.e().classList).filter(name => name.includes('page')).join(' '));
 
-            resolve();
+        // Add Fixed Class
+        this.elements.body.addClass('fixed');
 
-        })
+        // Destroy Scroll Instance
+        this.scroll.destroy();
 
-    }
-
-
-    destroy() {
-
-    }
-
-
-    refresh(next) {
-
-        this.destroy();
-
-        return new Page({ container: next.container });
+        // Return From Async Function
+        return;
 
     }
 
@@ -113,35 +86,31 @@ export default class Page {
     start() {
 
         this.scroll.init();
-        this.navbar.init(this.state.namespace);
+        this.navbar.init();
 
         // Mount Remaining Components
-        this.mountComponents();
+        this.components.registrar.forEach(component => {
+            this.components.mounted[component.name].init();
+        });
         
-    }
-
-
-    insertSlide() {
-        this.elements.slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use xlink:href="img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>');
-        this.elements.body.append(this.elements.slide);
     }
 
 
     addComponent(...components) {
 
-        components.forEach(c => {
-            this.components.registrar.push({ name: c.name, data: c.data });
-            this.components.mounted[c.name] = componentsRegistry[c.name](c.data);
+        components.forEach(component => {
+
+            const comp = typeof component == 'string' ? { name: component } : component;
+            
+            this.components.registrar.push({ name: comp.name, data: comp.data });
+            this.components.mounted[comp.name] = componentsRegistry[comp.name](comp.data ?? null, this.elements.container);
+
+            if (this.components.mounted[comp.name].load) this.components.mounted[comp.name].load();
+
         });
 
-        console.log(this.components);
     }
 
-    mountComponents() {
 
-        this.components.registrar.forEach(component => {
-            this.components.mounted[component.name].init();
-        })
-    }
 
 }

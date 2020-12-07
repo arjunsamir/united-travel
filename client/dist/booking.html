@@ -22,6 +22,7 @@
     <!-- Navigation Bar -->
     <nav class="navbar logged-in-na" id="navbar">
 
+    <!-- Branding -->
     <a href="/" class="navbar__brand" id="nav-brand">
 
         <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
@@ -29,13 +30,19 @@
 
     </a>
 
+
+    <!-- Mobile Menu Toggle -->
     <label for="nav-toggle" class="navbar__icon" id="nav-icon" aria-label="Toggle Navigation Menu">
         <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
         <svg><use xlink:href="/icons.a0140bae.svg#close"></use></svg>
     </label>
 
+
+    <!-- Hidden Checkbox Toggle -->
     <input type="checkbox" id="nav-toggle" class="navbar__checkbox">
 
+
+    <!-- Mobile Nav Layout -->
     <div class="navbar__mobile">
 
         <div class="navbar__mobile-account">
@@ -70,9 +77,9 @@
         <div class="navbar__mobile-links">
             <ul>
                 <li><a class="nb-link" href="/">Home</a></li>
-                <li><a class="nb-link" href="/services" id="services-mobile-link">Services</a></li>
-                <li><a class="nb-link" href="/about">About Us</a></li>
-                <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                <li><a class="nb-link" data-nav-namespace="services" href="/services" id="services-mobile-link">Services</a></li>
+                <li><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+                <li><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
                 <!-- <li><a class="nb-link" href="/search">My Trips</a></li> -->
                 <li><a class="nb-link" href="/book">Book Now</a></li>
             </ul>
@@ -89,6 +96,8 @@
 
     </div>
 
+
+    <!-- Desktop Nav Layout -->
     <div class="navbar__main">
 
         <div class="navbar__action">
@@ -107,9 +116,9 @@
         <span class="navbar__divider">|</span>
 
         <ul class="navbar__links">
-            <li class="navbar__link"><a class="nb-link" href="/services">Services</a></li>
-            <li class="navbar__link"><a class="nb-link" href="/about">About Us</a></li>
-            <li class="navbar__link"><a class="nb-link" href="/fleet">Our Fleet</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="services" href="/services">Services</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
         </ul>
 
         <div class="navbar__action tablet">
@@ -119,9 +128,9 @@
             </button>
             <div class="navbar__dropdown">
                 <ul>
-                    <li><a class="nb-link" href="/services">Services</a></li>
-                    <li><a class="nb-link" href="/about">About Us</a></li>
-                    <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
+                    <li><a class="nb-link" data-nav-namespace="services" href="/services">Services</a></li>
+                    <li><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+                    <li><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
                 </ul>
             </div>
         </div>
@@ -159,14 +168,115 @@
 
     </div>
 
-
 </nav>
 
 
     <!-- Main Container -->
     <main data-scroll-container="" data-barba="container" data-barba-namespace="booking">
 
-        <section class="booking"></section>
+        <!-- Main Booking Section -->
+        <section class="booking">
+
+            <!-- Booking Image Container -->
+            <div class="booking__image">
+                <picture>
+                    <source srcset="/airport-gate.4b62ecb1.webp" type="image/webp">
+                    <source srcset="/airport-gate.174c4281.jpg" type="image/jpeg">
+                    <img src="/airport-gate.174c4281.jpg" alt="Airport gate">
+                </picture>
+            </div>
+
+
+            <!-- Booking Map Container -->
+            <div class="booking__map" id="booking-map"></div>
+
+
+            <!-- Booking Container -->
+            <div class="booking__container">
+
+                <!-- Booking Card -->
+                <div class="booking-card">
+
+                    <div class="booking-card__header">
+                        <button class="carat-btn lt-dark dk-light hover-opacity-75" id="booking-back">
+                            <svg>
+                                <use xlink:href="/icons.a0140bae.svg#back"></use>
+                            <svg>
+                            <h6>Back</h6>
+                        </svg></svg></button>
+                    </div>
+
+                    <div class="booking-card__body">
+
+                        <h3 class="booking-card__title">Is this an <span>airport</span> ride?</h3>
+
+                        <div class="booking-card__options">
+
+                            <label class="select-tile">
+
+                                <input type="radio" value="arriving" name="flight-type">
+
+                                <div class="select-tile__container">
+                                    <h4 class="select-tile__title">Arriving Flight</h4>
+                                    <p class="select-tile__text">I need to be picked up from the airport.</p>
+                                </div>
+
+                            </label>
+                            
+                            <label class="select-tile">
+
+                                <input type="radio" value="departing" name="flight-type">
+
+                                <div class="select-tile__container">
+                                    <h4 class="select-tile__title">Departing Flight</h4>
+                                    <p class="select-tile__text">I need to be dropped off at the airport.</p>
+                                </div>
+
+                            </label>
+
+                        </div>
+
+                    </div>
+
+                    <div class="booking-card__footer">
+                        <button class="carat-btn lt-dark dk-light hover-primary" id="booking-forward">
+                            <h6>Next Step</h6>
+                            <svg>
+                                <use xlink:href="/icons.a0140bae.svg#carat-right"></use>
+                            <svg>
+                        </svg></svg></button>
+                    </div>
+
+                </div>
+
+
+                <!-- Booking Route Sub Card -->
+                <div class="booking__route"></div>
+
+
+                <!-- Accent Dots -->
+                <div class="accent-dots">
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                    <span class="accent-dots__dot"></span>
+                </div>
+
+            </div>
+
+        </section>
 
     </main>
 

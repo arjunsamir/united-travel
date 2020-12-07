@@ -2,16 +2,16 @@ import Form from './Form';
 
 export default class ContactForm extends Form {
 
-    constructor(options) {
+    constructor(selector, container) {
 
-        super(options.selector, options.container);
+        super(selector, container);
 
         this.elements = {
             input: this.form.children('.input'),
             textarea: this.form.children('.textarea')
         }
 
-        console.log(this.fields);
+        // console.log(this.fields);
 
     }
 

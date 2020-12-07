@@ -13,140 +13,163 @@
 
     <!-- Preloader -->
     <section class="preloader" id="preloader">
-        <div class="preloader__content">
-            <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
-            <span class="preloader__spinner"></span>
-        </div>
-    </section>
+    <div class="preloader__content">
+        <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
     
 
     <!-- Navigation Bar -->
-    <nav class="navbar" id="navbar">
+    <nav class="navbar logged-in-na" id="navbar">
 
-        <a href="/" class="navbar__brand" id="nav-brand">
+    <!-- Branding -->
+    <a href="/" class="navbar__brand" id="nav-brand">
 
-            <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
-            <h5>United Travel</h5>
+        <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
+        <h5>United Travel</h5>
 
-        </a>
-
-        <label for="nav-toggle" class="navbar__icon" id="nav-icon" aria-label="Toggle Navigation Menu">
-            <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
-            <svg><use xlink:href="/icons.a0140bae.svg#close"></use></svg>
-        </label>
-
-        <input type="checkbox" id="nav-toggle" class="navbar__checkbox">
-
-        <div class="navbar__mobile">
-
-            <div class="navbar__mobile-account">
-
-                <div class="logged-in">
-                    <a href="/my-account" class="logged-in__grid">
-                        <div class="navbar__mobile-profile-pic">
-                            <img src="/profile.f6abe80f.png" alt="Profile Picture">
-                        </div>
-                        <div>
-                            <h4>Arjun Patel</h4>
-                            <p>me@arjunsamir.com</p>
-                        </div>
-                    </a>
-                    <a href="/log-out" class="carat-btn">
-                        <h6>Log Out</h6>
-                        <svg>
-                            <use xlink:href="/icons.a0140bae.svg#exit"></use>
-                        <svg>
-                    </svg></svg></a>
-                </div>
-
-                <div class="logged-out" style="display: none;">
-                    <a href="/create-account">Create Account</a>
-                    <a href="/login">Log In</a>
-                </div>
+    </a>
 
 
-            </div>
-
-            <div class="navbar__mobile-links">
-                <ul>
-                    <li><a class="nb-link" href="/services" id="services-mobile-link">Services</a></li>
-                    <li><a class="nb-link" href="/about">About Us</a></li>
-                    <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
-                    <li><a class="nb-link" href="/search">My Trips</a></li>
-                    <li><a class="nb-link" href="/book">Book Now</a></li>
-                </ul>
-            </div>
-
-            <div class="navbar__mobile-language">
-                <hr>
-                <h5>Language</h5>
-                <ul>
-                    <li class="active"><a href="#">English</a></li>
-                    <li><a href="#">Español</a></li>
-                </ul>
-            </div>
-
-        </div>
+    <!-- Mobile Menu Toggle -->
+    <label for="nav-toggle" class="navbar__icon" id="nav-icon" aria-label="Toggle Navigation Menu">
+        <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
+        <svg><use xlink:href="/icons.a0140bae.svg#close"></use></svg>
+    </label>
 
 
-        <div class="navbar__main">
+    <!-- Hidden Checkbox Toggle -->
+    <input type="checkbox" id="nav-toggle" class="navbar__checkbox">
 
-            <div class="navbar__action">
-                <button>
-                    <svg><use xlink:href="/icons.a0140bae.svg#globe"></use></svg>
-                    <span>EN</span>
-                </button>
-                <div class="navbar__dropdown">
-                    <ul>
-                        <li><a href="#">English</a></li>
-                        <li><a href="#">Spanish</a></li>
-                    </ul>
-                </div>
-            </div>
 
-            <span class="navbar__divider">|</span>
+    <!-- Mobile Nav Layout -->
+    <div class="navbar__mobile">
 
-            <ul class="navbar__links">
-                <li class="navbar__link"><a class="nb-link" href="/services">Services</a></li>
-                <li class="navbar__link"><a class="nb-link" href="/about">About Us</a></li>
-                <li class="navbar__link"><a class="nb-link" href="/fleet">Our Fleet</a></li>
-            </ul>
+        <div class="navbar__mobile-account">
 
-            <div class="navbar__action tablet">
-                <button>
-                    <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
-                    <span>Learn More</span>
-                </button>
-                <div class="navbar__dropdown">
-                    <ul>
-                        <li><a class="nb-link" href="/services">Services</a></li>
-                        <li><a class="nb-link" href="/about">About Us</a></li>
-                        <li><a class="nb-link" href="/fleet">Our Fleet</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <span class="navbar__divider">|</span>
-
-            <div class="navbar__actions">
-                <div class="navbar__action">
-                    <button>Account</button>
-                    <div class="navbar__dropdown">
-                        <ul>
-                            <li><a href="/create-account">Create Account</a></li>
-                            <li><a href="/login">Log In</a></li>
-                        </ul>
+            <div class="logged-in">
+                <a href="/my-account" class="logged-in__grid">
+                    <div class="navbar__mobile-profile-photo">
+                        <img class="navbar-profile-pic" src="/profile.f6abe80f.png" alt="Profile Picture">
                     </div>
-                </div>
-                
-                <a class="navbar__link nb-link" href="/search">My Trips</a>
-                <a class="navbar__cta nb-link" href="/book">Book Now</a>
+                    <div>
+                        <h4 class="navbar-user-name">Arjun Patel</h4>
+                        <p class="navbar-user-email">me@arjunsamir.com</p>
+                    </div>
+                </a>
+                <a href="/log-out" class="carat-btn">
+                    <h6>Log Out</h6>
+                    <svg>
+                        <use xlink:href="/icons.a0140bae.svg#exit"></use>
+                    <svg>
+                </svg></svg></a>
             </div>
+
+            <div class="logged-out">
+                <h3>United Travel</h3>
+                <a href="/create-account">Create Account</a>
+                <a href="/login">Log In</a>
+            </div>
+
 
         </div>
 
+        <div class="navbar__mobile-links">
+            <ul>
+                <li><a class="nb-link" href="/">Home</a></li>
+                <li><a class="nb-link" data-nav-namespace="services" href="/services" id="services-mobile-link">Services</a></li>
+                <li><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+                <li><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
+                <!-- <li><a class="nb-link" href="/search">My Trips</a></li> -->
+                <li><a class="nb-link" href="/book">Book Now</a></li>
+            </ul>
+        </div>
 
-    </nav>
+        <div class="navbar__mobile-language">
+            <hr>
+            <h5>Language</h5>
+            <ul>
+                <li class="active"><a href="#">English</a></li>
+                <li><a href="#">Español</a></li>
+            </ul>
+        </div>
+
+    </div>
+
+
+    <!-- Desktop Nav Layout -->
+    <div class="navbar__main">
+
+        <div class="navbar__action">
+            <button>
+                <svg><use xlink:href="/icons.a0140bae.svg#globe"></use></svg>
+                <span>EN</span>
+            </button>
+            <div class="navbar__dropdown">
+                <ul>
+                    <li><a href="#">Español</a></li>
+                    <li><a href="#">Spanish</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <span class="navbar__divider">|</span>
+
+        <ul class="navbar__links">
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="services" href="/services">Services</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+            <li class="navbar__link"><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
+        </ul>
+
+        <div class="navbar__action tablet">
+            <button>
+                <svg><use xlink:href="/icons.a0140bae.svg#menu"></use></svg>
+                <span>Learn More</span>
+            </button>
+            <div class="navbar__dropdown">
+                <ul>
+                    <li><a class="nb-link" data-nav-namespace="services" href="/services">Services</a></li>
+                    <li><a class="nb-link" data-nav-namespace="about" href="/about">About Us</a></li>
+                    <li><a class="nb-link" data-nav-namespace="fleet" href="/fleet">Our Fleet</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <span class="navbar__divider">|</span>
+
+        <div class="navbar__actions">
+            <div class="navbar__action show-on-login">
+                <button class="navbar__profile-photo">
+                    <img class="navbar-profile-pic" src="/profile.f6abe80f.png" alt="User Profile Photo">
+                </button>
+                <div class="navbar__dropdown">
+                    <ul>
+                        <li><a href="/me">My Account</a></li>
+                        <!-- <li><a href="/me">My Trips</a></li> -->
+                        <li><a href="#" class="action-log-out">Log Out</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="navbar__action hide-on-login">
+                <button>Account</button>
+                <div class="navbar__dropdown">
+                    <ul>
+                        <li><a href="/create-account">Create Account</a></li>
+                        <li><a href="/login">Log In</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- <a class="navbar__link nb-link hide-on-login" href="/search">My Trips</a> -->
+
+            <a class="navbar__cta nb-link" href="/book">Book Now</a>
+        </div>
+
+    </div>
+
+</nav>
 
 
     <!-- Data Scroll Container -->
@@ -156,6 +179,7 @@
         <header class="header">
 
             <div class="bg-video">
+                <div class="bg-video__preload"></div>
                 <div class="bg-video__overlay"></div>
                 <div class="bg-video__fallback loading" id="yt-fallback"></div>
                 <video class="bg-video__player" autoplay="" muted="" loop="" playsinline="">
@@ -168,7 +192,7 @@
                 <h2 class="header__headline" id="navbar-collapse">Our <span>fleet</span></h2>
             </div>
 
-            <a class="header__cta" data-scroll="" data-scroll-speed=".4">
+            <a class="header__cta">
                 <div class="carat-btn lt-light dk-dark">
                     <h6>Book a ride now</h6>
                     <svg>
@@ -329,186 +353,121 @@
         <!-- Call To Action -->
         <section class="cta">
 
-            <div class="section__content animate-on-scroll reveal grow" data-scroll="" data-scroll-repeat="">
+    <div class="section__content animate-on-scroll reveal grow" data-scroll="" data-scroll-repeat="">
 
-                <h2>Book A Ride With Us</h2>
+        <h2>Book A Ride With Us</h2>
 
-                <p>Ready to book a ride for your next trip to Orlando? You can book your ride online using our online booking system. You will be able to complete the entire booking process online so that when it’s time for your ride its effortless.</p>
+        <p>Ready to book a ride for your next trip to Orlando? You can book your ride online using our online booking system. You will be able to complete the entire booking process online so that when it’s time for your ride its effortless.</p>
 
-                <a href="/book" class="btn lt-hollow lt-light lt-hover-fill lt-hover-primary-text dk-filled dk-primary dk-hover-opacity-75">Book Now</a>
+        <a href="/book" class="btn lt-hollow lt-light lt-hover-fill lt-hover-primary-text dk-filled dk-primary dk-hover-opacity-75">Book Now</a>
 
-            </div>
+    </div>
 
-        </section>
+</section>
 
 
         <!-- Contact Form -->
         <section class="contact">
 
-            <div class="contact__img">
-                <picture>
-                    <source srcset="/contact.3cdd71a2.webp" type="image/webp">
-                    <source srcset="/contact.39f7414c.jpg" type="image/jpeg">
-                    <img src="/contact.39f7414c.jpg" alt="Purple neon Sign that says 'Hello'" data-scroll="" data-scroll-speed="-1">
-                </picture>
+    <div class="contact__img">
+        <picture>
+            <source srcset="/contact.3cdd71a2.webp" type="image/webp">
+            <source srcset="/contact.39f7414c.jpg" type="image/jpeg">
+            <img src="/contact.39f7414c.jpg" alt="Purple neon Sign that says 'Hello'" data-scroll="" data-scroll-speed="-1">
+        </picture>
+    </div>
+
+    <form action="/sumbit/contact-form" method="POST" class="contact__form" id="contact-form">
+
+        <div class="contact__form-container">
+
+            <h2 class="h2">Have a question? Send us a message <span>now.</span></h2>
+
+            <!-- Dual Field Input -->
+            <div class="input" data-icons="1" data-name="contact">
+
+                <div class="input__icon"><svg><use xlink:href="/icons.a0140bae.svg#person"></use></svg></div>
+
+                <label class="input__field" data-type="name" data-required="">
+                    <input type="text" placeholder="Monika Patterson">
+                    <h6>Full Name</h6>
+                </label>
+                
+                <label class="input__field" data-type="email" data-required="">
+                    <input type="text" placeholder="monika@example.com">
+                    <h6>Email Address</h6>
+                </label>
+
             </div>
 
-            <form action="/sumbit/contact-form" method="POST" class="contact__form" id="contact-form">
 
-                <div class="contact__form-container">
-
-                    <h2 class="h2">Have a question? Send us a message <span>now.</span></h2>
-
-                    <!-- Dual Field Input -->
-                    <div class="input" data-icons="1" data-name="contact">
-
-                        <div class="input__icon"><svg><use xlink:href="/icons.a0140bae.svg#person"></use></svg></div>
-
-                        <label class="input__field" data-type="name" data-required="">
-                            <input type="text" placeholder="Monika Patterson">
-                            <h6>Full Name</h6>
-                        </label>
-                        
-                        <label class="input__field" data-type="email" data-required="">
-                            <input type="text" placeholder="monika@example.com">
-                            <h6>Email Address</h6>
-                        </label>
-
-                    </div>
+            <!-- Textarea -->
+            <label class="textarea" data-type="message" data-min="25" data-required="">
+                <textarea placeholder="Talk to us."></textarea>
+                <h6>Message</h6>
+            </label>
 
 
-                    <!-- Textarea -->
-                    <label class="textarea" data-type="message" data-min="25" data-required="">
-                        <textarea placeholder="Talk to us."></textarea>
-                        <h6>Message</h6>
-                    </label>
+            <!-- Submit Button -->
+            <button class="btn filled lt-dark lt-hover-primary dk-primary dk-hover-opacity-75">Send Message</button>
 
+        </div>
 
-                    <!-- Submit Button -->
-                    <button class="btn filled lt-dark lt-hover-primary dk-primary dk-hover-opacity-75">Send Message</button>
+    </form>
 
-                </div>
-
-            </form>
-
-        </section>
+</section>
 
 
         <!-- Footer -->
         <footer class="footer">
 
-            <div class="footer__branding">
+    <a href="/" class="footer__branding">
 
-                <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
-                <h5>United Travel LLC</h5>
+        <svg><use xlink:href="/icons.a0140bae.svg#logo"></use></svg>
+        <h5>United Travel LLC</h5>
 
-            </div>
+    </a>
 
-            <a href="https://www.arjunsamir.com" class="footer__sponsor">Designed On Day FiftyFive</a>
+    <a href="https://www.arjunsamir.com" class="footer__sponsor">Designed On Day FiftyFive</a>
 
-            <div class="footer__main">
+    <div class="footer__main">
 
-                <div class="footer__container">
+        <div class="footer__container">
 
-                    <div class="footer__contact">
+            <div class="footer__contact">
 
-                        <h3>Contact Us</h3>
-                        <hr>
-                        <p><a href="mailto:info@unitedtravelflorida.com">info@unitedtravelflorida.com</a></p>
-                        <p><a href="tel:321-295-1104">(321) 295-1104</a></p>
-
-                    </div>
-
-                    <div class="footer__nav">
-                        <ul>
-                            <li><a href="/services">Services</a></li>
-                            <li><a href="/about">About Us</a></li>
-                            <li><a href="/fleet">Our Fleet</a></li>
-                            <li><a href="/book">Book Now</a></li>
-                        </ul>
-                    </div>
-
-                    <div class="footer__copyright">
-
-                        <p>&copy; Copyright Day FiftyFive LLC 2020. All rights reserved.</p>
-
-                    </div>
-
-                </div>
+                <h3>Contact Us</h3>
+                <hr>
+                <p><a href="mailto:info@unitedtravelflorida.com">info@unitedtravelflorida.com</a></p>
+                <p><a href="tel:321-295-1104">(321) 295-1104</a></p>
 
             </div>
 
-        </footer>
-
-    </main>
-
-    <!-- PhotoSwipe Galleries -->
-    <!-- Root element of PhotoSwipe. Must have class pswp. -->
-    <div class="pswp" tabindex="-1" role="dialog" aria-hidden="true">
-
-        <!-- Background of PhotoSwipe. 
-            It's a separate element as animating opacity is faster than rgba(). -->
-        <div class="pswp__bg"></div>
-
-        <!-- Slides wrapper with overflow:hidden. -->
-        <div class="pswp__scroll-wrap">
-
-            <!-- Container that holds slides. 
-                PhotoSwipe keeps only 3 of them in the DOM to save memory.
-                Don't modify these 3 pswp__item elements, data is added later on. -->
-            <div class="pswp__container">
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
-                <div class="pswp__item"></div>
+            <div class="footer__nav">
+                <ul>
+                    <li><a href="/services">Services</a></li>
+                    <li><a href="/about">About Us</a></li>
+                    <li><a href="/fleet">Our Fleet</a></li>
+                    <li><a href="/book">Book Now</a></li>
+                </ul>
             </div>
 
-            <!-- Default (PhotoSwipeUI_Default) interface on top of sliding area. Can be changed. -->
-            <div class="pswp__ui pswp__ui--hidden">
+            <div class="footer__copyright">
 
-                <div class="pswp__top-bar">
-
-                    <!--  Controls are self-explanatory. Order can be changed. -->
-
-                    <div class="pswp__counter"></div>
-
-                    <button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
-
-                    <button class="pswp__button pswp__button--share" title="Share"></button>
-
-                    <button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
-
-                    <button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button>
-
-                    <!-- Preloader demo https://codepen.io/dimsemenov/pen/yyBWoR -->
-                    <!-- element will get class pswp__preloader--active when preloader is running -->
-                    <div class="pswp__preloader">
-                        <div class="pswp__preloader__icn">
-                        <div class="pswp__preloader__cut">
-                            <div class="pswp__preloader__donut"></div>
-                        </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap">
-                    <div class="pswp__share-tooltip"></div> 
-                </div>
-
-                <button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
-                </button>
-
-                <button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)">
-                </button>
-
-                <div class="pswp__caption">
-                    <div class="pswp__caption__center"></div>
-                </div>
+                <p>&copy; Copyright Day FiftyFive LLC 2020. All rights reserved.</p>
 
             </div>
 
         </div>
 
     </div>
+
+</footer>
+
+    </main>
+
+    <!-- Photoswipe Gallery -->
+    
 
 
     <!-- JavaScript Source -->
