@@ -44,8 +44,9 @@
                 <!-- Booking Card -->
                 <div class="booking-card">
 
+                    <!-- Back Button -->
                     <div class="booking-card__header">
-                        <button class="carat-btn lt-dark dk-light hover-opacity-75" id="booking-back">
+                        <button class="carat-btn lt-dark dk-light hover-opacity-75 disabled" id="booking-back">
                             <svg>
                                 <use xlink:href="img/icons.svg#back"></use>
                             <svg>
@@ -53,40 +54,12 @@
                         </button>
                     </div>
 
-                    <div class="booking-card__body">
+                    <!-- Form -->
+                    <form class="booking-card__body"></form>
 
-                        <h3 class="booking-card__title">Is this an <span>airport</span> ride?</h3>
-
-                        <div class="booking-card__options">
-
-                            <label class="select-tile">
-
-                                <input type="radio" value="arriving" name="flight-type">
-
-                                <div class="select-tile__container">
-                                    <h4 class="select-tile__title">Arriving Flight</h4>
-                                    <p class="select-tile__text">I need to be picked up from the airport.</p>
-                                </div>
-
-                            </label>
-                            
-                            <label class="select-tile">
-
-                                <input type="radio" value="departing" name="flight-type">
-
-                                <div class="select-tile__container">
-                                    <h4 class="select-tile__title">Departing Flight</h4>
-                                    <p class="select-tile__text">I need to be dropped off at the airport.</p>
-                                </div>
-
-                            </label>
-
-                        </div>
-
-                    </div>
-
+                    <!-- Next Button -->
                     <div class="booking-card__footer">
-                        <button class="carat-btn lt-dark dk-light hover-primary" id="booking-forward">
+                        <button class="carat-btn lt-dark dk-light hover-primary disabled" id="booking-forward">
                             <h6>Next Step</h6>
                             <svg>
                                 <use xlink:href="img/icons.svg#carat-right"></use>

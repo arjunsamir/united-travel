@@ -52,7 +52,7 @@ export default class Scroll {
 
 
         // Determine If Mobile
-        this.isMobile = this.locomotive.scroll.isMobile;
+        this.isMobile = this.page.state.isMobile = this.locomotive.scroll.isMobile;
 
 
         // Remove Fixed Class If Mobile
@@ -115,6 +115,7 @@ export default class Scroll {
             return link;
 
         });
+
 
     }
 

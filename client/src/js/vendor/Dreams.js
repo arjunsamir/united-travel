@@ -187,6 +187,7 @@ class Dream {
         this.elements.forEach(e => e.removeChild(e.lastChild));
     }
 
+    
     idx(idx) {
         const node = [this.elements[idx]];
 
@@ -565,7 +566,9 @@ class Dream {
             return clone;
         });
 
-        return this.cycle();
+        this.first = this.elements[0];
+
+        return this;
     }
 
 
@@ -661,7 +664,12 @@ class Dream {
     // Dispath An Event
     dispatch( event ) {
         this.elements.forEach( element => element.dispatchEvent( event ) );
-        return this.cycle();
+        return this;
+    }
+
+
+    fire(event) {
+        return this.dispatch(new Event(event));
     }
 
 

@@ -112,7 +112,7 @@ export default class Navbar {
 
 
     resetLayout() {
-        this.main.removeClass('opaque');
+        this.main.removeClass('opaque hidden');
         this.main.removeClass('mobile-layout tablet-layout');
     }
 

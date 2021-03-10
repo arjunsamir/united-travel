@@ -427,15 +427,6 @@ class Input {
     }
 }
 
-class Options {
-
-    constructor(selector) {
-        
-    }
-
-
-
-}
 
 
 export default class Form {

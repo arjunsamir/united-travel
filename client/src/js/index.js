@@ -173,7 +173,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     page.navbar.applyTheme([{ brand: 'jet' }]).forceLayout('mobile');
 
                     // Add Booking App Component
-                    page.addComponent({ name: 'BookingApp', data: { page } });
+                    page.addComponent({ name: 'BookingApp', data: page });
 
                 }
             }

@@ -10,6 +10,8 @@
 
     --icon-size: 2.5rem;
 
+    --field-height: 3.5rem;
+
     color: var(--jet);
     border: var(--border-style) var(--outer-color);
     padding: 1rem  var(--input-padding);
@@ -18,6 +20,11 @@
     align-items: center;
 
     transition: border $dt, color $dt;
+
+    &.date-time {
+        display: grid;
+        grid-template-columns: 55% 1fr;
+    }
 
     @include dark {
         --outer-color: var(--white);
@@ -53,6 +60,15 @@
             --heading-color: var(--inner-color);
             @include phone { --inner-color: var(--success-color); }
         }
+    }
+
+
+    &__date {
+        height: var(--field-height);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
     }
 
     &__icon {
@@ -125,6 +141,7 @@
 
             border: none;
             width: 100%;
+            height: var(--field-height);
             padding: .5rem 0;
 
             transition: color $dt, background $dt, opacity $dt, border $dt;
@@ -135,6 +152,14 @@
 
             &[type="password"] {
                 letter-spacing: .2em;
+            }
+
+            &[type="time"], &[type="date"] {
+                cursor: pointer;
+                
+                &:focus {
+                    outline: none;
+                }
             }
 
         }
@@ -356,6 +381,47 @@
     &__text {
         font-size: 1.4rem;
         color: var(--p-col);
+    }
+
+}
+
+.dropdown {
+
+    --border-color: var(--jet);
+
+    border: 2px solid var(--border-color);
+    height: 5.6rem;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    max-width: 38rem;
+
+    &__select {
+        display: block;
+        border: none;
+        cursor: pointer;
+        height: 100%;
+        width: 100%;
+        padding: 0 2rem;
+
+        -o-appearance: none;
+        -ms-appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
+
+    svg {
+        position: absolute;
+        right: 2rem;
+        height: 1.8rem;
+        width: 1.8rem;
+        transform: rotate(90deg);
+        fill: transparent;
+        stroke: currentColor;
     }
 
 }

@@ -43,7 +43,10 @@ const schema = new mongoose.Schema({
         },
         number: String,
         airline: String,
-        airport: String
+        airport: {
+            code: String,
+            name: String
+        }
     },
     passengers: {
         total: Number,

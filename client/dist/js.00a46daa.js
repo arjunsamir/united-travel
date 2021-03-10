@@ -6687,7 +6687,8 @@ class Dream {
       el.parentNode.replaceChild(clone, el);
       return clone;
     });
-    return this.cycle();
+    this.first = this.elements[0];
+    return this;
   } // Remove Event Listeners
 
 
@@ -6754,7 +6755,11 @@ class Dream {
 
   dispatch(event) {
     this.elements.forEach(element => element.dispatchEvent(event));
-    return this.cycle();
+    return this;
+  }
+
+  fire(event) {
+    return this.dispatch(new Event(event));
   } // On Resize
 
 
@@ -10073,7 +10078,7 @@ class Scroll {
     this.position = this.locomotive.scroll.instance.scroll.y;
     this.threshold = this.anchor.top() - this.navbar.height(); // Determine If Mobile
 
-    this.isMobile = this.locomotive.scroll.isMobile; // Remove Fixed Class If Mobile
+    this.isMobile = this.page.state.isMobile = this.locomotive.scroll.isMobile; // Remove Fixed Class If Mobile
 
     if (this.isMobile) this.body.removeClass('fixed');
   }
@@ -10280,7 +10285,7 @@ class Navbar {
   }
 
   resetLayout() {
-    this.main.removeClass('opaque');
+    this.main.removeClass('opaque hidden');
     this.main.removeClass('mobile-layout tablet-layout');
   }
 
@@ -12505,11 +12510,6 @@ class Input {
 
 }
 
-class Options {
-  constructor(selector) {}
-
-}
-
 class Form {
   constructor(selector, container) {
     this.fields = {};
@@ -13850,7 +13850,466 @@ class Map {
 }
 
 exports.default = Map;
-},{}],"js/data/sampleBooking.js":[function(require,module,exports) {
+},{}],"../../node_modules/os-browserify/browser.js":[function(require,module,exports) {
+exports.endianness = function () { return 'LE' };
+
+exports.hostname = function () {
+    if (typeof location !== 'undefined') {
+        return location.hostname
+    }
+    else return '';
+};
+
+exports.loadavg = function () { return [] };
+
+exports.uptime = function () { return 0 };
+
+exports.freemem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.totalmem = function () {
+    return Number.MAX_VALUE;
+};
+
+exports.cpus = function () { return [] };
+
+exports.type = function () { return 'Browser' };
+
+exports.release = function () {
+    if (typeof navigator !== 'undefined') {
+        return navigator.appVersion;
+    }
+    return '';
+};
+
+exports.networkInterfaces
+= exports.getNetworkInterfaces
+= function () { return {} };
+
+exports.arch = function () { return 'javascript' };
+
+exports.platform = function () { return 'browser' };
+
+exports.tmpdir = exports.tmpDir = function () {
+    return '/tmp';
+};
+
+exports.EOL = '\n';
+
+exports.homedir = function () {
+	return '/'
+};
+
+},{}],"../../node_modules/uniqid/index.js":[function(require,module,exports) {
+var process = require("process");
+/* 
+(The MIT License)
+Copyright (c) 2014-2019 Halász Ádám <mail@adamhalasz.com>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/
+
+//  Unique Hexatridecimal ID Generator
+// ================================================
+
+//  Dependencies
+// ================================================
+var pid = process && process.pid ? process.pid.toString(36) : '' ;
+var address = '';
+if(typeof __webpack_require__ !== 'function'){
+    var mac = '', networkInterfaces = require('os').networkInterfaces();
+    for(let interface_key in networkInterfaces){
+        const networkInterface = networkInterfaces[interface_key];
+        const length = networkInterface.length;
+        for(var i = 0; i < length; i++){
+            if(networkInterface[i].mac && networkInterface[i].mac != '00:00:00:00:00:00'){
+                mac = networkInterface[i].mac; break;
+            }
+        }
+    }
+    address = mac ? parseInt(mac.replace(/\:|\D+/gi, '')).toString(36) : '' ;
+} 
+
+//  Exports
+// ================================================
+module.exports = module.exports.default = function(prefix, suffix){ return (prefix ? prefix : '') + address + pid + now().toString(36) + (suffix ? suffix : ''); }
+module.exports.process = function(prefix, suffix){ return (prefix ? prefix : '') + pid + now().toString(36) + (suffix ? suffix : ''); }
+module.exports.time    = function(prefix, suffix){ return (prefix ? prefix : '') + now().toString(36) + (suffix ? suffix : ''); }
+
+//  Helpers
+// ================================================
+function now(){
+    var time = Date.now();
+    var last = now.last || time;
+    return now.last = time > last ? time : last + 1;
+}
+
+},{"os":"../../node_modules/os-browserify/browser.js","process":"../../node_modules/process/browser.js"}],"js/data/airports.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+var _default = [{
+  code: 'MCO',
+  name: 'Orlando International Airport',
+  placeId: 'ChIJ85K0xidj54gRbeERlDa5Sq0'
+}, {
+  code: 'SFB',
+  name: 'Orlando Sanford International Airport',
+  placeId: 'ChIJ5d7ffVJr54gRRbL4HmpQb5M'
+}, {
+  code: 'TPA',
+  name: 'Tampa International Airport',
+  placeId: 'ChIJQ0Sek0bCwogRCdUBxgiEW3o'
+}, {
+  code: 'MIA',
+  name: 'Miami International Airport',
+  placeId: 'ChIJwUq5Tk232YgR4fiiy-Dan5g'
+}, {
+  code: 'JAX',
+  name: 'Jacksonville International Airport',
+  placeId: 'ChIJE0IKb3-v5YgRZnt9T4YY-Bk'
+}, {
+  code: 'DAB',
+  name: 'Daytona Beach International Airport',
+  placeId: 'ChIJb6NBzDvZ5ogRjFlbUUVOkLo'
+}];
+exports.default = _default;
+},{}],"js/utils/textNodes.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.p = exports.h6 = exports.h5 = exports.h4 = exports.h3 = exports.h2 = exports.h1 = void 0;
+
+const createTextNode = tag => {
+  return (content, className) => {
+    if (!content) return '';
+    return "<".concat(tag).concat(className ? " class=\"".concat(className, "\"") : '', ">").concat(content, "</").concat(tag, ">");
+  };
+};
+
+const h1 = createTextNode('h1');
+exports.h1 = h1;
+const h2 = createTextNode('h2');
+exports.h2 = h2;
+const h3 = createTextNode('h3');
+exports.h3 = h3;
+const h4 = createTextNode('h4');
+exports.h4 = h4;
+const h5 = createTextNode('h5');
+exports.h5 = h5;
+const h6 = createTextNode('h6');
+exports.h6 = h6;
+const p = createTextNode('p');
+exports.p = p;
+},{}],"js/components/app/formComponents.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+const generate = {}; // CREATE OPTIONS
+
+const createOption = (opt, type, name, data) => {
+  return "\n        <label class=\"select-tile\">\n            <input type=\"".concat(type, "\" name=\"").concat(name, "\" value=\"").concat(opt.value, "\"").concat(data == opt.value ? ' checked' : '', ">\n            <div class=\"select-tile__container\">\n                <h4 class=\"select-tile__title\">").concat(opt.title, "</h4>\n                <p class=\"select-tile__text\">").concat(opt.text || '', "</p>\n            </div>\n        </label>\n    ");
+};
+
+generate.options = (opts, type, name, data) => {
+  return "\n        <div class=\"booking-card__options\">\n            ".concat(opts.map(opt => createOption(opt, type, name, data)).join(''), "\n        </div>\n    ");
+};
+
+generate.select = (opts, name, data) => {
+  return "\n        <div class=\"dropdown\">\n            <select class=\"dropdown__select\" name=\"".concat(name, "\">\n                <option>Please Select</option>\n                ").concat(opts.map(opt => "<option value=\"".concat(opt.value, "\"").concat(data == opt.value ? ' selected' : '', ">").concat(opt.text, "</option>")).join(''), "\n            </select>\n            <svg><use xlink:href=\"img/icons.svg#carat-right\"></use></svg>\n        </div>\n    ");
+};
+
+generate.dateTime = (isMobile, time) => {
+  return "\n        <div class=\"input date-time\">\n\n            <label class=\"input__field\" data-type=\"name\" data-required>\n                ".concat(isMobile ? "<input type=\"date\" min=\"".concat(new Date().toISOString().split('T')[0], "\">") : '<div class="input__date"><p>Jun 23, 2020</p>/div>', "\n                <h6>Date</h6>\n            </label>\n            \n            <label class=\"input__field\" data-type=\"email\" data-required>\n                <input type=\"time\">\n                <h6>Time</h6>\n            </label>\n\n        </div>\n    ");
+}; // Export Options 
+
+
+var _default = generate;
+exports.default = _default;
+},{}],"js/components/app/Step.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _uniqid = _interopRequireDefault(require("uniqid"));
+
+var _gsap = _interopRequireDefault(require("gsap"));
+
+var _airports = _interopRequireDefault(require("../../data/airports"));
+
+var _textNodes = require("../../utils/textNodes");
+
+var _formComponents = _interopRequireDefault(require("./formComponents"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+// Create Shortcut
+const bc = 'booking-card';
+
+class Step {
+  constructor(props, content) {
+    var _props$callbacks, _props$data;
+
+    this.content = _objectSpread({}, content);
+    this.container = props.container; // Initialize Empty Data Object
+
+    this.data = {}; // Initialize Raw Data
+
+    this.rawData = []; // Initialize Step State
+
+    this.state = {
+      complete: false,
+      fieldsets: {},
+      isMobile: props.isMobile
+    }; // Initialize Event Listeners
+
+    this.listeners = []; // Register Callback Functions
+
+    this.callbacks = (_props$callbacks = props.callbacks) !== null && _props$callbacks !== void 0 ? _props$callbacks : {}; // Import Form Data
+
+    this.importedData = (_props$data = props.data) !== null && _props$data !== void 0 ? _props$data : [];
+  }
+
+  mount() {
+    const events = {
+      change: this.listeners.map(l => l.type === 'change' ? "[name=\"".concat(l.id, "\"]") : null).filter(l => l).join(', ')
+    };
+    this.container.listenFor('change', events.change, e => {
+      const id = e.target.name;
+      this.listeners.forEach(listener => {
+        var _listener$key;
+
+        const key = (_listener$key = listener.key) !== null && _listener$key !== void 0 ? _listener$key : listener.id;
+
+        if (listener.id == id) {
+          const value = listener.test ? listener.test(e.target.value) : e.target.value;
+          this.data[key] = value;
+          const dataRef = this.rawData.find(x => x.id == id);
+          dataRef.value = e.target.value;
+          let isValid = true;
+
+          switch (listener.inputType) {
+            case 'select':
+              if (!value) isValid = false;
+              break;
+          }
+
+          this.state.fieldsets[id].valid = isValid;
+        }
+      });
+      this.validate(); // console.log(this.data);
+      // console.log(this.rawData);
+    }); // Manually Fire Change Events
+
+    this.container.children('input').fire('change');
+  }
+
+  async unmount() {
+    // Fade Out Container
+    await new Promise(resolve => _gsap.default.to(this.container.e(), {
+      opacity: 0,
+      duration: .5,
+      onComplete: resolve
+    })); // Clear Container
+
+    this.container.clear(); // Kill Events on Container
+
+    this.container = this.container.kill();
+  }
+
+  validate() {
+    let valid = true;
+    $.each(this.state.fieldsets, (key, value) => {
+      if (!value.valid) valid = false;
+    });
+    this.state.complete = valid;
+    if (valid) this.callbacks.onValid();else this.callbacks.onError();
+  }
+
+  registerListeners(inputType, id, test, key, index) {
+    let type = 'change';
+    this.state.fieldsets[id] = {
+      valid: false
+    };
+    this.listeners.push({
+      type,
+      inputType,
+      id,
+      test,
+      key,
+      valid: e => e.target.checked
+    });
+    this.rawData.push({
+      id,
+      value: this.importedData[index]
+    });
+  }
+
+  createFieldsets() {
+    return this.content.fieldsets.map((fs, i) => {
+      // Define Variables
+      let inputs = '';
+      const id = (0, _uniqid.default)();
+      const data = this.importedData[i]; // Render Inputs
+
+      switch (fs.type) {
+        case 'option':
+          inputs = _formComponents.default.options(fs.options, fs.optionSchema, id, data);
+          break;
+
+        case 'select':
+          inputs = _formComponents.default.select(fs.options, id, data);
+          break;
+
+        case 'date-time':
+          inputs = _formComponents.default.dateTime(this.state.isMobile);
+          break;
+      } // Register Event Listeners and Actions
+
+
+      this.registerListeners(fs.type, id, fs.test, fs.key, i); // Render Fieldset
+
+      return "\n                <div class=\"booking-card__fieldset\">\n                    ".concat((0, _textNodes.h4)(fs.title, "".concat(bc, "__fieldset-title")), "\n                    ").concat(inputs, "\n                </div>\n            ");
+    }).join('');
+  }
+
+  async render() {
+    this.container.css({
+      opacity: 0
+    });
+    this.container.insert("\n            ".concat((0, _textNodes.h3)(this.content.title, "".concat(bc, "__title")), "\n            ").concat((0, _textNodes.p)(this.content.text, "".concat(bc, "__text")), "\n            ").concat(this.createFieldsets(), "\n        "));
+    this.mount();
+    await new Promise(resolve => _gsap.default.to(this.container.e(), {
+      opacity: 1,
+      duration: .5,
+      onComplete: resolve
+    }));
+  }
+
+}
+
+var _default = {
+  // Flight Steps
+  flight: {
+    // Create Main Flight Card Page
+    main: props => new Step(props, {
+      title: 'Is this an <span>airport</span> ride?',
+      fieldsets: [{
+        type: 'option',
+        key: 'airportRide',
+        optionSchema: 'radio',
+        options: [{
+          title: 'Yes',
+          text: 'I need to be picked up or dropped off at the airport.',
+          value: 'y'
+        }, {
+          title: 'No',
+          text: 'I need a ride to a hotel, theme park, beach, resturant, etc.',
+          value: 'n'
+        }],
+        test: val => val === 'y'
+      }]
+    }),
+    // Determine if Arriving or Departing Flight
+    type: props => new Step(props, {
+      title: 'Details about your <span>flight</span>',
+      fieldsets: [{
+        title: 'Select an airport',
+        key: 'airport',
+        type: 'select',
+        options: _airports.default.map(apt => {
+          return {
+            text: "".concat(apt.code, " - ").concat(apt.name),
+            value: apt.code
+          };
+        }),
+        test: val => _airports.default.find(apt => apt.code === val)
+      }, {
+        title: 'What type of flight is this?',
+        type: 'option',
+        key: 'flightType',
+        optionSchema: 'radio',
+        options: [{
+          title: 'Arriving',
+          text: 'I need to be picked up from the airport',
+          value: 'arriving'
+        }, {
+          title: 'Departing',
+          text: 'I need to be dropped off at the airport before my flight.',
+          value: 'departing'
+        }]
+      }]
+    }),
+    // Flight Details
+    details: props => new Step(props, {
+      title: 'More <span>flight</span> details',
+      text: 'Help us schedule your ride by providing some information about your flight schedule.',
+      fieldsets: [{
+        title: 'Flight Date & Time',
+        type: 'date-time'
+      }, {
+        title: 'Airline Information',
+        type: 'multipart',
+        icon: '',
+        fields: [{
+          label: 'Airline',
+          placeholder: 'United',
+          type: 'text'
+        }, {
+          label: 'Flight Number',
+          placeholder: 'A2302',
+          type: 'text'
+        }]
+      }]
+    }),
+    // Flight Preference for Departing Flights
+    preference: props => new Step(props, {})
+  },
+  // Main Booking Steps
+  ride: {
+    // Main Step for controlling Google Map
+    main: '',
+    // Get Passengers
+    passengers: '',
+    // Get Vehicle
+    vehicle: '',
+    // Display Summary
+    summary: ''
+  },
+  // Authentication Steps
+  auth: {
+    main: ''
+  },
+  // Payment
+  payment: {
+    main: ''
+  },
+  // Confirmtaion
+  confirmtaion: {
+    main: ''
+  }
+};
+exports.default = _default;
+},{"uniqid":"../../node_modules/uniqid/index.js","gsap":"../../node_modules/gsap/index.js","../../data/airports":"js/data/airports.js","../../utils/textNodes":"js/utils/textNodes.js","./formComponents":"js/components/app/formComponents.js"}],"js/data/sampleBooking.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -13931,6 +14390,8 @@ var _Map = _interopRequireDefault(require("./Map"));
 
 var _AuthForm = _interopRequireDefault(require("./AuthForm"));
 
+var _Step = _interopRequireDefault(require("./Step"));
+
 var _sampleBooking = _interopRequireDefault(require("../../data/sampleBooking"));
 
 var _vehicles = _interopRequireDefault(require("../../data/vehicles"));
@@ -13943,8 +14404,11 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+// Define Steps
+const registeredSteps = ['flight main', 'flight type', 'flight details', 'flight preference', 'ride main', 'ride passengers', 'ride vehicle', 'ride summary', 'auth main', 'payment main', 'confirmation main'];
+
 class BookingApp {
-  constructor(props, container) {
+  constructor(page, container) {
     // Assign Sample Data
     this.data = _objectSpread({}, _sampleBooking.default); // Refrence Data For Booking
 
@@ -13957,29 +14421,116 @@ class BookingApp {
         date: null,
         time: null
       }
-    }; // Assign App Data
+    };
+    this.rawData = {}; // Assign App Data
 
     this.appData = {
       loaded: false,
       vehicles: []
-    };
+    }; // Keep Track of Booking Application State
+
+    this.state = {
+      step: ''
+    }; // Define DOM Elements
+
+    const ctn = $(container);
+
+    const child = sel => ctn.children(sel);
+
     this.elements = {
       container,
-      forwardButton: $(container).children('#booking-forward'),
-      backButton: $(container).children('#booking-back')
-    };
+      image: child('.booking__image'),
+      map: child('#booking-map'),
+      card: {
+        main: child('.booking-card'),
+        body: child('.booking-card__body'),
+        back: child('#booking-back'),
+        forward: child('#booking-forward')
+      }
+    }; // Assign page object
+
+    this.page = page; // For debugging
+
     console.log(this);
   }
 
   load() {}
 
-  init() {// Attach Event Listeners to Buttons
+  init() {
+    // Prevent Submit
+    this.elements.card.body.prevent('submit'); // Initialize Navigation Events
+
+    this.elements.card.back.click(e => this.navigate(-1, e.target));
+    this.elements.card.forward.click(e => this.navigate(1, e.target)); // Initialize First Step
+
+    this.setStep("flight main"); // Render Current Step
+
+    this.currentStep.render();
+  }
+
+  setStep(name) {
+    const keys = name.split(' ');
+    this.currentStep = _Step.default[keys[0]][keys[1]]({
+      container: this.elements.card.body,
+      isMobile: this.page.state.isMobile,
+      callbacks: {
+        onValid: () => this.elements.card.forward.removeClass('disabled'),
+        onError: () => this.elements.card.forward.addClass('disabled')
+      },
+      data: this.rawData[name]
+    });
+    this.state.step = name;
+  }
+
+  getStepData() {
+    //console.log(this.currentStep.data);
+    // console.log(this.state);
+    this.rawData[this.state.step] = this.currentStep.rawData.map(fs => fs.value);
+
+    switch (this.state.step) {
+      case 'flight main':
+        Object.assign(this.data, this.currentStep.data);
+        break;
+
+      case 'flight type':
+        console.log(this.currentStep.data);
+        break;
+    } // Debugging Refreence for Data
+    // console.log(this.data);
+    // console.log(this.rawData);
+
+  }
+
+  getNextStep(iterator, refIndex) {
+    const currentIndex = refIndex !== null && refIndex !== void 0 ? refIndex : registeredSteps.findIndex(step => this.state.step === step);
+    const index = currentIndex + iterator;
+    let next = registeredSteps[index];
+    const max = registeredSteps.length; // Iterate To Next Steop For Non-Flight Rides
+
+    if (next.includes('flight') && next.split(' ')[1] !== 'main' && !this.data.airportRide) return this.getNextStep(iterator, index); // Set Up Next Step
+
+    this.setStep(next); // Enable or Disable Back Button
+
+    this.elements.card.back[!index ? 'addClass' : 'removeClass']('disabled');
+  }
+
+  async navigate(direction, target) {
+    // Blur Clicked Button
+    if (target) target.closest('.carat-btn').blur(); // Return Step Data
+
+    this.getStepData(); // Unmount Current Step
+
+    await this.currentStep.unmount(); // Determine Next Step
+
+    this.getNextStep(direction); // Render New Step
+
+    this.currentStep.render();
   }
 
 }
 
 exports.default = BookingApp;
-},{"../../vendor/HelloWeek":"js/vendor/HelloWeek.js","axios":"../../node_modules/axios/index.js","./Map":"js/components/app/Map.js","./AuthForm":"js/components/app/AuthForm.js","../../data/sampleBooking":"js/data/sampleBooking.js","../../data/vehicles":"js/data/vehicles.js"}],"js/Page.js":[function(require,module,exports) {
+},{"../../vendor/HelloWeek":"js/vendor/HelloWeek.js","axios":"../../node_modules/axios/index.js","./Map":"js/components/app/Map.js","./AuthForm":"js/components/app/AuthForm.js","./Step":"js/components/app/Step.js","../../data/sampleBooking":"js/data/sampleBooking.js","../../data/vehicles":"js/data/vehicles.js"}],"js/Page.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -14357,9 +14908,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
         page.addComponent({
           name: 'BookingApp',
-          data: {
-            page
-          }
+          data: page
         });
       }
 
@@ -14410,7 +14959,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "49798" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "61208" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
