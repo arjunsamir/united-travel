@@ -1,0 +1,89 @@
+var helpers = require("../../../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = exports.steps = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _store = require("../../store");
+var _Image = _interopRequireDefault(require("../../components/atoms/Image"));
+var _Dots = _interopRequireDefault(require("../../components/atoms/Dots"));
+var _AirportRide = _interopRequireDefault(require("../steps/AirportRide"));
+var _FlightLocation = _interopRequireDefault(require("../steps/FlightLocation"));
+var _FlightSchedule = _interopRequireDefault(require("../steps/FlightSchedule"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Defaults
+// Import Context
+// Import Atoms
+// Import Steps
+// Register Steps Here
+const steps = {
+    'airport-ride': _AirportRide.default,
+    'flight-location': _FlightLocation.default,
+    'flight-schedule': _FlightSchedule.default
+}; // Create Step
+exports.steps = steps;
+const Flight = ()=>{
+    const { state , dispatch  } = _react.useContext(_store.AppContext);
+    const Step = steps[state.app.step];
+    return(/*#__PURE__*/ _react.default.createElement("section", {
+        className: "booking"
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, {
+        fileName: "airport-gate",
+        webp: true
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__container"
+    }, /*#__PURE__*/ _react.default.createElement(Step, {
+        navigateTo: (target)=>dispatch({
+                type: 'SET_APP_STEP',
+                payload: target
+            })
+    }), /*#__PURE__*/ _react.default.createElement(_Dots.default, null))));
+};
+_c = Flight;
+var _default = Flight;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Flight");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <%- include('../partials/head', { title: 'Services - United Travel LLC' })  %>
+</head>
+<body class="booking-page preload" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../partials/preloader'); %>
+    
+
+    <!-- Navigation Bar -->
+    <%- include('../partials/navbar', { lang, path })  %> 
+
+
+    <!-- Main Container -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="booking">
+
+        <div id="root"></div>
+
+    </main>
+
+
+    <!-- JavaScript Source -->
+    <%- include('../partials/scripts')  %>
+
+</body>
+</html>

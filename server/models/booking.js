@@ -49,10 +49,13 @@ const schema = new mongoose.Schema({
         }
     },
     passengers: {
-        total: Number,
+        total: {
+            type: Number,
+            default: 1
+        },
         adults: {
             type: Number,
-            default: 0
+            default: 1
         },
         children: {
             type: Number,
@@ -64,7 +67,10 @@ const schema = new mongoose.Schema({
         }
     },
     luggage: {
-        total: Number,
+        total: {
+            type: Number,
+            default: 0
+        },
         small: {
             type: Number,
             default: 0

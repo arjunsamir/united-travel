@@ -1,0 +1,28 @@
+"use strict";
+Object.defineProperty($a091bba3446355e8f24f651704e813f4$exports, "__esModule", {
+    value: true
+});
+$a091bba3446355e8f24f651704e813f4$exports.default = void 0;
+import   "a091bba3446355e8f24f651704e813f4:./Form";
+var $a091bba3446355e8f24f651704e813f4$var$_Form = $a091bba3446355e8f24f651704e813f4$var$_interopRequireDefault($a091bba3446355e8f24f651704e813f4$import$a08c16a8abdd32bc);
+function $a091bba3446355e8f24f651704e813f4$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+class $a091bba3446355e8f24f651704e813f4$var$ContactForm extends $a091bba3446355e8f24f651704e813f4$var$_Form.default {
+    onValidationFail() {
+        console.log('we validated the WHOLE fooking form m*ty');
+    }
+    onValidationSuccess() {
+        console.log('SUCCESSSSSSS');
+    }
+    constructor(selector, container){
+        super(selector, container);
+        this.elements = {
+            input: this.form.children('.input'),
+            textarea: this.form.children('.textarea')
+        }; // console.log(this.fields);
+    }
+}
+$a091bba3446355e8f24f651704e813f4$exports.default = $a091bba3446355e8f24f651704e813f4$var$ContactForm;

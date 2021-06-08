@@ -1,0 +1,174 @@
+"use strict";
+import   "91c356218e32556f96f87baa87991fe1:regenerator-runtime/runtime";
+$91c356218e32556f96f87baa87991fe1$import$6c98e727b9e8b4fb;
+import   "91c356218e32556f96f87baa87991fe1:gsap";
+var $91c356218e32556f96f87baa87991fe1$var$_gsap = $91c356218e32556f96f87baa87991fe1$var$_interopRequireDefault($91c356218e32556f96f87baa87991fe1$import$a68c99996323679b);
+import   "91c356218e32556f96f87baa87991fe1:./vendor/Dreams";
+import   "91c356218e32556f96f87baa87991fe1:@barba/core";
+var $91c356218e32556f96f87baa87991fe1$var$_core = $91c356218e32556f96f87baa87991fe1$var$_interopRequireDefault($91c356218e32556f96f87baa87991fe1$import$2f7f7bcff35d50fb);
+import   "91c356218e32556f96f87baa87991fe1:./Page";
+var $91c356218e32556f96f87baa87991fe1$var$_Page = $91c356218e32556f96f87baa87991fe1$var$_interopRequireDefault($91c356218e32556f96f87baa87991fe1$import$44cd7e626e114a22);
+import   "91c356218e32556f96f87baa87991fe1:./Page/components/Preloader";
+var $91c356218e32556f96f87baa87991fe1$var$_Preloader = $91c356218e32556f96f87baa87991fe1$var$_interopRequireDefault($91c356218e32556f96f87baa87991fe1$import$2cd52888991d92);
+function $91c356218e32556f96f87baa87991fe1$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Runtime & GSAP
+// Import Modules
+// Define Global Variables
+window.$ = $91c356218e32556f96f87baa87991fe1$import$1ced67488a8e5100$84234f73fc5307cd;
+window.gsapDefaults = {
+    defaults: {
+        ease: 'power1.inOut'
+    }
+}; // Define Module Global Variables
+let $91c356218e32556f96f87baa87991fe1$var$slide, $91c356218e32556f96f87baa87991fe1$var$page; // Insert Slide In Page
+const $91c356218e32556f96f87baa87991fe1$var$insertSlide = ()=>{
+    // Create Slide Element
+    $91c356218e32556f96f87baa87991fe1$var$slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use xlink:href="img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>'); // Append Slide Element
+    $91c356218e32556f96f87baa87991fe1$var$page.elements.body.append($91c356218e32556f96f87baa87991fe1$var$slide);
+}; // Define Function to refresh page
+const $91c356218e32556f96f87baa87991fe1$var$refreshPageEvents = (_ref)=>{
+    let { next: next  } = _ref;
+    $91c356218e32556f96f87baa87991fe1$var$page.destroy();
+    $91c356218e32556f96f87baa87991fe1$var$page = new $91c356218e32556f96f87baa87991fe1$var$_Page.default({
+        barba: $91c356218e32556f96f87baa87991fe1$var$_core.default,
+        container: next.container
+    }).init();
+}; // Start Page Functions
+const $91c356218e32556f96f87baa87991fe1$var$startPage = (data)=>{
+    // Start Page Events
+    $91c356218e32556f96f87baa87991fe1$var$page.start(); // Get Video Backgrounds
+    const videos = $(data ? data.next.container : 'main').children('.bg-video'); // Return if no videos on the page
+    if (!videos.length) return; //Autoplay Videos After transition
+    videos.children('video[autoplay]').forEach((video)=>video.play()
+    ); // Add Ready Class To Videos
+    videos.addClass('ready');
+}; // Start Load Page
+window.addEventListener('DOMContentLoaded', ()=>{
+    // Create New Page
+    $91c356218e32556f96f87baa87991fe1$var$page = new $91c356218e32556f96f87baa87991fe1$var$_Page.default({
+        barba: $91c356218e32556f96f87baa87991fe1$var$_core.default
+    }).init(); // Create Preloader
+    new $91c356218e32556f96f87baa87991fe1$var$_Preloader.default().after($91c356218e32556f96f87baa87991fe1$var$startPage).init(); // Initialize Barba.JS
+    $91c356218e32556f96f87baa87991fe1$var$_core.default.init({
+        // Define Page Transition
+        transitions: [
+            {
+                name: 'default-transition',
+                // Animate Slide Into Place
+                leave () {
+                    return new Promise((resolve)=>{
+                        const tl = $91c356218e32556f96f87baa87991fe1$var$_gsap.default.timeline(gsapDefaults);
+                        tl.to($91c356218e32556f96f87baa87991fe1$var$slide.e(), {
+                            y: 0,
+                            duration: 0.5
+                        });
+                        tl.eventCallback('onComplete', resolve);
+                    });
+                },
+                // Animate Slide Away to reveal new page
+                enter () {
+                    return new Promise((resolve)=>{
+                        const tl = $91c356218e32556f96f87baa87991fe1$var$_gsap.default.timeline(gsapDefaults);
+                        tl.to($91c356218e32556f96f87baa87991fe1$var$slide.children('.preloader__content').e(), {
+                            duration: 0.5,
+                            opacity: 0
+                        });
+                        tl.to($91c356218e32556f96f87baa87991fe1$var$slide.e(), {
+                            duration: 0.5,
+                            y: '-100vh'
+                        });
+                        tl.eventCallback('onComplete', resolve);
+                    });
+                }
+            }
+        ],
+        // Register JavaScript Components For Different Pages
+        views: [
+            {
+                namespace: 'home',
+                beforeEnter (_ref2) {
+                    let { next: next  } = _ref2;
+                    $91c356218e32556f96f87baa87991fe1$var$page.addComponent('Typewriter', 'ContactForm', {
+                        name: 'DraggableSlider',
+                        data: {
+                            selector: '.reviews__carousel',
+                            activeClass: 'dragging'
+                        }
+                    });
+                }
+            },
+            {
+                namespace: 'services',
+                beforeEnter () {
+                    $91c356218e32556f96f87baa87991fe1$var$page.addComponent('ContactForm');
+                }
+            },
+            {
+                namespace: 'about',
+                beforeEnter () {
+                    $91c356218e32556f96f87baa87991fe1$var$page.addComponent('ContactForm');
+                }
+            },
+            {
+                namespace: 'fleet',
+                beforeEnter () {
+                    $91c356218e32556f96f87baa87991fe1$var$page.addComponent('ContactForm');
+                }
+            },
+            {
+                namespace: 'login',
+                beforeEnter () {
+                    // Apply Navbar Theme Changes
+                    $91c356218e32556f96f87baa87991fe1$var$page.navbar.applyTheme([
+                        {
+                            brand: 'jet'
+                        },
+                        {
+                            media: 'mobile',
+                            brand: 'white'
+                        }
+                    ]).forceLayout('tablet'); // Add Auth Form Component
+                    $91c356218e32556f96f87baa87991fe1$var$page.addComponent({
+                        name: 'AuthForm',
+                        data: {
+                            page: $91c356218e32556f96f87baa87991fe1$var$page,
+                            selector: '#login-form'
+                        }
+                    });
+                }
+            },
+            {
+                namespace: 'booking',
+                beforeEnter () {
+                    // Apply Navbar Theme Changes
+                    $91c356218e32556f96f87baa87991fe1$var$page.navbar.applyTheme([
+                        {
+                            brand: 'jet'
+                        }
+                    ]).forceLayout('mobile'); // Add Booking App Component
+                    $91c356218e32556f96f87baa87991fe1$var$page.addComponent({
+                        name: 'BookingApp',
+                        data: {
+                            page: $91c356218e32556f96f87baa87991fe1$var$page,
+                            selector: '#root'
+                        }
+                    });
+                }
+            }
+        ],
+        // Prevent Double Clicking Links
+        preventRunning: true,
+        // Prevent Defalut Link Actions
+        prevent: (_ref3)=>{
+            let { el: el  } = _ref3;
+            return el.classList && el.classList.contains('prevent');
+        }
+    }); // Attach Global Barba Hooks
+    $91c356218e32556f96f87baa87991fe1$var$_core.default.hooks.beforeLeave($91c356218e32556f96f87baa87991fe1$var$insertSlide);
+    $91c356218e32556f96f87baa87991fe1$var$_core.default.hooks.afterLeave($91c356218e32556f96f87baa87991fe1$var$refreshPageEvents);
+    $91c356218e32556f96f87baa87991fe1$var$_core.default.hooks.after($91c356218e32556f96f87baa87991fe1$var$startPage);
+});

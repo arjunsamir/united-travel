@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = useEventStyle;
+var _react = require("react");
+var _helpers = require("../../helpers");
+function useEventStyle(startDate, duration) {
+    return _react.useMemo(function() {
+        return {
+            height: "".concat(_helpers.getHeightOfMinutes(duration), "px"),
+            top: "".concat(_helpers.getHeightOfDate(startDate), "px")
+        };
+    }, [
+        startDate,
+        duration
+    ]);
+}

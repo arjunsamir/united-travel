@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <%- include('../partials/head', { title: 'United Travel LLC' })  %> 
+</head>
+
+<body class="home-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../partials/preloader'); %>
+    
+
+    <!-- Navigation Bar -->
+    <%- include('../partials/navbar', { lang, path })  %> 
+
+
+    <!-- Data Scroll Container -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="home">
+
+        <!-- Hero -->
+        <header class="header hero">
+
+            <div class="bg-video">
+                <div class="bg-video__preload"></div>
+                <div class="bg-video__overlay"></div>
+                <div class="bg-video__fallback loading" id="yt-fallback"></div>
+                <video class="bg-video__player" autoplay muted loop playsinline>
+                    <!-- <source src="video/hero-bg.webm" type="video/webm"> -->
+                    <source src="/video/hero-bg.mp4" type="video/mp4">
+                </video>
+            </div>
+
+            <div class="header__content">
+                <h2 class="header__headline" id="navbar-collapse">Ride with <span id="typewrite" data-period="2500" data-words='["style", "comfort", "ease"]'></span><span class="blink">|</span></h2>
+                <h5 class="header__subtitle">Orlando Black Car Services</h5>
+            </div>
+
+            <a href="<%= path %>/book" class="header__cta">
+                <div class="carat-btn lt-light dk-dark">
+                    <h6>Book a ride now</h6>
+                    <svg>
+                        <use xlink:href="/img/icons.svg#carat-right"></use>
+                    <svg>
+                </div>
+                <p>Scroll to learn more</p>
+            </a>
+
+        </header>
+    
+
+        <!-- Orlando Section -->
+        <section class="section light" id="orlando">
+
+            <div class="section__container">
+
+                <div class="section__content animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+
+                    <h2>Orlando based black car service</h2>
+
+                    <p>We provide high quality, safe and reliable transportation services throughout Central Florida. We also offer longer distance rides in and out of Orlando. Get to you next destination with ease, class, and peace of mind.</p>
+
+                    <a href="<%= path %>/services" class="btn hollow lt-dark dk-light hover-fill hover-primary">Learn More</a>
+
+                </div>
+
+                <div class="section__image portrait">
+                    <div class="img-accent orlando" data-scroll data-scroll-speed=".75"></div>
+                    <picture>
+                        <source srcset="/img/orlando.webp" type="image/webp">
+                        <source srcset="/img/orlando.jpg" type="image/jpeg">
+                        <img src="/img/orlando.jpg" alt="Orlando Skyline" data-scroll data-scroll-speed="1.5">
+                    </picture>
+                </div>
+
+            </div>
+            
+
+        </section>
+
+
+        <!-- Airport & Cruise Section -->
+        <section class="multipart">
+
+            <div class="multipart__bg">
+                <picture>
+                    <source srcset="/img/cruise.webp" type="image/webp">
+                    <source srcset="/img/cruise.jpg" type="image/jpeg">
+                    <img src="/img/cruise.jpg" alt="Cruise ship in open water at sunset" data-scroll data-scroll-speed="-1">
+                </picture>
+                <span></span>
+            </div>
+
+            <div class="multipart__container">
+
+                <div class="section__content animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+                    <h2>Airport & Cruise Transportation</h2>
+                    <p>Need to be picked up or dropped off from the airport or a cruise terminal? We offer a completely seamless experience. We track the status of your flight so that we can be there early so that you aren’t waiting a minute for your driver to arrive. We’re always on time and always professional.</p>
+                    <a href="<%= path %>/book" class="btn hollow light hover-fill">Learn More</a>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Multicolumn Section -->
+        <section class="multicol">
+
+            <div class="multicol__container animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+
+                <div class="section__content">
+                    <h2>Accomodating Your Children</h2>
+                    <p>We want to ensure that your children are safe. We offer child car seats in multiple sizes in order to keep them safe. When you book a ride with us, you can request special accomodations and we will provide the car seats for your children.</p>
+                </div>
+                
+                <div class="section__content">
+                    <h2>Prioritizing Your Safety</h2>
+                    <p>We prioritize your safety and comfort. We will go the extra mile to ensure that you have a first class experience and get to your destination in a timely manner. Our fleet of vehicles are cleaned and sanitized before and after each ride so you can have some extra peace of mind. Whether you’re in Florida for vacation, or for business, we are here to offer our class leading services.</p>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Children Image -->
+        <section class="image-banner">
+
+            <div class="image-banner__bg">
+
+                <picture>
+                    <source srcset="/img/children.webp" type="image/webp">
+                    <source srcset="/img/children.jpg" type="image/jpeg">
+                    <img src="/img/children.jpg" alt="Picture of children playing" data-scroll data-scroll-speed="-1">
+                </picture>
+
+            </div>
+            
+            <h2 class="image-banner__text">reliable, <span>safe,</span> and professional service</h2>
+
+        </section>
+
+
+        <!-- Review Carousel -->
+        <section class="reviews">
+
+            <h2 class="reviews__title">What Our Clients Say</h2>
+
+            <div class="reviews__carousel">
+
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="/img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="/img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="/img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="/img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="/img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="/img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="/img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="review">
+                    <div class="review__stars">
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star"><use xlink:href="img/icons.svg#star"></use></svg>
+                        <svg class="star-outline"><use xlink:href="img/icons.svg#star"></use></svg>
+                    </div>
+                    <h5>Amazing Ride!!</h5>
+                    <p>Many say exploration is part of our destiny, but it’s actually our duty to future generations and their quest to ensure the survival of the human species.</p>
+                    <div class="review__author">
+                        <img src="img/profile.png" alt="Profile Picture For Arjun Patel">
+                        <div>
+                            <h4>Arjun Patel</h4>
+                            <h6>May 30, 2020</h6>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="review__ghost"></div>
+
+            </div>
+
+            <!-- <div class="reviews__cta">
+
+                <a href="/reviews" class="carat-btn lt-dark dk-light hover-opacity-50">
+                    <h6>View all reviews</h6>
+                    <svg>
+                        <use xlink:href="img/icons.svg#carat-right"></use>
+                    <svg>
+                </a>
+
+            </div> -->
+
+        </section>
+
+
+        <!-- Ride Lookup -->
+        <section class="section light" id="lookup">
+
+            <div class="section__container">
+
+                <div class="section__image square">
+                    <div class="img-accent booked-ride"></div>
+                    <picture>
+                        <source srcset="/img/reservation.webp" type="image/webp">
+                        <source srcset="/img/reservation.jpg" type="image/jpeg">
+                        <img src="/img/reservation.jpg" alt="Man on computer sitting at booth" data-scroll data-scroll-speed="1.2">
+                    </picture>
+                </div>
+
+                <div class="section__content animate-on-scroll reveal grow" data-scroll data-scroll-repeat>
+
+                    <h2>Already booked a ride?</h2>
+
+                    <p>You can check for any updates on the reservation even if you don’t have an account. You can also modify the reservation or cancel it.</p>
+
+                    <a href="<%= path %>/services" class="btn hollow lt-dark dk-light hover-fill hover-primary">Look Up Reservation</a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Call To Action -->
+        <%- include('../partials/cta', { path, lang })  %> 
+
+
+        <!-- Contact Form -->
+        <%- include('../partials/contact', { path, lang })  %> 
+
+
+        <!-- Footer -->
+        <%- include('../partials/footer', { path, lang })  %> 
+
+    </main>
+
+
+    <!-- JavaScript Source -->
+    <%- include('../partials/scripts')  %> 
+
+</body>
+
+</html>

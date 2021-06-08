@@ -1,0 +1,35 @@
+"use strict";
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = MarkdownOutput;
+var _react = _interopRequireDefault(require("react"));
+var _propTypes = _interopRequireDefault(require("prop-types"));
+var _useMarkdownToReact = _interopRequireDefault(require("./hooks/useMarkdownToReact"));
+var _styled = _interopRequireDefault(require("./styled"));
+/**
+ * MarkdownOutput renders Markdown text in browser.
+ * It is based on highlight.js, to customize the code blocks you can use highlight.js themes.
+ * @category Form
+ */ function MarkdownOutput(props) {
+    var id = props.id, className = props.className, style = props.style, value = props.value;
+    var result = _useMarkdownToReact["default"](value);
+    return(/*#__PURE__*/ _react["default"].createElement(_styled["default"], {
+        id: id,
+        className: className,
+        style: style
+    }, result));
+}
+MarkdownOutput.propTypes = {
+    /** The id of the outer element. */ id: _propTypes["default"].string,
+    /** A CSS class for the outer element, in addition to the component's base classes. */ className: _propTypes["default"].string,
+    /** An object with custom style applied to the outer element. */ style: _propTypes["default"].object,
+    /** The markdown string to parse.  */ value: _propTypes["default"].string
+};
+MarkdownOutput.defaultProps = {
+    id: undefined,
+    className: undefined,
+    style: undefined,
+    value: ''
+};

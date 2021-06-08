@@ -1,0 +1,111 @@
+"use strict";
+Object.defineProperty($8b4ed16474114786e2fa80b499fe4ec9$exports, "__esModule", {
+    value: true
+});
+$8b4ed16474114786e2fa80b499fe4ec9$exports.default = void 0;
+import   "8b4ed16474114786e2fa80b499fe4ec9:react";
+var $8b4ed16474114786e2fa80b499fe4ec9$var$_react = $8b4ed16474114786e2fa80b499fe4ec9$var$_interopRequireWildcard($8b4ed16474114786e2fa80b499fe4ec9$import$f02ba03fc070e88c);
+import   "8b4ed16474114786e2fa80b499fe4ec9:../../store";
+import   "8b4ed16474114786e2fa80b499fe4ec9:../../components/organisms/BookingCard";
+var $8b4ed16474114786e2fa80b499fe4ec9$var$_BookingCard = $8b4ed16474114786e2fa80b499fe4ec9$var$_interopRequireDefault($8b4ed16474114786e2fa80b499fe4ec9$import$bc3be07ddd560df7);
+import   "8b4ed16474114786e2fa80b499fe4ec9:../../components/organisms/Input";
+var $8b4ed16474114786e2fa80b499fe4ec9$var$_Input = $8b4ed16474114786e2fa80b499fe4ec9$var$_interopRequireDefault($8b4ed16474114786e2fa80b499fe4ec9$import$3072242ec7f19d8a);
+import   "8b4ed16474114786e2fa80b499fe4ec9:../../helpers/utils";
+import   "8b4ed16474114786e2fa80b499fe4ec9:axios";
+var $8b4ed16474114786e2fa80b499fe4ec9$var$_axios = $8b4ed16474114786e2fa80b499fe4ec9$var$_interopRequireDefault($8b4ed16474114786e2fa80b499fe4ec9$import$bed27987f94bc6dd);
+function $8b4ed16474114786e2fa80b499fe4ec9$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function $8b4ed16474114786e2fa80b499fe4ec9$var$_getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    $8b4ed16474114786e2fa80b499fe4ec9$var$_getRequireWildcardCache = function _getRequireWildcardCache() {
+        return cache;
+    };
+    return cache;
+}
+function $8b4ed16474114786e2fa80b499fe4ec9$var$_interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = $8b4ed16474114786e2fa80b499fe4ec9$var$_getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Defaults
+// Import Context
+// Import Atoms
+// Import Molecules
+// Import Organizms
+// Import Utils
+// Flight Location Step
+const $8b4ed16474114786e2fa80b499fe4ec9$var$FlightLocation = (_ref)=>{
+    let { navigateTo: navigateTo  } = _ref;
+    // Create bemify instance
+    const bc = $8b4ed16474114786e2fa80b499fe4ec9$import$9bbc8f641788c85e$4a5b6bc0da3adef7('booking-card'); // Import State & Dispatch
+    const { state: state , dispatch: dispatch  } = $8b4ed16474114786e2fa80b499fe4ec9$var$_react.useContext($8b4ed16474114786e2fa80b499fe4ec9$import$84d4fe7ec975578b$e5eaa4bf70309a92); // Create Shortcut
+    const { flight: flight  } = state.reservation; // Set Allowed Actions
+    const allowed = [
+        'previous'
+    ]; // Create Local State
+    const [error, setError] = $8b4ed16474114786e2fa80b499fe4ec9$var$_react.useState(false);
+    const [airlines, setAirlines] = $8b4ed16474114786e2fa80b499fe4ec9$var$_react.useState(null); // Fetch Airline Data
+    $8b4ed16474114786e2fa80b499fe4ec9$var$_react.useEffect(()=>{
+        const getDropdownData = async ()=>{
+            if (airlines) return;
+            try {
+                const res = await $8b4ed16474114786e2fa80b499fe4ec9$var$_axios.default('/api/data/airlines');
+                setAirlines(res.data);
+            } catch (err) {
+                setError(true);
+            }
+        };
+        getDropdownData();
+    }, []); // Function To Update State
+    const updateState = (key, data)=>{
+        // Prevent Some Potential Errors
+        if (!key) return; // Update Airport Reservation
+        dispatch({
+            type: "UPDATE_RESERVATION_".concat(key),
+            payload: data
+        });
+    }; // Crreate Rendered Component
+    return(/*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement($8b4ed16474114786e2fa80b499fe4ec9$var$_BookingCard.default, {
+        title: /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement($8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.Fragment, null, "More ", /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement("span", null, "flight"), " details"),
+        text: "Help us schedule your ride by providing some information about your flight schedule.",
+        allowed: allowed,
+        showLoader: airlines ? false : true,
+        showError: error,
+        previous: ()=>{
+            navigateTo('flight-location');
+        },
+        next: ()=>{
+            navigateTo('flight-location');
+        }
+    }, /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement("div", {
+        className: bc('fieldset')
+    }, /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement("h4", {
+        className: bc('fieldset-title')
+    }, "Flight Date & time"), /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement($8b4ed16474114786e2fa80b499fe4ec9$var$_Input.default, {
+        icon: "calendar"
+    })), /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement("div", {
+        className: bc('fieldset')
+    }, /*#__PURE__*/ $8b4ed16474114786e2fa80b499fe4ec9$var$_react.default.createElement("h4", {
+        className: bc('fieldset-title')
+    }, "Airline Information"))));
+};
+var $8b4ed16474114786e2fa80b499fe4ec9$var$_default = $8b4ed16474114786e2fa80b499fe4ec9$var$FlightLocation;
+$8b4ed16474114786e2fa80b499fe4ec9$exports.default = $8b4ed16474114786e2fa80b499fe4ec9$var$_default;

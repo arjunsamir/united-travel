@@ -1,0 +1,49 @@
+"use strict";
+Object.defineProperty($c4f20d4cec5837fcc368239796f5aa26$exports, "__esModule", {
+    value: true
+});
+$c4f20d4cec5837fcc368239796f5aa26$exports.default = void 0;
+import   "c4f20d4cec5837fcc368239796f5aa26:react";
+var $c4f20d4cec5837fcc368239796f5aa26$var$_react = $c4f20d4cec5837fcc368239796f5aa26$var$_interopRequireDefault($c4f20d4cec5837fcc368239796f5aa26$import$f02ba03fc070e88c);
+import   "c4f20d4cec5837fcc368239796f5aa26:../molecules/Buttons";
+import   "c4f20d4cec5837fcc368239796f5aa26:../../helpers/utils";
+function $c4f20d4cec5837fcc368239796f5aa26$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const $c4f20d4cec5837fcc368239796f5aa26$var$BookingCard = (_ref)=>{
+    let { children: children , next: next , previous: previous , allowed: allowed , title: title , text: text , showLoader: showLoader , showError: showError  } = _ref;
+    const bc = $c4f20d4cec5837fcc368239796f5aa26$import$9bbc8f641788c85e$4a5b6bc0da3adef7('booking-card');
+    const cardTitle = showError ? 'This is weird...' : title;
+    const cardText = showError ? 'Something went wrong. Please try again.' : text;
+    return(/*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("div", {
+        className: bc()
+    }, /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("div", {
+        className: bc("header")
+    }, /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement($c4f20d4cec5837fcc368239796f5aa26$import$6e6a9d972ff5329b$b92adbfed9c8158, {
+        icon: "back",
+        order: "first",
+        text: "Back",
+        disabled: !(allowed && allowed.find((a)=>a == 'back' || a == 'previous'
+        )),
+        onClick: previous
+    })), /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("form", {
+        className: bc("body")
+    }, showLoader ? /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement($c4f20d4cec5837fcc368239796f5aa26$var$_react.default.Fragment, null, /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("p", null, "loading...")) : /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement($c4f20d4cec5837fcc368239796f5aa26$var$_react.default.Fragment, null, cardTitle && /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("h3", {
+        className: bc('title')
+    }, cardTitle), cardText && /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("p", {
+        className: bc('text')
+    }, cardText), children)), /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement("div", {
+        className: bc("footer")
+    }, /*#__PURE__*/ $c4f20d4cec5837fcc368239796f5aa26$var$_react.default.createElement($c4f20d4cec5837fcc368239796f5aa26$import$6e6a9d972ff5329b$b92adbfed9c8158, {
+        icon: "carat-right",
+        order: "last",
+        text: "Next Step",
+        disabled: !(allowed && allowed.find((a)=>a == 'next' || a == 'forward'
+        )),
+        onClick: next
+    }))));
+};
+var $c4f20d4cec5837fcc368239796f5aa26$var$_default = $c4f20d4cec5837fcc368239796f5aa26$var$BookingCard;
+$c4f20d4cec5837fcc368239796f5aa26$exports.default = $c4f20d4cec5837fcc368239796f5aa26$var$_default;

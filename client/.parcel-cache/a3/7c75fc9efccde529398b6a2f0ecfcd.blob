@@ -1,0 +1,49 @@
+var helpers = require("../../../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("../atoms/Icon"));
+var _Field = _interopRequireDefault(require("../molecules/Field"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React
+// Import Atoms
+// Import Molecules
+// Create Component 
+const Input = (_ref)=>{
+    let { icon , fields  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "input"
+    }, icon && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__icon"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    })), fields && fields.map((field)=>/*#__PURE__*/ _react.default.createElement(_Field.default, {
+            input: field.input,
+            label: field.label,
+            tooltip: field.tooltip
+        })
+    )));
+};
+_c = Input;
+var _default = Input;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Input");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

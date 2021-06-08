@@ -1,0 +1,13 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.ZINDEX_OVERLAY = exports.ZINDEX_DRAWER = exports.XINDEX_MODAL = exports.ZINDEX_SPINNER = void 0;
+var ZINDEX_SPINNER = 9000;
+exports.ZINDEX_SPINNER = ZINDEX_SPINNER;
+var XINDEX_MODAL = 5000;
+exports.XINDEX_MODAL = XINDEX_MODAL;
+var ZINDEX_DRAWER = 5000;
+exports.ZINDEX_DRAWER = ZINDEX_DRAWER;
+var ZINDEX_OVERLAY = 5000;
+exports.ZINDEX_OVERLAY = ZINDEX_OVERLAY;

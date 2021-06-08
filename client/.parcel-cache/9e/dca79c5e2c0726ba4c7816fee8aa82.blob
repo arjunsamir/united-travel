@@ -1,0 +1,13 @@
+'use strict';
+import   "6910d08dae5c67d9860040aea0569577:./createError";
+/**
+ * Resolve or reject a Promise based on response status.
+ *
+ * @param {Function} resolve A function that resolves the promise.
+ * @param {Function} reject A function that rejects the promise.
+ * @param {object} response The response.
+ */ $6910d08dae5c67d9860040aea0569577$exports = function settle(resolve, reject, response) {
+    var validateStatus = response.config.validateStatus;
+    if (!response.status || !validateStatus || validateStatus(response.status)) resolve(response);
+    else reject($6910d08dae5c67d9860040aea0569577$import$de93a236fae8c56e('Request failed with status code ' + response.status, response.config, null, response.request, response));
+};

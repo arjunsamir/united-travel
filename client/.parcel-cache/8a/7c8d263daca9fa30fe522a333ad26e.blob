@@ -1,0 +1,232 @@
+"use strict";
+Object.defineProperty($dfcac212133ed1678a5696cbea1fdc67$exports, "__esModule", {
+    value: true
+});
+$dfcac212133ed1678a5696cbea1fdc67$exports.reducer = $dfcac212133ed1678a5696cbea1fdc67$exports.initialState = $dfcac212133ed1678a5696cbea1fdc67$exports.AppContext = void 0;
+import   "dfcac212133ed1678a5696cbea1fdc67:react";
+var $dfcac212133ed1678a5696cbea1fdc67$var$_react = $dfcac212133ed1678a5696cbea1fdc67$var$_interopRequireDefault($dfcac212133ed1678a5696cbea1fdc67$import$f02ba03fc070e88c);
+import   "dfcac212133ed1678a5696cbea1fdc67:./helpers/Merger";
+var $dfcac212133ed1678a5696cbea1fdc67$var$_Merger = $dfcac212133ed1678a5696cbea1fdc67$var$_interopRequireDefault($dfcac212133ed1678a5696cbea1fdc67$import$6e3a27ab5098a7b9);
+function $dfcac212133ed1678a5696cbea1fdc67$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function $dfcac212133ed1678a5696cbea1fdc67$var$ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) $dfcac212133ed1678a5696cbea1fdc67$var$ownKeys(Object(source), true).forEach(function(key) {
+            $dfcac212133ed1678a5696cbea1fdc67$var$_defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else $dfcac212133ed1678a5696cbea1fdc67$var$ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function $dfcac212133ed1678a5696cbea1fdc67$var$_defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+// Create Context Object
+const $dfcac212133ed1678a5696cbea1fdc67$var$AppContext = /*#__PURE__*/ $dfcac212133ed1678a5696cbea1fdc67$var$_react.default.createContext(); // Create Initial Applicaiton State
+$dfcac212133ed1678a5696cbea1fdc67$exports.AppContext = $dfcac212133ed1678a5696cbea1fdc67$var$AppContext;
+const $dfcac212133ed1678a5696cbea1fdc67$var$initialState = {
+    reservation: {
+        airportRide: null,
+        flight: {
+            number: '',
+            airline: '',
+            type: '',
+            airport: {
+            }
+        },
+        origin: {
+            placeId: '',
+            coordinates: [],
+            name: '',
+            address: ''
+        },
+        destination: {
+            placeId: '',
+            coordinates: [],
+            name: '',
+            address: ''
+        },
+        schedule: {
+            pickup: null,
+            dropoff: null
+        },
+        route: {
+            distance: 0,
+            eta: ''
+        },
+        passengers: {
+            total: 1,
+            adults: 1,
+            children: 0,
+            infants: 0
+        },
+        luggage: {
+            total: 0,
+            small: 0,
+            medium: 0,
+            large: 0
+        },
+        vehicle: null,
+        payment: {
+            method: '',
+            appliedCredit: '',
+            total: 0
+        }
+    },
+    app: {
+        // step: 'airport-ride',
+        step: 'flight-schedule',
+        airports: null
+    }
+}; //Create Reducer
+$dfcac212133ed1678a5696cbea1fdc67$exports.initialState = $dfcac212133ed1678a5696cbea1fdc67$var$initialState;
+const $dfcac212133ed1678a5696cbea1fdc67$var$reducer = (state, action)=>{
+    var _state$app$airports$f;
+    const [method, category, type] = action.type.toLowerCase().split('_');
+    if (!state[category]) return state;
+    const m = new $dfcac212133ed1678a5696cbea1fdc67$var$_Merger.default(category, state);
+    const PL = action.payload; // Helper Functions
+    const setAirport = (newAirport)=>{
+        const airport = newAirport !== null && newAirport !== void 0 ? newAirport : state.reservation.flight.airport; // Destructure Properties
+        const { placeId: placeId , coordinates: coordinates , address: address , name: name  } = airport; // Update Airport
+        m.merge({
+            airport: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+            }, airport)
+        }, 'flight'); // Update Origin/Destination
+        switch(m.state.reservation.flight.type){
+            case 'arriving':
+                m.merge({
+                    origin: {
+                        placeId: placeId,
+                        coordinates: coordinates,
+                        address: address,
+                        name: name
+                    }
+                });
+                break;
+            case 'departing':
+                m.merge({
+                    destination: {
+                        placeId: placeId,
+                        coordinates: coordinates,
+                        address: address,
+                        name: name
+                    }
+                });
+                break;
+        }
+        return $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+        }, m.state);
+    };
+    if (method === 'update') switch(type){
+        case 'airport-ride':
+            m.merge({
+                airportRide: PL
+            });
+            if (PL) setAirport();
+            return m.state;
+        case 'flight-number':
+            return m.merge({
+                number: PL
+            }, 'flight');
+        case 'airline':
+            return m.merge({
+                airline: PL
+            }, 'flight');
+        case 'flight-type':
+            m.merge({
+                type: PL
+            }, 'flight');
+            return setAirport();
+        case 'airport':
+            return setAirport((_state$app$airports$f = state.app.airports.find((apt)=>apt.code === PL
+            )) !== null && _state$app$airports$f !== void 0 ? _state$app$airports$f : {
+            });
+        case 'origin':
+            return m.merge({
+                origin: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+                }, PL)
+            });
+        case 'destination':
+            return m.merge({
+                destination: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+                }, PL)
+            });
+        case 'pickup-time':
+            return m.merge({
+                pickup: PL
+            }, 'schedule');
+        case 'dropoff-time':
+            return m.merge({
+                dropoff: PL
+            }, 'schedule');
+        case 'route':
+            return m.merge({
+                route: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+                }, PL)
+            });
+        case 'passengers':
+            return m.merge({
+                passengers: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+                }, PL)
+            });
+        case 'luggage':
+            return m.merge({
+                luggage: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+                }, PL)
+            });
+        case 'vehicle':
+            return m.merge({
+                vehicle: PL
+            });
+        case 'payment':
+            return m.merge({
+                payment: $dfcac212133ed1678a5696cbea1fdc67$var$_objectSpread({
+                }, PL)
+            });
+        default:
+            return state;
+    }
+    else if (method === 'set') switch(type){
+        case 'step':
+            return m.merge({
+                step: PL
+            });
+        case 'airports':
+            return m.merge({
+                airports: [
+                    ...PL
+                ]
+            });
+        default:
+            return state;
+    }
+    else return state;
+};
+$dfcac212133ed1678a5696cbea1fdc67$exports.reducer = $dfcac212133ed1678a5696cbea1fdc67$var$reducer;

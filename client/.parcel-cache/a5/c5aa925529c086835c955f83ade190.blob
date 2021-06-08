@@ -1,0 +1,85 @@
+'use strict';
+import   "2244412f63fab8e0cf5b9075327e5a79:./../utils";
+import   "2244412f63fab8e0cf5b9075327e5a79:../helpers/buildURL";
+import   "2244412f63fab8e0cf5b9075327e5a79:./InterceptorManager";
+import   "2244412f63fab8e0cf5b9075327e5a79:./dispatchRequest";
+import   "2244412f63fab8e0cf5b9075327e5a79:./mergeConfig";
+/**
+ * Create a new instance of Axios
+ *
+ * @param {Object} instanceConfig The default config for the instance
+ */ function $2244412f63fab8e0cf5b9075327e5a79$var$Axios(instanceConfig) {
+    this.defaults = instanceConfig;
+    this.interceptors = {
+        request: new $2244412f63fab8e0cf5b9075327e5a79$import$3b8962dec11197f8(),
+        response: new $2244412f63fab8e0cf5b9075327e5a79$import$3b8962dec11197f8()
+    };
+}
+/**
+ * Dispatch a request
+ *
+ * @param {Object} config The config specific for this request (merged with this.defaults)
+ */ $2244412f63fab8e0cf5b9075327e5a79$var$Axios.prototype.request = function request(config) {
+    /*eslint no-param-reassign:0*/ // Allow for axios('example/url'[, config]) a la fetch API
+    if (typeof config === 'string') {
+        config = arguments[1] || {
+        };
+        config.url = arguments[0];
+    } else config = config || {
+    };
+    config = $2244412f63fab8e0cf5b9075327e5a79$import$a4b906a1203e03f1(this.defaults, config);
+    // Set config.method
+    if (config.method) config.method = config.method.toLowerCase();
+    else if (this.defaults.method) config.method = this.defaults.method.toLowerCase();
+    else config.method = 'get';
+    // Hook up interceptors middleware
+    var chain = [
+        $2244412f63fab8e0cf5b9075327e5a79$import$322426070c38ad42,
+        undefined
+    ];
+    var promise = Promise.resolve(config);
+    this.interceptors.request.forEach(function unshiftRequestInterceptors(interceptor) {
+        chain.unshift(interceptor.fulfilled, interceptor.rejected);
+    });
+    this.interceptors.response.forEach(function pushResponseInterceptors(interceptor) {
+        chain.push(interceptor.fulfilled, interceptor.rejected);
+    });
+    while(chain.length)promise = promise.then(chain.shift(), chain.shift());
+    return promise;
+};
+$2244412f63fab8e0cf5b9075327e5a79$var$Axios.prototype.getUri = function getUri(config) {
+    config = $2244412f63fab8e0cf5b9075327e5a79$import$a4b906a1203e03f1(this.defaults, config);
+    return $2244412f63fab8e0cf5b9075327e5a79$import$bf679accdd2a678a(config.url, config.params, config.paramsSerializer).replace(/^\?/, '');
+};
+// Provide aliases for supported request methods
+$2244412f63fab8e0cf5b9075327e5a79$import$61f3fc819ec50e70$40f3d9558cf6e846([
+    'delete',
+    'get',
+    'head',
+    'options'
+], function forEachMethodNoData(method) {
+    /*eslint func-names:0*/ $2244412f63fab8e0cf5b9075327e5a79$var$Axios.prototype[method] = function(url, config) {
+        return this.request($2244412f63fab8e0cf5b9075327e5a79$import$a4b906a1203e03f1(config || {
+        }, {
+            method: method,
+            url: url,
+            data: (config || {
+            }).data
+        }));
+    };
+});
+$2244412f63fab8e0cf5b9075327e5a79$import$61f3fc819ec50e70$40f3d9558cf6e846([
+    'post',
+    'put',
+    'patch'
+], function forEachMethodWithData(method) {
+    /*eslint func-names:0*/ $2244412f63fab8e0cf5b9075327e5a79$var$Axios.prototype[method] = function(url, data, config) {
+        return this.request($2244412f63fab8e0cf5b9075327e5a79$import$a4b906a1203e03f1(config || {
+        }, {
+            method: method,
+            url: url,
+            data: data
+        }));
+    };
+});
+$2244412f63fab8e0cf5b9075327e5a79$exports = $2244412f63fab8e0cf5b9075327e5a79$var$Axios;

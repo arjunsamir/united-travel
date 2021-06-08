@@ -1,0 +1,81 @@
+import   "d7d21acb1fb4272ea5f09f7d8dd3a1e4:process";
+'use strict';
+import   "d7d21acb1fb4272ea5f09f7d8dd3a1e4:./utils";
+import   "d7d21acb1fb4272ea5f09f7d8dd3a1e4:./helpers/normalizeHeaderName";
+var $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$DEFAULT_CONTENT_TYPE = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+};
+function $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$setContentTypeIfUnset(headers, value) {
+    if (!$d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$3747995d719cde22(headers) && $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$3747995d719cde22(headers['Content-Type'])) headers['Content-Type'] = value;
+}
+import   "d7d21acb1fb4272ea5f09f7d8dd3a1e4:./adapters/xhr";
+import   "d7d21acb1fb4272ea5f09f7d8dd3a1e4:./adapters/http";
+function $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$getDefaultAdapter() {
+    var adapter;
+    if (typeof XMLHttpRequest !== 'undefined') // For browsers use XHR adapter
+    adapter = $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$5d92f29471c867cb;
+    else if (typeof $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$9242cb9e284019eb !== 'undefined' && Object.prototype.toString.call($d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$9242cb9e284019eb) === '[object process]') // For node use HTTP adapter
+    adapter = $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$a9891091dfc9d9b5;
+    return adapter;
+}
+var $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$defaults = {
+    adapter: $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$getDefaultAdapter(),
+    transformRequest: [
+        function transformRequest(data, headers) {
+            $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$fdcb42d98dd7844(headers, 'Accept');
+            $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$fdcb42d98dd7844(headers, 'Content-Type');
+            if ($d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$c29651da47a81950(data) || $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$d4fdcee36a842c78(data) || $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$52426c5a29a9ad48(data) || $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$805baa70083c1543(data) || $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$f830f20b75484249(data) || $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$ff2fc87f53958661(data)) return data;
+            if ($d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$3c01861899d6a9ef(data)) return data.buffer;
+            if ($d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$dded553bf1d38891(data)) {
+                $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$setContentTypeIfUnset(headers, 'application/x-www-form-urlencoded;charset=utf-8');
+                return data.toString();
+            }
+            if ($d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$9ee30c9ec6e8e509(data)) {
+                $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$setContentTypeIfUnset(headers, 'application/json;charset=utf-8');
+                return JSON.stringify(data);
+            }
+            return data;
+        }
+    ],
+    transformResponse: [
+        function transformResponse(data) {
+            /*eslint no-param-reassign:0*/ if (typeof data === 'string') try {
+                data = JSON.parse(data);
+            } catch (e) {
+            }
+            return data;
+        }
+    ],
+    /**
+   * A timeout in milliseconds to abort a request. If set to 0 (default) a
+   * timeout is not created.
+   */ timeout: 0,
+    xsrfCookieName: 'XSRF-TOKEN',
+    xsrfHeaderName: 'X-XSRF-TOKEN',
+    maxContentLength: -1,
+    maxBodyLength: -1,
+    validateStatus: function validateStatus(status) {
+        return status >= 200 && status < 300;
+    }
+};
+$d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$defaults.headers = {
+    common: {
+        'Accept': 'application/json, text/plain, */*'
+    }
+};
+$d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$40f3d9558cf6e846([
+    'delete',
+    'get',
+    'head'
+], function forEachMethodNoData(method) {
+    $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$defaults.headers[method] = {
+    };
+});
+$d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$40f3d9558cf6e846([
+    'post',
+    'put',
+    'patch'
+], function forEachMethodWithData(method) {
+    $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$defaults.headers[method] = $d7d21acb1fb4272ea5f09f7d8dd3a1e4$import$4b1ea399deea6e65$7e2a8c166c5904b7($d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$DEFAULT_CONTENT_TYPE);
+});
+$d7d21acb1fb4272ea5f09f7d8dd3a1e4$exports = $d7d21acb1fb4272ea5f09f7d8dd3a1e4$var$defaults;

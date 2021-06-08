@@ -1,0 +1,49 @@
+<section class="contact">
+
+    <div class="contact__img">
+        <picture>
+            <source srcset="/img/contact.webp" type="image/webp">
+            <source srcset="/img/contact.jpg" type="image/jpeg">
+            <img src="/img/contact.jpg" alt="Purple neon Sign that says 'Hello'" data-scroll data-scroll-speed="-1">
+        </picture>
+    </div>
+
+    <form action="/sumbit/contact-form" method="POST" class="contact__form" id="contact-form">
+
+        <div class="contact__form-container">
+
+            <h2 class="h2">Have a question? Send us a message <span>now.</span></h2>
+
+            <!-- Dual Field Input -->
+            <div class="input" data-icons="1" data-name="contact">
+
+                <div class="input__icon"><svg><use xlink:href="/img/icons.svg#person"></use></svg></div>
+
+                <label class="input__field" data-type="name" data-required>
+                    <input type="text" placeholder="Monika Patterson">
+                    <h6>Full Name</h6>
+                </label>
+                
+                <label class="input__field" data-type="email" data-required>
+                    <input type="text" placeholder="monika@example.com">
+                    <h6>Email Address</h6>
+                </label>
+
+            </div>
+
+
+            <!-- Textarea -->
+            <label class="textarea" data-type="message" data-min="25" data-required>
+                <textarea placeholder="Talk to us."></textarea>
+                <h6>Message</h6>
+            </label>
+
+
+            <!-- Submit Button -->
+            <button class="btn filled lt-dark lt-hover-primary dk-primary dk-hover-opacity-75">Send Message</button>
+
+        </div>
+
+    </form>
+
+</section>

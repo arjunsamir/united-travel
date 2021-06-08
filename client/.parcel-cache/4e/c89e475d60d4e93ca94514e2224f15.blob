@@ -1,0 +1,42 @@
+"use strict";
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = void 0;
+var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
+var _styledComponents = _interopRequireWildcard(require("styled-components"));
+var _attachThemeAttrs = _interopRequireDefault(require("../../../styles/helpers/attachThemeAttrs"));
+function _templateObject2() {
+    var data = _taggedTemplateLiteral2["default"]([
+        "\n    position: absolute;\n    width: 100%;\n    border-radius: 12px;\n    background-color: ",
+        ";\n    box-shadow: ",
+        ";\n    border: solid 1px ",
+        ";\n    overflow: hidden;\n    margin-top: 0.2rem;\n    z-index: 2000;\n    animation: ",
+        ";\n    animation-duration: 0.3s\n    padding: 1.15rem 0;\n"
+    ]);
+    _templateObject2 = function _templateObject21() {
+        return data;
+    };
+    return data;
+}
+function _templateObject() {
+    var data = _taggedTemplateLiteral2["default"]([
+        "\n    0% {\n        opacity: 0;\n    }\n\n    100% {\n        opacity: 1;\n    }\n"
+    ]);
+    _templateObject = function _templateObject1() {
+        return data;
+    };
+    return data;
+}
+var ListOptionsMenu = _styledComponents.keyframes(_templateObject());
+var StyledOptionsMenu = _attachThemeAttrs["default"](_styledComponents["default"].div)(_templateObject2(), function(props) {
+    return props.palette.background.main;
+}, function(props) {
+    return props.shadows.shadow_2;
+}, function(props) {
+    return props.palette.border.divider;
+}, ListOptionsMenu);
+var _default = StyledOptionsMenu;
+exports["default"] = _default;

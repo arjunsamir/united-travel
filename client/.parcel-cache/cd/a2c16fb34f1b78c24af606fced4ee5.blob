@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = useEventDuration;
+var _react = require("react");
+var _helpers = require("../helpers");
+function useEventDuration(startDate, endDate) {
+    return _react.useMemo(function() {
+        return _helpers.getDiffMinutes(startDate, endDate);
+    }, [
+        endDate,
+        startDate
+    ]);
+}

@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty($686f46d395e019a2d69c8f3520ad79e9$exports, "__esModule", {
+    value: true
+});
+$686f46d395e019a2d69c8f3520ad79e9$exports.default = void 0;
+import   "686f46d395e019a2d69c8f3520ad79e9:react";
+var $686f46d395e019a2d69c8f3520ad79e9$var$_react = $686f46d395e019a2d69c8f3520ad79e9$var$_interopRequireDefault($686f46d395e019a2d69c8f3520ad79e9$import$f02ba03fc070e88c);
+function $686f46d395e019a2d69c8f3520ad79e9$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const $686f46d395e019a2d69c8f3520ad79e9$var$Icon = (_ref)=>{
+    let { icon: icon  } = _ref;
+    return(/*#__PURE__*/ $686f46d395e019a2d69c8f3520ad79e9$var$_react.default.createElement("svg", null, /*#__PURE__*/ $686f46d395e019a2d69c8f3520ad79e9$var$_react.default.createElement("use", {
+        href: "../../../../img/icons.svg#".concat(icon)
+    })));
+};
+var $686f46d395e019a2d69c8f3520ad79e9$var$_default = $686f46d395e019a2d69c8f3520ad79e9$var$Icon;
+$686f46d395e019a2d69c8f3520ad79e9$exports.default = $686f46d395e019a2d69c8f3520ad79e9$var$_default;

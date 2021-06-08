@@ -1,0 +1,50 @@
+{
+  "name": "united-travel",
+  "version": "1.0.0",
+  "description": "Website and Application For United Travel LLC",
+  "scripts": {
+    "start": "parcel watch ./src/scss/main.scss ./src/js/app.js --dist-dir ./public/",
+    "build": "parcel build ./src/scss/main.scss ./src/js/app.js --dist-dir ./public/",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "author": "Arjun Patel",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@barba/core": "^2.9.7",
+    "axios": "^0.19.2",
+    "gsap": "^3.6.0",
+    "locomotive-scroll": "^4.1.0",
+    "moment": "^2.29.1",
+    "photoswipe": "^4.1.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "react-rainbow-components": "^1.25.0",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-react": "^7.12.13",
+    "@parcel/transformer-sass": "^2.0.0-beta.3.1",
+    "autoprefixer": "^9.8.6",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "cssnano": "^5.0.5",
+    "postcss": "^8.3.0",
+    "posthtml-include": "^1.6.0",
+    "sass": "^1.32.8"
+  },
+  "engines": {
+    "node": "^12"
+  },
+  "browserslist": [
+    "since 2017-06"
+  ],
+  "resolutions": {
+    "browserslist": "4.14.2",
+    "caniuse-lite": "1.0.30001129"
+  }
+}

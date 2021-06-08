@@ -1,0 +1,44 @@
+var helpers = require("../../../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Image1 = (props)=>{
+    const { fileExt , fileName , webp  } = props;
+    const extension = fileExt || 'jpg';
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__image"
+    }, /*#__PURE__*/ _react.default.createElement("picture", null, webp && /*#__PURE__*/ _react.default.createElement("source", {
+        srcSet: "/img/".concat(fileName, ".webp"),
+        type: "image/webp"
+    }), /*#__PURE__*/ _react.default.createElement("source", {
+        srcSet: "/img/".concat(fileName, ".").concat(extension),
+        type: "image/jpeg"
+    }), /*#__PURE__*/ _react.default.createElement("img", {
+        src: "/img/".concat(fileName, ".").concat(extension),
+        alt: "Airport gate"
+    }))));
+};
+_c = Image1;
+var _default = Image1;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Image");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

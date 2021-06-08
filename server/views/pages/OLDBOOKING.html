@@ -1,0 +1,76 @@
+<!-- Main Booking Section -->
+<section class="booking">
+
+    <!-- Booking Image Container -->
+    <div class="booking__image">
+        <picture>
+            <source srcset="/img/airport-gate.webp" type="image/webp">
+            <source srcset="/img/airport-gate.jpg" type="image/jpeg">
+            <img src="/img/airport-gate.jpg" alt="Airport gate">
+        </picture>
+    </div>
+
+
+    <!-- Booking Map Container -->
+    <div class="booking__map" id="booking-map"></div>
+
+
+    <!-- Booking Container -->
+    <div class="booking__container">
+
+        <!-- Booking Card -->
+        <div class="booking-card">
+
+            <!-- Back Button -->
+            <div class="booking-card__header">
+                <button class="carat-btn lt-dark dk-light hover-opacity-75 disabled" id="booking-back">
+                    <svg>
+                        <use xlink:href="/img/icons.svg#back"></use>
+                    </svg>
+                    <h6>Back</h6>
+                </button>
+            </div>
+
+            <!-- Form -->
+            <form class="booking-card__body"></form>
+
+            <!-- Next Button -->
+            <div class="booking-card__footer">
+                <button class="carat-btn lt-dark dk-light hover-primary disabled" id="booking-forward">
+                    <h6>Next Step</h6>
+                    <svg>
+                        <use xlink:href="/img/icons.svg#carat-right"></use>
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+
+
+        <!-- Booking Route Sub Card -->
+        <div class="booking__route"></div>
+
+
+        <!-- Accent Dots -->
+        <div class="accent-dots">
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+            <span class="accent-dots__dot"></span>
+        </div>
+
+    </div>
+
+</section>

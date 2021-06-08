@@ -1,0 +1,31 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = useMoveFocusedDayFunction;
+var _react = require("react");
+var _helpers = require("../../helpers");
+function useMoveFocusedDayFunction(focusedDate, currentMonth, minDate, maxDate) {
+    return _react.useCallback(function(increment) {
+        var _getCalendarBounds = _helpers.getCalendarBounds(minDate, maxDate), minCalendarDate = _getCalendarBounds.minCalendarDate, maxCalendarDate = _getCalendarBounds.maxCalendarDate;
+        var nextFocusedDate = _helpers.addDays(focusedDate, increment);
+        var nextFocusedMonth = _helpers.isSameMonth(nextFocusedDate, currentMonth) ? currentMonth : _helpers.getFirstDayMonth(_helpers.addMonths(currentMonth, _helpers.getSign(increment)));
+        if (_helpers.isDateBelowLimit(nextFocusedDate, minCalendarDate)) return {
+            day: minCalendarDate,
+            month: _helpers.getFirstDayMonth(minCalendarDate)
+        };
+        if (_helpers.isDateBeyondLimit(nextFocusedDate, maxCalendarDate)) return {
+            day: maxCalendarDate,
+            month: _helpers.getFirstDayMonth(maxCalendarDate)
+        };
+        return {
+            day: nextFocusedDate,
+            month: nextFocusedMonth
+        };
+    }, [
+        focusedDate,
+        currentMonth,
+        minDate,
+        maxDate
+    ]);
+}

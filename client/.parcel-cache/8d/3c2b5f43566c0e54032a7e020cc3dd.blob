@@ -1,0 +1,30 @@
+"use strict";
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = useFocusIndex;
+var _slicedToArray2 = _interopRequireDefault(require("@babel/runtime/helpers/slicedToArray"));
+var _react = require("react");
+function useFocusIndex(containerRef, triggerRef, searchRef, inputRef) {
+    var _useState = _react.useState(-1), _useState2 = _slicedToArray2["default"](_useState, 2), focusIndex = _useState2[0], setFocusIndex = _useState2[1];
+    _react.useEffect(function() {
+        if (focusIndex > -1) {
+            var refsMap = [
+                triggerRef,
+                searchRef,
+                inputRef
+            ];
+            refsMap[focusIndex].current.focus();
+        }
+    }, [
+        focusIndex,
+        inputRef,
+        searchRef,
+        triggerRef
+    ]);
+    return [
+        focusIndex,
+        setFocusIndex
+    ];
+}

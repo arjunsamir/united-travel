@@ -1,0 +1,80 @@
+"use strict";
+Object.defineProperty($ddfd258f2b3cdac1d0a5cccff050d242$exports, "__esModule", {
+    value: true
+});
+$ddfd258f2b3cdac1d0a5cccff050d242$exports.default = $ddfd258f2b3cdac1d0a5cccff050d242$exports.steps = void 0;
+import   "ddfd258f2b3cdac1d0a5cccff050d242:react";
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_react = $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireWildcard($ddfd258f2b3cdac1d0a5cccff050d242$import$f02ba03fc070e88c);
+import   "ddfd258f2b3cdac1d0a5cccff050d242:../../store";
+import   "ddfd258f2b3cdac1d0a5cccff050d242:../../components/atoms/Image";
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_Image = $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireDefault($ddfd258f2b3cdac1d0a5cccff050d242$import$38cf03a0f689b393);
+import   "ddfd258f2b3cdac1d0a5cccff050d242:../../components/atoms/Dots";
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_Dots = $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireDefault($ddfd258f2b3cdac1d0a5cccff050d242$import$da76e846d6b0b637);
+import   "ddfd258f2b3cdac1d0a5cccff050d242:../steps/AirportRide";
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_AirportRide = $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireDefault($ddfd258f2b3cdac1d0a5cccff050d242$import$333b9f2685e757c4);
+import   "ddfd258f2b3cdac1d0a5cccff050d242:../steps/FlightLocation";
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_FlightLocation = $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireDefault($ddfd258f2b3cdac1d0a5cccff050d242$import$f64de9c4339ec9f8);
+import   "ddfd258f2b3cdac1d0a5cccff050d242:../steps/FlightSchedule";
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_FlightSchedule = $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireDefault($ddfd258f2b3cdac1d0a5cccff050d242$import$4dd0ec790b9b0698);
+function $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function $ddfd258f2b3cdac1d0a5cccff050d242$var$_getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    $ddfd258f2b3cdac1d0a5cccff050d242$var$_getRequireWildcardCache = function _getRequireWildcardCache() {
+        return cache;
+    };
+    return cache;
+}
+function $ddfd258f2b3cdac1d0a5cccff050d242$var$_interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = $ddfd258f2b3cdac1d0a5cccff050d242$var$_getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Defaults
+// Import Context
+// Import Atoms
+// Import Steps
+// Register Steps Here
+const $ddfd258f2b3cdac1d0a5cccff050d242$var$steps = {
+    'airport-ride': $ddfd258f2b3cdac1d0a5cccff050d242$var$_AirportRide.default,
+    'flight-location': $ddfd258f2b3cdac1d0a5cccff050d242$var$_FlightLocation.default,
+    'flight-schedule': $ddfd258f2b3cdac1d0a5cccff050d242$var$_FlightSchedule.default
+}; // Create Step
+$ddfd258f2b3cdac1d0a5cccff050d242$exports.steps = $ddfd258f2b3cdac1d0a5cccff050d242$var$steps;
+const $ddfd258f2b3cdac1d0a5cccff050d242$var$Flight = ()=>{
+    const { state: state , dispatch: dispatch  } = $ddfd258f2b3cdac1d0a5cccff050d242$var$_react.useContext($ddfd258f2b3cdac1d0a5cccff050d242$import$84d4fe7ec975578b$e5eaa4bf70309a92);
+    const Step = $ddfd258f2b3cdac1d0a5cccff050d242$var$steps[state.app.step];
+    return(/*#__PURE__*/ $ddfd258f2b3cdac1d0a5cccff050d242$var$_react.default.createElement("section", {
+        className: "booking"
+    }, /*#__PURE__*/ $ddfd258f2b3cdac1d0a5cccff050d242$var$_react.default.createElement($ddfd258f2b3cdac1d0a5cccff050d242$var$_Image.default, {
+        fileName: "airport-gate",
+        webp: true
+    }), /*#__PURE__*/ $ddfd258f2b3cdac1d0a5cccff050d242$var$_react.default.createElement("div", {
+        className: "booking__container"
+    }, /*#__PURE__*/ $ddfd258f2b3cdac1d0a5cccff050d242$var$_react.default.createElement(Step, {
+        navigateTo: (target)=>dispatch({
+                type: 'SET_APP_STEP',
+                payload: target
+            })
+    }), /*#__PURE__*/ $ddfd258f2b3cdac1d0a5cccff050d242$var$_react.default.createElement($ddfd258f2b3cdac1d0a5cccff050d242$var$_Dots.default, null))));
+};
+var $ddfd258f2b3cdac1d0a5cccff050d242$var$_default = $ddfd258f2b3cdac1d0a5cccff050d242$var$Flight;
+$ddfd258f2b3cdac1d0a5cccff050d242$exports.default = $ddfd258f2b3cdac1d0a5cccff050d242$var$_default;

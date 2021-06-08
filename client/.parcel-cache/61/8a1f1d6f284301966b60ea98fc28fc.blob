@@ -1,0 +1,59 @@
+var helpers = require("../../../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Tile = _interopRequireDefault(require("../atoms/Tile"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Select = (props)=>{
+    var _props$selected;
+    const { type , options , name , onChange  } = props;
+    const selected = (_props$selected = props.selected) !== null && _props$selected !== void 0 ? _props$selected : [];
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card__options"
+    }, options && options.map((opt)=>{
+        var _ref;
+        return(/*#__PURE__*/ _react.default.createElement(_Tile.default, {
+            key: opt.value,
+            type: type,
+            title: opt.title,
+            text: opt.text,
+            name: name,
+            value: opt.value,
+            checked: (_ref = selected.findIndex((sel)=>sel.value === opt.value
+            ) >= 0, _ref !== void 0) ? _ref : false,
+            onSelect: (e)=>{
+                if (!onChange) return;
+                if (type === 'radio') return onChange(opt);
+                const cleaned = selected.filter((sel)=>sel.value !== opt.value
+                );
+                if (e.target.checked) cleaned.push(opt);
+                onChange([
+                    ...cleaned
+                ]);
+            }
+        }));
+    })));
+};
+_c = Select;
+var _default = Select;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Select");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

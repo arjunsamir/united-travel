@@ -1,0 +1,37 @@
+"use strict";
+Object.defineProperty($967bc9bcf11eed6c7d43eff61b9b7846$exports, "__esModule", {
+    value: true
+});
+$967bc9bcf11eed6c7d43eff61b9b7846$exports.default = void 0;
+import   "967bc9bcf11eed6c7d43eff61b9b7846:react";
+var $967bc9bcf11eed6c7d43eff61b9b7846$var$_react = $967bc9bcf11eed6c7d43eff61b9b7846$var$_interopRequireDefault($967bc9bcf11eed6c7d43eff61b9b7846$import$f02ba03fc070e88c);
+import   "967bc9bcf11eed6c7d43eff61b9b7846:../atoms/Icon";
+var $967bc9bcf11eed6c7d43eff61b9b7846$var$_Icon = $967bc9bcf11eed6c7d43eff61b9b7846$var$_interopRequireDefault($967bc9bcf11eed6c7d43eff61b9b7846$import$9e674f5d27d0ecc1);
+import   "967bc9bcf11eed6c7d43eff61b9b7846:../molecules/Field";
+var $967bc9bcf11eed6c7d43eff61b9b7846$var$_Field = $967bc9bcf11eed6c7d43eff61b9b7846$var$_interopRequireDefault($967bc9bcf11eed6c7d43eff61b9b7846$import$3f3327837b9e6c8a);
+function $967bc9bcf11eed6c7d43eff61b9b7846$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React
+// Import Atoms
+// Import Molecules
+// Create Component 
+const $967bc9bcf11eed6c7d43eff61b9b7846$var$Input = (_ref)=>{
+    let { icon: icon , fields: fields  } = _ref;
+    return(/*#__PURE__*/ $967bc9bcf11eed6c7d43eff61b9b7846$var$_react.default.createElement("div", {
+        className: "input"
+    }, icon && /*#__PURE__*/ $967bc9bcf11eed6c7d43eff61b9b7846$var$_react.default.createElement("div", {
+        className: "input__icon"
+    }, /*#__PURE__*/ $967bc9bcf11eed6c7d43eff61b9b7846$var$_react.default.createElement($967bc9bcf11eed6c7d43eff61b9b7846$var$_Icon.default, {
+        icon: icon
+    })), fields && fields.map((field)=>/*#__PURE__*/ $967bc9bcf11eed6c7d43eff61b9b7846$var$_react.default.createElement($967bc9bcf11eed6c7d43eff61b9b7846$var$_Field.default, {
+            input: field.input,
+            label: field.label,
+            tooltip: field.tooltip
+        })
+    )));
+};
+var $967bc9bcf11eed6c7d43eff61b9b7846$var$_default = $967bc9bcf11eed6c7d43eff61b9b7846$var$Input;
+$967bc9bcf11eed6c7d43eff61b9b7846$exports.default = $967bc9bcf11eed6c7d43eff61b9b7846$var$_default;

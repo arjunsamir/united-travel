@@ -1,0 +1,20 @@
+"use strict";
+Object.defineProperty($8dad3bac586de83622cf097e3a5b1a03$exports, "__esModule", {
+    value: true
+});
+$8dad3bac586de83622cf097e3a5b1a03$exports.default = void 0;
+import   "8dad3bac586de83622cf097e3a5b1a03:react";
+var $8dad3bac586de83622cf097e3a5b1a03$var$_react = $8dad3bac586de83622cf097e3a5b1a03$var$_interopRequireDefault($8dad3bac586de83622cf097e3a5b1a03$import$f02ba03fc070e88c);
+function $8dad3bac586de83622cf097e3a5b1a03$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const $8dad3bac586de83622cf097e3a5b1a03$var$Icon = (_ref)=>{
+    let { icon: icon  } = _ref;
+    return(/*#__PURE__*/ $8dad3bac586de83622cf097e3a5b1a03$var$_react.default.createElement("svg", null, /*#__PURE__*/ $8dad3bac586de83622cf097e3a5b1a03$var$_react.default.createElement("use", {
+        href: "../../../../img/icons.svg#".concat(icon)
+    })));
+};
+var $8dad3bac586de83622cf097e3a5b1a03$var$_default = $8dad3bac586de83622cf097e3a5b1a03$var$Icon;
+$8dad3bac586de83622cf097e3a5b1a03$exports.default = $8dad3bac586de83622cf097e3a5b1a03$var$_default;

@@ -1,0 +1,41 @@
+"use strict";
+Object.defineProperty($05755c5b3eeca8c4a6c2b022a907c221$exports, "__esModule", {
+    value: true
+});
+$05755c5b3eeca8c4a6c2b022a907c221$exports.Button = $05755c5b3eeca8c4a6c2b022a907c221$exports.CaratButton = void 0;
+import   "05755c5b3eeca8c4a6c2b022a907c221:react";
+var $05755c5b3eeca8c4a6c2b022a907c221$var$_react = $05755c5b3eeca8c4a6c2b022a907c221$var$_interopRequireDefault($05755c5b3eeca8c4a6c2b022a907c221$import$f02ba03fc070e88c);
+import   "05755c5b3eeca8c4a6c2b022a907c221:../atoms/Icon";
+var $05755c5b3eeca8c4a6c2b022a907c221$var$_Icon = $05755c5b3eeca8c4a6c2b022a907c221$var$_interopRequireDefault($05755c5b3eeca8c4a6c2b022a907c221$import$9e674f5d27d0ecc1);
+function $05755c5b3eeca8c4a6c2b022a907c221$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React
+// Import Icons
+// Create Carat Button
+const $05755c5b3eeca8c4a6c2b022a907c221$var$CaratButton = (_ref)=>{
+    let { icon: icon , text: text , children: children , disabled: disabled , order: order , onClick: onClick  } = _ref;
+    const btnClasses = [
+        'carat-btn',
+        'lt-dark',
+        'dk-light',
+        'hover-primary'
+    ];
+    if (disabled) btnClasses.push('disabled');
+    return(/*#__PURE__*/ $05755c5b3eeca8c4a6c2b022a907c221$var$_react.default.createElement("button", {
+        className: btnClasses.join(" "),
+        onClick: onClick
+    }, (!order || order == 'left' || order == 'first') && /*#__PURE__*/ $05755c5b3eeca8c4a6c2b022a907c221$var$_react.default.createElement($05755c5b3eeca8c4a6c2b022a907c221$var$_Icon.default, {
+        icon: icon
+    }), text && /*#__PURE__*/ $05755c5b3eeca8c4a6c2b022a907c221$var$_react.default.createElement("h6", null, text), children && children, (order == 'left' || order == 'last') && /*#__PURE__*/ $05755c5b3eeca8c4a6c2b022a907c221$var$_react.default.createElement($05755c5b3eeca8c4a6c2b022a907c221$var$_Icon.default, {
+        icon: icon
+    })));
+};
+$05755c5b3eeca8c4a6c2b022a907c221$exports.CaratButton = $05755c5b3eeca8c4a6c2b022a907c221$var$CaratButton;
+const $05755c5b3eeca8c4a6c2b022a907c221$var$Button = (_ref2)=>{
+    let { text: text , children: children  } = _ref2;
+    return(/*#__PURE__*/ $05755c5b3eeca8c4a6c2b022a907c221$var$_react.default.createElement("button", null, text !== null && text !== void 0 ? text : children));
+};
+$05755c5b3eeca8c4a6c2b022a907c221$exports.Button = $05755c5b3eeca8c4a6c2b022a907c221$var$Button;

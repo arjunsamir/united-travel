@@ -1,0 +1,16 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = unregisterGlobalPlugins;
+var _plugins = require("chart.js/src/plugins");
+function unregisterGlobalPlugins(ChartJS) {
+    ChartJS.plugins.clear();
+    [
+        _plugins.filler,
+        _plugins.legend,
+        _plugins.title
+    ].forEach(function(plugin) {
+        return ChartJS.plugins.register(plugin);
+    });
+}

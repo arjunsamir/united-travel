@@ -1,0 +1,67 @@
+"use strict";
+Object.defineProperty($8fb6fe20c2700b8bb2f37d7b8167f1fe$exports, "__esModule", {
+    value: true
+});
+$8fb6fe20c2700b8bb2f37d7b8167f1fe$exports.default = void 0;
+import   "8fb6fe20c2700b8bb2f37d7b8167f1fe:gsap";
+var $8fb6fe20c2700b8bb2f37d7b8167f1fe$var$_gsap = $8fb6fe20c2700b8bb2f37d7b8167f1fe$var$_interopRequireDefault($8fb6fe20c2700b8bb2f37d7b8167f1fe$import$a68c99996323679b);
+function $8fb6fe20c2700b8bb2f37d7b8167f1fe$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+class $8fb6fe20c2700b8bb2f37d7b8167f1fe$var$Preloader {
+    init() {
+        $(document).on('readystatechange', ()=>{
+            this.pageState = document.readyState;
+            if (this.pageState == 'complete') this.onPageLoad();
+        });
+        return this;
+    }
+    onPageLoad() {
+        // 1. Fire Before Events
+        this.fire('before'); // 2. Create Timeline 
+        const tl = $8fb6fe20c2700b8bb2f37d7b8167f1fe$var$_gsap.default.timeline(gsapDefaults); // 3. Add Load Complete Class
+        this.preloader.addClass('load-complete'); // 4. Fade Out Logo
+        tl.to(this.preloader.children('.preloader__content').e(), {
+            opacity: 0,
+            duration: 0.75,
+            delay: 0.5
+        }); // 5. Fade Out Preloader
+        tl.to(this.preloader.e(), {
+            opacity: 0,
+            duration: 0.5
+        }); // 6. Subscribe To Completed Animation Callback
+        tl.eventCallback('onComplete', ()=>this.onComplete()
+        );
+    }
+    onComplete() {
+        // 1. Execute Callback Functions
+        this.fire('after'); // 2. Remove Preloader Element
+        $.delay(500).then(()=>{
+            if (this.preloader) this.preloader.remove();
+            this.preloader = null;
+        });
+    }
+    subscribe(event, callback) {
+        this.callbacks.push({
+            event: event,
+            callback: callback
+        });
+    }
+    fire(event) {
+        this.callbacks.forEach((item)=>{
+            if (item.event === event) item.callback();
+        });
+    }
+    after(callback) {
+        this.subscribe('after', callback);
+        return this;
+    }
+    constructor(){
+        this.pageState = 'loading';
+        this.callbacks = [];
+        this.preloader = $('#preloader');
+    }
+}
+$8fb6fe20c2700b8bb2f37d7b8167f1fe$exports.default = $8fb6fe20c2700b8bb2f37d7b8167f1fe$var$Preloader;

@@ -1,0 +1,42 @@
+"use strict";
+Object.defineProperty($1e33d852ab13b5a051c537f60e69b730$exports, "__esModule", {
+    value: true
+});
+$1e33d852ab13b5a051c537f60e69b730$exports.default = void 0;
+class $1e33d852ab13b5a051c537f60e69b730$var$DraggableSlider {
+    init() {
+        this.slider.on('mousedown', (e)=>this.startDrag(e.pageX)
+        );
+        this.slider.on('mouseleave mouseup', ()=>this.endDrag()
+        );
+        this.slider.on('mousemove', (e)=>this.dragging(e)
+        );
+    }
+    startDrag(x) {
+        this.isDragging = true;
+        this.slider.addClass(this.activeClass);
+        this.startX = x - this.sliderElem.offsetLeft;
+        this.scrollLeft = this.sliderElem.scrollLeft;
+    }
+    endDrag() {
+        this.isDragging = false;
+        this.slider.removeClass(this.activeClass);
+    }
+    dragging(e) {
+        if (!this.isDragging) return;
+        e.preventDefault();
+        const x = e.pageX - this.sliderElem.offsetLeft;
+        const walk = (x - this.startX) * 3; // Speeds Scroll Rate
+        this.sliderElem.scrollLeft = this.scrollLeft - walk;
+    }
+    constructor(options, container){
+        // Define Active Class
+        this.activeClass = options.activeClass; // Define Slider
+        this.slider = $(container).children(options.selector);
+        this.sliderElem = this.slider.nodes(); // Define State Variables
+        this.isDragging = false;
+        this.startX = undefined;
+        this.scrollLeft = undefined;
+    }
+}
+$1e33d852ab13b5a051c537f60e69b730$exports.default = $1e33d852ab13b5a051c537f60e69b730$var$DraggableSlider;

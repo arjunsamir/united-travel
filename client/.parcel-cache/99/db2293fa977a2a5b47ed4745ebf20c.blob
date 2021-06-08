@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = useRangeFromValue;
+var _react = require("react");
+var _helpers = require("../helpers");
+function useRangeFromValue(value, selectionType) {
+    return _react.useMemo(function() {
+        if (selectionType === 'single') return undefined;
+        if (value && Array.isArray(value)) {
+            if (_helpers.isEmptyRange(value)) return [];
+            return _helpers.normalizeRange(value);
+        }
+        return value ? [
+            _helpers.normalizeDate(value)
+        ] : [];
+    }, [
+        value,
+        selectionType
+    ]);
+}

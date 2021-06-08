@@ -1,0 +1,30 @@
+"use strict";
+Object.defineProperty($2e5c867dce49a237a6b71f35e5adc1a8$exports, "__esModule", {
+    value: true
+});
+$2e5c867dce49a237a6b71f35e5adc1a8$exports.default = void 0;
+import   "2e5c867dce49a237a6b71f35e5adc1a8:react";
+var $2e5c867dce49a237a6b71f35e5adc1a8$var$_react = $2e5c867dce49a237a6b71f35e5adc1a8$var$_interopRequireDefault($2e5c867dce49a237a6b71f35e5adc1a8$import$f02ba03fc070e88c);
+function $2e5c867dce49a237a6b71f35e5adc1a8$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const $2e5c867dce49a237a6b71f35e5adc1a8$var$Image = (props)=>{
+    const { fileExt: fileExt , fileName: fileName , webp: webp  } = props;
+    const extension = fileExt || 'jpg';
+    return(/*#__PURE__*/ $2e5c867dce49a237a6b71f35e5adc1a8$var$_react.default.createElement("div", {
+        className: "booking__image"
+    }, /*#__PURE__*/ $2e5c867dce49a237a6b71f35e5adc1a8$var$_react.default.createElement("picture", null, webp && /*#__PURE__*/ $2e5c867dce49a237a6b71f35e5adc1a8$var$_react.default.createElement("source", {
+        srcSet: "/img/".concat(fileName, ".webp"),
+        type: "image/webp"
+    }), /*#__PURE__*/ $2e5c867dce49a237a6b71f35e5adc1a8$var$_react.default.createElement("source", {
+        srcSet: "/img/".concat(fileName, ".").concat(extension),
+        type: "image/jpeg"
+    }), /*#__PURE__*/ $2e5c867dce49a237a6b71f35e5adc1a8$var$_react.default.createElement("img", {
+        src: "/img/".concat(fileName, ".").concat(extension),
+        alt: "Airport gate"
+    }))));
+};
+var $2e5c867dce49a237a6b71f35e5adc1a8$var$_default = $2e5c867dce49a237a6b71f35e5adc1a8$var$Image;
+$2e5c867dce49a237a6b71f35e5adc1a8$exports.default = $2e5c867dce49a237a6b71f35e5adc1a8$var$_default;

@@ -1,0 +1,35 @@
+'use strict';
+var Element1 = require('./core.element');
+var exports = module.exports = Element1.extend({
+    chart: null,
+    currentStep: 0,
+    numSteps: 60,
+    easing: '',
+    render: null,
+    onAnimationProgress: null,
+    onAnimationComplete: null
+});
+// DEPRECATIONS
+/**
+ * Provided for backward compatibility, use Chart.Animation instead
+ * @prop Chart.Animation#animationObject
+ * @deprecated since version 2.6.0
+ * @todo remove at version 3
+ */ Object.defineProperty(exports.prototype, 'animationObject', {
+    get: function() {
+        return this;
+    }
+});
+/**
+ * Provided for backward compatibility, use Chart.Animation#chart instead
+ * @prop Chart.Animation#chartInstance
+ * @deprecated since version 2.6.0
+ * @todo remove at version 3
+ */ Object.defineProperty(exports.prototype, 'chartInstance', {
+    get: function() {
+        return this.chart;
+    },
+    set: function(value) {
+        this.chart = value;
+    }
+});

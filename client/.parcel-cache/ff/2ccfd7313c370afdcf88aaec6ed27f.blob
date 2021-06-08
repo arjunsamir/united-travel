@@ -1,0 +1,39 @@
+var helpers = require("../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _reactDom = _interopRequireDefault(require("react-dom"));
+var _App = _interopRequireDefault(require("./App"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+class BookingApp {
+    onMount() {
+        console.log('App mounted');
+    }
+    init() {
+        _reactDom.default.render(/*#__PURE__*/ _react.default.createElement(_App.default, null), this.root, ()=>this.onMount()
+        );
+    }
+    constructor(dta, ctn){
+        this.dta = dta;
+        this.root = $(ctn).children(dta.selector).e();
+    }
+}
+exports.default = BookingApp;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

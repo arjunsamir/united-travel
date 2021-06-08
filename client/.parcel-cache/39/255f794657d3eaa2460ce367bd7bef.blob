@@ -1,0 +1,22 @@
+"use strict";
+var _interopRequireWildcard = require("@babel/runtime/helpers/interopRequireWildcard");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = Preview;
+var _react = _interopRequireWildcard(require("react"));
+var _context = require("../context");
+var _styled = require("./styled");
+var _color = require("../../../styles/helpers/color");
+function Preview() {
+    var _useContext = _react.useContext(_context.ColorPickerContext), rgba = _useContext.rgba;
+    var style = {
+        backgroundColor: _color.recomposeColor({
+            type: 'rgba',
+            values: rgba
+        })
+    };
+    return(/*#__PURE__*/ _react["default"].createElement(_styled.StyledPreview, {
+        style: style
+    }));
+}

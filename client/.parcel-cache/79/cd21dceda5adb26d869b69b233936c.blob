@@ -1,0 +1,8 @@
+'use strict';
+module.exports = hexadecimal;
+// Check if the given character code, or the character code at the first
+// character, is hexadecimal.
+function hexadecimal(character) {
+    var code = typeof character === 'string' ? character.charCodeAt(0) : character;
+    return code >= 97 && code <= 102 || code >= 65 && code <= 70 || code >= 48 && code <= 57;
+}

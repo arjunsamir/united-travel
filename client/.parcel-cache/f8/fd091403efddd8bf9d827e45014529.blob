@@ -1,0 +1,42 @@
+'use strict';
+var trim = require('trim');
+var repeat = require('repeat-string');
+var getIndent = require('./get-indentation');
+module.exports = indentation;
+var lineFeed = '\n';
+var space = ' ';
+var exclamationMark = '!';
+// Remove the minimum indent from every line in `value`.  Supports both tab,
+// spaced, and mixed indentation (as well as possible).
+function indentation(value, maximum) {
+    var values = value.split(lineFeed);
+    var position = values.length + 1;
+    var minIndent = Infinity;
+    var matrix = [];
+    var index;
+    var indentation1;
+    var stops;
+    values.unshift(repeat(space, maximum) + exclamationMark);
+    while(position--){
+        indentation1 = getIndent(values[position]);
+        matrix[position] = indentation1.stops;
+        if (trim(values[position]).length === 0) continue;
+        if (indentation1.indent) {
+            if (indentation1.indent > 0 && indentation1.indent < minIndent) minIndent = indentation1.indent;
+        } else {
+            minIndent = Infinity;
+            break;
+        }
+    }
+    if (minIndent !== Infinity) {
+        position = values.length;
+        while(position--){
+            stops = matrix[position];
+            index = minIndent;
+            while(index && !(index in stops))index--;
+            values[position] = values[position].slice(stops[index] + 1);
+        }
+    }
+    values.shift();
+    return values.join(lineFeed);
+}

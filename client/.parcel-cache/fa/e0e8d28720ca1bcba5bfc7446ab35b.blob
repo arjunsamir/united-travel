@@ -1,0 +1,32 @@
+'use strict';
+var VMessage = require('vfile-message');
+var VFile = require('./core.js');
+module.exports = VFile;
+VFile.prototype.message = message;
+VFile.prototype.info = info;
+VFile.prototype.fail = fail;
+// Create a message with `reason` at `position`.
+// When an error is passed in as `reason`, copies the stack.
+function message(reason, position, origin) {
+    var message1 = new VMessage(reason, position, origin);
+    if (this.path) {
+        message1.name = this.path + ':' + message1.name;
+        message1.file = this.path;
+    }
+    message1.fatal = false;
+    this.messages.push(message1);
+    return message1;
+}
+// Fail: creates a vmessage, associates it with the file, and throws it.
+function fail() {
+    var message1 = this.message.apply(this, arguments);
+    message1.fatal = true;
+    throw message1;
+}
+// Info: creates a vmessage, associates it with the file, and marks the fatality
+// as null.
+function info() {
+    var message1 = this.message.apply(this, arguments);
+    message1.fatal = null;
+    return message1;
+}

@@ -1,0 +1,59 @@
+"use strict";
+Object.defineProperty($19eb92106c1def8407bcbbf522885ba8$exports, "__esModule", {
+    value: true
+});
+$19eb92106c1def8407bcbbf522885ba8$exports.default = void 0;
+import   "19eb92106c1def8407bcbbf522885ba8:react";
+var $19eb92106c1def8407bcbbf522885ba8$var$_react = $19eb92106c1def8407bcbbf522885ba8$var$_interopRequireWildcard($19eb92106c1def8407bcbbf522885ba8$import$f02ba03fc070e88c);
+import   "19eb92106c1def8407bcbbf522885ba8:./store";
+import   "19eb92106c1def8407bcbbf522885ba8:./Booking";
+var $19eb92106c1def8407bcbbf522885ba8$var$_Booking = $19eb92106c1def8407bcbbf522885ba8$var$_interopRequireDefault($19eb92106c1def8407bcbbf522885ba8$import$b5ed44ec7b7e7803);
+function $19eb92106c1def8407bcbbf522885ba8$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function $19eb92106c1def8407bcbbf522885ba8$var$_getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    $19eb92106c1def8407bcbbf522885ba8$var$_getRequireWildcardCache = function _getRequireWildcardCache() {
+        return cache;
+    };
+    return cache;
+}
+function $19eb92106c1def8407bcbbf522885ba8$var$_interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = $19eb92106c1def8407bcbbf522885ba8$var$_getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import React and Components
+// Import State & Dispatch
+// Import Components
+// import Login from './Login';
+// import Checkout from './Checkout';
+// Create App Component
+const $19eb92106c1def8407bcbbf522885ba8$var$App = ()=>{
+    const [state, dispatch] = $19eb92106c1def8407bcbbf522885ba8$var$_react.useReducer($19eb92106c1def8407bcbbf522885ba8$import$720f23b03d4ed3c6$c358e3982747b4ad, $19eb92106c1def8407bcbbf522885ba8$import$720f23b03d4ed3c6$f3c0d603f1ec272d);
+    return(/*#__PURE__*/ $19eb92106c1def8407bcbbf522885ba8$var$_react.default.createElement($19eb92106c1def8407bcbbf522885ba8$import$720f23b03d4ed3c6$e5eaa4bf70309a92.Provider, {
+        value: {
+            state: state,
+            dispatch: dispatch
+        }
+    }, /*#__PURE__*/ $19eb92106c1def8407bcbbf522885ba8$var$_react.default.createElement($19eb92106c1def8407bcbbf522885ba8$var$_Booking.default, null)));
+};
+var $19eb92106c1def8407bcbbf522885ba8$var$_default = $19eb92106c1def8407bcbbf522885ba8$var$App;
+$19eb92106c1def8407bcbbf522885ba8$exports.default = $19eb92106c1def8407bcbbf522885ba8$var$_default;

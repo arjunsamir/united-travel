@@ -1,0 +1,162 @@
+var helpers = require("../../../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _store = require("../../store");
+var _Dropdown = _interopRequireDefault(require("../../components/molecules/Dropdown"));
+var _Select = _interopRequireDefault(require("../../components/molecules/Select"));
+var _BookingCard = _interopRequireDefault(require("../../components/organisms/BookingCard"));
+var _utils = require("../../helpers/utils");
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Defaults
+// Import Context
+// Import Atoms
+// Import Molecules
+// Import Organizms
+// Import Utils
+// Construct Dropdown Items From Raw Data
+const constructDropdownItems = (items)=>{
+    return items && items.map((item)=>({
+            text: "".concat(item.code, " - ").concat(item.name),
+            value: item.code
+        })
+    );
+}; // Selectable Options
+const options = [
+    {
+        title: 'Arriving Flight',
+        text: 'I need to be picked up from the airport.',
+        value: 'arriving'
+    },
+    {
+        title: 'Departing Flight',
+        text: 'I need to be dropped off at the airport before my flight.',
+        value: 'departing'
+    }
+]; // Flight Location Step
+const FlightLocation = (_ref)=>{
+    let { navigateTo  } = _ref;
+    // Create bemify instance
+    const bc = _utils.bemify('booking-card'); // Import State & Dispatch
+    const { state , dispatch  } = _react.useContext(_store.AppContext); // Create Shortcut
+    const { flight  } = state.reservation; // Load Dropdown Items
+    const dropdownItems = constructDropdownItems(state.app.airports); // Create Local State
+    const [error, setError] = _react.useState(false);
+    const allowed = flight.type && flight.airport.code ? [
+        'previous',
+        'next'
+    ] : [
+        'previous'
+    ]; // Fetch Airport Data
+    _react.useEffect(()=>{
+        const getDropdownData = async ()=>{
+            if (state.app.airports) return;
+            try {
+                const res = await _axios.default('/api/data/airports');
+                dispatch({
+                    type: 'SET_APP_AIRPORTS',
+                    payload: res.data
+                });
+            } catch (err) {
+                setError(true);
+            }
+        };
+        getDropdownData();
+    }, []); // Function To Update State
+    const updateState = (key, data)=>{
+        // Prevent Some Potential Errors
+        if (!key) return; // Update Airport Reservation
+        dispatch({
+            type: "UPDATE_RESERVATION_".concat(key),
+            payload: data
+        });
+    }; // Crreate Rendered Component
+    return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
+        title: /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, "Details about your ", /*#__PURE__*/ _react.default.createElement("span", null, "flight")),
+        allowed: allowed,
+        showLoader: !dropdownItems,
+        showError: error,
+        previous: ()=>{
+            navigateTo('airport-ride');
+        },
+        next: ()=>{
+            navigateTo('flight-schedule');
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: bc('fieldset')
+    }, /*#__PURE__*/ _react.default.createElement("h4", {
+        className: bc('fieldset-title')
+    }, "Select an airport"), /*#__PURE__*/ _react.default.createElement(_Dropdown.default, {
+        items: dropdownItems !== null && dropdownItems !== void 0 ? dropdownItems : [],
+        defaultItem: "Select Airport",
+        selected: dropdownItems && dropdownItems.find((item)=>item.value === flight.airport.code
+        ),
+        onSelect: function onSelect() {
+            let item = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+            };
+            return updateState('AIRPORT', item.value);
+        }
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: bc('fieldset')
+    }, /*#__PURE__*/ _react.default.createElement("h4", {
+        className: bc('fieldset-title')
+    }, "Choose a flight type"), /*#__PURE__*/ _react.default.createElement(_Select.default, {
+        type: "radio",
+        name: "flight-type",
+        options: options,
+        selected: options.filter((opt)=>opt.value === flight.type
+        ),
+        onChange: (data)=>updateState('FLIGHT-TYPE', data.value)
+    }))));
+};
+_c = FlightLocation;
+var _default = FlightLocation;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "FlightLocation");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

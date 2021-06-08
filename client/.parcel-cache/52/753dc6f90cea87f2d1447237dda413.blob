@@ -1,0 +1,47 @@
+"use strict";
+Object.defineProperty($d613db00909c5a9c1b21bd52deb7b7b8$exports, "__esModule", {
+    value: true
+});
+$d613db00909c5a9c1b21bd52deb7b7b8$exports.default = void 0;
+import   "d613db00909c5a9c1b21bd52deb7b7b8:react";
+var $d613db00909c5a9c1b21bd52deb7b7b8$var$_react = $d613db00909c5a9c1b21bd52deb7b7b8$var$_interopRequireDefault($d613db00909c5a9c1b21bd52deb7b7b8$import$f02ba03fc070e88c);
+import   "d613db00909c5a9c1b21bd52deb7b7b8:../atoms/Icon";
+var $d613db00909c5a9c1b21bd52deb7b7b8$var$_Icon = $d613db00909c5a9c1b21bd52deb7b7b8$var$_interopRequireDefault($d613db00909c5a9c1b21bd52deb7b7b8$import$9e674f5d27d0ecc1);
+function $d613db00909c5a9c1b21bd52deb7b7b8$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React
+// Import Atoms
+// Create Dropdown Component
+const $d613db00909c5a9c1b21bd52deb7b7b8$var$Dropdown = (props)=>{
+    const { defaultItem: defaultItem , onSelect: onSelect , selected: selected  } = props;
+    const defaultKey = 'default-item-value';
+    const items = defaultItem ? [
+        {
+            value: defaultKey,
+            text: defaultItem
+        },
+        ...props.items
+    ] : props.items;
+    return(/*#__PURE__*/ $d613db00909c5a9c1b21bd52deb7b7b8$var$_react.default.createElement("div", {
+        className: "dropdown"
+    }, /*#__PURE__*/ $d613db00909c5a9c1b21bd52deb7b7b8$var$_react.default.createElement("select", {
+        className: "dropdown__select",
+        value: selected ? selected.value : items[0],
+        onChange: (e)=>{
+            if (defaultItem && e.target.value === defaultKey) return null;
+            onSelect && onSelect(items.find((item)=>item.value == e.target.value
+            ));
+        }
+    }, items.map((item)=>/*#__PURE__*/ $d613db00909c5a9c1b21bd52deb7b7b8$var$_react.default.createElement("option", {
+            key: item.value,
+            value: item.value
+        }, item.text)
+    )), /*#__PURE__*/ $d613db00909c5a9c1b21bd52deb7b7b8$var$_react.default.createElement($d613db00909c5a9c1b21bd52deb7b7b8$var$_Icon.default, {
+        icon: "carat-right"
+    })));
+};
+var $d613db00909c5a9c1b21bd52deb7b7b8$var$_default = $d613db00909c5a9c1b21bd52deb7b7b8$var$Dropdown;
+$d613db00909c5a9c1b21bd52deb7b7b8$exports.default = $d613db00909c5a9c1b21bd52deb7b7b8$var$_default;

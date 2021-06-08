@@ -1,0 +1,28 @@
+"use strict";
+Object.defineProperty($17c7db6f3a31f18f765b50a07a17a932$exports, "__esModule", {
+    value: true
+});
+$17c7db6f3a31f18f765b50a07a17a932$exports.default = void 0;
+class $17c7db6f3a31f18f765b50a07a17a932$var$Merger {
+    merge(data, key) {
+        if (key) this.state = Object.assign({
+        }, this.state, {
+            [this.category]: Object.assign({
+            }, this.state[this.category], {
+                [key]: Object.assign({
+                }, this.state[this.category][key], data)
+            })
+        });
+        else this.state = Object.assign({
+        }, this.state, {
+            [this.category]: Object.assign({
+            }, this.state[this.category], data)
+        });
+        return this.state;
+    }
+    constructor(category, state){
+        this.category = category;
+        this.state = state;
+    }
+}
+$17c7db6f3a31f18f765b50a07a17a932$exports.default = $17c7db6f3a31f18f765b50a07a17a932$var$Merger;

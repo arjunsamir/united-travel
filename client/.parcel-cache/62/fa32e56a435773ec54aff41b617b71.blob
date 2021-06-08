@@ -1,0 +1,56 @@
+var helpers = require("../../../../../../../../../../../usr/local/lib/node_modules/parcel/node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.Button = exports.CaratButton = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("../atoms/Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React
+// Import Icons
+// Create Carat Button
+const CaratButton = (_ref)=>{
+    let { icon , text , children , disabled , order , onClick  } = _ref;
+    const btnClasses = [
+        'carat-btn',
+        'lt-dark',
+        'dk-light',
+        'hover-primary'
+    ];
+    if (disabled) btnClasses.push('disabled');
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: btnClasses.join(" "),
+        onClick: onClick
+    }, (!order || order == 'left' || order == 'first') && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), text && /*#__PURE__*/ _react.default.createElement("h6", null, text), children && children, (order == 'left' || order == 'last') && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    })));
+};
+_c = CaratButton;
+exports.CaratButton = CaratButton;
+const Button = (_ref2)=>{
+    let { text , children  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("button", null, text !== null && text !== void 0 ? text : children));
+};
+_c1 = Button;
+exports.Button = Button;
+var _c, _c1;
+$RefreshReg$(_c, "CaratButton");
+$RefreshReg$(_c1, "Button");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}

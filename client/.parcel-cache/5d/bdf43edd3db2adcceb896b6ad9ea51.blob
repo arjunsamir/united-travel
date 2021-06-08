@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = useHandleBlur;
+var _react = require("react");
+function useHandleBlur(focusIndex, onBlur, value) {
+    return _react.useCallback(function() {
+        if (focusIndex === -1) onBlur(value);
+    }, [
+        focusIndex,
+        onBlur,
+        value
+    ]);
+}

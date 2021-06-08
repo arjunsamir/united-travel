@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = shouldUpdateCurrentMonth;
+var _helpers = require("../../helpers");
+function shouldUpdateCurrentMonth(value, currentMonth, rightMonth) {
+    if (_helpers.isSameMonth(value, rightMonth) || _helpers.isSameMonth(value, currentMonth)) return false;
+    return true;
+}

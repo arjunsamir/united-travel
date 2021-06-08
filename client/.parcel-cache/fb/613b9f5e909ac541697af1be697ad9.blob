@@ -1,0 +1,24 @@
+"use strict";
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = void 0;
+var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+var _attachThemeAttrs = _interopRequireDefault(require("../../../styles/helpers/attachThemeAttrs"));
+function _templateObject() {
+    var data = _taggedTemplateLiteral2["default"]([
+        "\n    position: absolute;\n    top: 50%;\n    margin: -0.0625rem 10% 0;\n    display: block;\n    width: 80%;\n    height: 1px;\n    border: solid 0.5px ",
+        ";\n"
+    ]);
+    _templateObject = function _templateObject1() {
+        return data;
+    };
+    return data;
+}
+var StyledIndicatorBar = _attachThemeAttrs["default"](_styledComponents["default"].div)(_templateObject(), function(props) {
+    return props.palette.border.divider;
+});
+var _default = StyledIndicatorBar;
+exports["default"] = _default;

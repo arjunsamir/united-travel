@@ -1,0 +1,152 @@
+"use strict";
+Object.defineProperty($ffdf07f5860ade26d37e7a450a0ae5b4$exports, "__esModule", {
+    value: true
+});
+$ffdf07f5860ade26d37e7a450a0ae5b4$exports.default = void 0;
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:react";
+var $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireWildcard($ffdf07f5860ade26d37e7a450a0ae5b4$import$f02ba03fc070e88c);
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:../../store";
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:../../components/molecules/Dropdown";
+var $ffdf07f5860ade26d37e7a450a0ae5b4$var$_Dropdown = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireDefault($ffdf07f5860ade26d37e7a450a0ae5b4$import$90556e644c0c5f90);
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:../../components/molecules/Select";
+var $ffdf07f5860ade26d37e7a450a0ae5b4$var$_Select = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireDefault($ffdf07f5860ade26d37e7a450a0ae5b4$import$13f8dee595da5aad);
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:../../components/organisms/BookingCard";
+var $ffdf07f5860ade26d37e7a450a0ae5b4$var$_BookingCard = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireDefault($ffdf07f5860ade26d37e7a450a0ae5b4$import$bc3be07ddd560df7);
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:../../helpers/utils";
+import   "ffdf07f5860ade26d37e7a450a0ae5b4:axios";
+var $ffdf07f5860ade26d37e7a450a0ae5b4$var$_axios = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireDefault($ffdf07f5860ade26d37e7a450a0ae5b4$import$bed27987f94bc6dd);
+function $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function $ffdf07f5860ade26d37e7a450a0ae5b4$var$_getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    $ffdf07f5860ade26d37e7a450a0ae5b4$var$_getRequireWildcardCache = function _getRequireWildcardCache() {
+        return cache;
+    };
+    return cache;
+}
+function $ffdf07f5860ade26d37e7a450a0ae5b4$var$_interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Defaults
+// Import Context
+// Import Atoms
+// Import Molecules
+// Import Organizms
+// Import Utils
+// Construct Dropdown Items From Raw Data
+const $ffdf07f5860ade26d37e7a450a0ae5b4$var$constructDropdownItems = (items)=>{
+    return items && items.map((item)=>({
+            text: "".concat(item.code, " - ").concat(item.name),
+            value: item.code
+        })
+    );
+}; // Selectable Options
+const $ffdf07f5860ade26d37e7a450a0ae5b4$var$options = [
+    {
+        title: 'Arriving Flight',
+        text: 'I need to be picked up from the airport.',
+        value: 'arriving'
+    },
+    {
+        title: 'Departing Flight',
+        text: 'I need to be dropped off at the airport before my flight.',
+        value: 'departing'
+    }
+]; // Flight Location Step
+const $ffdf07f5860ade26d37e7a450a0ae5b4$var$FlightLocation = (_ref)=>{
+    let { navigateTo: navigateTo  } = _ref;
+    // Create bemify instance
+    const bc = $ffdf07f5860ade26d37e7a450a0ae5b4$import$9bbc8f641788c85e$4a5b6bc0da3adef7('booking-card'); // Import State & Dispatch
+    const { state: state , dispatch: dispatch  } = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.useContext($ffdf07f5860ade26d37e7a450a0ae5b4$import$84d4fe7ec975578b$e5eaa4bf70309a92); // Create Shortcut
+    const { flight: flight  } = state.reservation; // Load Dropdown Items
+    const dropdownItems = $ffdf07f5860ade26d37e7a450a0ae5b4$var$constructDropdownItems(state.app.airports); // Create Local State
+    const [error, setError] = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.useState(false);
+    const allowed = flight.type && flight.airport.code ? [
+        'previous',
+        'next'
+    ] : [
+        'previous'
+    ]; // Fetch Airport Data
+    $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.useEffect(()=>{
+        const getDropdownData = async ()=>{
+            if (state.app.airports) return;
+            try {
+                const res = await $ffdf07f5860ade26d37e7a450a0ae5b4$var$_axios.default('/api/data/airports');
+                dispatch({
+                    type: 'SET_APP_AIRPORTS',
+                    payload: res.data
+                });
+            } catch (err) {
+                setError(true);
+            }
+        };
+        getDropdownData();
+    }, []); // Function To Update State
+    const updateState = (key, data)=>{
+        // Prevent Some Potential Errors
+        if (!key) return; // Update Airport Reservation
+        dispatch({
+            type: "UPDATE_RESERVATION_".concat(key),
+            payload: data
+        });
+    }; // Crreate Rendered Component
+    return(/*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement($ffdf07f5860ade26d37e7a450a0ae5b4$var$_BookingCard.default, {
+        title: /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement($ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.Fragment, null, "Details about your ", /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement("span", null, "flight")),
+        allowed: allowed,
+        showLoader: !dropdownItems,
+        showError: error,
+        previous: ()=>{
+            navigateTo('airport-ride');
+        },
+        next: ()=>{
+            navigateTo('flight-schedule');
+        }
+    }, /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement("div", {
+        className: bc('fieldset')
+    }, /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement("h4", {
+        className: bc('fieldset-title')
+    }, "Select an airport"), /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement($ffdf07f5860ade26d37e7a450a0ae5b4$var$_Dropdown.default, {
+        items: dropdownItems !== null && dropdownItems !== void 0 ? dropdownItems : [],
+        defaultItem: "Select Airport",
+        selected: dropdownItems && dropdownItems.find((item)=>item.value === flight.airport.code
+        ),
+        onSelect: function onSelect() {
+            let item = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
+            };
+            return updateState('AIRPORT', item.value);
+        }
+    })), /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement("div", {
+        className: bc('fieldset')
+    }, /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement("h4", {
+        className: bc('fieldset-title')
+    }, "Choose a flight type"), /*#__PURE__*/ $ffdf07f5860ade26d37e7a450a0ae5b4$var$_react.default.createElement($ffdf07f5860ade26d37e7a450a0ae5b4$var$_Select.default, {
+        type: "radio",
+        name: "flight-type",
+        options: $ffdf07f5860ade26d37e7a450a0ae5b4$var$options,
+        selected: $ffdf07f5860ade26d37e7a450a0ae5b4$var$options.filter((opt)=>opt.value === flight.type
+        ),
+        onChange: (data)=>updateState('FLIGHT-TYPE', data.value)
+    }))));
+};
+var $ffdf07f5860ade26d37e7a450a0ae5b4$var$_default = $ffdf07f5860ade26d37e7a450a0ae5b4$var$FlightLocation;
+$ffdf07f5860ade26d37e7a450a0ae5b4$exports.default = $ffdf07f5860ade26d37e7a450a0ae5b4$var$_default;

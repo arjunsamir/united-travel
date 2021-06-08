@@ -1,0 +1,22 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.constructWrappers = exports.bemify = void 0;
+const bemify = (block)=>{
+    return (element)=>element ? "".concat(block, "__").concat(element) : block
+    ;
+};
+exports.bemify = bemify;
+const constructWrappers = function constructWrappers1() {
+    const wrapper = {
+    };
+    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
+    pairs.forEach((_ref)=>{
+        let [Component, steps] = _ref;
+        Object.keys(steps).forEach((key)=>wrapper[key] = Component
+        );
+    });
+    return wrapper;
+};
+exports.constructWrappers = constructWrappers;

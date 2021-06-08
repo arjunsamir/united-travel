@@ -1,0 +1,32 @@
+"use strict";
+Object.defineProperty($a18ba7c5ef604a0855f2a3c5ddfcaf52$exports, "__esModule", {
+    value: true
+});
+$a18ba7c5ef604a0855f2a3c5ddfcaf52$exports.default = void 0;
+import   "a18ba7c5ef604a0855f2a3c5ddfcaf52:react";
+var $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_react = $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_interopRequireDefault($a18ba7c5ef604a0855f2a3c5ddfcaf52$import$f02ba03fc070e88c);
+function $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$Option = (_ref)=>{
+    let { type: type , title: title , text: text , name: name , value: value , checked: checked , onSelect: onSelect  } = _ref;
+    return(/*#__PURE__*/ $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_react.default.createElement("label", {
+        className: "select-tile"
+    }, /*#__PURE__*/ $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_react.default.createElement("input", {
+        type: type,
+        name: name,
+        onChange: onSelect,
+        defaultValue: value,
+        checked: checked
+    }), /*#__PURE__*/ $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_react.default.createElement("div", {
+        className: "select-tile__container"
+    }, /*#__PURE__*/ $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_react.default.createElement("h4", {
+        className: "select-tile__title"
+    }, title), /*#__PURE__*/ $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_react.default.createElement("p", {
+        className: "select-tile__text"
+    }, text || ''))));
+};
+var $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_default = $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$Option;
+$a18ba7c5ef604a0855f2a3c5ddfcaf52$exports.default = $a18ba7c5ef604a0855f2a3c5ddfcaf52$var$_default;

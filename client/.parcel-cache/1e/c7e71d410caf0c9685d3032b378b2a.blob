@@ -1,0 +1,30 @@
+"use strict";
+var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports["default"] = void 0;
+var _taggedTemplateLiteral2 = _interopRequireDefault(require("@babel/runtime/helpers/taggedTemplateLiteral"));
+var _styledComponents = _interopRequireDefault(require("styled-components"));
+var _attachThemeAttrs = _interopRequireDefault(require("../../../styles/helpers/attachThemeAttrs"));
+function _templateObject() {
+    var data = _taggedTemplateLiteral2["default"]([
+        "\n    background-color: ",
+        ";\n    counter-reset: rowCounter ",
+        ";\n\n    ",
+        ";\n"
+    ]);
+    _templateObject = function _templateObject1() {
+        return data;
+    };
+    return data;
+}
+var StyledTableBody = _attachThemeAttrs["default"](_styledComponents["default"].tbody)(_templateObject(), function(props) {
+    return props.palette.background.main;
+}, function(props) {
+    return props.rowNumberOffset;
+}, function(props) {
+    return props.theme.variant === 'listview' && "\n            background-color: transparent;\n        ";
+});
+var _default = StyledTableBody;
+exports["default"] = _default;
