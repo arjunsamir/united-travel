@@ -11,6 +11,7 @@ const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const xss = require('xss-clean');
 const compression = require('compression');
+const cors = require('cors');
 
 // Error Handlers
 const AppError = require('./server/utils/appError');
@@ -30,6 +31,7 @@ const dataRouter = require('./server/routes/dataRoutes');
 
 // 2. CREATE EXPRESS APPLICATION
 const app = express();
+app.use(cors())
 app.enable('trust proxy');
 
 
@@ -44,7 +46,7 @@ app.use(express.static(path.join(__dirname, 'client/public')));
 
 // 3. IMPLEMENT SECURITY MIDDLEWARE
 app.use(helmet());
-app.use('/api', rateLimit({ max: 100, windowMs: 1000 * 60 * 60, message: 'Too many requests from thie IP, please try again in an hour'}));
+if (process.env.NODE_ENV === 'production') app.use('/api', rateLimit({ max: 100, windowMs: 1000 * 60 * 60, message: 'Too many requests from thie IP, please try again in an hour'}));
 //app.post('/webhooks/checkout', express.raw({ type: 'application/json' }), bookingController.webhookCheckout);
 app.use(mongoSanitize());
 app.use(xss());
@@ -67,7 +69,7 @@ app.use('/es', viewRouter('es'));
 app.use('/auth', authRouter);
 app.use('/users', userRouter);
 app.use('/api/vehicles', vehicleRouter);
-app.use('/api/bookings', bookingRouter);
+app.use('/api/booking', bookingRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/data', dataRouter);
 app.all('*', (req, res, next) => next( new AppError(`Can't find ${req.originalUrl} on this server you bitch!`, 404) ));

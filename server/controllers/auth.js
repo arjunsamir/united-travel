@@ -62,6 +62,20 @@ const createAccount = async body => {
 }
 
 
+const findUserByJWT = async (token) => {
+
+    if (!token || token === 'logged-out') return null;
+
+    const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    const user = await User.findById(decoded.id);
+
+    if (!user || user.changedPasswordAfter(decoded.iat)) return null;
+
+    return user;
+}
+
+
 exports.createAccount = catchAsync(async (req, res, next) => {
 
     if (!req.body.password) return next(new AppError('The password is a required field', 401));
@@ -185,6 +199,24 @@ exports.login = catchAsync(async (req, res, next) => {
 });
 
 
+exports.checkEmail = catchAsync(async (req, res, next) => {
+
+    const { email } = req.body;
+    let exists = false;
+
+    if (email) {
+        const user = await User.findOne({ email });
+        if (user) exists = true;
+    }
+
+    send(res, {
+        status: 'success',
+        exists
+    });
+
+});
+
+
 exports.logout = (req, res) => {
 
     res.cookie('jwt', 'logged-out', {
@@ -281,14 +313,29 @@ exports.protect = catchAsync(async (req, res, next) => {
     else if (req.cookies.jwt) token = req.cookies.jwt;
     else return next(new AppError('You are not logged in. Please log in to access this route', 401));
 
-    const data = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    const user = await User.findById(data.id);
+    const user = await findUserByJWT(token);
 
-    if (!user) return next(new AppError('This user does not exist', 401));
-    if (user.changedPasswordAfter(data.iat)) return next(new AppError('The password on this account was changed. Please log in again'));
+    // const data = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    // const user = await User.findById(data.id);
+
+    // if (!user) return next(new AppError('This user does not exist', 401));
+    // if (user.changedPasswordAfter(data.iat)) return next(new AppError('The password on this account was changed. Please log in again'));
 
     req.user = user;
     // //res.locals.user = user; // For PUG templates
+
+    next();
+
+});
+
+
+exports.screen = catchAsync(async (req, res, next) => {
+
+    const user = await findUserByJWT(req.cookies.jwt);
+
+    if (!user) return next();
+
+    req.user = user;
 
     next();
 
@@ -309,13 +356,9 @@ exports.isLoggedIn = async (req, res, next) => {
 
     try {
 
-        if (!req.cookies.jwt || req.cookies.jwt === 'logged-out') return next();
+        const user = await findUserByJWT(req.cookies.jwt);
 
-        const decoded = await promisify(jwt.verify)(req.cookies.jwt, process.env.JWT_SECRET);
-        console.log(decoded);
-        const user = await User.findById(decoded.id);
-
-        if (!user || user.changedPasswordAfter(decoded.iat)) return next();
+        if (!user) return next();
 
         // There is a logged in user
         res.locals.user = user;
@@ -329,3 +372,15 @@ exports.isLoggedIn = async (req, res, next) => {
     }
 
 }
+
+
+exports.validateSession = catchAsync(async (req, res, next) => {
+
+    const user = await findUserByJWT(req.cookies.jwt);
+
+    send(res, {
+        status: 'success',
+        user
+    });
+
+});

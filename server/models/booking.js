@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 
 
 const schema = new mongoose.Schema({
+    paymentIntent: String,
     status: {
         type: String,
         default: 'Pending',

@@ -15,17 +15,19 @@ export const initialState = {
             number: '',
             airline: '',
             type: '',
+            time: null,
+            buffer: null,
             airport: {}
         },
         origin: {
+            selected: null,
             placeId: '',
-            coordinates: [],
             name: '',
             address: ''
         },
         destination: {
+            selected: null,
             placeId: '',
-            coordinates: [],
             name: '',
             address: ''
         },
@@ -34,8 +36,9 @@ export const initialState = {
             dropoff: null
         },
         route: {
-            distance: 0,
-            eta: ''
+            distance: null,
+            duration: null,
+            eta: null
         },
         passengers: {
             total: 1,
@@ -50,16 +53,25 @@ export const initialState = {
             large: 0
         },
         vehicle: null,
+        quote: {
+            id: '',
+            cost: 0,
+            origin: '',
+            destination: '',
+            vehicle: ''
+        },
         payment: {
             method: '',
             appliedCredit: '',
             total: 0
-        }
+        },
+        notes: ''
     },
     app: {
         // step: 'airport-ride',
-        step: 'flight-schedule',
-        airports: null
+        step: 'checkout',
+        airports: null,
+        user: null
     }
 }
 
@@ -72,7 +84,7 @@ export const reducer = (state, action) => {
 
     const m = new Merger(category, state)
 
-    const PL = action.payload;
+    let PL = action.payload;
 
     // Helper Functions
     const setAirport = (newAirport) => {
@@ -80,7 +92,7 @@ export const reducer = (state, action) => {
         const airport = newAirport ?? state.reservation.flight.airport;
 
         // Destructure Properties
-        const { placeId, coordinates, address, name } = airport;
+        const { placeId, address, name } = airport;
 
         // Update Airport
         m.merge({ airport: { ...airport } }, 'flight')
@@ -88,16 +100,28 @@ export const reducer = (state, action) => {
         // Update Origin/Destination
         switch (m.state.reservation.flight.type) {
             case 'arriving':
-                m.merge({ origin: { placeId, coordinates, address, name } })
+                m.merge({ origin: { placeId, address, name } })
                 break;
             case 'departing':
-                m.merge({ destination: { placeId, coordinates, address, name }})
+                m.merge({ destination: { placeId, address, name }})
                 break;
         }
 
         return { ...m.state }
     }
 
+    const setPassengersOrLuggage = (a, b, c) => {
+
+        m.merge({ [PL.key]: PL.value }, type)
+    
+        const p = m.state.reservation[type];
+
+        return m.merge({
+            total: (p[a]|| 0) + (p[b] || 0) + (p[c] || 0)
+        }, type)
+    }
+
+    // Update Reservation State
     if (method === 'update') {
         switch(type) {
             case 'airport-ride':
@@ -109,6 +133,9 @@ export const reducer = (state, action) => {
     
             case 'flight-number':
                 return m.merge({ number: PL }, 'flight')
+
+            case 'flight-time':
+                return m.merge({time: PL}, 'flight')
     
             case 'airline': 
                 return m.merge({ airline: PL }, 'flight')
@@ -116,15 +143,26 @@ export const reducer = (state, action) => {
             case 'flight-type':
                 m.merge({ type: PL }, 'flight')
                 return setAirport()
+
+            case 'flight-buffer':
+                return m.merge({ buffer: parseFloat(PL) }, 'flight')
     
             case 'airport':
                 return setAirport(state.app.airports.find(apt => apt.code === PL) ?? {})
     
             case 'origin':
-                return m.merge({ origin: { ...PL } })
-    
             case 'destination':
-                return m.merge({ destination: { ...PL } })
+                return m.merge({ [type]: PL ? {
+                    selected: { ...PL },
+                    placeId: PL.place_id,
+                    name: PL.structured_formatting.main_text,
+                    address: PL.description
+                } : {
+                    selected: null,
+                    placeId: '',
+                    name: '',
+                    address: ''
+                }});
     
             case 'pickup-time':
                 return m.merge({ pickup: PL }, 'schedule')
@@ -136,13 +174,19 @@ export const reducer = (state, action) => {
                 return m.merge({ route: { ...PL } })
     
             case 'passengers':
-                return m.merge({ passengers: { ...PL } })
+                return setPassengersOrLuggage('adults', 'children', 'infants')
     
             case 'luggage':
-                return m.merge({ luggage: { ...PL } })
+                return setPassengersOrLuggage('small', 'medium', 'large')
     
             case 'vehicle':
                 return m.merge({ vehicle: PL })
+
+            case 'notes':
+                return m.merge({ notes: PL })
+
+            case 'quote':
+                return m.merge({ quote: { ...PL } })
     
             case 'payment': 
                 return m.merge({ payment: { ...PL } })
@@ -157,6 +201,8 @@ export const reducer = (state, action) => {
                 return m.merge({ step: PL })
             case 'airports':
                 return m.merge({ airports: [ ...PL ] })
+            case 'user':
+                return m.merge({ user: { ... PL } })
             default:
                 return state
         }

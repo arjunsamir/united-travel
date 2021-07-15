@@ -4,35 +4,50 @@ import React, { useState, useContext, useEffect } from 'react';
 // Import Context
 import { AppContext } from '../../store';
 
-// Import Atoms
-
 // Import Molecules
-import Field from '../../components/molecules/Field'
 import DateTimePicker from '../../components/organisms/DateTimePicker';
+import Dropdown from '../../components/molecules/Dropdown';
 
 // Import Organizms
 import BookingCard from '../../components/organisms/BookingCard';
-import Input from '../../components/organisms/Input';
 
 // Import Utils
 import { bemify } from '../../helpers/utils';
 import axios from 'axios';
 
+const dropdownItems = [
+    {
+        text: '2 hours before my flight',
+        value: 2
+    },
+    {
+        text: '2 1/2 hours before my flight',
+        value: 2.5
+    },
+    {
+        text: '3 hours before my flight',
+        value: 3
+    }
+]
+
 
 // Flight Location Step
-const FlightLocation = ({ navigateTo }) => {
+const FlightLocation = ({ navigateTo, updateState }) => {
 
     // Create bemify instance
     const bc = bemify('booking-card');
 
     // Import State & Dispatch
-    const { state, dispatch } = useContext(AppContext);
+    const { state } = useContext(AppContext);
 
     // Create Shortcut
     const { flight } = state.reservation;
 
+    // Determing Flight Type
+    const isDeparting = flight.type && flight.type === 'departing';
+
     // Set Allowed Actions
-    const allowed = ['previous'];
+    const allowed = flight.time && (isDeparting ? flight.buffer : true) ? ['previous', 'next'] : ['previous'];
 
     // Create Local State
     const [error, setError] = useState(false);
@@ -42,9 +57,7 @@ const FlightLocation = ({ navigateTo }) => {
     // Fetch Airline Data
     useEffect(() => {
 
-        const getDropdownData = async () => {
-
-            if (airlines) return;
+        const getAirlineData = async () => {
 
             try {
                 const res = await axios('/api/data/airlines');
@@ -56,23 +69,9 @@ const FlightLocation = ({ navigateTo }) => {
 
         }
 
-        getDropdownData();
+        if (!airlines) getAirlineData();
 
     }, [])
-
-    // Function To Update State
-    const updateState = (key, data) => {
-
-        // Prevent Some Potential Errors
-        if (!key) return;
-
-        // Update Airport Reservation
-        dispatch({
-            type: `UPDATE_RESERVATION_${key}`,
-            payload: data
-        })
-        
-    }
 
     // Crreate Rendered Component
     return (
@@ -82,31 +81,29 @@ const FlightLocation = ({ navigateTo }) => {
             allowed={allowed}
             showLoader={airlines ? false : true}
             showError={error}
-            previous={() => {
-                navigateTo('flight-location')
-            }}
-            next={() => {
-                navigateTo('flight-location')
-            }}
+            previous={() => navigateTo('flight-details')}
+            next={() => navigateTo('flight-location')}
         >
 
             <div className={bc('fieldset')}>
                 <h4 className={bc('fieldset-title')}>Flight Date &amp; time</h4>
-                <DateTimePicker />
-                {/* <Input
-                    icon="calendar"
-                >
-                    <Field
-                        input={<input type="date" min={(new Date()).toISOString().split('T')[0]} />}
-                        label="Date"
-                        tooltip="Select a date"
-                    />
-                </Input> */}
+                <DateTimePicker
+                    date={flight.time}
+                    initialDate={new Date().setHours(12, 0, 0, 0)}
+                    onDateChange={(date) => updateState('flight-time', date.toString())}
+                />
             </div>
 
-            <div className={bc('fieldset')}>
-                <h4 className={bc('fieldset-title')}>Airline Information</h4>
-            </div>
+            {isDeparting && (<div className={bc('fieldset')}>
+                <h4 className={bc('fieldset-title')}>Arrive at the airport</h4>
+                <Dropdown
+                    items={dropdownItems ?? []}
+                    defaultItem="Select Time"
+                    selected={dropdownItems && dropdownItems.find(item => item.value == flight.buffer)}
+                    onSelect={(item = {}) => updateState('FLIGHT-BUFFER', item.value)}
+                />
+                
+            </div>)}
 
         </BookingCard>
     )

@@ -7,8 +7,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const devcert = require('devcert');
 
-// Import Express
-const app = require('./app');
+
 
 
 
@@ -18,6 +17,9 @@ const app = require('./app');
 
 // Initialize Enviornment Variables
 dotenv.config({ path: './config.env' });
+
+// Import Express
+const app = require('./app');
 
 
 const port = process.env.PORT || 3000;
@@ -30,9 +32,15 @@ const initDev = async () => {
 
     console.log('Starting development server');
     
-    const ssl = await devcert.certificateFor('my-app.test');
-    server = https.createServer(ssl, app).listen(port, () => {
+    // const ssl = await devcert.certificateFor('my-app.test');
+    // server = https.createServer(ssl, app).listen(port, () => {
+    //     console.log(`✊🏾App running on port ${port}`);
+    // });
+
+    server = app.listen( port, () => {
+
         console.log(`✊🏾App running on port ${port}`);
+    
     });
 
     
@@ -46,7 +54,7 @@ const initProd = () => {
 
     server = app.listen( port, () => {
 
-        console.log(`App running on port ${port}...`);
+        console.log(`✊🏾App running on port ${port}`);
     
     });
 

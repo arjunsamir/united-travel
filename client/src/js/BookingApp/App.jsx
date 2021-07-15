@@ -1,13 +1,15 @@
 // Import React and Components
 import React, { useReducer } from 'react';
 
+// Import Date Picker Contexts
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DayjsUtils from '@date-io/dayjs'
+
 // Import State & Dispatch
 import { AppContext, reducer, initialState } from './store'
 
 // Import Components
 import Booking from './Booking';
-// import Login from './Login';
-// import Checkout from './Checkout';
 
 // Create App Component
 const App = () => {
@@ -17,8 +19,10 @@ const App = () => {
     return (
         <AppContext.Provider value={{ state, dispatch }}>
 
-            <Booking />
-
+            <MuiPickersUtilsProvider utils={DayjsUtils}>
+                <Booking />
+            </MuiPickersUtilsProvider>
+            
         </AppContext.Provider>
     )
 

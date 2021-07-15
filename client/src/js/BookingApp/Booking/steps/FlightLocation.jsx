@@ -104,12 +104,8 @@ const FlightLocation = ({ navigateTo }) => {
             allowed={allowed}
             showLoader={!dropdownItems}
             showError={error}
-            previous={() => {
-                navigateTo('airport-ride')
-            }}
-            next={() => {
-                navigateTo('flight-schedule')
-            }}
+            previous={() => navigateTo('flight-helper')}
+            next={() => navigateTo('flight-details')}
         >
 
             <div className={bc('fieldset')}>

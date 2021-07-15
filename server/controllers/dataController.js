@@ -8,6 +8,6 @@ exports.getAirlines = (req, res) => {
     res.sendFile(path.join(__dirname, '../data/aviation/airlines.json'))
 }
 
-exports.getMapTheme = (req, res) => {
-    res.sendFile(path.join(__dirname, '../data/themes/map-dark.json'))
+exports.getMapData = (req, res) => {
+    res.sendFile(path.join(__dirname, '../data/config/map.json'))
 }

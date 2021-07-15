@@ -29,31 +29,24 @@ const options = [
 ];
 
 // Airport Ride Step
-const AirportRide = ({ navigateTo }) => {
+const AirportRide = ({ navigateTo, updateState }) => {
 
     // Import State & Dispatch
-    const { state, dispatch } = useContext(AppContext);
+    const { state } = useContext(AppContext);
+    const { airportRide } = state.reservation;
 
     // Choose Default Selected Element
-    const selected = options.filter(opt => opt.value === state.reservation.airportRide)
+    const selected = options.filter(opt => opt.value === airportRide)
 
     // Set Up State To Track Allowed Naviation Actions
     const allowed = selected.length ? ['next'] : [];
-
-    // Function To Update State
-    const updateState = (data) => {
-        dispatch({
-            type: "UPDATE_RESERVATION_AIRPORT-RIDE",
-            payload: data.value
-        })
-    }
 
     return (
         <BookingCard
             title={<>Is this an <span>airport</span> ride?</>}
             allowed={allowed}
             next={() => {
-                navigateTo('flight-location')
+                navigateTo(airportRide ? 'flight-helper' : 'route');
             }}
         >
             <div className={bc('fieldset')}>
@@ -62,7 +55,7 @@ const AirportRide = ({ navigateTo }) => {
                     options={options}
                     name="airport-ride"
                     selected={selected}
-                    onChange={updateState}
+                    onChange={(e) => updateState('airport-ride', e.value)}
                 />
             </div>
 

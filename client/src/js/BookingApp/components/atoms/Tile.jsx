@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Option = ({ type, title, text, name, value, checked, onSelect }) => {
+const Option = ({ type, title, text, img, name, value, checked, onSelect }) => {
 
     return (
         <label className="select-tile">
@@ -14,6 +14,11 @@ const Option = ({ type, title, text, name, value, checked, onSelect }) => {
             <div className="select-tile__container">
                 <h4 className="select-tile__title">{title}</h4>
                 <p className="select-tile__text">{text || ''}</p>
+                {img && (
+                    <div className="select-tile__image">
+                        <img src={img.src} alt={img.alt} />
+                    </div>
+                )}
             </div>
         </label>
     )

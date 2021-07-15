@@ -4,7 +4,10 @@
         "minHours": 3
     },
     "mpg": {
-        "baseline": 25
+        "base": 25,
+        "upsize_md": 20,
+        "upsize_lg": 18,
+        "upsize_xl": 16 
     },
     "fees": {
         "base": 15,
@@ -25,7 +28,7 @@
         }
     },
     "thresholds": {
-        "long": 100,
+        "extended": 100,
         "tourist": 50
     }
 }

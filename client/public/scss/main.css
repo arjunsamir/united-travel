@@ -298,6 +298,14 @@ input::placeholder-shown, input::placeholder, textarea::placeholder-shown, texta
     color: var(--text-dark);
   }
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type=number] {
+  -moz-appearance: textfield;
+}
 ::-webkit-input-placeholder {
   color: var(--text-light);
 }
@@ -377,6 +385,8 @@ body {
   font-size: 1.6rem;
   font-weight: 400;
   color: var(--jet);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 h1, h2, h3, h4 {
   line-height: 1.2;
@@ -1619,16 +1629,22 @@ a.pswp__share--download:hover {
     --heading-color: var(--text-light);
   }
 }
-.input__field h6 {
+.input__field h6, .input__field label {
+  display: block;
   margin-bottom: 0.5rem;
   color: var(--heading-color);
   transition: color 0.2s ease-in;
+  line-height: 1.4;
+  font-weight: 700;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
 }
 .input__field input {
   border: none;
   width: 100%;
   height: var(--field-height);
-  padding: 0.5rem 0;
+  padding: 0.2rem 0;
   transition: color 0.2s ease-in, background 0.2s ease-in, opacity 0.2s ease-in, border 0.2s ease-in;
   background: transparent;
   color: currentColor;
@@ -1641,6 +1657,12 @@ a.pswp__share--download:hover {
 }
 .input__field input[type=time]:focus, .input__field input[type=date]:focus {
   outline: none;
+}
+.input__field .StripeElement {
+  height: var(--field-height);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 .input__field svg {
   stroke: var(--inner-color);
@@ -1789,6 +1811,7 @@ a.pswp__share--download:hover {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  flex-grow: 1;
   --h-col: var(--jet);
   --p-col: var(--text-dark);
   --b-col: var(--jet);
@@ -1831,6 +1854,9 @@ input:checked + .select-tile__container {
   font-size: 1.4rem;
   color: var(--p-col);
 }
+.select-tile__image img {
+  max-width: 100%;
+}
 .dropdown {
   --border-color: var(--jet);
   border: 2px solid var(--border-color);
@@ -1839,7 +1865,6 @@ input:checked + .select-tile__container {
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: 38rem;
 }
 .dropdown__select {
   display: block;
@@ -1862,6 +1887,37 @@ input:checked + .select-tile__container {
   transform: rotate(90deg);
   fill: transparent;
   stroke: currentColor;
+}
+.date-time-picker {
+  cursor: pointer;
+  padding: 0.2rem 0;
+}
+.date-time-picker.placeholder {
+  opacity: 0.3;
+}
+.autocomplete-item {
+  display: flex;
+  align-items: center;
+}
+.autocomplete-item svg {
+  height: 2.4rem;
+  width: 2.4rem;
+  margin-right: 1.2rem;
+}
+.autocomplete-item span.highlight {
+  font-weight: bold;
+  background-color: rgba(238, 181, 89, 0.25);
+}
+.autocomplete-item__location {
+  padding: 0.4rem 0;
+}
+.autocomplete-item__location h4 {
+  font-size: 1.6rem;
+  color: var(--jet);
+}
+.autocomplete-item__location p {
+  color: var(--text-dark);
+  font-size: 1.4rem;
 }
 .center {
   text-align: center;
@@ -4366,6 +4422,25 @@ section#fleet .img-accent {
   height: 12rem;
   width: 12rem;
 }
+.booking__container--map {
+  left: auto;
+  right: 10%;
+  width: 100%;
+  max-width: 55rem;
+}
+.booking__map {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 70%;
+  background-color: oldlace;
+}
+.booking__map > #google-map {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
 .booking-card {
   background-color: #fff;
   position: relative;
@@ -4412,6 +4487,11 @@ section#fleet .img-accent {
 .booking-card__text {
   margin-bottom: 4rem;
 }
+@media (prefers-color-scheme: dark) {
+  .booking-card__text {
+    color: var(--white);
+  }
+}
 .booking-card__options {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -4426,6 +4506,46 @@ section#fleet .img-accent {
 .booking-card__fieldset-title {
   margin-bottom: 1.4rem;
   font-size: var(--h5);
+}
+@media (prefers-color-scheme: dark) {
+  .booking-card__fieldset-title {
+    color: var(--white);
+  }
+}
+.booking-card__fieldset .input:not(:last-child),
+.booking-card__fieldset button:not(:last-child),
+.booking-card__fieldset .ctn:not(:last-child) {
+  margin-bottom: 1.4rem;
+}
+.booking-card__summary {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-top: 2.4rem;
+}
+.booking-card__summary h5 {
+  color: var(--primary);
+  margin-bottom: 0.8rem;
+}
+.booking-card__summary hr {
+  max-width: 10rem;
+  margin: 1.2rem 0 1.6rem;
+}
+.booking-card__summary h6 {
+  margin-bottom: 0.4rem;
+}
+.booking-card__schedule {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 2.4rem;
+  margin-bottom: 2.4rem;
+}
+.booking-card__info {
+  display: flex;
+  align-items: center;
+}
+.booking-card__info img, .booking-card__info div {
+  width: 50%;
 }
 .accent-dots {
   height: 10rem;

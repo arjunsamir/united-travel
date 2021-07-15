@@ -39,6 +39,9 @@ body {
     font-size: 1.6rem;
     font-weight: 400;
     color: var(--jet);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 h1,h2,h3,h4 {

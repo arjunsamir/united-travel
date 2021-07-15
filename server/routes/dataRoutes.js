@@ -1,6 +1,5 @@
 // Import Dependencies
 const express = require('express');
-const send = require('../utils/sendResponse');
 const data = require('../controllers/dataController');
 
 
@@ -11,7 +10,7 @@ const router = express.Router();
 // Retrieve Booking Data
 router.get('/airports', data.getAirports);
 router.get('/airlines', data.getAirlines)
-router.get('/map-theme', data.getMapTheme)
+router.get('/map', data.getMapData)
 
 
 // Export Router

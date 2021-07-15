@@ -22,7 +22,6 @@
         <path d="M2 8H15" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </symbol>
 
-
     <symbol id="globe" viewBox="0 0 16 16" fill="none">
         <title>Globe</title>
         <path d="M8 1.5C4.41031 1.5 1.5 4.41031 1.5 8C1.5 11.5897 4.41031 14.5 8 14.5C11.5897 14.5 14.5 11.5897 14.5 8C14.5 4.41031 11.5897 1.5 8 1.5Z" stroke-miterlimit="10"/>
@@ -125,6 +124,61 @@
         <path d="M8.4375 16.25C7.91973 16.25 7.5 15.8303 7.5 15.3125C7.5 14.7947 7.91973 14.375 8.4375 14.375C8.95527 14.375 9.375 14.7947 9.375 15.3125C9.375 15.8303 8.95527 16.25 8.4375 16.25Z" fill="currentColor"/>
         <path d="M15 1.875V3.125" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M5 1.875V3.125" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="airplane" viewBox="0 0 20 20" fill="none">
+        <path d="M15.9265 8.75C15.7937 8.75 15.3488 8.75391 15.2234 8.76172L12.6883 8.82812C12.6751 8.82893 12.6619 8.82608 12.6503 8.81987C12.6386 8.81366 12.6289 8.80435 12.6222 8.79297L7.56052 2.63906C7.52982 2.59842 7.49066 2.56494 7.44574 2.54092C7.40082 2.51691 7.35122 2.50295 7.30037 2.5H6.24998L9.10154 8.78906C9.10834 8.80346 9.11128 8.81938 9.11007 8.83525C9.10886 8.85113 9.10354 8.86642 9.09464 8.87962C9.08573 8.89281 9.07355 8.90347 9.05928 8.91054C9.04501 8.9176 9.02915 8.92084 9.01326 8.91992L4.25974 8.99023C4.21028 8.99173 4.16115 8.98155 4.11636 8.96051C4.07157 8.93947 4.03236 8.90817 4.00193 8.86914L2.55662 7.11133C2.43943 6.95898 2.2199 6.87695 2.02888 6.87695H1.29217C1.24178 6.87695 1.2492 6.92422 1.26287 6.97187L2.03787 9.76172C2.09645 9.91113 2.09645 10.0772 2.03787 10.2266L1.26209 13.0078C1.23904 13.084 1.24178 13.125 1.33123 13.125H2.03123C2.3492 13.125 2.39256 13.0836 2.55506 12.8789L4.02771 11.0938C4.05841 11.055 4.09767 11.0239 4.1424 11.0029C4.18713 10.9819 4.23612 10.9716 4.28552 10.9727L8.99959 11.0781C9.01675 11.0785 9.03356 11.0831 9.04855 11.0915C9.06355 11.0998 9.07628 11.1117 9.08563 11.1261C9.09498 11.1405 9.10068 11.157 9.10223 11.1741C9.10378 11.1912 9.10113 11.2084 9.09451 11.2242L6.24998 17.5H7.2906C7.34135 17.497 7.39086 17.4831 7.4357 17.4592C7.48055 17.4352 7.51967 17.4018 7.55037 17.3613L12.6226 11.2109C12.6379 11.1875 12.7008 11.1758 12.7277 11.1758L15.2238 11.2422C15.3527 11.25 15.7937 11.2539 15.9269 11.2539C17.6562 11.2539 18.75 10.7785 18.75 10C18.75 9.22148 17.6609 8.75 15.9265 8.75Z" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+    </symbol>
+
+    <symbol id="ticket" viewBox='0 0 512 512'>
+        <path fill='none' stroke='currentColor' stroke-miterlimit='10' stroke-width='32' d='M366.05 146a46.7 46.7 0 01-2.42-63.42 3.87 3.87 0 00-.22-5.26l-44.13-44.18a3.89 3.89 0 00-5.5 0l-70.34 70.34a23.62 23.62 0 00-5.71 9.24h0a23.66 23.66 0 01-14.95 15h0a23.7 23.7 0 00-9.25 5.71L33.14 313.78a3.89 3.89 0 000 5.5l44.13 44.13a3.87 3.87 0 005.26.22 46.69 46.69 0 0165.84 65.84 3.87 3.87 0 00.22 5.26l44.13 44.13a3.89 3.89 0 005.5 0l180.4-180.39a23.7 23.7 0 005.71-9.25h0a23.66 23.66 0 0114.95-15h0a23.62 23.62 0 009.24-5.71l70.34-70.34a3.89 3.89 0 000-5.5l-44.13-44.13a3.87 3.87 0 00-5.26-.22 46.7 46.7 0 01-63.42-2.32z'/>
+        <path fill='none' stroke='currentColor' stroke-miterlimit='10' stroke-width='32' stroke-linecap='round' d='M250.5 140.44l-16.51-16.51M294.52 184.46l-11.01-11M338.54 228.49l-11-11.01M388.07 278.01l-16.51-16.51'/>
+    </symbol>
+
+    <symbol id="location" viewBox='0 0 512 512'>
+        <path d='M256 48c-79.5 0-144 61.39-144 137 0 87 96 224.87 131.25 272.49a15.77 15.77 0 0025.5 0C304 409.89 400 272.07 400 185c0-75.61-64.5-137-144-137z' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <circle cx='256' cy='192' r='48' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+    </symbol>
+
+    <symbol id="bus" viewBox='0 0 512 512'>
+        <rect x='80' y='112' width='352' height='192' rx='32' ry='32' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <rect x='80' y='304' width='352' height='128' rx='32' ry='32' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <path d='M400 112H112a32.09 32.09 0 01-32-32h0a32.09 32.09 0 0132-32h288a32.09 32.09 0 0132 32h0a32.09 32.09 0 01-32 32zM144 432v22a10 10 0 01-10 10h-28a10 10 0 01-10-10v-22zM416 432v22a10 10 0 01-10 10h-28a10 10 0 01-10-10v-22z' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <circle cx='368' cy='368' r='16' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32'/>
+        <circle cx='144' cy='368' r='16' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32'/>
+        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M256 112v192M80 80v288M432 80v288'/>
+    </symbol>
+
+    <symbol id="train" viewBox='0 0 512 512'>
+        <path d='M344 48h-24a16 16 0 00-16-16h-96a16 16 0 00-16 16h-24a56.16 56.16 0 00-56 56v247c0 35.3 144 65 144 65s144-29.7 144-65V104a56 56 0 00-56-56zm-88 304a48 48 0 1148-48 48 48 0 01-48 48zm96-160a16 16 0 01-16 16H176a16 16 0 01-16-16v-64a16 16 0 0116-16h160a16 16 0 0116 16zM144 464h224M336 432l48 48M176 432l-48 48' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+    </symbol>
+
+    <symbol id="hotel" viewBox='0 0 512 512'>
+        <path d='M384 240H96V136a40.12 40.12 0 0140-40h240a40.12 40.12 0 0140 40v104zM48 416V304a64.19 64.19 0 0164-64h288a64.19 64.19 0 0164 64v112' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <path d='M48 416v-8a24.07 24.07 0 0124-24h368a24.07 24.07 0 0124 24v8M112 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16M256 240v-16a32.09 32.09 0 0132-32h80a32.09 32.09 0 0132 32v16' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+    </symbol>
+
+    <symbol id="restaurant" viewBox='0 0 512 512'>
+        <path d='M57.49 47.74l368.43 368.43a37.28 37.28 0 010 52.72h0a37.29 37.29 0 01-52.72 0l-90-91.55a32 32 0 01-9.2-22.43v-5.53a32 32 0 00-9.52-22.78l-11.62-10.73a32 32 0 00-29.8-7.44h0a48.53 48.53 0 01-46.56-12.63l-85.43-85.44C40.39 159.68 21.74 83.15 57.49 47.74z' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32'/>
+        <path d='M400 32l-77.25 77.25A64 64 0 00304 154.51v14.86a16 16 0 01-4.69 11.32L288 192M320 224l11.31-11.31a16 16 0 0111.32-4.69h14.86a64 64 0 0045.26-18.75L480 112M440 72l-80 80M200 368l-99.72 100.28a40 40 0 01-56.56 0h0a40 40 0 010-56.56L128 328' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+    </symbol>
+
+    <symbol id="bar" viewBox='0 0 512 512'>
+        <path d='M398.57 80H113.43v16S87.51 272 256 272 398.57 96 398.57 96zM256 272v160' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32'/>
+        <path fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32' d='M352 432H160'/>
+        <path fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32' d='M112 160h288'/>
+    </symbol>
+
+    <symbol id="people" viewBox='0 0 512 512'>
+        <path d='M402 168c-2.93 40.67-33.1 72-66 72s-63.12-31.32-66-72c-3-42.31 26.37-72 66-72s69 30.46 66 72z' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <path d='M336 304c-65.17 0-127.84 32.37-143.54 95.41-2.08 8.34 3.15 16.59 11.72 16.59h263.65c8.57 0 13.77-8.25 11.72-16.59C463.85 335.36 401.18 304 336 304z' fill='none' stroke='currentColor' stroke-miterlimit='10' stroke-width='32'/>
+        <path d='M200 185.94c-2.34 32.48-26.72 58.06-53 58.06s-50.7-25.57-53-58.06C91.61 152.15 115.34 128 147 128s55.39 24.77 53 57.94z' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
+        <path d='M206 306c-18.05-8.27-37.93-11.45-59-11.45-52 0-102.1 25.85-114.65 76.2-1.65 6.66 2.53 13.25 9.37 13.25H154' fill='none' stroke='currentColor' stroke-linecap='round' stroke-miterlimit='10' stroke-width='32'/>
+    </symbol>
+
+    <symbol id="luggage" viewBox='0 0 512 512'>
+        <rect x='32' y='128' width='448' height='320' rx='48' ry='48' fill='none' stroke='currentColor' stroke-linejoin='round' stroke-width='32'/>
+        <path d='M144 128V96a32 32 0 0132-32h160a32 32 0 0132 32v32M480 240H32M320 240v24a8 8 0 01-8 8H200a8 8 0 01-8-8v-24' fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='32'/>
     </symbol>
 
   </defs>

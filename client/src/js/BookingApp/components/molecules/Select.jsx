@@ -15,6 +15,7 @@ const Select = (props) => {
                     type={type}
                     title={opt.title}
                     text={opt.text}
+                    img={opt.img}
                     name={name}
                     value={opt.value}
                     checked={selected.findIndex(sel => sel.value === opt.value) >= 0 ?? false}
