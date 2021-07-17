@@ -39,7 +39,7 @@ app.enable('trust proxy');
 
 // 3. CREATE PUBLIC FOLDER
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/server/views');
+app.set('views', path.join(__dirname, 'client/views/static'));
 app.use(express.static(path.join(__dirname, 'client/public')));
 
 

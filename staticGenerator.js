@@ -1,0 +1,91 @@
+// Import Node Modules
+const path_module = require('path');
+const fs = require('fs').promises;
+
+// Import 3rd Party Modules
+const ejs = require('ejs');
+
+// Compile Languages
+const bundleLocale = async (template) => {
+
+    const base = './client/views/src/locale';
+
+    const path = {
+        main: `${base}/templates/${template}`,
+        common: `${base}/common`
+    }
+
+    const files = {
+        includes: `${path.main}/${template}.includes.json`,
+        en: `${path.main}/${template}.en.json`,
+        es: `${path.main}/${template}.es.json`
+    }
+
+    const includes = JSON.parse(await fs.readFile(files.includes, 'utf8'));
+
+    const compileBundle = async (lang) => {
+
+        const copy = JSON.parse(await fs.readFile(files[lang], 'utf8'));
+        const components = {};
+
+        await Promise.all(includes.map(async component => {
+
+            const c = await fs.readFile(`${path.common}/${component}.${lang}.json`, 'utf8');
+
+            components[component] = JSON.parse(c);
+
+        }));
+
+        return { lang, ...copy, components, path: lang === 'en' ? '' : '/' + lang }
+    }
+
+
+    return {
+        en: await compileBundle('en'),
+        es: await compileBundle('es')
+    }
+
+}
+
+
+// Generate Static Files For Each View
+const generateStaticFiles = async (view) => {
+
+    // Define Base Path
+    const base = './client/views';
+
+    // Get the template
+    const file = `${base}/src/templates/${view}.ejs`
+
+    // Bundle Locales
+    const data = await bundleLocale(view);
+
+    const render = (lang) => {
+
+        return new Promise(resolve => {
+
+            ejs.renderFile(file, data[lang], (err, html) => {
+
+                const output = html.replaceAll('{{', '<%=').replaceAll('}}', '%>');
+
+                const filename = path_module.join(__dirname, `${base}/static/${lang}/${view}.ejs`);
+
+                fs.writeFile(filename, output, 'utf8').then(resolve);
+
+            })
+
+        })
+
+    }
+
+    await render('en');
+    await render('es');
+
+}
+
+console.log('Compiling Localized EJS Templates');
+
+Promise.all(['home'].map(generateStaticFiles)).then(() => {
+    console.log('Success 🔥')
+    process.exit(0);
+});
