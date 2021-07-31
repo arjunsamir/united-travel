@@ -1,0 +1,40 @@
+$h1: 6.4rem;
+$h2: 4.9rem;
+$h3: 3.7rem;
+$h4: 2.8rem;
+$h5: 2.1rem;
+$h6: 1.6rem;
+$p: 1.8rem;
+$p-small: 1.4rem;
+$p-large: 2.2rem;
+
+$font-family: 'Silka', Arial, Helvetica, sans-serif;
+
+
+body {
+    font-family: $font-family;
+    font-size: 1.6rem;
+    font-weight: 400;
+    color: var(--text);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+h1,h2,h3,h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+    line-height: 1.2;
+    font-weight: 400;
+    color: var(--jet);
+}
+
+h1, .h1 { font-size: $h1; }
+h2, .h2 { font-size: $h2; }
+h3, .h3 { font-size: $h3; }
+h4, .h4 { font-size: $h4; }
+h5, .h5 { font-size: $h5;}
+h6, .h6 { font-size: $h6; }
+
+p, .p {
+    font-size: $p;
+    line-height: 2;
+}

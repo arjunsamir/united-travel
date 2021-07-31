@@ -8,9 +8,39 @@
     <!-- Navbar -->
     <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
 
-    <!-- Hero -->
-    <h1><%= copy.hero.title %></h1>
-    <p>look {{ user }} I'm converting handlebars to ejs</p>
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="home">
+
+        <!-- Hero Section -->
+        <section class="hero">
+
+            <!-- Background Video -->
+            <div class="hero__background">
+                <div class="bg-video">
+                    <div class="bg-video__overlay"></div>
+                    <div class="bg-video__fallback loading"></div>
+                    <video class="bg-video__player" autoplay muted loop playsinline>
+                        <!-- <source src="video/hero-bg.webm" type="video/webm"> -->
+                        <source src="/video/hero-bg.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="hero__content">
+
+                <h1><%= copy.hero.title %><span id="typewrite" data-period="2500" data-words="<%= copy.hero.words %>"></span><span class="blink">|</span></h1>
+                <h4><%= copy.hero.subtitle %></h4>
+                <a href="<%= path %>/book" class="btn-pill hollow white"><%= copy.hero.cta %> </a>
+                
+            </div>
+
+        </section>
+
+    </main>
+
+    
+
 
     <!-- JavaScript -->
     <%- include('../partials/scripts')  %> 

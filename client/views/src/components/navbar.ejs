@@ -1,32 +1,58 @@
-<section class="nav">
+<!--  Main Navbar  -->
+<div class="navbar">
 
-    <div class="navbar">
+    <!-- Desktop Navbar -->
+    <div class="navbar__full">
 
-        <!-- Desktop Navbar -->
-        <div class="navbar__full">
+        <div class="navbar__background"></div>
 
-            <div class="navbar__brand"></div>
+        <a class="navbar__brand" href="<%= path %>/">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <span>United Travel</span>
+        </a>
 
-            <nav class="navbar__nav" aria-label="desktop">
-                <%- include('navlist', { path, lang, links, className: 'navbar__nav-list' }) %>
-            </nav>
-    
-            <div class="navbar__actions"></div>
+        <nav class="navbar__nav" aria-label="desktop">
+            <%- include('navlist', { path, lang, links, className: 'navbar__nav-list' }) %>
+        </nav>
 
-        </div>
-
-        <!-- Hamburger Menu Only -->
-        <div class="navbar__min">
-            <div class="navbar__menu-icon">
-                <span></span>
-                <span></span>
+        <div class="navbar__actions">
+            <!-- Language -->
+            <div class="navbar__lang">
+                <svg><use href="/img/icons.svg#language"></use></svg>
             </div>
+
+            <!-- Divider -->
+            <hr>
+
+            <!-- Profile -->
+            <div class="navbar__profile logged-in">
+
+                <!-- Logged In Icon -->
+                <div class="navbar__profile-pic">
+                    <img src="/profile-photos/juan.jpg" alt="Profile Photo">
+                </div>
+
+                <!-- Logged Out Icon -->
+                <svg class="navbar__profile-icon"><use href="/img/icons.svg#person-circle"></use></svg>
+
+            </div>
+
+            <!-- Call To Action -->
+            <a href="<%= path %>/book" class="navbar__cta"><%= cta %> </a>
         </div>
-        
+
     </div>
 
-    <div class="menu">
-        
+    <!-- Hamburger Menu Only -->
+    <div class="navbar__min">
+        <div class="navbar__menu-icon">
+            <span></span>
+            <span></span>
+        </div>
     </div>
+    
+</div>
 
-</section>
+<div class="nav-menu">
+    
+</div>

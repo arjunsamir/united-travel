@@ -2,6 +2,8 @@
     "links": {
         "home": "Casa",
         "about": "Acerca de",
-        "contact": "Contacto"
-    }
+        "contact": "Contacto",
+        "fleet": "Flota"
+    },
+    "cta": "Reservar Ahora"
 }

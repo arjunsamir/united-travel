@@ -21,7 +21,7 @@ body {
     box-sizing: border-box;
     overflow-x: hidden;
     width: 100vw;
-    background-color: var(--bg-light);
+    background-color: var(--white);
 
     &.fixed {
         height: 100vh;
@@ -30,9 +30,6 @@ body {
         position: fixed;
     }
 
-    @include dark {
-        background-color: var(--bg-dark);
-    }
 }
 
 label, input[type="text"], input[type="email"], input[type="password"], input[type="number"], select, textarea {
@@ -43,18 +40,15 @@ label, input[type="text"], input[type="email"], input[type="password"], input[ty
 }
 
 button {
-    font-family: $font;
+    font-family: $font-family;
 }
 
 input, textarea {
-    font-family: $font;
+    font-family: $font-family;
     font-size: 1.8rem;
     color: var(--jet);
     &::placeholder-shown, &::placeholder {
-        color: var(--text-light);
-        @include dark {
-            color: var(--text-dark);
-        }
+        color: var(--placeholder);
     }
 }
 
@@ -69,10 +63,7 @@ input[type=number] {
 }
 
 ::placeholder {
-    color: var(--text-light);
-    @include dark {
-        color: var(--text-dark);
-    }
+    color: var(--placeholder);
 }
 
 ::selection {
@@ -95,14 +86,11 @@ a, a:link, a:visited {
     }
 }
 
-img {
+img, svg {
     display: block;
 }
 
 hr {
     display: block;
     border: none;
-    background-color: var(--text-light);
-    height: 2px;
-    opacity: .5;
 }

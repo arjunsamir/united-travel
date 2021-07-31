@@ -1,0 +1,48 @@
+.btn-pill {
+
+    --btn--bg: var(--jet);
+    --btn-border: var(--jet);
+    --btn-text: var(--white);
+
+    font-size: $p-small;
+    padding: 2rem 4.8rem;
+    border-radius: 6rem;
+
+    // Button Theme
+    @include link {
+        color: var(--btn-text);
+        border: 2px solid var(--btn-border);
+        background-color: var(--btn-bg);
+    }
+
+    // Hover Behaviors
+    &.hollow {
+        background-color: transparent;
+
+        @include link {
+            &:hover {
+                opacity: 1;
+                background-color: var(--primary);
+                border-color: var(--primary);
+                color: var(--jet);
+            }
+        }
+    }
+
+    // Theme Definitions
+    &.white {
+        --btn--bg: var(--white);
+        --btn-border: var(--white);
+        --btn-text: var(--white);
+    }
+
+    &.dark {
+        --btn--bg: var(--jet);
+        --btn-border: var(--jet);
+        --btn-text: var(--jet);
+    }
+
+}
+
+
+

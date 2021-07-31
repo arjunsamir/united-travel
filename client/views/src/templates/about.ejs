@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Hero -->
+    <h1><%= copy.hero.title %></h1>
+    <p>look {{ user.name }} I'm converting handlebars to ejs</p>
+
+    <!-- JavaScript -->
+    <%- include('../partials/scripts')  %> 
+
+</body>
+
+</html>
