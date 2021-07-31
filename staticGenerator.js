@@ -3,6 +3,7 @@ const path_module = require('path');
 const fs = require('fs').promises;
 
 // Import 3rd Party Modules
+const chokidar = require('chokidar');
 const ejs = require('ejs');
 
 // Compile Languages
@@ -83,9 +84,12 @@ const generateStaticFiles = async (view) => {
 
 }
 
-console.log('Compiling Localized EJS Templates');
+const watchStaticFiles = () => {
+    return Promise.all(['home'].map(generateStaticFiles)).then(() => {
+        console.log('Rebuilt Static Files 🔥')
+    }).catch(err => process.exit());
+}
 
-Promise.all(['home'].map(generateStaticFiles)).then(() => {
-    console.log('Success 🔥')
-    process.exit(0);
-});
+watchStaticFiles().then(() => {
+    chokidar.watch('./client/views/src').on('change', watchStaticFiles);
+})

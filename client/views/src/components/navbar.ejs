@@ -1,5 +1,32 @@
-<nav>
-    <a class="navbar__cta nb-link" href="<%= path %>/book"><%= links.home %></a>
-    <a class="navbar__cta nb-link" href="<%= path %>/book"><%= links.about %></a>
-    <a class="navbar__cta nb-link" href="<%= path %>/book"><%= links.contact %></a>
-</nav>
+<section class="nav">
+
+    <div class="navbar">
+
+        <!-- Desktop Navbar -->
+        <div class="navbar__full">
+
+            <div class="navbar__brand"></div>
+
+            <nav class="navbar__nav" aria-label="desktop">
+                <%- include('navlist', { path, lang, links, className: 'navbar__nav-list' }) %>
+            </nav>
+    
+            <div class="navbar__actions"></div>
+
+        </div>
+
+        <!-- Hamburger Menu Only -->
+        <div class="navbar__min">
+            <div class="navbar__menu-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="menu">
+        
+    </div>
+
+</section>

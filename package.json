@@ -7,9 +7,9 @@
     "start": "node server.js",
     "start:prod": "node server.js",
     "start:dev": "nodemon server.js",
-    "build-static": "node staticGenerator.js",
+    "watch:static": "node staticGenerator.js",
     "watch": "cd client && npm start",
-    "build": "npm run build-static && cd client && npm run build",
+    "build": "cd client && npm run build",
     "preinstall": "npx npm-force-resolutions"
   },
   "author": "Arjun Patel",
@@ -45,5 +45,8 @@
   },
   "engines": {
     "node": "^12"
+  },
+  "devDependencies": {
+    "chokidar": "^3.5.2"
   }
 }

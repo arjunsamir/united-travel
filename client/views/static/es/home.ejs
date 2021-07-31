@@ -2,20 +2,63 @@
 <html lang="es">
 
 <head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>United Travel LLC</title>
+
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/style/main.css">
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="/fonts/silka.css">
+
 </head>
 
 <body>
 
     <!-- Navbar -->
-    <nav>
-    <a class="navbar__cta nb-link" href="/es/book">Casa</a>
-    <a class="navbar__cta nb-link" href="/es/book">Acerca de</a>
-    <a class="navbar__cta nb-link" href="/es/book">Contacto</a>
-</nav>
+    <section class="nav">
+
+    <div class="navbar">
+
+        <!-- Desktop Navbar -->
+        <div class="navbar__full">
+
+            <div class="navbar__brand"></div>
+
+            <nav class="navbar__nav" aria-label="desktop">
+                <ul class="navbar__nav-list">
+    <li><a href="/es/">Casa</a></li>
+    <li><a href="/es/about">Acerca de</a></li>
+    <li><a href="/es/fleet"></a></li>
+    <li><a href="/es/contact">Contacto</a></li>
+</ul>
+            </nav>
+    
+            <div class="navbar__actions"></div>
+
+        </div>
+
+        <!-- Hamburger Menu Only -->
+        <div class="navbar__min">
+            <div class="navbar__menu-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="menu">
+        
+    </div>
+
+</section>
+
 
     <!-- Hero -->
-    <h1>Esto es una prueba</h1>
+    <h1>andar con </h1>
     <p>look <%= user %> I'm converting handlebars to ejs</p>
 
     <!-- JavaScript -->

@@ -2,22 +2,64 @@
 <html lang="en">
 
 <head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>United Travel LLC</title>
+
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/style/main.css">
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="/fonts/silka.css">
+
 </head>
 
 <body>
 
     <!-- Navbar -->
-    <nav>
-    <a class="navbar__cta nb-link" href="/book">Home</a>
-    <a class="navbar__cta nb-link" href="/book">About</a>
-    <a class="navbar__cta nb-link" href="/book">Contact</a>
+    <section class="nav">
+
+    <div class="navbar">
+
+        <!-- Desktop Navbar -->
+        <div class="navbar__full">
+
+            <div class="navbar__brand"></div>
+
+            <nav class="navbar__nav" aria-label="desktop">
+                <ul class="navbar__nav-list">
+    <li><a href="/">Home</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/fleet">Fleet</a></li>
+    <li><a href="/contact">Contact</a></li>
+</ul>
+            </nav>
     
-</nav>
+            <div class="navbar__actions"></div>
+
+        </div>
+
+        <!-- Hamburger Menu Only -->
+        <div class="navbar__min">
+            <div class="navbar__menu-icon">
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        
+    </div>
+
+    <div class="menu">
+        
+    </div>
+
+</section>
+
 
     <!-- Hero -->
-    <h1>This is a test</h1>
-    <p>look <%= user.name %> I'm converting handlebars to ejs</p>
+    <h1>ride with </h1>
+    <p>look <%= user %> I'm converting handlebars to ejs</p>
 
     <!-- JavaScript -->
     <script src="/js/app.js"></script> 

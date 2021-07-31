@@ -2,6 +2,7 @@
     "links": {
         "home": "Home",
         "about": "About",
-        "contact": "Contact"
+        "contact": "Contact",
+        "fleet": "Fleet"
     }
 }
