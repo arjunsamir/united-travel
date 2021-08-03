@@ -2,19 +2,20 @@
     height: 100vh;
     width: 100%;
 
+    position: relative;
+
     @include flexCenter;
 
     &__background {
-        position: absolute;
-        top: 0;
-        left: 0;
-        z-index: -1;
+        @include overlay;
 
-        height: 100%;
-        width: 100%;
+        img {
+            @include cover;
+        }
     }
 
     &__content {
+        position: relative;
         @include flexCenter;
         @include flexGap(1.2rem, "column");
         

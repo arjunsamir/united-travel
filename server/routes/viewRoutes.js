@@ -20,7 +20,8 @@ module.exports = lang => {
     router.get('/book', render(views, 'booking'));
     router.get('/login', auth.isLoggedIn, render(views, 'login'));
     router.get('/account', auth.protect, render(views, 'account'));
-    router.get('/lost', render(views, 'lost'));
+    router.get('/privacy', render(views, 'privacy'));
+    router.get('/terms', render(views, 'terms'));
     
     return router;
 

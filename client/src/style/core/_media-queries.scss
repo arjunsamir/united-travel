@@ -8,27 +8,6 @@
 1800+           Large Desktop (desktop)
 */
 
-@mixin respond($breakpoint) {
-    @if $breakpoint == iphone {
-        @media(max-width: 23em) { @content }; //400px
-    }
-    @if $breakpoint == phone {
-        @media(max-width: 37.5em) { @content }; //600px
-    }
-    @if $breakpoint == tab-port {
-        @media(max-width: 56.25em) { @content }; //900px
-    }
-    @if $breakpoint == tab-land {
-        @media(max-width: 75em) { @content }; //1200px
-    }
-    @if $breakpoint == laptop {
-        @media(max-width: 85em) { @content }; //1400px
-    }
-    @if $breakpoint == desktop {
-        @media(max-width: 95em) { @content }; // 1520
-    }
-}
-
 @mixin iphone {
     @media(max-width: 23em) { @content }; //400px
 }
@@ -49,7 +28,7 @@
     @media(max-width: 85em) { @content }; //1400px
 }
 
-@mixin responsive($breakpoint) {
+@mixin respond($breakpoint) {
     @media(max-width: $breakpoint) { @content }; //900px
 }
 

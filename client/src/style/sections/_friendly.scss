@@ -1,0 +1,27 @@
+.friendly {
+
+    position: relative;
+    padding: var(--y-pad) var(--x-pad);
+    background-color: #222325;
+
+    @include flexCenter;
+    
+    &__map {
+        @include overlay;
+
+        img {
+            height:100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+        }
+    }
+
+    &__content {
+        position: relative;
+        width: 100%;
+        max-width: var(--track-width);
+
+    }
+
+}

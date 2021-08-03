@@ -1,0 +1,37 @@
+.long-distance {
+
+    position: relative;
+    padding: var(--y-pad) var(--x-pad);
+    background-color: #313131;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    height: 100vh;
+
+    &__map {
+        @include overlay;
+
+        img {
+            height:100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            @include respond(80em) {
+                right: -10rem;
+            }
+
+        }
+    }
+
+    &__content {
+        position: relative;
+        width: 100%;
+        max-width: var(--track-width);
+
+    }
+
+}

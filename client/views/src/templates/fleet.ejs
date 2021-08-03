@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="home">
+
+        <!-- Fleet React App -->
+        <section class="fleet" id="fleet">
+            <h1>Fleet</h1>
+        </section>
+
+        <!-- Contact Us -->
+        <%- include('../components/contact', { path, lang, ...components.contact }) %>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html

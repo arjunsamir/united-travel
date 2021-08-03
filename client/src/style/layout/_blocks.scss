@@ -1,6 +1,11 @@
 .content {
 
     width: 100%;
+    max-width: var(--max-content-width);
+
+    display: flex;
+    flex-direction: column;
+    @include flexGap(2.4rem, "column");
 
     h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
         span {
@@ -8,4 +13,39 @@
         }
     }
 
+    &.xl {
+        max-width: calc(var(--max-content-width) * 1.5);
+
+        p {
+            font-size: $p-large;
+        }
+    }
+
+}
+
+.bg-alt {
+    background-color: var(--light-gray);
+}
+
+.section {
+
+    @include flexCenter;
+    padding: var(--y-pad) var(--x-pad);
+    
+
+    picture, img {
+        width: 100%;
+    }
+
+    &__grid {
+        max-width: var(--track-width);
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 8rem;
+        align-items: center;
+
+        &.flex-start {
+            align-items: flex-start;
+        }
+    }
 }

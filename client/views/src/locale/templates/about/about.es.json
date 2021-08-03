@@ -1,0 +1,27 @@
+{
+    "title": "Sobre Nosotros - United Travel LLC",
+    "hero": {
+        "title": "Nuestro corazón está en <span>Orlando</span>",
+        "subtitle": "La ciudad hermosa"
+    },
+    "family": {
+        "title": "De propiedad y operación <span>familiar.</span>",
+        "copy": "Somos un negocio operado y de propiedad familiar centrado en Orlando, Florida. Esta empresa fue fundada en 2013 por Beatriz Murillo y Juan López, con el objetivo principal de brindar servicios de autos negros de primera clase en las áreas de Orlando y Tampa Bay. Desde entonces hemos crecido y ahora ofrecemos viajes de larga distancia en todo el estado de Florida."
+    },
+    "professional": {
+        "title": "Siempre <span>profesional.</span> Siempre <span>amigable.</span>",
+        "copy": "Siempre somos profesionales y siempre corteses. Cuando viaje con nosotros, nunca encontrará un conductor grosero ni recibirá un servicio insatisfactorio. Estamos orgullosos de lo que hacemos y nos encanta conocer gente nueva. Lo primero que verá cuando llegue nuestro conductor es una sonrisa en su rostro, porque realmente es un placer para nosotros atenderlo."
+    },
+    "quality": {
+        "title": "Nos impulsa <span>la calidad</span>",
+        "copy": [
+            "Creemos en hacer un esfuerzo adicional por usted. Cuando viaja con nosotros, solo puede esperar el más alto nivel de servicio. Nos aseguramos de llegar temprano a su punto de recogida y llevarlo a su destino de manera oportuna para que nunca tenga que esperar un minuto.",
+            "Calidad significa conducir con seguridad para que tenga la máxima tranquilidad y pueda relajarse sabiendo que está en buenas manos. También tenemos asientos para niños para acomodar a los pequeños y mantenerlos seguros.",
+            "También nos tomamos el tiempo para limpiar nuestros vehículos antes y después de cada viaje para que pueda viajar en un ambiente limpio e higiénico. Esto es más importante que nunca debido a COVID-19, por lo que puede relajarse sabiendo que estamos haciendo nuestra parte."
+        ]
+    },
+    "quote": {
+        "text": "Calidad significa hacerlo bien cuando nadie está mirando.",
+        "author": "Henry Ford"
+    }
+}

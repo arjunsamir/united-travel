@@ -67,7 +67,7 @@ const generateStaticFiles = async (view) => {
 
             ejs.renderFile(file, data[lang], (err, html) => {
 
-                const output = html.replaceAll('{{', '<%=').replaceAll('}}', '%>');
+                const output = html.replaceAll('{{', '<%-').replaceAll('}}', '%>');
 
                 const filename = path_module.join(__dirname, `${base}/static/${lang}/${view}.ejs`);
 
@@ -85,7 +85,7 @@ const generateStaticFiles = async (view) => {
 }
 
 const watchStaticFiles = () => {
-    return Promise.all(['home'].map(generateStaticFiles)).then(() => {
+    return Promise.all(['home', 'about', 'fleet'].map(generateStaticFiles)).then(() => {
         console.log('Rebuilt Static Files 🔥')
     }).catch(err => process.exit());
 }

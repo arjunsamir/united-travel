@@ -1,0 +1,12 @@
+.cta {
+    padding: 0 var(--x-pad);
+
+    &__card {
+        background-color: var(--jet);
+        border-radius: 2.4rem;
+        box-shadow: $soft-shadow;
+        display: flex;
+        justify-content: center;
+        padding: calc(var(--y-pad) / 2) calc(var(--x-pad) / 2);
+    }
+}

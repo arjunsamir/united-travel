@@ -8,6 +8,11 @@ html {
     font-size: 62.5%;
     scroll-behavior: smooth;
 
+    --track-width: 120rem;
+    --max-content-width: 56rem;
+    --x-pad: 10rem;
+    --y-pad: 20rem;
+
     @include respond(tab-land){
         font-size: 56.25%; //1rem = 9px
     }
@@ -15,6 +20,7 @@ html {
     @include respond(tab-port){
         font-size: 50%; //1rem = 8px
     }
+
 }
 
 body {

@@ -8,13 +8,98 @@
     <!-- Navbar -->
     <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
 
-    <!-- Hero -->
-    <h1><%= copy.hero.title %></h1>
-    <p>look {{ user.name }} I'm converting handlebars to ejs</p>
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="home">
 
+        <!-- Hero Section -->
+        <section class="hero">
+
+            <!-- Background Video -->
+            <div class="hero__background">
+                <img src="/img/about-background.jpg" alt="Disney Castle, Universal Studios Sign, and downtown orlando">
+            </div>
+
+            <!-- Content -->
+            <div class="hero__content">
+
+                <h1><%- hero.title %></h1>
+                <h4><%= hero.subtitle %></h4>
+                
+            </div>
+
+        </section>
+
+        <!-- Family Section -->
+        <section class="section">
+
+             <!-- Content Block -->
+             <div class="content xl">
+                <h2><%- family.title %></h2>
+                <p><%- family.copy %></p>
+            </div>
+
+        </section>
+
+        <!-- Professional & Friendly Service -->
+        <section class="friendly">
+            <div class="friendly__map">
+                <img src="/img/friendly.png" alt="Man wearing a hat and smiling in black and white">
+            </div>
+
+            <div class="friendly__content">
+                <div class="content">
+                    <h2 class="white"><%- professional.title %></h2>
+                    <p><%- professional.copy %></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Section -->
+        <section class="section">
+
+            <!-- Content Block -->
+            <div class="content xl">
+               <h2><%- quality.title %></h2>
+               <% quality.copy.forEach(function(c) { %>
+                    <p><%- c %></p>
+                <% }) %>
+           </div>
+
+       </section>
+
+       <!-- Quote Section -->
+       <section class="quote">
+           <div class="quote__background">
+                <img src="/img/quote.jpg" alt="Car driving at night with blurred lights">
+           </div>
+
+           <div class="quote__content">
+               <h2 class="white"><%- quote.text %></h2>
+               <h3 class="white light">&dash; <%- quote.author %></h3>
+           </div>
+       </section>
+
+        <!-- Reviews  -->
+        <%- include('../components/reviews', { path, lang }) %>
+
+        <!-- Call To Action -->
+        <%- include('../components/cta', { path, lang, ...components.cta }) %>
+
+        <!-- Our Fleet -->
+        <%- include('../components/fleet', { path, lang, ...components.fleet }) %>
+
+        <!-- Contact Us -->
+        <%- include('../components/contact', { path, lang, ...components.contact }) %>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+
+    
     <!-- JavaScript -->
-    <%- include('../partials/scripts')  %> 
+    <%- include('../partials/scripts'), { lang }  %> 
 
 </body>
 
-</html>
+</html

@@ -72,7 +72,7 @@ app.use('/api/vehicles', vehicleRouter);
 app.use('/api/booking', bookingRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/data', dataRouter);
-app.all('*', (req, res, next) => next( new AppError(`Can't find ${req.originalUrl} on this server you bitch!`, 404) ));
+app.all('*', (req, res, next) => res.redirect('/'));
 
 
 

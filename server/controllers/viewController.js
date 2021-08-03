@@ -33,8 +33,12 @@ class Views {
         this.render(res, 'account');
     }
 
-    lost(req, res) {
-        this.render(res, 'lost');
+    privacy(req, res) {
+        this.render(res, 'privacy');
+    }
+
+    terms(req, res) {
+        this.render(res, 'terms');
     }
 
     async render(res, page, data = {}) {
