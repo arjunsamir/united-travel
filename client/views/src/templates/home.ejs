@@ -3,7 +3,10 @@
 
 <%- include('../partials/head', { title })  %>
 
-<body>
+<body class="home-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
 
     <!-- Navbar -->
     <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
@@ -12,7 +15,7 @@
     <main data-scroll-container data-barba="container" data-barba-namespace="home">
 
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero" id="hero">
 
             <!-- Background Video -->
             <div class="hero__background">
@@ -44,10 +47,10 @@
             <div class="section__grid">
 
                 <!-- Content Block -->
-                <div class="content">
+                <div class="content" >
                     <h2><%- copy.beyond.title %></h2>
                     <p><%- copy.beyond.copy %></p>
-                    <a href="<%= path %>/book" class="btn-pill hollow dark"><%= copy.beyond.cta %> </a>
+                    <a href="<%= path %>/book" class="btn-pill hollow dark"><%= copy.beyond.cta %></a>
                 </div>
 
                 <!-- Image -->
@@ -64,7 +67,7 @@
         </section>
 
         <!-- Airport Service -->
-        <section class="fsi">
+        <section class="fsi" id="airport-service">
 
             <!-- Background Image -->
             <div class="fsi__background">
@@ -80,7 +83,7 @@
 
             <!-- Section Content -->
             <div class="fsi__content">
-                <div class="content">
+                <div class="content" data-scroll data-scroll-speed="2">
                     <h2 class="white"><%- copy.airport.title %></h2>
                     <p><%- copy.airport.copy %></p>
                     <a href="<%= path %>/book" class="btn-pill hollow white"><%= copy.airport.cta %> </a>
@@ -90,7 +93,7 @@
         </section>
         
         <!-- Cruise Service -->
-        <section class="fsi">
+        <section class="fsi" id="cruise-service">
 
             <!-- Background Image -->
             <div class="fsi__background">
@@ -103,7 +106,7 @@
 
             <!-- Section Content -->
             <div class="fsi__content align-right">
-                <div class="content">
+                <div class="content" data-scroll data-scroll-speed="2">
                     <h2 class="white"><%- copy.cruise.title %></h2>
                     <p><%- copy.cruise.copy %></p>
                     <a href="<%= path %>/book" class="btn-pill hollow white"><%= copy.cruise.cta %> </a>
@@ -144,7 +147,7 @@
                 </picture>
             </div>
 
-            <div class="long-distance__content">
+            <div class="long-distance__content" data-scroll data-scroll-speed="1">
                 <div class="content">
                     <h2 class="white"><%- copy.long.title %></h2>
                     <p><%- copy.long.copy %></p>

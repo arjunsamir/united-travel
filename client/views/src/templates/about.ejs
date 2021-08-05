@@ -3,13 +3,16 @@
 
 <%- include('../partials/head', { title })  %>
 
-<body>
+<body class="about-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
 
     <!-- Navbar -->
     <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
 
     <!-- Main Block (Scroll Container) -->
-    <main data-scroll-container data-barba="container" data-barba-namespace="home">
+    <main data-scroll-container data-barba="container" data-barba-namespace="about">
 
         <!-- Hero Section -->
         <section class="hero">

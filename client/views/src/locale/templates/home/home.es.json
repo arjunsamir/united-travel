@@ -3,7 +3,7 @@
     "copy": {
         "hero": {
             "title": "andar con ",
-            "words": "['estilo', 'comodidad', 'facilidad']",
+            "words": "[``estilo``, ``comodidad``, ``facilidad``]",
             "subtitle": "Servicios de autos negros con sede en Orlando",
             "cta": "Hacer Reservacion"
         },

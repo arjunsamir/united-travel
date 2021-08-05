@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="login-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="login">
+
+        <!-- Fleet React App -->
+        <section class="login" id="login">
+            <h1>Login App Init</h1>
+        </section>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html

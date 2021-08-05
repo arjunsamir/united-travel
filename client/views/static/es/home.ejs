@@ -15,7 +15,15 @@
 
 </head>
 
-<body>
+<body class="home-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use href="/img/icons.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
 
     <!-- Navbar -->
     <!--  Main Navbar  -->
@@ -86,7 +94,7 @@
     <main data-scroll-container data-barba="container" data-barba-namespace="home">
 
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero" id="hero">
 
             <!-- Background Video -->
             <div class="hero__background">
@@ -103,7 +111,7 @@
             <!-- Content -->
             <div class="hero__content">
 
-                <h1>andar con <span id="typewrite" data-period="2500" data-words="['estilo', 'comodidad', 'facilidad']"></span><span class="blink">|</span></h1>
+                <h1>andar con <span id="typewrite" data-period="2500" data-words="[``estilo``, ``comodidad``, ``facilidad``]"></span><span class="blink">|</span></h1>
                 <h4>Servicios de autos negros con sede en Orlando</h4>
                 <a href="/es/book" class="btn-pill hollow white">Hacer Reservacion </a>
                 
@@ -118,10 +126,10 @@
             <div class="section__grid">
 
                 <!-- Content Block -->
-                <div class="content">
+                <div class="content" >
                     <h2>Desde el punto A hasta el más allá.</h2>
                     <p>Brindamos servicios de transporte de alta calidad, seguros y confiables en toda la Florida Central. También ofrecemos viajes de mayor distancia dentro y fuera de Orlando. Llegue a su próximo destino con facilidad, comodidad y tranquilidad.</p>
-                    <a href="/es/book" class="btn-pill hollow dark">Reservar Ahora </a>
+                    <a href="/es/book" class="btn-pill hollow dark">Reservar Ahora</a>
                 </div>
 
                 <!-- Image -->
@@ -138,7 +146,7 @@
         </section>
 
         <!-- Airport Service -->
-        <section class="fsi">
+        <section class="fsi" id="airport-service">
 
             <!-- Background Image -->
             <div class="fsi__background">
@@ -154,7 +162,7 @@
 
             <!-- Section Content -->
             <div class="fsi__content">
-                <div class="content">
+                <div class="content" data-scroll data-scroll-speed="2">
                     <h2 class="white">Servicio de Aeropuerto</h2>
                     <p>¿Necesita que lo recojan o lo dejen en el aeropuerto? Ofrecemos una experiencia completamente perfecta. Realizamos un seguimiento del estado de su vuelo para que podamos llegar temprano para que no tenga que esperar un minuto a que llegue su conductor. Siempre llegamos a tiempo y siempre somos profesionales.</p>
                     <a href="/es/book" class="btn-pill hollow white">Hacer Reservacion </a>
@@ -164,7 +172,7 @@
         </section>
         
         <!-- Cruise Service -->
-        <section class="fsi">
+        <section class="fsi" id="cruise-service">
 
             <!-- Background Image -->
             <div class="fsi__background">
@@ -177,7 +185,7 @@
 
             <!-- Section Content -->
             <div class="fsi__content align-right">
-                <div class="content">
+                <div class="content" data-scroll data-scroll-speed="2">
                     <h2 class="white">Servicio de Crucero</h2>
                     <p>¿Vas a hacer un crucero y necesitas que te dejen en la terminal de cruceros? Lo cubrimos con una experiencia completamente fluida. Siempre somos profesionales y siempre a tiempo.</p>
                     <a href="/es/book" class="btn-pill hollow white">Hacer Reservacion </a>
@@ -218,7 +226,7 @@
                 </picture>
             </div>
 
-            <div class="long-distance__content">
+            <div class="long-distance__content" data-scroll data-scroll-speed="1">
                 <div class="content">
                     <h2 class="white"><span>¿Paseos de larga distancia?</span> No hay problema.</h2>
                     <p>¿Se puede llegar de Orlando a Miami? Eso no es un problema para nosotros, ya que estamos orgullosos de ofrecer viajes de larga distancia. Siéntese y relájese mientras lo conducimos por el estado de Florida. Disfruta de un viaje en autopista cómodo y suave con toda la comodidad que necesitas para que el tiempo pase volando.</p>

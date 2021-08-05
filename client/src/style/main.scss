@@ -9,6 +9,10 @@
 @import 'core/html';
 
 
+// Import Vendor Modules
+@import 'vendor/locomotive-scroll';
+
+
 // Import Layouts
 @import 'layout/bg-video';
 @import 'layout/blocks';
@@ -18,6 +22,7 @@
 @import 'components/navbar';
 @import 'components/nav-menu';
 @import 'components/buttons';
+@import 'components/preloader';
 
 
 // Import Sections

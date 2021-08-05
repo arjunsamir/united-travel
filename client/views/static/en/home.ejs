@@ -15,7 +15,15 @@
 
 </head>
 
-<body>
+<body class="home-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use href="/img/icons.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
 
     <!-- Navbar -->
     <!--  Main Navbar  -->
@@ -86,7 +94,7 @@
     <main data-scroll-container data-barba="container" data-barba-namespace="home">
 
         <!-- Hero Section -->
-        <section class="hero">
+        <section class="hero" id="hero">
 
             <!-- Background Video -->
             <div class="hero__background">
@@ -103,7 +111,7 @@
             <!-- Content -->
             <div class="hero__content">
 
-                <h1>ride with <span id="typewrite" data-period="2500" data-words="['style', 'comfort', 'ease']"></span><span class="blink">|</span></h1>
+                <h1>ride with <span id="typewrite" data-period="2500" data-words="[``style``, ``comfort``, ``ease``]"></span><span class="blink">|</span></h1>
                 <h4>Orlando-based black car services</h4>
                 <a href="/book" class="btn-pill hollow white">Book Reservation </a>
                 
@@ -118,10 +126,10 @@
             <div class="section__grid">
 
                 <!-- Content Block -->
-                <div class="content">
+                <div class="content" >
                     <h2>From point <span>A</span> to <span>Beyond.</span></h2>
                     <p>We provide high quality, safe and reliable transportation services throughout Central Florida. We also offer longer distance rides in and out of Orlando. Get to you next destination with ease, comfort, and peace of mind.</p>
-                    <a href="/book" class="btn-pill hollow dark">Book Now </a>
+                    <a href="/book" class="btn-pill hollow dark">Book Now</a>
                 </div>
 
                 <!-- Image -->
@@ -138,7 +146,7 @@
         </section>
 
         <!-- Airport Service -->
-        <section class="fsi">
+        <section class="fsi" id="airport-service">
 
             <!-- Background Image -->
             <div class="fsi__background">
@@ -154,7 +162,7 @@
 
             <!-- Section Content -->
             <div class="fsi__content">
-                <div class="content">
+                <div class="content" data-scroll data-scroll-speed="2">
                     <h2 class="white">Airport Service</h2>
                     <p>Need to be picked up or dropped off at the airport? We offer a completely seamless experience. We track the status of your flight so that we can be there early so that you aren’t waiting a minute for your driver to arrive. We’re always on time and always professional.</p>
                     <a href="/book" class="btn-pill hollow white">Book Reservation </a>
@@ -164,7 +172,7 @@
         </section>
         
         <!-- Cruise Service -->
-        <section class="fsi">
+        <section class="fsi" id="cruise-service">
 
             <!-- Background Image -->
             <div class="fsi__background">
@@ -177,7 +185,7 @@
 
             <!-- Section Content -->
             <div class="fsi__content align-right">
-                <div class="content">
+                <div class="content" data-scroll data-scroll-speed="2">
                     <h2 class="white">Cruise Service</h2>
                     <p>Going on a cruise and need to be dropped off at the cruise terminal? We’ve got you covered with a completely seamless experience. We're always professional and always on time.</p>
                     <a href="/book" class="btn-pill hollow white">Book Reservation </a>
@@ -218,7 +226,7 @@
                 </picture>
             </div>
 
-            <div class="long-distance__content">
+            <div class="long-distance__content" data-scroll data-scroll-speed="1">
                 <div class="content">
                     <h2 class="white"><span>Long distance rides?</span> No problem.</h2>
                     <p>Do you to get from Orlando to Miami? That’s not a problem for us as we proudly offer long distance rides. Sit back and relax as we drive you across the state of Florida. Enjoy a comfortable and smooth highway ride with all the comfort you need to make the time fly by.</p>

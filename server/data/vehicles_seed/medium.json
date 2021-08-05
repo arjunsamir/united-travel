@@ -1,0 +1,27 @@
+{
+    "make": "Chevrolet",
+    "model": "Suburban",
+    "year": "2018",
+    "passengers": 7,
+    "bags": 6,
+    "mpg": 20,
+    "info_en": {
+        "name": "Medium",
+        "description": "We typically use a Chevrolet Suburban SUV as our standard vehicle. It is a very comfortable and spacious vehicle. It can handle up to 7 passengers comfortably and carry more luggage than our compact vehicles.",
+        "features": ["Air Conditioning", "Leather Seats", "Quiet Ride"]
+    },
+    "info_es": {
+        "name": "Medio",
+        "description": "Normalmente utilizamos un SUV Chevrolet Suburban como nuestro vehículo estándar. Es un vehículo muy cómodo y espacioso. Puede transportar cómodamente hasta 7 pasajeros y llevar más equipaje que nuestros vehículos compactos.",
+        "features": ["Aire acondicionado", "Asientos de piel", "Paseo silencioso"]
+    },
+    "thumbnail": "chevrolet_suburban_thumb.png",
+    "size": "m",
+    "image": "chevrolet_suburban.png",
+    "rates": {
+        "fee": 2500,
+        "base": 400,
+        "tourist": 250,
+        "extended": 185
+    }
+}

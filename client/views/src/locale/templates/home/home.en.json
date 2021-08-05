@@ -3,7 +3,7 @@
     "copy": {
         "hero": {
             "title": "ride with ",
-            "words": "['style', 'comfort', 'ease']",
+            "words": "[``style``, ``comfort``, ``ease``]",
             "subtitle": "Orlando-based black car services",
             "cta": "Book Reservation"
         },
