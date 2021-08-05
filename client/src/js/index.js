@@ -4,7 +4,7 @@ import barba from '@barba/core';
 
 
 // Import Modules
-import './helpers/Dreams';
+import './main/helpers/Dreams';
 import Page from './main/Page';
 import Preloader from './main/Preloader';
 
@@ -130,8 +130,13 @@ window.addEventListener('DOMContentLoaded', () => {
             // Fleet Namespace
             {
                 namespace: 'fleet',
-                beforeEnter() {
-                    // page.addComponent('ContactForm');
+                beforeEnter: async () => {
+                    page.addComponent({ name: 'FleetApp', data: {
+                        page,
+                        selector: '#fleet-react-app'
+                    }});
+
+                    await page.load();
                 }
             },
 
@@ -165,7 +170,10 @@ window.addEventListener('DOMContentLoaded', () => {
         preventRunning: true,
 
         // Prevent Defalut Link Actions
-        prevent: ({ el }) => el.classList && el.classList.contains('prevent')
+        prevent: ({ el }) => el.classList && el.classList.contains('prevent'),
+
+        // Enable Debug Mode
+        debug: true
 
     });
 

@@ -1140,5 +1140,101 @@ html.has-scroll-dragging {
   min-height: 100vh;
   width: 100%;
   background-color: var(--light-gray);
+  padding: var(--y-pad) var(--x-pad) var(--x-pad);
+  display: flex;
+  flex-direction: column;
+}
+.fleet__vehicle {
+  flex-grow: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.fleet__picker {
+  display: flex;
+  justify-content: center;
+}
+.fleet__picker > *:not(:last-child) {
+  margin-right: 3.6rem;
+}
+.fleet__picker-item {
+  background-color: var(--white);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
+  border-radius: 1.2rem;
+  padding: 1.6rem;
+  cursor: pointer;
+  transition: opacity 0.2s ease-in;
+}
+.fleet__picker-item div {
+  position: relative;
+  height: 5rem;
+  width: 16rem;
+}
+.fleet__picker-item img {
+  height: 200%;
+  position: absolute;
+  bottom: 0;
+}
+.fleet__picker-item p {
+  text-align: center;
+  color: var(--jet);
+}
+.fleet__picker-item.selected {
+  background-color: var(--black);
+}
+.fleet__picker-item.selected p {
+  color: var(--white);
+}
+.fleet__picker-item:hover {
+  opacity: 0.8;
+}
+.vehicle {
+  display: grid;
+  grid-template-columns: -webkit-max-content 1fr;
+  grid-template-columns: max-content 1fr;
+  width: 100%;
+}
+.vehicle__info {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: var(--max-content-width);
+}
+.vehicle__info > *:not(:last-child) {
+  margin-bottom: 2.4rem;
+}
+.vehicle__key-specs {
+  display: flex;
+}
+.vehicle__key-specs > *:not(:last-child) {
+  margin-right: 2.4rem;
+}
+.vehicle__key-spec {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.vehicle__key-spec > *:not(:last-child) {
+  margin-bottom: 0.8rem;
+}
+.vehicle__key-spec > span {
+  display: block;
+  border: 2px solid var(--jet);
+  border-radius: 50%;
+  padding: 1.6rem;
+  color: var(--jet);
+}
+.vehicle__key-spec svg {
+  height: 2rem;
+  width: 2rem;
+  margin: 0;
+}
+.vehicle__key-spec p {
+  color: var(--jet);
+}
+.vehicle__image img {
+  width: 100%;
 }
 /*# sourceMappingURL=main.css.map */

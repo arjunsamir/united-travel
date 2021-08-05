@@ -2,7 +2,7 @@
     "make": "Chevrolet",
     "model": "Suburban",
     "year": "2018",
-    "passengers": 7,
+    "seats": 7,
     "bags": 6,
     "mpg": 20,
     "info_en": {

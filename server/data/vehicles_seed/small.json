@@ -2,7 +2,7 @@
     "make": "Mercedes",
     "model": "E350",
     "year": "2013",
-    "passengers": 3,
+    "seats": 3,
     "mpg": 25,
     "info_en": {
         "name": "Small",

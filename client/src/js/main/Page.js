@@ -4,11 +4,13 @@ import Navbar from './Navbar';
 import Typewriter from './Typewriter';
 
 // Import Apps
+import FleetApp from '../apps/Fleet';
 // import BookingApp from '../BookingApp';
 
 
 const componentsRegistry = {
     Typewriter: (dta, ctn) => new Typewriter(dta ?? '#typewrite', ctn),
+    FleetApp: (dta, ctn) => new FleetApp(dta, ctn),
     // BookingApp: (dta, ctn) => new BookingApp(dta, ctn)
 }
 
@@ -40,6 +42,8 @@ export default class Page {
         };
 
         this.barba = barba;
+
+        this.promises = [];
 
     }
 
@@ -92,21 +96,33 @@ export default class Page {
     }
 
 
+    async load() {
+
+        await Promise.all(this.promises.map(c => c.load()));
+
+    }
+
+
     addComponent(...components) {
 
         components.forEach(component => {
 
             const comp = typeof component == 'string' ? { name: component } : component;
             
+            // Add Component to Registry
             this.components.registrar.push({ name: comp.name, data: comp.data });
-            this.components.mounted[comp.name] = componentsRegistry[comp.name](comp.data, this.elements.container);
 
-            if (this.components.mounted[comp.name].load) this.components.mounted[comp.name].load();
+            const Component = componentsRegistry[comp.name](comp.data, this.elements.container);
+
+            // Mount Component
+            this.components.mounted[comp.name] = Component;
+
+            // Push Components with Promises
+            if (Component.load) this.promises.push(Component);
 
         });
 
+
     }
-
-
 
 }

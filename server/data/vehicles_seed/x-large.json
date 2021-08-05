@@ -2,7 +2,7 @@
     "make": "Ford",
     "model": "Transit",
     "year": "2016",
-    "passengers": 14,
+    "seats": 14,
     "bags": 12,
     "mpg": 16,
     "info_en": {

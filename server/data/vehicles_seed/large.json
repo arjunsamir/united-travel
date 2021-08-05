@@ -2,7 +2,7 @@
     "make": "Mercedes",
     "model": "Sprinter",
     "year": "2014",
-    "passengers": 11,
+    "seats": 11,
     "bags": 10,
     "mpg": 18,
     "info_en": {

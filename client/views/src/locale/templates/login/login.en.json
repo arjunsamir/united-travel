@@ -1,98 +1,96 @@
 {
     "title": "Login - United Travel LLC",
-    "content": {
-        "main": {
-            "title": "Hello ",
-            "words": "['Traveller', 'Adventurer', 'Friend']",
-            "continueWith": "Continue With",
-            "alt": "Or continue with email",
-            "button": "Continue with email",
-            "back": "Back"
-        },
-        "signup": {
-            "title": "Create Login",
-            "inputs": {
-                "password": {
-                    "label": "Create Password",
-                    "placeholder": "••••••••"
-                }
-            },
-            "button": "Create Login",
-            "back": "Back"
-        },
-        "info": {
-            "title": "Introduce Yourself",
-            "inputs": {
-                "fullName": {
-                    "label": "Full Name",
-                    "placeholder": "Juan Mendez"
-                },
-                "preferredName": {
-                    "label": "Preferred Name",
-                    "placeholder": "Juan"
-                },
-                "profilePhoto": {
-                    "label": "Profile Photo (optional)",
-                    "placeholder": "Click to upload a photo"
-                }
-            },
-            "button": "Complete Signup",
-            "back": "Back"
-        },
-        "login": {
-            "title": "Welcome Back",
-            "inputs": {
-                "password": {
-                    "label": "Password",
-                    "placeholder": "••••••••"
-                }
-            },
-            "button": "Login",
-            "forgot": "Forgot your password?",
-            "back": "Back"
-        },
-        "reset": {
-            "title": "Reset Password",
-            "copy": "Enter your email address and we'll send you a password reset link so that you can create a new password.",
-            "button": "Get Reset Code",
-            "back": "Back"
-        },
-        "newPassword": {
-            "title": "Create New Password",
-            "copy": "Please choose a new password for your account. Your password must have at least 8 characters but the longer the better!",
-            "inputs": {
-                "password": {
-                    "label": "New Password",
-                    "placeholder": "••••••••"
-                }
-            },
-            "button": "Update Password",
-            "back": "Back"
-        },
-        "common": {
-            "email": {
-                "label": "Email Address",
-                "placeholder": "hello@unitedtravel.llc"
-            }
-        },
-        "errors": {
-            "email": {
-                "required": "Email Address is required",
-                "invalid": "Email Address is not valid"
-            },
+    "main": {
+        "title": "Hello ",
+        "words": "['Traveller', 'Adventurer', 'Friend']",
+        "continueWith": "Continue With",
+        "alt": "Or continue with email",
+        "button": "Continue with email",
+        "back": "Back"
+    },
+    "signup": {
+        "title": "Create Login",
+        "inputs": {
             "password": {
-                "required": "Password is required",
-                "invalid": "Password is not valid",
-                "short": "Password must be at least 8 characters long"
-            },
-            "name": {
-                "required": "Full Name is required",
-                "invalid": "Name cannot contain numbers or special characters"
+                "label": "Create Password",
+                "placeholder": "••••••••"
             }
         },
-        "referral": {
-            "title": "{name} Invited You",
-            "subtitle": "Sign up and save {amount} on your first ride."
+        "button": "Create Login",
+        "back": "Back"
+    },
+    "info": {
+        "title": "Introduce Yourself",
+        "inputs": {
+            "fullName": {
+                "label": "Full Name",
+                "placeholder": "Juan Mendez"
+            },
+            "preferredName": {
+                "label": "Preferred Name",
+                "placeholder": "Juan"
+            },
+            "profilePhoto": {
+                "label": "Profile Photo (optional)",
+                "placeholder": "Click to upload a photo"
+            }
+        },
+        "button": "Complete Signup",
+        "back": "Back"
+    },
+    "login": {
+        "title": "Welcome Back",
+        "inputs": {
+            "password": {
+                "label": "Password",
+                "placeholder": "••••••••"
+            }
+        },
+        "button": "Login",
+        "forgot": "Forgot your password?",
+        "back": "Back"
+    },
+    "reset": {
+        "title": "Reset Password",
+        "copy": "Enter your email address and we'll send you a password reset link so that you can create a new password.",
+        "button": "Get Reset Code",
+        "back": "Back"
+    },
+    "newPassword": {
+        "title": "Create New Password",
+        "copy": "Please choose a new password for your account. Your password must have at least 8 characters but the longer the better!",
+        "inputs": {
+            "password": {
+                "label": "New Password",
+                "placeholder": "••••••••"
+            }
+        },
+        "button": "Update Password",
+        "back": "Back"
+    },
+    "common": {
+        "email": {
+            "label": "Email Address",
+            "placeholder": "hello@unitedtravel.llc"
         }
+    },
+    "errors": {
+        "email": {
+            "required": "Email Address is required",
+            "invalid": "Email Address is not valid"
+        },
+        "password": {
+            "required": "Password is required",
+            "invalid": "Password is not valid",
+            "short": "Password must be at least 8 characters long"
+        },
+        "name": {
+            "required": "Full Name is required",
+            "invalid": "Name cannot contain numbers or special characters"
+        }
+    },
+    "referral": {
+        "title": "{name} Invited You",
+        "subtitle": "Sign up and save {amount} on your first ride."
     }
 }

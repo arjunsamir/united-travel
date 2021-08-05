@@ -25,6 +25,7 @@ const vehicleRouter = require('./server/routes/vehicleRoutes');
 const bookingRouter = require('./server/routes/bookingRoutes');
 const reviewRouter = require('./server/routes/reviewRoutes');
 const dataRouter = require('./server/routes/dataRoutes');
+const copyRouter = require('./server/routes/copyRoutes');
 
 
 
@@ -72,6 +73,7 @@ app.use('/api/vehicles', vehicleRouter);
 app.use('/api/booking', bookingRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/data', dataRouter);
+app.use('/api/copy', copyRouter);
 app.all('*', (req, res, next) => res.redirect('/'));
 
 
