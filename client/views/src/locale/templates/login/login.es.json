@@ -1,12 +1,13 @@
 {
     "title": "Acceso - United Travel LLC",
-    "main": {
+    "hello": {
         "title": "Hola ",
-        "words": "['Viajero', 'Aventurero', 'Amigo']",
+        "words": ["Viajero", "Aventurero", "Amigo"],
         "continueWith": "Continua Con",
         "alt": "O continuar con el correo electrónico",
         "button": "Continuar con el correo electrónico",
-        "back": "Atrás"
+        "back": "Atrás",
+        "inputs": {}
     },
     "signup": {
         "title": "Crear inicio de sesión",
@@ -19,7 +20,7 @@
         "button": "Crear inicio de sesión",
         "back": "Atrás"
     },
-    "info": {
+    "registration": {
         "title": "Presentarte",
         "inputs": {
             "fullName": {
@@ -50,13 +51,14 @@
         "forgot": "¿Olvidaste tu contraseña?",
         "back": "Atrás"
     },
-    "reset": {
+    "requestReset": {
         "title": "Restablecer la Contraseña",
         "copy": "Ingrese su dirección de correo electrónico y le enviaremos un enlace de restablecimiento de contraseña para que pueda crear una nueva contraseña.",
         "button": "Obtener Código de Reinicio",
-        "back": "Atrás"
+        "back": "Atrás",
+        "inputs": {}
     },
-    "newPassword": {
+    "reset": {
         "title": "Crear Nueva Contraseña",
         "copy": "Elija una nueva contraseña para su cuenta. Su contraseña debe tener al menos 8 caracteres, ¡pero cuanto más larga, mejor!",
         "inputs": {

@@ -23,6 +23,9 @@
 @import 'components/nav-menu';
 @import 'components/buttons';
 @import 'components/preloader';
+@import 'components/icons';
+@import 'components/inputs';
+@import 'components/loader';
 
 
 // Import Sections
@@ -36,3 +39,4 @@
 @import 'sections/friendly';
 @import 'sections/quote';
 @import 'sections/fleet';
+@import 'sections/login';

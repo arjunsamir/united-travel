@@ -7,6 +7,7 @@ import Merger from './helpers/Merger';
 // Create Context Object
 export const AppContext = React.createContext();
 
+
 // Create Initial Applicaiton State
 export const initialState = {
     reservation: {

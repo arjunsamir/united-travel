@@ -9,6 +9,7 @@ const router = express.Router();
 
 // Retrieve Booking Data
 router.get('/fleet/:locale', control.getFleet);
+router.get('/login/:locale', control.getLogin);
 
 
 // Export Router

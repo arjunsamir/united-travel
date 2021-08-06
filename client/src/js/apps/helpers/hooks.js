@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function useObjectState(initialState) {
+export const useObjectState = (initialState) => {
 
     const [state, setState] = useState(initialState);
 

@@ -1,0 +1,60 @@
+svg, .icon {
+
+    &.icon-xs {
+        height: 1.6rem;
+        width: 1.6rem;
+    }
+
+    &.icon-sm {
+        height: 2rem;
+        width: 2rem;
+    }
+
+    &.icon-md {
+        height: 2.4rem;
+        width: 2.4rem;
+    }
+
+    &.icon-lg {
+        height: 2.8rem;
+        width: 2.8rem;
+    }
+
+    &.icon-xl {
+        height: 3.2rem;
+        width: 3.2rem;
+    }
+
+    &.white {
+        color: var(--white);
+    }
+
+    &.jet {
+        color: var(--jet);
+    }
+
+    &.black {
+        color: var(--black);
+    }
+
+    &.primary {
+        color: var(--primary);
+    }
+
+    &.slate {
+        color: var(--slate);
+    }
+
+    &.slate-dark {
+        color: var(--slate-dark);
+    }
+
+    &.slate-light {
+        color: var(--slate-light);
+    }
+
+    &.placeholder {
+        color: var(--placeholder);
+    }
+
+}

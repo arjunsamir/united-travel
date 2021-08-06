@@ -26,6 +26,13 @@
     }
 }
 
+
+@mixin blockGap($gap: 1.2rem) {
+    & > *:not(:last-child) {
+        margin-bottom: $gap;
+    }
+}
+
 @mixin overlay {
     position: absolute;
     top: 0;

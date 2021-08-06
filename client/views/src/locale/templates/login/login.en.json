@@ -1,12 +1,13 @@
 {
     "title": "Login - United Travel LLC",
-    "main": {
+    "hello": {
         "title": "Hello ",
-        "words": "['Traveller', 'Adventurer', 'Friend']",
+        "words": ["Traveller", "Adventurer", "Friend"],
         "continueWith": "Continue With",
         "alt": "Or continue with email",
         "button": "Continue with email",
-        "back": "Back"
+        "back": "Back",
+        "inputs": {}
     },
     "signup": {
         "title": "Create Login",
@@ -19,7 +20,7 @@
         "button": "Create Login",
         "back": "Back"
     },
-    "info": {
+    "registration": {
         "title": "Introduce Yourself",
         "inputs": {
             "fullName": {
@@ -50,13 +51,14 @@
         "forgot": "Forgot your password?",
         "back": "Back"
     },
-    "reset": {
+    "requestReset": {
         "title": "Reset Password",
         "copy": "Enter your email address and we'll send you a password reset link so that you can create a new password.",
         "button": "Get Reset Code",
-        "back": "Back"
+        "back": "Back",
+        "inputs": {}
     },
-    "newPassword": {
+    "reset": {
         "title": "Create New Password",
         "copy": "Please choose a new password for your account. Your password must have at least 8 characters but the longer the better!",
         "inputs": {

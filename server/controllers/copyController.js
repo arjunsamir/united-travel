@@ -7,3 +7,7 @@ const getPath = (page, locale) => {
 exports.getFleet = (req, res) => {
     res.sendFile(path.join(__dirname, getPath('fleet', req.params.locale)))
 }
+
+exports.getLogin = (req, res) => {
+    res.sendFile(path.join(__dirname, getPath('login', req.params.locale)))
+}

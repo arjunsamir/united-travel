@@ -20,6 +20,17 @@
     
 }
 
+
+@keyframes dotFlashing {
+    0% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0.15;
+    }
+}
+
 .blink {
     animation: 1s blink step-end infinite;
 }

@@ -1,30 +1,36 @@
-const parseWords = (raw) => {
-
-    return JSON.parse(raw.replaceAll("``", '"'));
-
-}
+const parseWords = (raw) => JSON.parse(raw.replaceAll("``", '"'));
 
 export default class Typewriter {
 
-    constructor(selector, container) {
+    constructor(selector, container, props = {}) {
 
-        this.element = $(container).children(selector);
-        this.words = parseWords(this.element.data('words'));
+        const { element, period, words } = props;
+
+        this.element = element ? $(element) : $(container).children(selector);
+        this.words = words || parseWords(this.element.data('words'));
 
 
-        this.period = this.element.data('period', 'int') || 2000;
+        this.period = period|| this.element.data('period', 'int') || 2000;
 
         this.loopNum = 0;
         this.text = '';
+
+        this.timeout = null;
+
+        this.allowTicks = true;
         
     }
 
     init() {
         this.tick();
         this.isDeleting = false;
+
+        return this;
     }
 
     tick() {
+
+        if (!this.allowTicks) return;
 
         const i = this.loopNum % this.words.length;
         const fullText = this.words[i];
@@ -49,8 +55,13 @@ export default class Typewriter {
             delta = 500;
         }
 
-        setTimeout(() => this.tick(), delta);
+        this.timeout = setTimeout(() => this.tick(), delta);
 
+    }
+
+    destroy() {
+        clearTimeout(this.timeout);
+        this.allowTicks = false;
     }
 
 }

@@ -967,7 +967,14 @@ window.addEventListener('DOMContentLoaded', ()=>{
             {
                 namespace: 'login',
                 beforeEnter () {
-                // page.addComponent({ name: 'AuthForm', data: { page, selector: '#login-form' } });
+                    page.addComponent({
+                        name: 'LoginApp',
+                        data: {
+                            page,
+                            selector: '#login-react-app'
+                        }
+                    });
+                    return page.load();
                 }
             },
             {
@@ -3477,6 +3484,7 @@ var _Scroll = _interopRequireDefault(require("./Scroll"));
 var _Navbar = _interopRequireDefault(require("./Navbar"));
 var _Typewriter2 = _interopRequireDefault(require("./Typewriter"));
 var _Fleet = _interopRequireDefault(require("../apps/Fleet"));
+var _Login = _interopRequireDefault(require("../apps/Login"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -3489,6 +3497,8 @@ const componentsRegistry = {
     Typewriter: (dta, ctn)=>new _Typewriter2.default(dta !== null && dta !== void 0 ? dta : '#typewrite', ctn)
     ,
     FleetApp: (dta, ctn)=>new _Fleet.default(dta, ctn)
+    ,
+    LoginApp: (dta, ctn)=>new _Login.default(dta, ctn)
 }; // Create Page Class
 class Page {
     init() {
@@ -3562,7 +3572,7 @@ class Page {
 }
 exports.default = Page;
 
-},{"./Scroll":"2MJU8","./Typewriter":"3dS2T","./Navbar":"3g1LQ","../apps/Fleet":"5iAsK"}],"2MJU8":[function(require,module,exports) {
+},{"./Scroll":"2MJU8","./Typewriter":"3dS2T","./Navbar":"3g1LQ","../apps/Fleet":"5iAsK","../apps/Login":"72lIk"}],"2MJU8":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6050,15 +6060,16 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-const parseWords = (raw)=>{
-    return JSON.parse(raw.replaceAll("``", '"'));
-};
+const parseWords = (raw)=>JSON.parse(raw.replaceAll("``", '"'))
+;
 class Typewriter {
     init() {
         this.tick();
         this.isDeleting = false;
+        return this;
     }
     tick() {
+        if (!this.allowTicks) return;
         const i = this.loopNum % this.words.length;
         const fullText = this.words[i];
         if (this.isDeleting) this.text = fullText.substring(0, this.text.length - 1);
@@ -6074,15 +6085,24 @@ class Typewriter {
             this.loopNum++;
             delta = 500;
         }
-        setTimeout(()=>this.tick()
+        this.timeout = setTimeout(()=>this.tick()
         , delta);
     }
+    destroy() {
+        clearTimeout(this.timeout);
+        this.allowTicks = false;
+    }
     constructor(selector, container){
-        this.element = $(container).children(selector);
-        this.words = parseWords(this.element.data('words'));
-        this.period = this.element.data('period', 'int') || 2000;
+        let props = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {
+        };
+        const { element , period , words  } = props;
+        this.element = element ? $(element) : $(container).children(selector);
+        this.words = words || parseWords(this.element.data('words'));
+        this.period = period || this.element.data('period', 'int') || 2000;
         this.loopNum = 0;
         this.text = '';
+        this.timeout = null;
+        this.allowTicks = true;
     }
 }
 exports.default = Typewriter;
@@ -8305,7 +8325,6 @@ function _interopRequireDefault(obj) {
 }
 class ReactAppWrapper {
     init() {
-        console.log('should be good to go boss');
     }
     render() {
         let props = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {
@@ -29142,7 +29161,1423 @@ module.exports = CancelToken;
     return typeof payload === 'object' && payload.isAxiosError === true;
 };
 
-},{}],"7cKho":[function(require,module,exports) {
+},{}],"72lIk":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _axios = _interopRequireDefault(require("axios"));
+var _App = _interopRequireDefault(require("./App"));
+var _ReactAppWrapper = _interopRequireDefault(require("../helpers/ReactAppWrapper"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Do Initial Request
+class LoginApp extends _ReactAppWrapper.default {
+    async load() {
+        const res = {
+        };
+        await Promise.all([
+            _axios.default('/api/vehicles').then((data)=>{
+                var _data$data, _data$data$data, _data$data$data$data;
+                // Filter and Localize Vehicles
+                res.vehicles = data === null || data === void 0 ? void 0 : (_data$data = data.data) === null || _data$data === void 0 ? void 0 : (_data$data$data = _data$data.data) === null || _data$data$data === void 0 ? void 0 : (_data$data$data$data = _data$data$data.data) === null || _data$data$data$data === void 0 ? void 0 : _data$data$data$data.filter((v)=>v.active
+                ).sort((a, b)=>a.seats - b.seats
+                );
+            }),
+            _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
+            )
+        ]);
+        await this.render(res);
+    }
+    constructor(dta, ctn){
+        super(dta.selector, ctn);
+        this.App = _App.default;
+    }
+}
+exports.default = LoginApp;
+
+},{"axios":"5FCRD","./App":"4B1Xh","../helpers/ReactAppWrapper":"4R7YP"}],"4B1Xh":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Hello = _interopRequireDefault(require("./steps/Hello"));
+var _Login = _interopRequireDefault(require("./steps/Login"));
+var _Registration = _interopRequireDefault(require("./steps/Registration"));
+var _RequestReset = _interopRequireDefault(require("./steps/RequestReset"));
+var _Reset = _interopRequireDefault(require("./steps/Reset"));
+var _Signup = _interopRequireDefault(require("./steps/Signup"));
+var _axios = _interopRequireDefault(require("axios"));
+var _Validator = _interopRequireDefault(require("./helpers/Validator"));
+var _Transition = _interopRequireDefault(require("./helpers/Transition"));
+var _animejs = _interopRequireDefault(require("animejs"));
+var _store = require("./store");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+const steps = {
+    hello: _Hello.default,
+    login: _Login.default,
+    registration: _Registration.default,
+    requestReset: _RequestReset.default,
+    reset: _Reset.default,
+    signup: _Signup.default
+};
+const getCopy = (copy, step)=>{
+    const { common , errors , referral  } = copy;
+    const stepCopy = copy[step];
+    stepCopy.inputs = Object.assign({
+    }, stepCopy.inputs, common);
+    return _objectSpread(_objectSpread({
+    }, stepCopy), {
+    }, {
+        errors,
+        referral
+    });
+};
+const LoginApp = (_ref)=>{
+    let { copy , back , onLogin  } = _ref;
+    const [state, dispatch] = _react.useReducer(_store.reducer, _store.initialState);
+    const Step = steps[state.step] || /*#__PURE__*/ _react.default.createElement("div", null, "Something went wrong...");
+    return(/*#__PURE__*/ _react.default.createElement("section", {
+        className: "login"
+    }, /*#__PURE__*/ _react.default.createElement(Step, {
+        copy: getCopy(copy, state.step),
+        exit: back,
+        authenticate: (endpoint, data)=>{
+            var _res$data, _res$data$data;
+            const res = _axios.default.post(endpoint, data);
+            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.user)) return;
+            onLogin && onLogin(res.data.data.user);
+        },
+        update: (field)=>{
+            const type = "SET_".concat(field.toUpperCase());
+            return (data)=>dispatch({
+                    type,
+                    data
+                })
+            ;
+        },
+        state: state,
+        validator: new _Validator.default(copy.errors),
+        transition: new _Transition.default(dispatch)
+    })));
+};
+_c = LoginApp;
+var _default = LoginApp;
+exports.default = _default;
+const transition = (ctn, selector, complete)=>{
+    _animejs.default({
+        targets: $(ctn).children(".".concat(selector)).e(),
+        translateY: _animejs.default.stagger([
+            -25,
+            -100
+        ]),
+        opacity: 0,
+        easing: 'easeOutQuad',
+        duration: 250,
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ]),
+        complete
+    });
+};
+var _c;
+$RefreshReg$(_c, "LoginApp");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./steps/Hello":"4TE36","./steps/Login":"7cRna","./steps/Registration":"2xD76","./steps/RequestReset":"3Foxq","./steps/Reset":"5eely","./steps/Signup":"3HWhS","./store":"4H4Vl","axios":"5FCRD","./helpers/Validator":"3dy7A","./helpers/Transition":"3pM1O","animejs":"1GvRs"}],"4TE36":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _Typewriter = _interopRequireDefault(require("../../../main/Typewriter"));
+var _useOAuth = _interopRequireDefault(require("../helpers/useOAuth"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Login Components
+// Import Generic Components
+// Import Front End Components
+// Animation Class Shortcut
+const aC = "animate-item";
+const Hello = (_ref)=>{
+    let { copy , exit , authenticate , transition , update , state , validator  } = _ref;
+    // Create Refs
+    const typeRef = _react.useRef();
+    const mainRef = _react.useRef();
+    const typewriter = _react.useRef(); // Enable Third Party Login
+    const { loaded , useAuthProvider  } = _useOAuth.default(authenticate); // Use State
+    const [isFetching, setIsFetching] = _react.useState(false); // Check Email
+    const errors = validator.checkEmail(state.email); // Enable Typewriter Effect
+    _react.useEffect(()=>{
+        if (!loaded) return;
+        transition.set(mainRef.current).in();
+        if (typewriter.current) return;
+        typewriter.current = new _Typewriter.default(null, null, {
+            element: typeRef.current,
+            period: 2500,
+            words: copy.words
+        }).init();
+    }, [
+        loaded
+    ]);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: exit ? ()=>exit()
+         : null,
+        backText: copy.back,
+        showLoader: !loaded,
+        onSubmit: ()=>{
+            const timer = $.timer(1000).start();
+            setIsFetching(true);
+            _axios.default.post('/auth/check-email', {
+                email: state.email
+            }).then(async (res)=>{
+                const { exists  } = res.data || {
+                };
+                await timer.hold();
+                typewriter.current.destroy();
+                transition.to(exists ? "login" : "signup");
+            });
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__header"
+    }, /*#__PURE__*/ _react.default.createElement("h2", {
+        className: aC
+    }, copy.title, /*#__PURE__*/ _react.default.createElement("span", {
+        ref: typeRef
+    }), /*#__PURE__*/ _react.default.createElement("span", {
+        className: "blink"
+    }, "|"))), /*#__PURE__*/ _react.default.createElement("fieldset", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "bold ".concat(aC)
+    }, copy.continueWith), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__inline"
+    }, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Google",
+        icon: "google",
+        theme: "google",
+        onClick: loaded && useAuthProvider('google')
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Facebook",
+        icon: "facebook",
+        theme: "facebook",
+        onClick: loaded && useAuthProvider('facebook')
+    }))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "bold ".concat(aC)
+    }, copy.alt), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-email",
+        type: "email",
+        icon: "email",
+        label: copy.inputs.email.label,
+        placeholder: copy.inputs.email.placeholder,
+        value: state.email,
+        onChange: update('email'),
+        errors: errors
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: errors.length,
+        showLoader: isFetching
+    })))));
+};
+_c = Hello;
+var _default = Hello;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Hello");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../../main/Typewriter":"3dS2T","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../helpers/useOAuth":"74cnx","axios":"5FCRD"}],"7yi7W":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Image1 = (_ref)=>{
+    let { src , domRef  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__visual",
+        ref: domRef
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__image"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: "/img/".concat(src || "login-1.jpg"),
+        alt: "Login Visual"
+    }), /*#__PURE__*/ _react.default.createElement("img", {
+        src: "/img/".concat(src || "login-1.jpg"),
+        alt: "Login Visual"
+    }))));
+};
+_c = Image1;
+var _default = Image1;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Image");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"1bP9e":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Buttons = require("../../components/Buttons");
+var _Loader = _interopRequireDefault(require("../../components/Loader"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const LoginForm = (_ref)=>{
+    let { back , backText , onSubmit , title , text , children , showLoader  } = _ref;
+    const handleSubmit = (e)=>{
+        e.preventDefault();
+        onSubmit && onSubmit();
+    };
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__content"
+    }, showLoader ? /*#__PURE__*/ _react.default.createElement(_Loader.default, null) : /*#__PURE__*/ _react.default.createElement("form", {
+        className: "login__form",
+        onSubmit: handleSubmit
+    }, back && /*#__PURE__*/ _react.default.createElement(_Buttons.BackButton, {
+        onClick: back,
+        text: backText
+    }), title && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__header"
+    }, /*#__PURE__*/ _react.default.createElement("h3", {
+        className: "animate-item"
+    }, title), text && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "animate-item"
+    }, text)), children)));
+};
+_c = LoginForm;
+var _default = LoginForm;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "LoginForm");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Buttons":"7xzNC","../../components/Loader":"7GUXD"}],"7xzNC":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const a = 'animate-item';
+const BackButton = (_ref)=>{
+    let { onClick , text , animationClass  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("back-button", animationClass || a),
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "arrow-back",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text || "Back")));
+};
+_c = BackButton;
+exports.BackButton = BackButton;
+const Button = (_ref2)=>{
+    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("button", [
+            theme
+        ], [
+            icon,
+            "with-icon"
+        ], [
+            disabled,
+            "disabled"
+        ], animationClass || a),
+        onClick: onClick,
+        ref: domRef,
+        type: type || "button"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "button__loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
+};
+_c1 = Button;
+exports.Button = Button;
+const IconButton = (_ref3)=>{
+    let { onClick , icon , color , animationClass , domRef  } = _ref3;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("icon-button", animationClass || a),
+        onClick: onClick,
+        ref: domRef
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        color: color
+    })));
+};
+_c2 = IconButton;
+exports.IconButton = IconButton;
+const LinkButton = (_ref4)=>{
+    let { onClick , href , text , domRef , disabled , animationClass  } = _ref4;
+    return(/*#__PURE__*/ _react.default.createElement("a", {
+        href: href,
+        className: $.join("link-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ]),
+        ref: domRef,
+        onClick: onClick
+    }, text));
+};
+_c3 = LinkButton;
+exports.LinkButton = LinkButton;
+var _c, _c1, _c2, _c3;
+$RefreshReg$(_c, "BackButton");
+$RefreshReg$(_c1, "Button");
+$RefreshReg$(_c2, "IconButton");
+$RefreshReg$(_c3, "LinkButton");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4VYCM":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Icon = (_ref)=>{
+    let { icon , size , color  } = _ref;
+    let classes = 'icon-md';
+    let style = {
+    };
+    if (size) {
+        if (typeof size === 'string') classes = "icon-".concat(size);
+        if (size && typeof size === 'number') style = {
+            height: size + 'rem',
+            width: size + 'rem'
+        };
+    }
+    if (color) {
+        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
+        else classes += " ".concat(color);
+    }
+    return(/*#__PURE__*/ _react.default.createElement("svg", {
+        className: classes,
+        style: style
+    }, /*#__PURE__*/ _react.default.createElement("use", {
+        href: "/img/icons.svg#".concat(icon)
+    })));
+};
+_c = Icon;
+var _default = Icon;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Icon");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"7GUXD":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Loader = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null)));
+};
+_c = Loader;
+var _default = Loader;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Loader");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"16GiB":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _hooks = require("../helpers/hooks");
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React Defaults
+// Import Helpers
+// Import Other Components
+// Create Component
+const Input = (_ref)=>{
+    let { value , placeholder , onChange , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
+    const [state, setState] = _hooks.useObjectState({
+        type,
+        showErrors: false
+    });
+    const isText = state.type === "text";
+    const hasError = state.showErrors && errors.length > 0;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "input"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("input__input", [
+            hasError,
+            "has-error"
+        ], animationClass || "animate-item")
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__main"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "lg"
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__field"
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("input", {
+        id: id,
+        type: state.type || "text",
+        value: value,
+        placeholder: placeholder,
+        onChange: onChange && ((e)=>onChange(e.target.value)
+        ),
+        onBlur: (e)=>{
+            if (!state.showErrors) setState({
+                showErrors: true
+            });
+        },
+        onFocus: selectOnFocus && ((e)=>e.target.select()
+        )
+    }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__toggle",
+        onClick: ()=>setState({
+                type: isText ? "password" : "text"
+            })
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: isText ? "eye-off" : "eye",
+        size: "lg"
+    }))), hasError && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__error",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
+};
+_c = Input;
+var _default = Input;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Input");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../helpers/hooks":"4wqYR"}],"4wqYR":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.useObjectState = void 0;
+var _react = require("react");
+const useObjectState = (initialState)=>{
+    const [state, setState] = _react.useState(initialState);
+    return [
+        state,
+        (newState)=>setState(Object.assign({
+            }, state, newState))
+    ];
+};
+exports.useObjectState = useObjectState;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"74cnx":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = require("react");
+var _config = _interopRequireDefault(require("../../data/config"));
+var _utils = require("../../helpers/utils");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React Items
+// Import Config & Helpers
+// Facebook oAuth Class
+class FacebookAuth {
+    async load() {
+        if (window.FB) return;
+        window.fbAsyncInit = ()=>{
+            window.FB.init(_config.default.facebook);
+        };
+        await _utils.insertScript('https://connect.facebook.net/en_US/sdk.js', 'facebook-jssdk');
+    }
+    async getUserData() {
+        const user = {
+        };
+        await Promise.all([
+            new Promise((resolve)=>{
+                FB.api('/me', this.fields, (data)=>{
+                    user.name = data.name;
+                    user.email = data.email;
+                    user.preferredName = data.short_name || data.first_name;
+                    user.facebookID = data.id;
+                    resolve();
+                });
+            }),
+            new Promise((resolve)=>{
+                FB.api('/me/picture', {
+                    redirect: false,
+                    height: '250',
+                    width: '250',
+                    type: 'normal'
+                }, (data)=>{
+                    user.photo = data.data.url;
+                    resolve();
+                });
+            })
+        ]);
+        this.callback(this.endpoint, user);
+        FB.logout();
+    }
+    authenticate() {
+        FB.login(()=>this.getUserData()
+        , {
+            scope: 'email',
+            return_scopes: true
+        });
+    }
+    constructor(_ref){
+        let { callback , endpoint  } = _ref;
+        this.callback = callback;
+        this.endpoint = endpoint;
+        this.fields = {
+            fields: 'email,name,first_name,last_name,middle_name,short_name'
+        };
+    }
+} // Google oAuth Class
+class GoogleAuth {
+    async load() {
+        await _utils.insertScript('https://apis.google.com/js/api:client.js', 'google-oauth');
+        if (!window.GoogleAuth) await new Promise((resolve)=>{
+            // Load Google API
+            gapi.load('client:auth2', ()=>{
+                gapi.client.init(_config.default.google).then(resolve);
+            });
+        }); // Create New Auth Instance
+        this.auth = window.GoogleAuth = gapi.auth2.getAuthInstance(); // Sign Out User
+        this.auth.signOut(); // Listen For Chances to Authenticator
+        this.auth.isSignedIn.listen(()=>this.updateStatus()
+        );
+    }
+    updateStatus() {
+        if (!this.allowCallback || !this.auth.isSignedIn.get()) return;
+        const token = this.auth.currentUser.get().getAuthResponse().id_token; // Request JWT from server
+        this.callback(this.endpoint, {
+            token
+        }); // Sign googleuser back out to rely on JWT
+        this.auth.signOut();
+    }
+    authenticate() {
+        this.allowCallback = true;
+        this.auth.signIn();
+    }
+    constructor(_ref2){
+        let { callback: callback1 , endpoint: endpoint1  } = _ref2;
+        this.callback = callback1;
+        this.endpoint = endpoint1;
+        this.allowCallback = false;
+    }
+} // Create Custom Hook
+const useOAuth = (callback2)=>{
+    const [oAuth, setOAuth] = _react.useState({
+    });
+    _react.useEffect(()=>{
+        const loadClients = async ()=>{
+            const googleAuth = new GoogleAuth({
+                callback: callback2,
+                endpoint: '/auth/google'
+            });
+            const facebookAuth = new FacebookAuth({
+                callback: callback2,
+                endpoint: '/auth/facebook'
+            }); // Wait For oAuth Providers to load
+            await Promise.all([
+                googleAuth.load(),
+                facebookAuth.load()
+            ]);
+            setOAuth({
+                loaded: true,
+                useAuthProvider: (service)=>{
+                    switch(service){
+                        case 'google':
+                            return ()=>googleAuth.authenticate()
+                            ;
+                        case 'facebook':
+                            return ()=>facebookAuth.authenticate()
+                            ;
+                    }
+                }
+            });
+        };
+        if (!oAuth.loaded) loadClients();
+    }, []);
+    return oAuth;
+};
+var _default = useOAuth;
+exports.default = _default;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../helpers/utils":"5inPj","../../data/config":"3Re6c"}],"5inPj":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+const bemify = (block)=>{
+    return (element)=>element ? "".concat(block, "__").concat(element) : block
+    ;
+};
+exports.bemify = bemify;
+const constructWrappers = function constructWrappers1() {
+    const wrapper = {
+    };
+    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
+    pairs.forEach((_ref)=>{
+        let [Component, steps] = _ref;
+        Object.keys(steps).forEach((key)=>wrapper[key] = Component
+        );
+    });
+    return wrapper;
+};
+exports.constructWrappers = constructWrappers;
+const toUSD = (val)=>{
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+    }).format(val);
+};
+exports.toUSD = toUSD;
+const insertScript = (src, id)=>{
+    return new Promise((resolve)=>{
+        const ref = document.querySelector('script');
+        if (document.getElementById(id)) return resolve();
+        const js = document.createElement('script');
+        js.id = id;
+        js.src = src;
+        js.addEventListener('load', resolve);
+        ref.parentNode.insertBefore(js, ref);
+    });
+};
+exports.insertScript = insertScript;
+const validateEmail = (val)=>{
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
+};
+exports.validateEmail = validateEmail;
+const validateName = (val)=>{
+    // Allow for apostrophes!!!
+    return val && /^[a-zA-Z]+ [a-zA-Z]+$/.test(val);
+};
+exports.validateName = validateName;
+const validatePassword = (val)=>{
+    return val && val.length >= 8;
+};
+exports.validatePassword = validatePassword;
+const lettersOnly = (val)=>{
+    return val.replace(/[^A-Za-z ]+$/, '');
+};
+exports.lettersOnly = lettersOnly;
+
+},{}],"3Re6c":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const config = {
+    maps: {
+        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
+    },
+    facebook: {
+        appId: '274042323746865',
+        cookie: true,
+        xfbml: true,
+        version: 'v11.0'
+    },
+    google: {
+        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile',
+        cookiepolicy: 'single_host_origin'
+    },
+    stripe: {
+        key: 'pk_test_51J70jVAp1pPqDtncwRsmLJMVkDjxjhm1PF188lChMuCDW99i3xZU2lLrWYKpTdGqlUEG1JrqIyRE3eFe0M9YLIPc00G2vkTDIg'
+    }
+};
+var _default = config;
+exports.default = _default;
+
+},{}],"7cRna":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Login Components
+// Import Generic Components
+// Import Front End Components
+const Login = (_ref)=>{
+    let { copy , authenticate , transition , update , state , validator  } = _ref;
+    // Create Refs
+    const mainRef = _react.useRef(); // Check Email & Password
+    const emailErrors = validator.checkEmail(state.email);
+    const passwordErrors = validator.checkPassword(state.password); // Enable Typewriter Effect
+    _react.useEffect(()=>{
+        transition.set(mainRef.current).in();
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: ()=>transition.to("hello")
+        ,
+        backText: copy.back,
+        title: copy.title,
+        onSubmit: ()=>{
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-email-2",
+        type: "email",
+        icon: "email",
+        label: copy.inputs.email.label,
+        placeholder: copy.inputs.email.placeholder,
+        value: state.email,
+        onChange: update('email'),
+        errors: emailErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-password",
+        type: "password",
+        icon: "lock",
+        label: copy.inputs.password.label,
+        placeholder: copy.inputs.password.placeholder,
+        value: state.password,
+        onChange: update('password'),
+        errors: passwordErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: emailErrors.length || passwordErrors.length
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
+        text: copy.forgot,
+        onClick: ()=>transition.to("requestReset")
+    })))));
+};
+_c = Login;
+var _default = Login;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Login");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD"}],"2xD76":[function(require,module,exports) {
+"use strict";
+
+},{}],"3Foxq":[function(require,module,exports) {
+"use strict";
+
+},{}],"5eely":[function(require,module,exports) {
+"use strict";
+
+},{}],"3HWhS":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Login Components
+// Import Generic Components
+// Import Front End Components
+const Signup = (_ref)=>{
+    let { copy , authenticate , transition , update , state , validator  } = _ref;
+    // Create Refs
+    const mainRef = _react.useRef(); // Check Email & Password
+    const emailErrors = validator.checkEmail(state.email);
+    const passwordErrors = validator.checkPassword(state.password); // Enable Typewriter Effect
+    _react.useEffect(()=>{
+        transition.set(mainRef.current).in();
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: ()=>transition.to("hello")
+        ,
+        backText: copy.back,
+        title: copy.title,
+        onSubmit: ()=>{
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-email-2",
+        type: "email",
+        icon: "email",
+        label: copy.inputs.email.label,
+        placeholder: copy.inputs.email.placeholder,
+        value: state.email,
+        onChange: update('email'),
+        errors: emailErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-password",
+        type: "password",
+        icon: "lock",
+        label: copy.inputs.password.label,
+        placeholder: copy.inputs.password.placeholder,
+        value: state.password,
+        onChange: update('password'),
+        errors: passwordErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: emailErrors.length || passwordErrors.length
+    })))));
+};
+_c = Signup;
+var _default = Signup;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Signup");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4H4Vl":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.reducer = exports.initialState = void 0;
+// Define initial state
+const initialState = {
+    step: 'hello',
+    email: 'me@arjunsamir.com',
+    password: '',
+    referral: '',
+    fullName: '',
+    preferredName: ''
+}; // Create the reducer
+exports.initialState = initialState;
+const reducer = function reducer1() {
+    let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
+    let action = arguments.length > 1 ? arguments[1] : undefined;
+    switch(action.type){
+        case 'SET_STEP':
+            return Object.assign({
+            }, state, {
+                step: action.data
+            });
+        case 'SET_EMAIL':
+            return Object.assign({
+            }, state, {
+                email: action.data
+            });
+        case 'SET_PASSWORD':
+            return Object.assign({
+            }, state, {
+                password: action.data
+            });
+        case 'SET_REFERRAL':
+            return Object.assign({
+            }, state, {
+                referral: action.data
+            });
+        case 'SET_FULL_NAME':
+            return Object.assign({
+            }, state, {
+                fullName: action.data
+            });
+        case 'SET_PREFERRED_NAME':
+            return Object.assign({
+            }, state, {
+                preferredName: action.data
+            });
+        default:
+            return state;
+    }
+};
+exports.reducer = reducer;
+
+},{}],"3dy7A":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const regex = {
+    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    name: /^[a-zA-Z]+ [a-zA-Z]+$/,
+    lettersOnly: /[^A-Za-z ]+$/
+};
+class Validator {
+    checkEmail(val) {
+        const { invalid , required  } = this.errors.email;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.email.test(val.toLowerCase())) return [
+            invalid
+        ];
+        else return [];
+    }
+    checkPassword(val) {
+        const { required , short  } = this.errors.password;
+        if (!val) return [
+            required
+        ];
+        else if (val.length < 8) return [
+            short
+        ];
+        else return [];
+    }
+    checkName(val) {
+        const { invalid , required  } = this.errors.name;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.name.test(val)) return [
+            invalid
+        ];
+        else return [];
+    }
+    cleanInput(val) {
+        return val.replace(regex.lettersOnly, '');
+    }
+    constructor(errors){
+        this.errors = errors;
+    }
+}
+exports.default = Validator;
+
+},{}],"3pM1O":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+class Transition {
+    set(container) {
+        let selector = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "animate-item";
+        this.targets = $(container).children(".".concat(selector)).e();
+        return this;
+    }
+    async to(step) {
+        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+        await this.out();
+        await $.delay(delay);
+        this.dispatch({
+            type: "SET_STEP",
+            data: step
+        });
+    }
+    in() {
+        const timeline = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        timeline.add({
+            targets: this.targets,
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        return timeline.finished;
+    }
+    out() {
+        const timeline = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        timeline.add({
+            targets: this.targets,
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
+            opacity: 0,
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        return timeline.finished;
+    }
+    constructor(dispatch){
+        this.dispatch = dispatch;
+    }
+}
+exports.default = Transition;
+
+},{"animejs":"1GvRs"}],"7cKho":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -29647,9 +31082,10 @@ class Dream {
 class Timer {
     start(callback) {
         this.initial = new Date();
-        if (!callback) return;
+        if (!callback) return this;
         clearTimeout(this.timeout);
         this.timeout = setTimeout(callback, this.threshold);
+        return this;
     }
     stop() {
         this.final = new Date();
@@ -29704,6 +31140,22 @@ $.dreaming = (obj)=>obj instanceof Dream
 ; // Loop Through Opject
 $.each = (obj, fx)=>{
     for (const [key, value] of Object.entries(obj))fx(key, value);
+};
+$.join = function() {
+    for(var _len = arguments.length, items = new Array(_len), _key = 0; _key < _len; _key++)items[_key] = arguments[_key];
+    return items.map((i)=>{
+        switch(typeof i){
+            case 'string':
+                return i;
+            case 'object':
+                if (i[0] && i[1]) return i[1];
+                else if (i[0]) return i[0];
+                else return null;
+            default:
+                return null;
+        }
+    }).filter((i)=>i
+    ).join(' ');
 };
 window.$ = $;
 var _default = $;

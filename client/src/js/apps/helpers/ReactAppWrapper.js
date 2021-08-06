@@ -8,7 +8,7 @@ export default class ReactAppWrapper {
     }
 
     init() {
-        console.log('should be good to go boss');
+        
     }
 
     render(props = {}) {

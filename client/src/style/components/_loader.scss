@@ -1,0 +1,26 @@
+.loader {
+
+    --loader-border: 3px solid;
+    --loader-size: 6rem;
+    --loader-color: var(--slate-dark);
+    --loader-color-alt: var(--slate-light);
+
+    width: 100%;
+    @include flexCenter;
+    
+
+    span {
+        height: var(--loader-size);
+        width: var(--loader-size);
+        
+        border-top: var(--loader-border) var(--loader-color);
+        border-bottom: var(--loader-border) var(--loader-color-alt);
+        border-left: var(--loader-border) var(--loader-color-alt);
+        border-right: var(--loader-border) var(--loader-color-alt);
+        border-radius: 50%;
+
+        transition: border $smooth ease;
+        animation: preloadSpin 1s $cubic infinite;
+    }
+
+}

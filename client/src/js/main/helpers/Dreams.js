@@ -754,10 +754,12 @@ class Timer {
     start( callback ) {
         this.initial = new Date();
 
-        if ( !callback ) return;
+        if ( !callback ) return this;
 
         clearTimeout( this.timeout );
         this.timeout = setTimeout( callback, this.threshold );
+
+        return this;
     }
 
     stop() {
@@ -837,6 +839,23 @@ $.each = (obj, fx) => {
     for (const [key, value] of Object.entries(obj)) {
         fx(key, value);
     }
+}
+
+$.join = (...items) => {
+
+    return items.map(i => {
+        switch(typeof i) {
+            case 'string':
+                return i;
+            case 'object':
+                if (i[0] && i[1]) return i[1];
+                else if (i[0]) return i[0];
+                else return null;
+            default:
+                return null;
+        }
+    }).filter(i => i).join(' ');
+
 }
 
 window.$ = $;

@@ -145,8 +145,12 @@ window.addEventListener('DOMContentLoaded', () => {
                 namespace: 'login',
                 beforeEnter() {
 
-                    // Add Auth Form Component
-                    // page.addComponent({ name: 'AuthForm', data: { page, selector: '#login-form' } });
+                    page.addComponent({ name: 'LoginApp', data: {
+                        page,
+                        selector: '#login-react-app'
+                    }});
+
+                    return page.load();
 
                 }
             },
