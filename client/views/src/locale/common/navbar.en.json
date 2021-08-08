@@ -5,5 +5,12 @@
         "contact": "Contact",
         "fleet": "Fleet"
     },
-    "cta": "Book Now"
+    "cta": "Book Now",
+    "account": {
+        "login": "Login",
+        "logout": "Log out",
+        "register": "Create account",
+        "account": "My account"
+    },
+    "hello": "Hello"
 }

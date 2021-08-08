@@ -42,7 +42,7 @@ class Views {
     }
 
     async render(res, page, data = {}) {
-        if (!res.locals.user) res.locals.user = { name: 'mom' };
+        if (!res.locals.user) res.locals.user = {};
         res.render(`${this.lang}/${page}`, { ...data })
     }
 

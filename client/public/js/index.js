@@ -3516,7 +3516,8 @@ class Page {
         this.elements.body.removeClass(Array.from(this.elements.body.e().classList).filter((name)=>name.includes('page')
         ).join(' ')); // Add Fixed Class
         this.elements.body.addClass('fixed'); // Destroy Scroll Instance
-        this.scroll.destroy(); // Return From Async Function
+        this.scroll.destroy(); // Destroy Navbar Instance
+        this.navbar.destroy(); // Return From Async Function
         return;
     }
     start() {
@@ -6113,74 +6114,146 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
 class Navbar {
     init() {
-    // // Attach Event Listener For Navigation Toggle
-    // this.toggle.on('change', e => this.toggleDrawer(e.target.checked));
+        this.loggedIn = !!window.currentUser._id;
+        this.main.children('[data-nav-namespace]').forEach((l)=>{
+            const link = $(l);
+            const ns = link.data('navNamespace');
+            link.removeClass('active');
+            if (ns == this.namespace) console.log(link.addClass('active'));
+        }); // Update Selectors
+        this.selectors = {
+            account: ".navbar__profile.logged-".concat(this.loggedIn ? "in" : "out", " .navbar__profile-menu"),
+            lang: '.navbar__lang-menu'
+        }; // Handle Menu Open/Close
+        this.main.children('.nb-clt').click(()=>this.toggleDesktopMenu(this.selectors.account, 'user')
+        );
+        this.main.children('.nb-lng').click(()=>this.toggleDesktopMenu(this.selectors.lang, 'lang')
+        );
+        this.escape = this.main.children('.nb-esc');
+        this.escape.click(()=>this.handleEscapeClick()
+        );
     }
-    open() {
-    // this.checkbox.checked = true;
-    // this.toggleDrawer(true);
+    async handleEscapeClick() {
+        if (this.state.user) this.toggleDesktopMenu(this.selectors.account, 'user');
+        if (this.state.lang) this.toggleDesktopMenu(this.selectors.lang, 'lang');
     }
-    async close() {
-    // this.checkbox.checked = false;
-    // this.toggleDrawer(false);
+    async toggleDesktopMenu(selector, target) {
+        // Close Menu
+        const menu = this.main.children(selector); // Create Timeline
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        }); // Close Menu
+        if (this.state[target]) {
+            this.state[target] = false;
+            this.escape.addClass('no-esc');
+            tl.add({
+                targets: menu.e(),
+                opacity: [
+                    1,
+                    0
+                ]
+            });
+            await tl.finished;
+            menu.addClass('hidden');
+        } else {
+            await this.handleEscapeClick();
+            menu.removeClass('hidden');
+            this.state.user = true;
+            this.escape.removeClass('no-esc');
+            tl.add({
+                targets: menu.e(),
+                opacity: [
+                    0,
+                    1
+                ]
+            });
+            await tl.finished;
+        }
     }
-    toggleDrawer(open) {
-    //     this.branding.hide();
-    //     this.scroll.pause();
+    //     const menu = this.main.children('.navbar__lang-menu');
+    //     if (this.state.lang) {
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [1, 0],
+    //             easing: 'easeOutQuad',
+    //             duration: 250,
+    //             complete: () => {
+    //                 menu.addClass('hidden');
+    //                 this.state.lang = false;
+    //                 this.escape.addClass('no-esc');
+    //             }
+    //         });
+    //     }
+    //     else {
+    //         this.handleEscapeClick();
+    //         menu.removeClass('hidden');
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [0, 1],
+    //             easing: 'easeOutQuad',
+    //             duration: 250
+    //         });
+    //         this.state.lang = true;
+    //         this.escape.removeClass('no-esc');
+    //     }
     // }
-    // else {
-    //     this.branding.show();
-    //     this.scroll.resume();
+    // toggleUserMenu() {
+    //     const menu = this.main.children(`.navbar__profile.logged-${this.loggedIn ? "in" : "out"} .navbar__profile-menu`);
+    //     // Close Menu
+    //     if (this.state.user) {
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [1, 0],
+    //             easing: 'easeOutQuad',
+    //             duration: 250,
+    //             complete: () => {
+    //                 menu.addClass('hidden');
+    //                 this.state.user = false;
+    //                 this.escape.addClass('no-esc');
+    //             }
+    //         });
+    //     }
+    //     // Open Menu
+    //     else {
+    //         this.handleEscapeClick();
+    //         menu.removeClass('hidden');
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [0, 1],
+    //             easing: 'easeOutQuad',
+    //             duration: 250
+    //         });
+    //         this.state.user = true;
+    //         this.escape.removeClass('no-esc');
+    //     }
     // }
-    // this.icon.toggle('open', open);
-    // this.isOpen = open;
-    }
-    applyThemeChange(themes) {
-    }
-    applyTheme(themes) {
-    }
-    forceLayout(device) {
-    }
-    resetLayout() {
-    }
-    resetTheme() {
-    }
-    reset() {
-    }
-    login(user) {
-    }
-    logout() {
+    destroy() {
+        this.main.kill();
     }
     constructor(page){
-    // this.namespace = page.state.namespace;
-    // this.isOpen = false;
-    // // Define Main Elements
-    // this.main = $('#navbar');
-    // this.links = this.main.children('a[href]');
-    // // Define User Elements
-    // this.userElems = {
-    //     pics: this.main.children('.navbar-profile-pic'),
-    //     name: this.main.children('.navbar-user-name'),
-    //     email: this.main.children('.navbar-user-email')
-    // };
-    // // Define Navbar Elements
-    // this.toggle = $('#nav-toggle');
-    // this.checkbox = this.toggle.nodes();
-    // this.icon = $('#nav-icon'); 
-    // this.branding = $('#nav-brand');
-    // this.links.forEach(link => {
-    //     link.classList.remove('active');
-    //     const ns = link.dataset.navNamespace;
-    //     if (ns && ns == this.namespace) link.classList.add('active');
-    // });
-    // this.reset();
+        this.scroll = page.scroll;
+        this.namespace = page.state.namespace;
+        this.isOpen = false;
+        this.main = $('#navbar');
+        this.state = {
+            menu: false,
+            lang: false,
+            user: false
+        };
     }
 }
 exports.default = Navbar;
 
-},{}],"5iAsK":[function(require,module,exports) {
+},{"animejs":"1GvRs"}],"5iAsK":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

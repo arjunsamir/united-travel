@@ -5,5 +5,12 @@
         "contact": "Contacto",
         "fleet": "Flota"
     },
-    "cta": "Reservar Ahora"
+    "cta": "Reservar Ahora",
+    "account": {
+        "login": "Acceso",
+        "logout": "Cerrar sesión",
+        "register": "Crear una cuenta",
+        "account": "Mi cuenta"
+    },
+    "hello": "Hola"
 }

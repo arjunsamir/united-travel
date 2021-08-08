@@ -1,5 +1,7 @@
 <!--  Main Navbar  -->
-<div class="navbar">
+<div class="navbar {{ user._id ? 'logged-in' : 'logged-out' }}" id="navbar">
+
+    <div class="nb-esc no-esc"></div>
 
     <!-- Desktop Navbar -->
     <div class="navbar__full">
@@ -18,27 +20,57 @@
         <div class="navbar__actions">
             <!-- Language -->
             <div class="navbar__lang">
-                <svg><use href="/img/icons.svg#language"></use></svg>
+                <div class="navbar__lang-icon nb-lng">
+                    <svg><use href="/img/icons.svg#language"></use></svg>
+                </div>
+                
+                <div class="navbar__lang-menu hidden">
+                    <ul>
+                        <li><p class="small">English</p></li>
+                        <li><p class="small">Español</p></li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Divider -->
             <hr>
 
-            <!-- Profile -->
+            <!-- Profile Logged In -->
             <div class="navbar__profile logged-in">
 
                 <!-- Logged In Icon -->
-                <div class="navbar__profile-pic">
-                    <img src="/img/profile-photos/juan.jpg" alt="Profile Photo">
+                <div class="navbar__profile-pic nb-clt">
+                    <img src="{{ user.photo }}" alt="Profile Photo">
                 </div>
 
+                <div class="navbar__profile-menu hidden">
+                    <ul>
+                        <li><p class="small"><%= hello %> {{ user.preferredName }}</p></li>
+                        <hr>
+                        <li><a href="<%= path %>/account"><span><%= account.account %></span></a></li>
+                        <li><a href="#" id="nb-logout"><span><%= account.logout %></span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <!-- Profile Logged Out -->
+            <div class="navbar__profile logged-out">
+
                 <!-- Logged Out Icon -->
-                <svg class="navbar__profile-icon"><use href="/img/icons.svg#person-circle"></use></svg>
+                <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                
+                <div class="navbar__profile-menu hidden">
+                    <ul>
+                        <li><a href="<%= path %>/login"><span><%= account.register %></span></a></li>
+                        <li><a href="<%= path %>/login"><span><%= account.login %></span></a></li>
+                    </ul>
+                </div>
 
             </div>
 
             <!-- Call To Action -->
-            <a href="<%= path %>/book" class="navbar__cta"><%= cta %> </a>
+            <a href="<%= path %>/book" class="navbar__cta"><%= cta %></a>
         </div>
 
     </div>

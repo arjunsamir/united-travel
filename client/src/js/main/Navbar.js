@@ -1,116 +1,179 @@
+import anime from 'animejs';
+
 export default class Navbar {
 
     constructor(page) {
 
-        // this.scroll = page.scroll;
-        // this.namespace = page.state.namespace;
+        this.scroll = page.scroll;
+        this.namespace = page.state.namespace;
+        this.isOpen = false;
+        this.main = $('#navbar');
 
-        // this.isOpen = false;
-
-        // // Define Main Elements
-        // this.main = $('#navbar');
-        // this.links = this.main.children('a[href]');
-
-        // // Define User Elements
-        // this.userElems = {
-        //     pics: this.main.children('.navbar-profile-pic'),
-        //     name: this.main.children('.navbar-user-name'),
-        //     email: this.main.children('.navbar-user-email')
-        // };
-
-        // // Define Navbar Elements
-        // this.toggle = $('#nav-toggle');
-        // this.checkbox = this.toggle.nodes();
-        // this.icon = $('#nav-icon'); 
-        // this.branding = $('#nav-brand');
-
-        // this.links.forEach(link => {
-
-        //     link.classList.remove('active');
-
-        //     const ns = link.dataset.navNamespace;
-
-        //     if (ns && ns == this.namespace) link.classList.add('active');
-
-        // });
-
-        // this.reset();
+        this.state = {
+            menu: false,
+            lang: false,
+            user: false
+        }
 
     }
 
     init() {
 
-        // this.links = this.main.children('a[href]');
+        this.loggedIn = !!window.currentUser._id;
 
-        // // Attach Event Listener For Navigation Toggle
-        // this.toggle.on('change', e => this.toggleDrawer(e.target.checked));
+        this.main.children('[data-nav-namespace]').forEach(l => {
+            const link = $(l);
+            const ns = link.data('navNamespace');
+            link.removeClass('active');
+            if (ns == this.namespace) console.log(link.addClass('active'));
+        });
 
-    }
+        // Update Selectors
+        this.selectors = {
+            account: `.navbar__profile.logged-${this.loggedIn ? "in" : "out"} .navbar__profile-menu`,
+            lang: '.navbar__lang-menu'
+        };
 
-    open() {
-        // if (this.isOpen) return;
-        // this.checkbox.checked = true;
-        // this.toggleDrawer(true);
-    }
-
-
-    async close() {
-        // if (!this.isOpen) return;
-        // this.checkbox.checked = false;
-        // this.toggleDrawer(false);
-    }
-
-    
-    toggleDrawer(open) {
-        // if (open) {
-        //     this.branding.hide();
-        //     this.scroll.pause();
-        // }
-
-        // else {
-        //     this.branding.show();
-        //     this.scroll.resume();
-        // }
-
-        // this.icon.toggle('open', open);
-        
-        // this.isOpen = open;
-    }
-
-
-    applyThemeChange(themes) {
+        // Handle Menu Open/Close
+        this.main.children('.nb-clt').click(() => this.toggleDesktopMenu(this.selectors.account, 'user'));
+        this.main.children('.nb-lng').click(() => this.toggleDesktopMenu(this.selectors.lang, 'lang'));
+        this.escape = this.main.children('.nb-esc');
+        this.escape.click(() => this.handleEscapeClick());
 
     }
 
-
-    applyTheme(themes) {
+    async handleEscapeClick() {
+        if (this.state.user) this.toggleDesktopMenu(this.selectors.account, 'user');
+        if (this.state.lang) this.toggleDesktopMenu(this.selectors.lang, 'lang');
     }
 
+    async toggleDesktopMenu(selector, target) {
 
-    forceLayout(device) {
+        // Close Menu
+        const menu = this.main.children(selector);
+
+        // Create Timeline
+        const tl = anime.timeline({
+            easing: 'easeOutQuad',
+            duration: 250,
+        });
+
+        // Close Menu
+        if (this.state[target]) {
+            
+            this.state[target] = false;
+            this.escape.addClass('no-esc');
+
+            tl.add({
+                targets: menu.e(),
+                opacity: [1, 0],
+            });
+
+            await tl.finished;
+
+            menu.addClass('hidden');
+
+            
+        }
+
+        // Open Menu
+        else {
+
+            await this.handleEscapeClick();
+
+            menu.removeClass('hidden');
+            this.state.user = true;
+            this.escape.removeClass('no-esc');
+
+            tl.add({
+                targets: menu.e(),
+                opacity: [0, 1],
+            });
+
+            await tl.finished;
+        }
+
     }
 
+    // toggleLangMenu() {
+    //     const menu = this.main.children('.navbar__lang-menu');
 
-    resetLayout() {
+    //     if (this.state.lang) {
 
-    }
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [1, 0],
+    //             easing: 'easeOutQuad',
+    //             duration: 250,
+    //             complete: () => {
+    //                 menu.addClass('hidden');
+    //                 this.state.lang = false;
+    //                 this.escape.addClass('no-esc');
+    //             }
+    //         });
 
+    //     }
+    //     else {
 
-    resetTheme() {
+    //         this.handleEscapeClick();
 
-    }
+    //         menu.removeClass('hidden');
 
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [0, 1],
+    //             easing: 'easeOutQuad',
+    //             duration: 250
+    //         });
+            
+    //         this.state.lang = true;
+    //         this.escape.removeClass('no-esc');
+    //     }
+    // }
 
-    reset() {
+    // toggleUserMenu() {
 
-    }
+    //     const menu = this.main.children(`.navbar__profile.logged-${this.loggedIn ? "in" : "out"} .navbar__profile-menu`);
 
-    login(user) {
+    //     // Close Menu
+    //     if (this.state.user) {
 
-    }
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [1, 0],
+    //             easing: 'easeOutQuad',
+    //             duration: 250,
+    //             complete: () => {
+    //                 menu.addClass('hidden');
+    //                 this.state.user = false;
+    //                 this.escape.addClass('no-esc');
+    //             }
+    //         });
 
-    logout() {
+    //     }
 
+    //     // Open Menu
+    //     else {
+
+    //         this.handleEscapeClick();
+            
+    //         menu.removeClass('hidden');
+
+    //         anime({
+    //             targets: menu.e(),
+    //             opacity: [0, 1],
+    //             easing: 'easeOutQuad',
+    //             duration: 250
+    //         });
+            
+    //         this.state.user = true;
+    //         this.escape.removeClass('no-esc');
+    //     }
+
+    // }
+
+    destroy() {
+        this.main.kill();
     }
 
 }

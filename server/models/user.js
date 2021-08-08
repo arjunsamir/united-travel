@@ -48,7 +48,7 @@ const schema = new mongoose.Schema({
     photos: [String],
     photo: {
         type: String,
-        default: 'default.jpg'
+        default: '/img/profile-photos/default.png'
     },
     referralCode: String,
     referredBy: String,

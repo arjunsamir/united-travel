@@ -334,9 +334,10 @@ exports.screen = catchAsync(async (req, res, next) => {
 
     const user = await findUserByJWT(req.cookies.jwt);
 
-    if (!user) return next();
-
-    req.user = user;
+    if (user) {
+        req.user = user;
+        res.locals.user = user;
+    }
 
     next();
 
@@ -353,26 +354,13 @@ exports.restrictTo = (...roles) => {
 }
 
 
-exports.isLoggedIn = async (req, res, next) => {
+exports.isLoggedIn = (req, res, next) => {
 
-    try {
+    if (req.user) res.redirect('/');
 
-        const user = await findUserByJWT(req.cookies.jwt);
+    else next();
 
-        if (!user) return next();
-
-        // There is a logged in user
-        res.locals.user = user;
-        res.redirect('/');
-
-    }
-    catch (err) {
-
-        return next();
-
-    }
-
-}
+};
 
 
 exports.validateSession = catchAsync(async (req, res, next) => {

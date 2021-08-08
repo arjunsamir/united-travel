@@ -13,6 +13,8 @@ module.exports = lang => {
     const views = new Views(lang);
     const router = express.Router();
 
+    router.use(auth.screen);
+
     router.get('/', render(views, 'home'));
     router.get('/about', render(views, 'about'));
     router.get('/services', render(views, 'services'));

@@ -79,6 +79,9 @@ export default class Page {
         // Destroy Scroll Instance
         this.scroll.destroy();
 
+        // Destroy Navbar Instance
+        this.navbar.destroy();
+
         // Return From Async Function
         return;
 
