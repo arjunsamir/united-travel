@@ -1,16 +1,16 @@
 // 1. Import Dependencies
 const express = require('express');
-const send = require('../utils/sendResponse');
 const auth = require('../controllers/auth');
 const user = require('../controllers/userController');
+const upload = require('../controllers/uploadController');
 
 
 // 2. Create Router
 const router = express.Router();
 
+router.get('/referrals/:code', user.getUserByCode);
 
 router.use(auth.protect);
-
 
 router.route('/')
     .get(user.getAll)

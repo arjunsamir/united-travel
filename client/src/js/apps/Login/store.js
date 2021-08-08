@@ -2,46 +2,48 @@
 export const initialState = {
     step: 'hello',
     email: 'me@arjunsamir.com',
-    password: '',
-    referral: '',
-    fullName: '',
-    preferredName: ''
+    password: 'password',
+    fullName: 'Samir Patel',
+    preferredName: 'Arjun',
+    profilePhoto: '',
+    code: '',
+    user: {}
 }
 
 
 // Create the reducer
 export const reducer = (state = initialState, action) => {
 
+    const merge = (field) => {
+        return Object.assign({}, state, {
+            [field]: action.data
+        });
+    }
+
     switch (action.type) {
         case 'SET_STEP':
-            return Object.assign({}, state, {
-                step: action.data
-            });
+            return merge('step');
 
         case 'SET_EMAIL':
-            return Object.assign({}, state, {
-                email: action.data
-            });
+            return merge('email');
 
         case 'SET_PASSWORD':
-            return Object.assign({}, state, {
-                password: action.data
-            });
-
-        case 'SET_REFERRAL':
-            return Object.assign({}, state, {
-                referral: action.data
-            });
+            return merge('password');
         
         case 'SET_FULL_NAME':
-            return Object.assign({}, state, {
-                fullName: action.data
-            });
+            return merge('fullName');
 
         case 'SET_PREFERRED_NAME':
-            return Object.assign({}, state, {
-                preferredName: action.data
-            });
+            return merge('preferredName');
+
+        case 'SET_PROFILE_PHOTO':
+            return merge('profilePhoto');
+
+        case 'SET_CODE':
+            return merge('code');
+
+        case 'SET_USER':
+            return merge('user');
         
         default:
             return state;

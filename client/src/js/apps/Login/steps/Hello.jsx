@@ -3,6 +3,7 @@ import React, { useRef, useEffect, useState } from 'react';
 // Import Login Components
 import Image from '../components/Image';
 import LoginForm from '../components/LoginForm';
+import Referral from '../components/Referral';
 
 // Import Generic Components
 import { Button } from '../../components/Buttons';
@@ -16,7 +17,7 @@ import axios from 'axios';
 // Animation Class Shortcut
 const aC = "animate-item";
 
-const Hello = ({ copy, exit, authenticate, transition, update, state, validator }) => {
+const Hello = ({ copy, exit, authenticate, transition, update, state, validator, referral }) => {
 
     // Create Refs
     const typeRef = useRef();
@@ -53,7 +54,9 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator 
 
     return (
         <div className="login__container" ref={mainRef}>
-            <Image />
+            <Image>
+                {referral && <Referral copy={copy.referral} {...referral} />}
+            </Image>
             <LoginForm
                 back={exit ? () => exit() : null}
                 backText={copy.back}

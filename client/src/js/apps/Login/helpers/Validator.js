@@ -1,7 +1,7 @@
 const regex = {
     email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    name: /^[a-zA-Z]+ [a-zA-Z]+$/,
-    lettersOnly: /[^A-Za-z ]+$/,
+    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
+    lettersOnly: /[^A-Za-z ]+$/
 }
 
 
@@ -44,7 +44,7 @@ export default class Validator {
     }
 
     cleanInput(val) {
-        return val.replace(regex.lettersOnly, '');
+        return val.replace(regex.test, '');
     }
 
 }

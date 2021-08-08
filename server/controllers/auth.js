@@ -42,8 +42,8 @@ const sendToken = (user, status, req, res) => {
 const createAccount = async body => {
 
     const data = { ...body };
-    delete data.role;
-    data.referralCode = `${data.name.replace(/\s+/g, '-').toLowerCase()}-${uniqid.time()}`;
+    if (data.role )delete data.role;
+    data.referralCode = encodeURIComponent(`${data.name.replace(/\s+/g, '-').toLowerCase()}-${uniqid.time()}`);
 
     // Transform data
     data.email = data.email.toLowerCase();
@@ -54,9 +54,10 @@ const createAccount = async body => {
     
     const user = await User.create(data);
 
-    new Email(user).use('welcome', {
-        book_url: `http://localhost:3000/book-ride`
-    }).send();
+    // new Email(user).use('welcome', {
+    //     book_url: `http://localhost:3000/book-ride`
+    // }).send();
+
     return user;
 
 }

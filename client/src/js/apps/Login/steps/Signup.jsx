@@ -3,15 +3,14 @@ import React, { useRef, useEffect } from 'react';
 // Import Login Components
 import Image from '../components/Image';
 import LoginForm from '../components/LoginForm';
+import Referral from '../components/Referral';
 
 // Import Generic Components
 import { Button } from '../../components/Buttons';
 import Input from '../../components/Input';
 
-// Import Front End Components
-import axios from 'axios';
 
-const Signup = ({ copy, authenticate, transition, update, state, validator }) => {
+const Signup = ({ copy, transition, update, state, validator, referral }) => {
 
     // Create Refs
     const mainRef = useRef();
@@ -21,22 +20,21 @@ const Signup = ({ copy, authenticate, transition, update, state, validator }) =>
     const passwordErrors = validator.checkPassword(state.password);
 
 
-    // Enable Typewriter Effect
     useEffect(() => {
-
+        // Transition Into View
         transition.set(mainRef.current).in();
-        
     }, []);
 
     return (
         <div className="login__container" ref={mainRef}>
-            <Image />
+            <Image>
+                {referral && <Referral copy={copy.referral} {...referral} />}
+            </Image>
             <LoginForm
                 back={() => transition.to("hello")}
                 backText={copy.back}
                 title={copy.title}
-                onSubmit={() => {
-                }}
+                onSubmit={() => transition.to("registration")}
             >
                 <div className="login__fieldset">
                     <Input

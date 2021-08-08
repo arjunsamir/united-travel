@@ -26,6 +26,7 @@ const bookingRouter = require('./server/routes/bookingRoutes');
 const reviewRouter = require('./server/routes/reviewRoutes');
 const dataRouter = require('./server/routes/dataRoutes');
 const copyRouter = require('./server/routes/copyRoutes');
+const uploadRouter = require('./server/routes/uploadRoutes');
 
 
 
@@ -74,6 +75,7 @@ app.use('/api/booking', bookingRouter);
 app.use('/api/reviews', reviewRouter);
 app.use('/api/data', dataRouter);
 app.use('/api/copy', copyRouter);
+app.use('/api/upload', uploadRouter);
 app.all('*', (req, res, next) => res.redirect('/'));
 
 

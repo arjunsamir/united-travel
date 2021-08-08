@@ -18,6 +18,12 @@
         height: 100%;
         min-height: calc(100vh - (var(--y-pad) * 1.5));
         position: relative;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+
+        padding: 4.8rem;
     }
 
     &__image {
@@ -64,6 +70,44 @@
         border: none;
         display: block;
         @include blockGap(2.4rem);
+    }
+
+    &__header {
+        @include blockGap(2.4rem);
+    }
+
+}
+
+.referral {
+    position: relative;
+    padding: 1.2rem;
+
+    display: flex;
+    align-items: center;
+    @include flexGap(2.4rem);
+
+    &__bg {
+        @include overlay;
+        border-radius: 10rem;
+        background-color: var(--white);
+        box-shadow: $soft-shadow;
+    }
+
+    &__photo {
+        height: 8rem;
+        width: 8rem;
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+
+        img {
+            @include cover;
+        }
+    }
+
+    &__content {
+        position: relative;
+        @include blockGap(0.4rem);
     }
 
 }

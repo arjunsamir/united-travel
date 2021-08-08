@@ -1,18 +1,19 @@
-import React, { useReducer } from "react";
+import React, { useReducer, useRef } from "react";
 
 // Import Steps
 import Hello from './steps/Hello';
 import Login from './steps/Login';
 import Registration from './steps/Registration';
 import RequestReset from './steps/RequestReset';
+import ResetCode from './steps/ResetCode';
 import Reset from './steps/Reset';
 import Signup from './steps/Signup';
+import Greeting from './steps/Greeting';
 
 // Import Tools
 import axios from 'axios';
 import Validator from './helpers/Validator';
 import Transition from './helpers/Transition';
-import anime from 'animejs';
 
 // Import Context
 import { reducer, initialState } from './store';
@@ -23,7 +24,9 @@ const steps = {
     registration: Registration,
     requestReset: RequestReset,
     reset: Reset,
-    signup: Signup
+    signup: Signup,
+    resetCode: ResetCode,
+    greeting: Greeting
 }
 
 const getCopy = (copy, step) => {
@@ -36,32 +39,37 @@ const getCopy = (copy, step) => {
 
     return {...stepCopy, errors, referral};
 
-
 }
 
-const LoginApp = ({ copy, back, onLogin }) => {
+
+const LoginApp = ({ copy, back, onLogin, referral }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
 
     const Step = steps[state.step] || <div>Something went wrong...</div>;
+
+    const transition = useRef(new Transition(dispatch));
 
     return (
         <section className="login">
             <Step
                 copy={getCopy(copy, state.step)}
                 exit={back}
-                authenticate={(endpoint, data) => {
-                    const res = axios.post(endpoint, data);
+                authenticate={async (endpoint, data) => {
+                    const res = await axios.post(endpoint, data);
+                    console.log(res);
                     if (!res?.data?.data?.user) return;
-                    onLogin && onLogin(res.data.data.user)
+                    return res.data.data.user;
+                    // onLogin && onLogin(res.data.data.user)
                 }}
                 update={(field) => {
                     const type = `SET_${field.toUpperCase()}`;
                     return (data) => dispatch({ type, data })
                 }}
                 state={state}
+                referral={referral}
                 validator={new Validator(copy.errors)}
-                transition={new Transition(dispatch)}
+                transition={transition.current}
             />
         </section>
     )
@@ -69,19 +77,3 @@ const LoginApp = ({ copy, back, onLogin }) => {
 }
 
 export default LoginApp;
-
-
-const transition = (ctn, selector, complete) => {
-
-    anime({
-        targets: $(ctn).children(`.${selector}`).e(),
-        translateY: anime.stagger([-25, -100]),
-        opacity: 0,
-        easing: 'easeOutQuad',
-        duration: 250,
-        delay: anime.stagger([0, 250]),
-        complete
-    })
-
-
-}

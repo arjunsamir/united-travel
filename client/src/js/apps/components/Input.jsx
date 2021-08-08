@@ -11,7 +11,7 @@ import Icon from  './Icon';
 
 
 // Create Component
-const Input = ({ value, placeholder, onChange, label, type, icon, id, errors, animationClass, selectOnFocus }) => {
+const Input = ({ value, placeholder, onChange, onBlur, formatInput, label, type, icon, id, errors, animationClass, selectOnFocus }) => {
 
     const [state, setState] = useObjectState({
         type,
@@ -19,7 +19,7 @@ const Input = ({ value, placeholder, onChange, label, type, icon, id, errors, an
     });
 
     const isText = state.type === "text";
-    const hasError = state.showErrors && errors.length > 0;
+    const hasError = state.showErrors && errors && errors.length > 0;
 
     return (
         <div className="input">
@@ -41,11 +41,17 @@ const Input = ({ value, placeholder, onChange, label, type, icon, id, errors, an
                             type={state.type || "text"}
                             value={value}
                             placeholder={placeholder}
-                            onChange={onChange && ((e) => onChange(e.target.value))}
-                            onBlur={e => {
+                            onChange={(onChange || formatInput) && ((e) => {
+                                let val = e.target.value;
+                                if (formatInput) val = formatInput(val);
+                                onChange && onChange(val);
+                            })}
+                            onBlur={(e) => {
                                 if (!state.showErrors) setState({ showErrors: true });
+                                onBlur && onBlur(e);
                             }}
                             onFocus={selectOnFocus && ((e) => e.target.select())}
+                            className="input__text-input"
                         />
                     </div>
 

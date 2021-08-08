@@ -8174,7 +8174,7 @@ const Vehicle = (_ref2)=>{
     const refs = {
         info: _react.useRef(),
         img: _react.useRef()
-    };
+    }; // Exit Animation
     _react.useEffect(()=>{
         if (!nextVehicle) return;
         const tl = _animejs.default.timeline({
@@ -8183,21 +8183,26 @@ const Vehicle = (_ref2)=>{
         });
         tl.add({
             targets: $(refs.info.current).children().e(),
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
             opacity: 0,
-            delay: _animejs.default.stagger(100, {
-                start: 250
-            })
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
         });
         tl.add({
             targets: refs.img.current,
-            translateX: 200,
+            translateX: -200,
             opacity: 0
         });
         tl.finished.then(()=>setNext(nextVehicle)
         );
     }, [
         nextVehicle
-    ]);
+    ]); // Enter Animation
     _react.useEffect(()=>{
         const tl = _animejs.default.timeline({
             easing: 'easeOutQuad',
@@ -8205,11 +8210,21 @@ const Vehicle = (_ref2)=>{
         });
         tl.add({
             targets: $(refs.info.current).children().e(),
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
             opacity: [
                 0,
                 1
             ],
-            delay: _animejs.default.stagger(100)
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
         });
         tl.add({
             targets: refs.img.current,
@@ -29177,10 +29192,14 @@ function _interopRequireDefault(obj) {
 }
 // Do Initial Request
 class LoginApp extends _ReactAppWrapper.default {
+    getReferral() {
+        const url = new URLSearchParams(window.location.search);
+        return url.get('code');
+    }
     async load() {
         const res = {
         };
-        await Promise.all([
+        const promises = [
             _axios.default('/api/vehicles').then((data)=>{
                 var _data$data, _data$data$data, _data$data$data$data;
                 // Filter and Localize Vehicles
@@ -29190,7 +29209,13 @@ class LoginApp extends _ReactAppWrapper.default {
             }),
             _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
             )
-        ]);
+        ];
+        const code = this.getReferral();
+        if (code) promises.push(_axios.default("/users/referrals/".concat(code)).then((data)=>{
+            var _data$data2;
+            return res.referral = data === null || data === void 0 ? void 0 : (_data$data2 = data.data) === null || _data$data2 === void 0 ? void 0 : _data$data2.user;
+        }));
+        await Promise.all(promises);
         await this.render(res);
     }
     constructor(dta, ctn){
@@ -29217,12 +29242,13 @@ var _Hello = _interopRequireDefault(require("./steps/Hello"));
 var _Login = _interopRequireDefault(require("./steps/Login"));
 var _Registration = _interopRequireDefault(require("./steps/Registration"));
 var _RequestReset = _interopRequireDefault(require("./steps/RequestReset"));
+var _ResetCode = _interopRequireDefault(require("./steps/ResetCode"));
 var _Reset = _interopRequireDefault(require("./steps/Reset"));
 var _Signup = _interopRequireDefault(require("./steps/Signup"));
+var _Greeting = _interopRequireDefault(require("./steps/Greeting"));
 var _axios = _interopRequireDefault(require("axios"));
 var _Validator = _interopRequireDefault(require("./helpers/Validator"));
 var _Transition = _interopRequireDefault(require("./helpers/Transition"));
-var _animejs = _interopRequireDefault(require("animejs"));
 var _store = require("./store");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -29297,7 +29323,9 @@ const steps = {
     registration: _Registration.default,
     requestReset: _RequestReset.default,
     reset: _Reset.default,
-    signup: _Signup.default
+    signup: _Signup.default,
+    resetCode: _ResetCode.default,
+    greeting: _Greeting.default
 };
 const getCopy = (copy, step)=>{
     const { common , errors , referral  } = copy;
@@ -29312,19 +29340,21 @@ const getCopy = (copy, step)=>{
     });
 };
 const LoginApp = (_ref)=>{
-    let { copy , back , onLogin  } = _ref;
+    let { copy , back , onLogin , referral  } = _ref;
     const [state, dispatch] = _react.useReducer(_store.reducer, _store.initialState);
     const Step = steps[state.step] || /*#__PURE__*/ _react.default.createElement("div", null, "Something went wrong...");
+    const transition = _react.useRef(new _Transition.default(dispatch));
     return(/*#__PURE__*/ _react.default.createElement("section", {
         className: "login"
     }, /*#__PURE__*/ _react.default.createElement(Step, {
         copy: getCopy(copy, state.step),
         exit: back,
-        authenticate: (endpoint, data)=>{
+        authenticate: async (endpoint, data)=>{
             var _res$data, _res$data$data;
-            const res = _axios.default.post(endpoint, data);
+            const res = await _axios.default.post(endpoint, data);
+            console.log(res);
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.user)) return;
-            onLogin && onLogin(res.data.data.user);
+            return res.data.data.user; // onLogin && onLogin(res.data.data.user)
         },
         update: (field)=>{
             const type = "SET_".concat(field.toUpperCase());
@@ -29335,30 +29365,14 @@ const LoginApp = (_ref)=>{
             ;
         },
         state: state,
+        referral: referral,
         validator: new _Validator.default(copy.errors),
-        transition: new _Transition.default(dispatch)
+        transition: transition.current
     })));
 };
 _c = LoginApp;
 var _default = LoginApp;
 exports.default = _default;
-const transition = (ctn, selector, complete)=>{
-    _animejs.default({
-        targets: $(ctn).children(".".concat(selector)).e(),
-        translateY: _animejs.default.stagger([
-            -25,
-            -100
-        ]),
-        opacity: 0,
-        easing: 'easeOutQuad',
-        duration: 250,
-        delay: _animejs.default.stagger([
-            0,
-            250
-        ]),
-        complete
-    });
-};
 var _c;
 $RefreshReg$(_c, "LoginApp");
 
@@ -29367,7 +29381,7 @@ $RefreshReg$(_c, "LoginApp");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./steps/Hello":"4TE36","./steps/Login":"7cRna","./steps/Registration":"2xD76","./steps/RequestReset":"3Foxq","./steps/Reset":"5eely","./steps/Signup":"3HWhS","./store":"4H4Vl","axios":"5FCRD","./helpers/Validator":"3dy7A","./helpers/Transition":"3pM1O","animejs":"1GvRs"}],"4TE36":[function(require,module,exports) {
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./steps/Hello":"4TE36","./steps/Login":"7cRna","./steps/Registration":"2xD76","./steps/RequestReset":"3Foxq","./steps/Reset":"5eely","./steps/Signup":"3HWhS","./store":"4H4Vl","axios":"5FCRD","./helpers/Validator":"3dy7A","./helpers/Transition":"3pM1O","./steps/ResetCode":"25k9X","./steps/Greeting":"GbZeI"}],"4TE36":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -29382,6 +29396,7 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _Image = _interopRequireDefault(require("../components/Image"));
 var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Referral = _interopRequireDefault(require("../components/Referral"));
 var _Buttons = require("../../components/Buttons");
 var _Input = _interopRequireDefault(require("../../components/Input"));
 var _Typewriter = _interopRequireDefault(require("../../../main/Typewriter"));
@@ -29419,13 +29434,20 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
-// Import Login Components
-// Import Generic Components
-// Import Front End Components
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
 // Animation Class Shortcut
 const aC = "animate-item";
 const Hello = (_ref)=>{
-    let { copy , exit , authenticate , transition , update , state , validator  } = _ref;
+    let { copy , exit , authenticate , transition , update , state , validator , referral  } = _ref;
     // Create Refs
     const typeRef = _react.useRef();
     const mainRef = _react.useRef();
@@ -29448,7 +29470,9 @@ const Hello = (_ref)=>{
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__container",
         ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
+        copy: copy.referral
+    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
         back: exit ? ()=>exit()
          : null,
         backText: copy.back,
@@ -29521,7 +29545,7 @@ $RefreshReg$(_c, "Hello");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../../main/Typewriter":"3dS2T","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../helpers/useOAuth":"74cnx","axios":"5FCRD"}],"7yi7W":[function(require,module,exports) {
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../../main/Typewriter":"3dS2T","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../helpers/useOAuth":"74cnx","axios":"5FCRD","../components/Referral":"KtcU5"}],"7yi7W":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -29540,7 +29564,7 @@ function _interopRequireDefault(obj) {
     };
 }
 const Image1 = (_ref)=>{
-    let { src , domRef  } = _ref;
+    let { src , domRef , children  } = _ref;
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__visual",
         ref: domRef
@@ -29552,7 +29576,7 @@ const Image1 = (_ref)=>{
     }), /*#__PURE__*/ _react.default.createElement("img", {
         src: "/img/".concat(src || "login-1.jpg"),
         alt: "Login Visual"
-    }))));
+    })), children));
 };
 _c = Image1;
 var _default = Image1;
@@ -29639,8 +29663,9 @@ function _interopRequireDefault(obj) {
 }
 const a = 'animate-item';
 const BackButton = (_ref)=>{
-    let { onClick , text , animationClass  } = _ref;
+    let { onClick , text , animationClass , type  } = _ref;
     return(/*#__PURE__*/ _react.default.createElement("button", {
+        type: type || "button",
         className: $.join("back-button", animationClass || a),
         onClick: onClick
     }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
@@ -29691,12 +29716,14 @@ const IconButton = (_ref3)=>{
 _c2 = IconButton;
 exports.IconButton = IconButton;
 const LinkButton = (_ref4)=>{
-    let { onClick , href , text , domRef , disabled , animationClass  } = _ref4;
+    let { onClick , href , text , domRef , disabled , animationClass , cssClasses  } = _ref4;
     return(/*#__PURE__*/ _react.default.createElement("a", {
         href: href,
         className: $.join("link-button", animationClass || a, [
             disabled,
             "disabled"
+        ], [
+            cssClasses
         ]),
         ref: domRef,
         onClick: onClick
@@ -29826,13 +29853,13 @@ function _interopRequireDefault(obj) {
 // Import Other Components
 // Create Component
 const Input = (_ref)=>{
-    let { value , placeholder , onChange , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
+    let { value , placeholder , onChange , onBlur: _onBlur , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
     const [state, setState] = _hooks.useObjectState({
         type,
         showErrors: false
     });
     const isText = state.type === "text";
-    const hasError = state.showErrors && errors.length > 0;
+    const hasError = state.showErrors && errors && errors.length > 0;
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "input"
     }, /*#__PURE__*/ _react.default.createElement("div", {
@@ -29854,15 +29881,20 @@ const Input = (_ref)=>{
         type: state.type || "text",
         value: value,
         placeholder: placeholder,
-        onChange: onChange && ((e)=>onChange(e.target.value)
-        ),
+        onChange: (onChange || formatInput) && ((e)=>{
+            let val = e.target.value;
+            if (formatInput) val = formatInput(val);
+            onChange && onChange(val);
+        }),
         onBlur: (e)=>{
             if (!state.showErrors) setState({
                 showErrors: true
             });
+            _onBlur && _onBlur(e);
         },
         onFocus: selectOnFocus && ((e)=>e.target.select()
-        )
+        ),
+        className: "input__text-input"
     }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {
         className: "input__toggle",
         onClick: ()=>setState({
@@ -30163,7 +30195,55 @@ const config = {
 var _default = config;
 exports.default = _default;
 
-},{}],"7cRna":[function(require,module,exports) {
+},{}],"KtcU5":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Referral = (_ref)=>{
+    let { name , photo , copy , amount  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "referral"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "referral__bg"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "referral__photo"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: photo,
+        alt: "picture of ".concat(name)
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "referral__content"
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "bold"
+    }, copy.title.replace("{name}", name)), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small"
+    }, copy.subtitle.replace("{amount}", amount || 15)))));
+};
+_c = Referral;
+var _default = Referral;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Referral");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"7cRna":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -30180,7 +30260,7 @@ var _Image = _interopRequireDefault(require("../components/Image"));
 var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
 var _Buttons = require("../../components/Buttons");
 var _Input = _interopRequireDefault(require("../../components/Input"));
-var _axios = _interopRequireDefault(require("axios"));
+var _hooks = require("../../helpers/hooks");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -30215,14 +30295,22 @@ function _interopRequireWildcard(obj) {
 }
 // Import Login Components
 // Import Generic Components
-// Import Front End Components
+// Import Helpers
 const Login = (_ref)=>{
     let { copy , authenticate , transition , update , state , validator  } = _ref;
-    // Create Refs
+    // Set Up Local State
+    const [localState, setLocalState] = _hooks.useObjectState({
+        isFetching: false,
+        errors: []
+    }); // Create Refs
     const mainRef = _react.useRef(); // Check Email & Password
     const emailErrors = validator.checkEmail(state.email);
-    const passwordErrors = validator.checkPassword(state.password); // Enable Typewriter Effect
+    const passwordErrors = [
+        ...validator.checkPassword(state.password),
+        ...localState.errors
+    ];
     _react.useEffect(()=>{
+        console.log(copy);
         transition.set(mainRef.current).in();
     }, []);
     return(/*#__PURE__*/ _react.default.createElement("div", {
@@ -30233,7 +30321,24 @@ const Login = (_ref)=>{
         ,
         backText: copy.back,
         title: copy.title,
-        onSubmit: ()=>{
+        onSubmit: async ()=>{
+            // Set State
+            setLocalState({
+                isFetching: true
+            }); // Start Timer
+            const timer = $.timer(1000).start(); // Fetch Data
+            const user = await authenticate('/auth/create-session', {
+                email: state.email,
+                password: state.password
+            }); // Hold For Timer
+            await timer.hold(); // Set Error
+            if (!user) return setLocalState({
+                errors: [
+                    copy.errors.fails.password
+                ]
+            }); // Update Global State
+            update('user')(user); // Update State
+            transition.to("greeting");
         }
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "login__fieldset"
@@ -30253,12 +30358,18 @@ const Login = (_ref)=>{
         label: copy.inputs.password.label,
         placeholder: copy.inputs.password.placeholder,
         value: state.password,
-        onChange: update('password'),
+        onChange: (val)=>{
+            update('password')(val);
+            if (localState.errors.length) setLocalState({
+                errors: []
+            });
+        },
         errors: passwordErrors
     }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
         text: copy.button,
         type: "submit",
-        disabled: emailErrors.length || passwordErrors.length
+        disabled: emailErrors.length || passwordErrors.length,
+        showLoader: localState.isFetching
     }), /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
         text: copy.forgot,
         onClick: ()=>transition.to("requestReset")
@@ -30275,16 +30386,7 @@ $RefreshReg$(_c, "Login");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD"}],"2xD76":[function(require,module,exports) {
-"use strict";
-
-},{}],"3Foxq":[function(require,module,exports) {
-"use strict";
-
-},{}],"5eely":[function(require,module,exports) {
-"use strict";
-
-},{}],"3HWhS":[function(require,module,exports) {
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../helpers/hooks":"4wqYR"}],"2xD76":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -30299,6 +30401,277 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _Image = _interopRequireDefault(require("../components/Image"));
 var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Referral = _interopRequireDefault(require("../components/Referral"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _ImageUpload = _interopRequireDefault(require("../../components/ImageUpload"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const Registration = (_ref)=>{
+    let { copy , authenticate , transition , update , state , validator , referral  } = _ref;
+    // Use That State
+    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const mainRef = _react.useRef(); // Check Email & Password
+    const fullNameErrors = validator.checkName(state.fullName);
+    const preferredNameErrors = validator.checkName(state.preferredName); // Enable Typewriter Effect
+    _react.useEffect(()=>{
+        transition.set(mainRef.current).in();
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
+        copy: copy.referral
+    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: ()=>transition.to("signup")
+        ,
+        backText: copy.back,
+        title: copy.title,
+        onSubmit: async ()=>{
+            // Update Local State
+            setIsFetching(true); // Start a timer
+            const timer = $.timer(1000).start(); // Make Request
+            const user = await authenticate('/auth/register', {
+                name: state.fullName,
+                preferredName: state.preferredName,
+                password: state.password,
+                email: state.email,
+                photo: state.profilePhoto,
+                referredBy: referral === null || referral === void 0 ? void 0 : referral.code
+            }); // Wait For Timer To Expire
+            await timer.hold(); // Update Global State
+            update('user')(user); // Transition To Greeting
+            transition.to("greeting");
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-full-name",
+        type: "name",
+        icon: "person-circle",
+        label: copy.inputs.fullName.label,
+        placeholder: copy.inputs.fullName.placeholder,
+        value: state.fullName,
+        onChange: update('full_name'),
+        onBlur: ()=>{
+            if (state.preferredName || !state.fullName) return;
+            update('preferred_name')(state.fullName.split(" ")[0]);
+        },
+        errors: fullNameErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-preferred-name",
+        type: "name",
+        icon: "person-circle",
+        label: copy.inputs.preferredName.label,
+        placeholder: copy.inputs.preferredName.placeholder,
+        value: state.preferredName,
+        onChange: update('preferred_name'),
+        errors: preferredNameErrors
+    }), /*#__PURE__*/ _react.default.createElement(_ImageUpload.default, {
+        id: "user-profile-photo-upload",
+        label: copy.inputs.profilePhoto.label,
+        placeholder: copy.inputs.profilePhoto.placeholder,
+        endpoint: "/api/upload/profile-photo",
+        success: copy.inputs.profilePhoto.success,
+        onUpload: update('profile_photo')
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: fullNameErrors.length || preferredNameErrors.length,
+        showLoader: isFetching
+    })))));
+};
+_c = Registration;
+var _default = Registration;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Registration");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../components/Referral":"KtcU5","../../components/ImageUpload":"211X4"}],"211X4":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _hooks = require("../helpers/hooks");
+var _Icon = _interopRequireDefault(require("./Icon"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const ImageUpload = (_ref)=>{
+    let { label , placeholder , success , error , id , endpoint , onUpload  } = _ref;
+    // Set Up Object State
+    const [state, setState] = _hooks.useObjectState({
+        image: null,
+        isUploading: false,
+        error: "false"
+    }); // Define Refs
+    const input = _react.useRef(); // Create Change Handler
+    const onFileChange = async (e)=>{
+        var _res$data;
+        // Set State
+        setState({
+            isUploading: true
+        }); // Create Variables For Upload
+        const files = Array.from(e.target.files);
+        const formData = new FormData(); // Append Form Files
+        files.forEach((file)=>{
+            formData.append('photo', file);
+        });
+        const timer = $.timer(1000).start(); // Upload File
+        const res = await _axios.default.post(endpoint, formData);
+        await timer.hold();
+        setState({
+            isUploading: false,
+            image: res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.file
+        });
+        onUpload && onUpload(res.data.file);
+    };
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__input file animate-item",
+        onClick: ()=>input.current.click()
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__main"
+    }, state.image ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__photo"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: state.image,
+        alt: "uploaded photo"
+    })) : /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__icon"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "upload"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__field"
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("input", {
+        type: "file",
+        id: id,
+        className: "input__file",
+        ref: input,
+        onChange: onFileChange
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: $.join("small", [
+            state.image,
+            "success"
+        ], [
+            state.error,
+            "error"
+        ])
+    }, state.image ? success : placeholder))), state.isUploading && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__loader"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))))));
+};
+_c = ImageUpload;
+var _default = ImageUpload;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ImageUpload");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./Icon":"4VYCM","../helpers/hooks":"4wqYR","axios":"5FCRD"}],"3Foxq":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Referral = _interopRequireDefault(require("../components/Referral"));
 var _Buttons = require("../../components/Buttons");
 var _Input = _interopRequireDefault(require("../../components/Input"));
 var _axios = _interopRequireDefault(require("axios"));
@@ -30334,28 +30707,272 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
-// Import Login Components
-// Import Generic Components
-// Import Front End Components
-const Signup = (_ref)=>{
-    let { copy , authenticate , transition , update , state , validator  } = _ref;
-    // Create Refs
-    const mainRef = _react.useRef(); // Check Email & Password
-    const emailErrors = validator.checkEmail(state.email);
-    const passwordErrors = validator.checkPassword(state.password); // Enable Typewriter Effect
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const RequestReset = (_ref)=>{
+    let { copy , transition , update , state , validator , referral  } = _ref;
+    // Create State
+    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const mainRef = _react.useRef(); // Check Email 
+    const emailErrors = validator.checkEmail(state.email); // Enable Typewriter Effect
     _react.useEffect(()=>{
         transition.set(mainRef.current).in();
     }, []);
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__container",
         ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
+        copy: copy.referral
+    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: ()=>transition.to("signup")
+        ,
+        backText: copy.back,
+        title: copy.title,
+        text: copy.copy,
+        onSubmit: async ()=>{
+            // Set Local State
+            setIsFetching(true); // Create Timer
+            const timer = $.timer(1000).start(); // Request Reset Code From API
+            // Wait For Timer
+            await timer.hold(); // Transition To Next Screen
+            transition.to("resetCode");
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-email-2",
+        type: "email",
+        icon: "email",
+        label: copy.inputs.email.label,
+        placeholder: copy.inputs.email.placeholder,
+        value: state.email,
+        onChange: update('email'),
+        errors: emailErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: emailErrors.length,
+        showLoader: isFetching
+    })))));
+};
+_c = RequestReset;
+var _default = RequestReset;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "RequestReset");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../components/Referral":"KtcU5","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"5eely":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Referral = _interopRequireDefault(require("../components/Referral"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const RequestReset = (_ref)=>{
+    let { copy , transition , update , state , validator , referral  } = _ref;
+    // Create Local State
+    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const mainRef = _react.useRef(); // Check Email 
+    const errors = validator.checkPassword(state.password); // Enable Typewriter Effect
+    _react.useEffect(()=>{
+        transition.set(mainRef.current).in();
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
+        copy: copy.referral
+    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: ()=>transition.to("login")
+        ,
+        backText: copy.back,
+        title: copy.title,
+        text: copy.copy,
+        onSubmit: async ()=>{
+            // Set Local State
+            setIsFetching(true); // Start timer
+            const timer = $.timer(1000).start(); // Validate Reset
+            // Hold For Timer
+            await timer.hold(); // Transition to next view
+            transition.to("greeting");
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-password",
+        type: "password",
+        icon: "lock",
+        label: copy.inputs.password.label,
+        placeholder: copy.inputs.password.placeholder,
+        value: state.password,
+        onChange: update('password'),
+        errors: errors
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: errors.length,
+        showLoader: isFetching
+    })))));
+};
+_c = RequestReset;
+var _default = RequestReset;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "RequestReset");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../components/Referral":"KtcU5","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3HWhS":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Referral = _interopRequireDefault(require("../components/Referral"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const Signup = (_ref)=>{
+    let { copy , transition , update , state , validator , referral  } = _ref;
+    // Create Refs
+    const mainRef = _react.useRef(); // Check Email & Password
+    const emailErrors = validator.checkEmail(state.email);
+    const passwordErrors = validator.checkPassword(state.password);
+    _react.useEffect(()=>{
+        // Transition Into View
+        transition.set(mainRef.current).in();
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
+        copy: copy.referral
+    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
         back: ()=>transition.to("hello")
         ,
         backText: copy.back,
         title: copy.title,
-        onSubmit: ()=>{
-        }
+        onSubmit: ()=>transition.to("registration")
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "login__fieldset"
     }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
@@ -30393,7 +31010,7 @@ $RefreshReg$(_c, "Signup");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4H4Vl":[function(require,module,exports) {
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../components/Referral":"KtcU5"}],"4H4Vl":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -30403,46 +31020,41 @@ exports.reducer = exports.initialState = void 0;
 const initialState = {
     step: 'hello',
     email: 'me@arjunsamir.com',
-    password: '',
-    referral: '',
-    fullName: '',
-    preferredName: ''
+    password: 'password',
+    fullName: 'Samir Patel',
+    preferredName: 'Arjun',
+    profilePhoto: '',
+    code: '',
+    user: {
+    }
 }; // Create the reducer
 exports.initialState = initialState;
 const reducer = function reducer1() {
     let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
     let action = arguments.length > 1 ? arguments[1] : undefined;
+    const merge = (field)=>{
+        return Object.assign({
+        }, state, {
+            [field]: action.data
+        });
+    };
     switch(action.type){
         case 'SET_STEP':
-            return Object.assign({
-            }, state, {
-                step: action.data
-            });
+            return merge('step');
         case 'SET_EMAIL':
-            return Object.assign({
-            }, state, {
-                email: action.data
-            });
+            return merge('email');
         case 'SET_PASSWORD':
-            return Object.assign({
-            }, state, {
-                password: action.data
-            });
-        case 'SET_REFERRAL':
-            return Object.assign({
-            }, state, {
-                referral: action.data
-            });
+            return merge('password');
         case 'SET_FULL_NAME':
-            return Object.assign({
-            }, state, {
-                fullName: action.data
-            });
+            return merge('fullName');
         case 'SET_PREFERRED_NAME':
-            return Object.assign({
-            }, state, {
-                preferredName: action.data
-            });
+            return merge('preferredName');
+        case 'SET_PROFILE_PHOTO':
+            return merge('profilePhoto');
+        case 'SET_CODE':
+            return merge('code');
+        case 'SET_USER':
+            return merge('user');
         default:
             return state;
     }
@@ -30457,7 +31069,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 const regex = {
     email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    name: /^[a-zA-Z]+ [a-zA-Z]+$/,
+    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
     lettersOnly: /[^A-Za-z ]+$/
 };
 class Validator {
@@ -30492,7 +31104,7 @@ class Validator {
         else return [];
     }
     cleanInput(val) {
-        return val.replace(regex.lettersOnly, '');
+        return val.replace(regex.test, '');
     }
     constructor(errors){
         this.errors = errors;
@@ -30507,6 +31119,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _animejs = _interopRequireDefault(require("animejs"));
+var _uniqid = require("uniqid");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -30516,6 +31129,8 @@ class Transition {
     set(container) {
         let selector = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "animate-item";
         this.targets = $(container).children(".".concat(selector)).e();
+        this.image = $(container).children(".login__visual").e();
+        this.container = $(container);
         return this;
     }
     async to(step) {
@@ -30527,11 +31142,39 @@ class Transition {
             data: step
         });
     }
-    in() {
+    getReferralTargets() {
+        const ref = this.container.children('.referral');
+        if (!ref.length) return;
+        ref.children('.referral__bg, .referral__content, .referral__photo').clearInlineStyles();
+        return {
+            bg: ref.children(".referral__bg").e(),
+            content: ref.children(".referral__content").e(),
+            photo: ref.children(".referral__bg, .referral__photo").e()
+        };
+    }
+    async in() {
+        const targets = this.getReferralTargets();
         const timeline = _animejs.default.timeline({
             easing: 'easeOutQuad',
             duration: 250
         });
+        timeline.add({
+            targets: this.image,
+            opacity: [
+                0,
+                1
+            ],
+            duration: 800
+        });
+        if (targets) {
+            _animejs.default.set(targets.bg, {
+                width: '10.4rem',
+                opacity: 0
+            });
+            _animejs.default.set(targets.photo, {
+                scale: 0
+            });
+        }
         timeline.add({
             targets: this.targets,
             translateY: [
@@ -30550,13 +31193,53 @@ class Transition {
                 250
             ])
         });
+        if (targets) {
+            timeline.add({
+                targets: targets.photo,
+                scale: 1
+            });
+            timeline.add({
+                targets: targets.bg,
+                width: '100%',
+                opacity: 1
+            });
+            timeline.add({
+                targets: targets.content,
+                opacity: [
+                    0,
+                    1
+                ]
+            });
+        }
         return timeline.finished;
     }
     out() {
+        const targets = this.getReferralTargets();
         const timeline = _animejs.default.timeline({
             easing: 'easeOutQuad',
             duration: 250
         });
+        if (targets) {
+            timeline.add({
+                targets: targets.content,
+                opacity: [
+                    1,
+                    0
+                ]
+            });
+            timeline.add({
+                targets: targets.bg,
+                width: '10.4rem'
+            });
+            timeline.add({
+                targets: targets.photo,
+                duration: 800,
+                scale: [
+                    1,
+                    0
+                ]
+            });
+        }
         timeline.add({
             targets: this.targets,
             translateY: _animejs.default.stagger([
@@ -30569,6 +31252,13 @@ class Transition {
                 250
             ])
         });
+        timeline.add({
+            targets: this.image,
+            opacity: [
+                1,
+                0
+            ]
+        }, "-=500");
         return timeline.finished;
     }
     constructor(dispatch){
@@ -30577,7 +31267,227 @@ class Transition {
 }
 exports.default = Transition;
 
-},{"animejs":"1GvRs"}],"7cKho":[function(require,module,exports) {
+},{"animejs":"1GvRs","uniqid":"4Yh3d"}],"4Yh3d":[function(require,module,exports) {
+var process = require("process");
+/* 
+(The MIT License)
+Copyright (c) 2014-2021 Halász Ádám <adam@aimform.com>
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+*/ //  Unique Hexatridecimal ID Generator
+// ================================================
+//  Dependencies
+// ================================================
+var pid = typeof process !== 'undefined' && process.pid ? process.pid.toString(36) : '';
+var address = '';
+if (typeof __webpack_require__ !== 'function') {
+    var mac = '', networkInterfaces = require('os').networkInterfaces();
+    loop: for(let interface_key in networkInterfaces){
+        const networkInterface = networkInterfaces[interface_key];
+        const length = networkInterface.length;
+        for(var i = 0; i < length; i++)if (networkInterface[i] !== undefined && networkInterface[i].mac && networkInterface[i].mac != '00:00:00:00:00:00') {
+            mac = networkInterface[i].mac;
+            break loop;
+        }
+    }
+    address = mac ? parseInt(mac.replace(/\:|\D+/gi, '')).toString(36) : '';
+}
+//  Exports
+// ================================================
+module.exports = module.exports.default = function(prefix, suffix) {
+    return (prefix ? prefix : '') + address + pid + now().toString(36) + (suffix ? suffix : '');
+};
+module.exports.process = function(prefix, suffix) {
+    return (prefix ? prefix : '') + pid + now().toString(36) + (suffix ? suffix : '');
+};
+module.exports.time = function(prefix, suffix) {
+    return (prefix ? prefix : '') + now().toString(36) + (suffix ? suffix : '');
+};
+//  Helpers
+// ================================================
+function now() {
+    var time = Date.now();
+    var last = now.last || time;
+    return now.last = time > last ? time : last + 1;
+}
+
+},{"process":"6vAYb","os":"2DY8W"}],"2DY8W":[function(require,module,exports) {
+exports.endianness = function() {
+    return 'LE';
+};
+exports.hostname = function() {
+    if (typeof location !== 'undefined') return location.hostname;
+    else return '';
+};
+exports.loadavg = function() {
+    return [];
+};
+exports.uptime = function() {
+    return 0;
+};
+exports.freemem = function() {
+    return Number.MAX_VALUE;
+};
+exports.totalmem = function() {
+    return Number.MAX_VALUE;
+};
+exports.cpus = function() {
+    return [];
+};
+exports.type = function() {
+    return 'Browser';
+};
+exports.release = function() {
+    if (typeof navigator !== 'undefined') return navigator.appVersion;
+    return '';
+};
+exports.networkInterfaces = exports.getNetworkInterfaces = function() {
+    return {
+    };
+};
+exports.arch = function() {
+    return 'javascript';
+};
+exports.platform = function() {
+    return 'browser';
+};
+exports.tmpdir = exports.tmpDir = function() {
+    return '/tmp';
+};
+exports.EOL = '\n';
+exports.homedir = function() {
+    return '/';
+};
+
+},{}],"25k9X":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Image = _interopRequireDefault(require("../components/Image"));
+var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
+var _Referral = _interopRequireDefault(require("../components/Referral"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const ResetCode = (_ref)=>{
+    let { copy , transition , update , state , validator , referral  } = _ref;
+    // Create Local State
+    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const mainRef = _react.useRef(); // Check Email 
+    const emailErrors = validator.checkEmail(state.email); // Enable Typewriter Effect
+    _react.useEffect(()=>{
+        transition.set(mainRef.current).in();
+    }, []); // Return Component
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container",
+        ref: mainRef
+    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
+        copy: copy.referral
+    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
+        back: ()=>transition.to("requestReset")
+        ,
+        backText: copy.back,
+        title: copy.title,
+        text: copy.copy.replace("{email}", state.email),
+        onSubmit: async ()=>{
+            // Update State
+            setIsFetching(true); // Start Timer
+            const timer = $.timer(1000).start(); // Validate API Errors
+            // Await Timer
+            await timer.hold(); // Transition To Next Page
+            transition.to("reset");
+        }
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__fieldset"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "reset-code",
+        icon: "keypad",
+        label: copy.inputs.code.label,
+        placeholder: copy.inputs.code.placeholder,
+        value: state.code,
+        onChange: update('code'),
+        errors: emailErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.button,
+        type: "submit",
+        disabled: emailErrors.length,
+        showLoader: isFetching
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "animate-item"
+    }, copy.resend[0] + " ", /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
+        text: copy.resend[1],
+        onClick: ()=>transition.to("requestReset")
+        ,
+        animationClass: "no-animate"
+    }))))));
+};
+_c = ResetCode;
+var _default = ResetCode;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ResetCode");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../components/Referral":"KtcU5","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"GbZeI":[function(require,module,exports) {
+"use strict";
+
+},{}],"7cKho":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -30909,6 +31819,11 @@ class Dream {
         this.elements.forEach((e)=>Object.assign(e.style, properties)
         );
         return this.cycle();
+    }
+    clearInlineStyles() {
+        this.elements.forEach((e)=>e.removeAttribute('style')
+        );
+        return this;
     }
     async transition(style) {
         // 1. Get Transitionend Event Name

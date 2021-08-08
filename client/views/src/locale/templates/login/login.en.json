@@ -33,7 +33,9 @@
             },
             "profilePhoto": {
                 "label": "Profile Photo (optional)",
-                "placeholder": "Click to upload a photo"
+                "placeholder": "Click to upload a photo",
+                "success": "Upload Successful!",
+                "error": "Something went wrong..."
             }
         },
         "button": "Complete Signup",
@@ -57,6 +59,19 @@
         "button": "Get Reset Code",
         "back": "Back",
         "inputs": {}
+    },
+    "resetCode": {
+        "title": "Check Your Email",
+        "copy": "An email with your reset code has been sent to {email}. The code can take up to 10 minutes to arrive.",
+        "button": "Verify Code",
+        "back": "Back",
+        "resend": ["Didn't receive the email?", "Resend code."],
+        "inputs": {
+            "code": {
+                "label": "Reset Code",
+                "placeholder": "••••••••"
+            }
+        }
     },
     "reset": {
         "title": "Create New Password",
@@ -89,10 +104,13 @@
         "name": {
             "required": "Full Name is required",
             "invalid": "Name cannot contain numbers or special characters"
+        },
+        "fails": {
+            "password": "Your password is incorrect."
         }
     },
     "referral": {
         "title": "{name} Invited You",
-        "subtitle": "Sign up and save {amount} on your first ride."
+        "subtitle": "Sign up and save ${amount} on your first ride."
     }
 }

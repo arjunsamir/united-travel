@@ -33,7 +33,9 @@
             },
             "profilePhoto": {
                 "label": "Foto de perfil (opcional)",
-                "placeholder": "Haga clic para subir una foto"
+                "placeholder": "Haga clic para subir una foto",
+                "success": "¡Subida exitosa!",
+                "error": "Algo salió mal..."
             }
         },
         "button": "Registro Completo",
@@ -57,6 +59,19 @@
         "button": "Obtener Código de Reinicio",
         "back": "Atrás",
         "inputs": {}
+    },
+    "resetCode": {
+        "title": "Consultar su correo electrónico",
+        "copy": "Se envió un correo electrónico con su código de restablecimiento a {email}. El código puede tardar hasta 10 minutos en llegar.",
+        "button": "Código de verificación",
+        "back": "Atrás",
+        "resend": ["¿No recibiste el correo electrónico?", "Reenviar codigo."],
+        "inputs": {
+            "code": {
+                "label": "Restablecer Código",
+                "placeholder": "••••••••"
+            }
+        }
     },
     "reset": {
         "title": "Crear Nueva Contraseña",
@@ -89,10 +104,13 @@
         "name": {
             "required": "Se requiere el nombre completo",
             "invalid": "El nombre no puede contener números ni caracteres especiales"
+        },
+        "fails": {
+            "password": "Tu contraseña es incorrecta."
         }
     },
     "referral": {
         "title": "{name} te Invitó",
-        "subtitle": "Regístrate y ahorra {amount} en tu primer viaje."
+        "subtitle": "Regístrate y ahorra ${amount} en tu primer viaje."
     }
 }

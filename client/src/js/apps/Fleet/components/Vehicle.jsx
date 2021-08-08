@@ -23,6 +23,7 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
         img: useRef()
     }
 
+    // Exit Animation
     useEffect(() => {
 
         if (!nextVehicle) return;
@@ -34,13 +35,14 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
 
         tl.add({
             targets: $(refs.info.current).children().e(),
+            translateY: anime.stagger([-25, -100]),
             opacity: 0,
-            delay: anime.stagger(100, { start: 250 })
+            delay: anime.stagger([0, 250])
         });
 
         tl.add({
             targets: refs.img.current,
-            translateX: 200,
+            translateX: -200,
             opacity: 0
         });
 
@@ -48,6 +50,7 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
 
     }, [nextVehicle]);
 
+    // Enter Animation
     useEffect(() => {
 
         const tl = anime.timeline({
@@ -57,8 +60,9 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
 
         tl.add({
             targets: $(refs.info.current).children().e(),
+            translateY: [anime.stagger([100, 25]), 0],
             opacity: [0, 1],
-            delay: anime.stagger(100)
+            delay: anime.stagger([0, 250])
         });
 
         tl.add({

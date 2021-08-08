@@ -11,11 +11,16 @@ export default class LoginApp extends ReactAppWrapper {
         this.App = App;
     }
 
+    getReferral() {
+        const url = new URLSearchParams(window.location.search);
+        return url.get('code')
+    }
+
     async load() {
 
         const res = {};
 
-        await Promise.all([
+        const promises = [
             axios('/api/vehicles').then(data => {
                 // Filter and Localize Vehicles
                 res.vehicles = data?.data?.data?.data
@@ -23,7 +28,12 @@ export default class LoginApp extends ReactAppWrapper {
                 .sort((a, b) => a.seats - b.seats);
             }),
             axios(`/api/copy/login/${window.locale}`).then(data => res.copy = data?.data)
-        ]);
+        ];
+
+        const code = this.getReferral();
+        if (code) promises.push(axios(`/users/referrals/${code}`).then(data => res.referral = data?.data?.user));
+
+        await Promise.all(promises);
 
         await this.render(res);
 

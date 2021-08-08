@@ -5,6 +5,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
+        position: relative;
 
         padding: 1.6rem 2.4rem;
         background-color: var(--slate-light);
@@ -17,12 +18,33 @@
             border-color: var(--slate);
         }
 
-        svg {
-            color: var(--slate-dark);
-        }
-
         &.has-error {
             border-color: var(--error);
+        }
+
+        &.file {
+            cursor: pointer;
+
+            label {
+                pointer-events: none;
+                margin-bottom: 1.2rem;
+            }
+
+            p, label {
+                line-height: 1;
+            }
+
+            p {
+                color: var(--placeholder);
+
+                &.success {
+                    color: var(--success);
+                }
+            }
+
+            svg {
+                color: var(--white);
+            }
         }
 
     }
@@ -43,26 +65,14 @@
             user-select: none;
         }
 
-        input {
-            display: block;
-            font-size: $p;
-            line-height: 1.7;
-            margin: 0;
-            padding: 0;
-            border: none;
-            background: none;
-            color: var(--jet);
-            width: 100%;
-
-            &:focus {
-                outline: none;
-            }
-        }
-
         hr {
             height: 4.8rem;
             width: 3px;
             background-color: var(--placeholder);
+        }
+
+        svg {
+            color: var(--slate-dark);
         }
     }
 
@@ -98,6 +108,79 @@
             color: var(--error);
             margin-right: 1.2rem;
         }
+    }
+
+    &__text-input {
+        display: block;
+        font-size: $p;
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: none;
+        color: var(--jet);
+        width: 100%;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__icon {
+        height: 4.8rem;
+        width: 4.8rem;
+
+        background-color: var(--slate-dark);
+        border-radius: 50%;
+        @include flexCenter;
+    }
+
+    &__photo {
+        height: 4.8rem;
+        width: 4.8rem;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+            @include cover;
+        }
+    }
+
+    &__file {
+        display: none;
+        pointer-events: none;
+    }
+
+    &__loader {
+        
+        @include overlay;
+        background-color: var(--slate-light);
+        @include flexCenter;
+
+        p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include flexGap(1.2rem);
+        }
+
+        span {
+            display: block;
+            height: 1.2rem;
+            width: 1.2rem;
+            border-radius: 50%;
+            background-color: var(--jet);
+            animation: dotFlashing 0.8s infinite alternate;
+
+            &:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+        }
+
     }
 
 }

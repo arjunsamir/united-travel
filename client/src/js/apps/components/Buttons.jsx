@@ -5,10 +5,13 @@ import Icon from './Icon';
 const a = 'animate-item';
 
 
-export const BackButton = ({ onClick, text, animationClass }) => {
+export const BackButton = ({ onClick, text, animationClass, type }) => {
 
     return (
-        <button className={$.join("back-button", animationClass || a)} onClick={onClick}>
+        <button
+            type={type || "button"}
+            className={$.join("back-button", animationClass || a)} onClick={onClick}
+        >
             <Icon icon="arrow-back" size="sm" />
             <p className="bold">{text || "Back"}</p>
         </button>
@@ -57,12 +60,12 @@ export const IconButton = ({ onClick, icon, color, animationClass, domRef }) => 
 }
 
 
-export const LinkButton = ({ onClick, href, text, domRef, disabled, animationClass }) => {
+export const LinkButton = ({ onClick, href, text, domRef, disabled, animationClass, cssClasses }) => {
 
     return (
         <a
             href={href}
-            className={$.join("link-button", animationClass || a, [disabled, "disabled"])}
+            className={$.join("link-button", animationClass || a, [disabled, "disabled"], [cssClasses])}
             ref={domRef}
             onClick={onClick}
         >

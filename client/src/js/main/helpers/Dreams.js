@@ -465,6 +465,14 @@ class Dream {
     }
 
 
+    // Clear Inline Styles
+    clearInlineStyles() {
+        this.elements.forEach( e => e.removeAttribute('style') );
+
+        return this;
+    }
+
+
     // Wait For Transitions To End 
     async transition( style ) {
 

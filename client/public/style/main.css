@@ -983,6 +983,7 @@ svg.placeholder, .icon.placeholder {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   padding: 1.6rem 2.4rem;
   background-color: var(--slate-light);
   border-radius: 0.8rem;
@@ -992,11 +993,27 @@ svg.placeholder, .icon.placeholder {
 .input__input:focus-within {
   border-color: var(--slate);
 }
-.input__input svg {
-  color: var(--slate-dark);
-}
 .input__input.has-error {
   border-color: var(--error);
+}
+.input__input.file {
+  cursor: pointer;
+}
+.input__input.file label {
+  pointer-events: none;
+  margin-bottom: 1.2rem;
+}
+.input__input.file p, .input__input.file label {
+  line-height: 1;
+}
+.input__input.file p {
+  color: var(--placeholder);
+}
+.input__input.file p.success {
+  color: var(--success);
+}
+.input__input.file svg {
+  color: var(--white);
 }
 .input__main {
   flex-grow: 1;
@@ -1017,24 +1034,13 @@ svg.placeholder, .icon.placeholder {
       -ms-user-select: none;
           user-select: none;
 }
-.input__main input {
-  display: block;
-  font-size: 1.8rem;
-  line-height: 1.7;
-  margin: 0;
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--jet);
-  width: 100%;
-}
-.input__main input:focus {
-  outline: none;
-}
 .input__main hr {
   height: 4.8rem;
   width: 3px;
   background-color: var(--placeholder);
+}
+.input__main svg {
+  color: var(--slate-dark);
 }
 .input__toggle {
   align-self: stretch;
@@ -1064,6 +1070,82 @@ svg.placeholder, .icon.placeholder {
 .input__error svg {
   color: var(--error);
   margin-right: 1.2rem;
+}
+.input__text-input {
+  display: block;
+  font-size: 1.8rem;
+  line-height: 1.7;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--jet);
+  width: 100%;
+}
+.input__text-input:focus {
+  outline: none;
+}
+.input__icon {
+  height: 4.8rem;
+  width: 4.8rem;
+  background-color: var(--slate-dark);
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.input__photo {
+  height: 4.8rem;
+  width: 4.8rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.input__photo img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.input__file {
+  display: none;
+  pointer-events: none;
+}
+.input__loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: var(--slate-light);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.input__loader p {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.input__loader p > *:not(:last-child) {
+  margin-right: 1.2rem;
+}
+.input__loader span {
+  display: block;
+  height: 1.2rem;
+  width: 1.2rem;
+  border-radius: 50%;
+  background-color: var(--jet);
+  -webkit-animation: dotFlashing 0.8s infinite alternate;
+          animation: dotFlashing 0.8s infinite alternate;
+}
+.input__loader span:nth-child(2) {
+  -webkit-animation-delay: 0.2s;
+          animation-delay: 0.2s;
+}
+.input__loader span:nth-child(3) {
+  -webkit-animation-delay: 0.4s;
+          animation-delay: 0.4s;
 }
 .loader {
   --loader-border: 3px solid;
@@ -1563,6 +1645,10 @@ svg.placeholder, .icon.placeholder {
   height: 100%;
   min-height: calc(100vh - (var(--y-pad) * 1.5));
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 4.8rem;
 }
 .login__image {
   position: absolute;
@@ -1614,5 +1700,45 @@ svg.placeholder, .icon.placeholder {
 }
 .login__fieldset > *:not(:last-child) {
   margin-bottom: 2.4rem;
+}
+.login__header > *:not(:last-child) {
+  margin-bottom: 2.4rem;
+}
+.referral {
+  position: relative;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+}
+.referral > *:not(:last-child) {
+  margin-right: 2.4rem;
+}
+.referral__bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 10rem;
+  background-color: var(--white);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
+}
+.referral__photo {
+  height: 8rem;
+  width: 8rem;
+  border-radius: 50%;
+  overflow: hidden;
+  position: relative;
+}
+.referral__photo img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.referral__content {
+  position: relative;
+}
+.referral__content > *:not(:last-child) {
+  margin-bottom: 0.4rem;
 }
 /*# sourceMappingURL=main.css.map */
