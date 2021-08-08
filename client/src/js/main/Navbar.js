@@ -25,7 +25,7 @@ export default class Navbar {
             const link = $(l);
             const ns = link.data('navNamespace');
             link.removeClass('active');
-            if (ns == this.namespace) console.log(link.addClass('active'));
+            if (ns == this.namespace) link.addClass('active');
         });
 
         // Update Selectors
@@ -39,15 +39,43 @@ export default class Navbar {
         this.main.children('.nb-lng').click(() => this.toggleDesktopMenu(this.selectors.lang, 'lang'));
         this.escape = this.main.children('.nb-esc');
         this.escape.click(() => this.handleEscapeClick());
+        
+        // Update Active Language
+        this.main.children('.navbar__lang-menu li').forEach(l => {
+            const link = $(l);
+            const lang = link.data('navLang');
+            if (lang == window.locale) link.addClass('active');
+
+            link.click(() => this.changeLocale(lang));
+        })
 
     }
 
-    async handleEscapeClick() {
-        if (this.state.user) this.toggleDesktopMenu(this.selectors.account, 'user');
-        if (this.state.lang) this.toggleDesktopMenu(this.selectors.lang, 'lang');
+    changeLocale(lang) {
+
+        if (lang == window.locale) return this.toggleDesktopMenu(this.selectors.lang, 'lang');
+
+        const path = window.location.pathname.split('/');
+        const { origin, search } = window.location;
+
+        if (lang === 'en') {
+            path.splice(1, 1)
+        }
+
+        else if (lang === 'es') {
+            path.splice(1, 0, 'es');
+        }
+
+        window.location.href = `${origin}${path.join('/')}${search}`
+
     }
 
-    async toggleDesktopMenu(selector, target) {
+    async handleEscapeClick(animate = true) {
+        if (this.state.user) this.toggleDesktopMenu(this.selectors.account, 'user', animate);
+        if (this.state.lang) this.toggleDesktopMenu(this.selectors.lang, 'lang', animate);
+    }
+
+    async toggleDesktopMenu(selector, target, animate = true) {
 
         // Close Menu
         const menu = this.main.children(selector);
@@ -64,12 +92,20 @@ export default class Navbar {
             this.state[target] = false;
             this.escape.addClass('no-esc');
 
-            tl.add({
-                targets: menu.e(),
-                opacity: [1, 0],
-            });
+            if (animate) {
+                tl.add({
+                    targets: menu.e(),
+                    opacity: [1, 0],
+                });
 
-            await tl.finished;
+                await tl.finished;
+            }
+
+            else {
+                anime.set(menu.e(), {
+                    opacity: 0
+                });
+            }
 
             menu.addClass('hidden');
 
@@ -82,97 +118,28 @@ export default class Navbar {
             await this.handleEscapeClick();
 
             menu.removeClass('hidden');
-            this.state.user = true;
+            this.state[target] = true;
             this.escape.removeClass('no-esc');
 
-            tl.add({
-                targets: menu.e(),
-                opacity: [0, 1],
-            });
+            if (animate) {
+                tl.add({
+                    targets: menu.e(),
+                    opacity: [0, 1],
+                });
 
-            await tl.finished;
+                await tl.finished;
+            }
+            else {
+                anime.set(menu.e(), {
+                    opacity: 1
+                });
+            }
         }
 
     }
 
-    // toggleLangMenu() {
-    //     const menu = this.main.children('.navbar__lang-menu');
-
-    //     if (this.state.lang) {
-
-    //         anime({
-    //             targets: menu.e(),
-    //             opacity: [1, 0],
-    //             easing: 'easeOutQuad',
-    //             duration: 250,
-    //             complete: () => {
-    //                 menu.addClass('hidden');
-    //                 this.state.lang = false;
-    //                 this.escape.addClass('no-esc');
-    //             }
-    //         });
-
-    //     }
-    //     else {
-
-    //         this.handleEscapeClick();
-
-    //         menu.removeClass('hidden');
-
-    //         anime({
-    //             targets: menu.e(),
-    //             opacity: [0, 1],
-    //             easing: 'easeOutQuad',
-    //             duration: 250
-    //         });
-            
-    //         this.state.lang = true;
-    //         this.escape.removeClass('no-esc');
-    //     }
-    // }
-
-    // toggleUserMenu() {
-
-    //     const menu = this.main.children(`.navbar__profile.logged-${this.loggedIn ? "in" : "out"} .navbar__profile-menu`);
-
-    //     // Close Menu
-    //     if (this.state.user) {
-
-    //         anime({
-    //             targets: menu.e(),
-    //             opacity: [1, 0],
-    //             easing: 'easeOutQuad',
-    //             duration: 250,
-    //             complete: () => {
-    //                 menu.addClass('hidden');
-    //                 this.state.user = false;
-    //                 this.escape.addClass('no-esc');
-    //             }
-    //         });
-
-    //     }
-
-    //     // Open Menu
-    //     else {
-
-    //         this.handleEscapeClick();
-            
-    //         menu.removeClass('hidden');
-
-    //         anime({
-    //             targets: menu.e(),
-    //             opacity: [0, 1],
-    //             easing: 'easeOutQuad',
-    //             duration: 250
-    //         });
-            
-    //         this.state.user = true;
-    //         this.escape.removeClass('no-esc');
-    //     }
-
-    // }
-
     destroy() {
+        this.handleEscapeClick(false);
         this.main.kill();
     }
 

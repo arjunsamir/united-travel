@@ -701,7 +701,7 @@ class Dream {
     // Iterate Over Function
     forEach( fn ) {
         this.elements.forEach( fn );
-        return this.cycle();
+        return this;
     }
 
 
