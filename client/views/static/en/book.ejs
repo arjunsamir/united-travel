@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book a Ride - United Travel LLC</title>
+
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/style/main.css">
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="/fonts/silka.css">
+
+</head>
+
+<body class="booking-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use href="/img/icons.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
+
+    <!-- Navbar -->
+    <!--  Main Navbar  -->
+<div class="navbar <%- user._id ? 'logged-in' : 'logged-out' %>" id="navbar">
+
+    <div class="nb-esc no-esc"></div>
+
+    <!-- Desktop Navbar -->
+    <div class="navbar__full">
+
+        <div class="navbar__background"></div>
+
+        <a class="navbar__brand" href="/">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <span>United Travel</span>
+        </a>
+
+        <nav class="navbar__nav" aria-label="desktop">
+            <ul class="navbar__nav-list">
+    <li><a href="/" data-nav-namespace="home">Home</a></li>
+    <li><a href="/about" data-nav-namespace="about">About</a></li>
+    <li><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+</ul>
+        </nav>
+
+        <div class="navbar__actions">
+            <!-- Language -->
+            <div class="navbar__lang">
+                <div class="navbar__lang-icon nb-lng">
+                    <svg><use href="/img/icons.svg#language"></use></svg>
+                </div>
+                
+                <div class="navbar__lang-menu hidden">
+                    <ul>
+                        <li data-nav-lang="en"><p class="small">English</p></li>
+                        <li data-nav-lang="es"><p class="small">Español</p></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr>
+
+            <!-- Profile Logged In -->
+            <div class="navbar__profile logged-in">
+
+                <!-- Logged In Icon -->
+                <div class="navbar__profile-pic nb-clt">
+                    <img src="<%- user.photo %>" alt="Profile Photo">
+                </div>
+
+                <div class="navbar__profile-menu hidden">
+                    <ul>
+                        <li><p class="small">Hello <%- user.preferredName %></p></li>
+                        <hr>
+                        <li><a href="/account"><span>My account</span></a></li>
+                        <li><a href="#" id="nb-logout"><span>Log out</span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+            
+            <!-- Profile Logged Out -->
+            <div class="navbar__profile logged-out">
+
+                <!-- Logged Out Icon -->
+                <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                
+                <div class="navbar__profile-menu hidden">
+                    <ul>
+                        <li><a href="/login"><span>Create account</span></a></li>
+                        <li><a href="/login"><span>Login</span></a></li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <!-- Call To Action -->
+            <a href="/book" class="navbar__cta">Book Now</a>
+        </div>
+
+    </div>
+
+    <!-- Hamburger Menu Only -->
+    <div class="navbar__min">
+        <div class="navbar__menu-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+</div>
+
+<div class="nav-menu">
+    
+</div>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="booking">
+
+        <!-- Fleet React App -->
+        <div id="booking-react-app"></div>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <!-- Decalre Global Locale -->
+<script>
+    window.locale = "en";
+    window.currentUser = JSON.parse('<%- JSON.stringify(user) %>');
+</script>
+
+<!-- External JavaScript Links -->
+<script src="/js/index.js"></script> 
+
+</body>
+
+</html

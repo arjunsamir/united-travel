@@ -21,12 +21,6 @@ export default class LoginApp extends ReactAppWrapper {
         const res = {};
 
         const promises = [
-            axios('/api/vehicles').then(data => {
-                // Filter and Localize Vehicles
-                res.vehicles = data?.data?.data?.data
-                ?.filter(v => v.active)
-                .sort((a, b) => a.seats - b.seats);
-            }),
             axios(`/api/copy/login/${window.locale}`).then(data => res.copy = data?.data)
         ];
 

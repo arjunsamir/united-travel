@@ -1,7 +1,9 @@
 .reviews {
 
     padding: var(--y-pad) var(--x-pad);
-
+    min-height: 100vh;
+    @include flexCenter;
+    
     h2 {
         max-width: var(--track-width);
         margin: 0 auto 6.4rem;

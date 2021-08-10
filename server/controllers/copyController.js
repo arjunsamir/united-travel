@@ -11,3 +11,7 @@ exports.getFleet = (req, res) => {
 exports.getLogin = (req, res) => {
     res.sendFile(path.join(__dirname, getPath('login', req.params.locale)))
 }
+
+exports.getBooking = (req, res) => {
+    res.sendFile(path.join(__dirname, getPath('book', req.params.locale)))
+}

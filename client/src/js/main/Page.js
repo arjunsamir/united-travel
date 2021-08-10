@@ -6,14 +6,16 @@ import Typewriter from './Typewriter';
 // Import Apps
 import FleetApp from '../apps/Fleet';
 import LoginApp from '../apps/Login';
-// import BookingApp from '../BookingApp';
+import BookingApp from '../apps/Booking';
+import ReviewsApp from '../apps/Reviews';
 
 
 const componentsRegistry = {
     Typewriter: (dta, ctn) => new Typewriter(dta ?? '#typewrite', ctn),
     FleetApp: (dta, ctn) => new FleetApp(dta, ctn),
     LoginApp: (dta, ctn) => new LoginApp(dta, ctn),
-    // BookingApp: (dta, ctn) => new BookingApp(dta, ctn)
+    BookingApp: (dta, ctn) => new BookingApp(dta, ctn),
+    ReviewsApp: (dta, ctn) => new ReviewsApp(dta, ctn),
 }
 
 

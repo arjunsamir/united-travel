@@ -2,8 +2,6 @@
 const express = require('express');
 const auth = require('../controllers/auth');
 const user = require('../controllers/userController');
-const upload = require('../controllers/uploadController');
-
 
 // 2. Create Router
 const router = express.Router();

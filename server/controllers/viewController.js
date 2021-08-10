@@ -21,8 +21,8 @@ class Views {
         this.render(res, 'fleet');
     }
 
-    booking(req, res) {
-        this.render(res, 'booking');
+    book(req, res) {
+        this.render(res, 'book');
     }
 
     login(req, res) {

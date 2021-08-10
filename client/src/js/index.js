@@ -115,7 +115,12 @@ window.addEventListener('DOMContentLoaded', () => {
             {
                 namespace: 'home',
                 beforeEnter() {
-                    page.addComponent('Typewriter');
+                    page.addComponent('Typewriter', { name: 'ReviewsApp', data: {
+                        page,
+                        selector: '#reviews-react-app'
+                    }});
+
+                    return page.load();
                 }
             },
 
@@ -123,7 +128,12 @@ window.addEventListener('DOMContentLoaded', () => {
             {
                 namespace: 'about',
                 beforeEnter() {
-                    // page.addComponent('ContactForm');
+                    page.addComponent({ name: 'ReviewsApp', data: {
+                        page,
+                        selector: '#reviews-react-app'
+                    }});
+
+                    return page.load();
                 }
             },
 
@@ -163,8 +173,10 @@ window.addEventListener('DOMContentLoaded', () => {
                     // Add Booking App Component
                     page.addComponent({ name: 'BookingApp', data: {
                         page,
-                        selector: '#root'
+                        selector: '#booking-react-app'
                     }});
+
+                    return page.load();
 
                 }
             }

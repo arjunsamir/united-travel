@@ -943,12 +943,27 @@ window.addEventListener('DOMContentLoaded', ()=>{
             {
                 namespace: 'home',
                 beforeEnter () {
-                    page.addComponent('Typewriter');
+                    page.addComponent('Typewriter', {
+                        name: 'ReviewsApp',
+                        data: {
+                            page,
+                            selector: '#reviews-react-app'
+                        }
+                    });
+                    return page.load();
                 }
             },
             {
                 namespace: 'about',
                 beforeEnter () {
+                    page.addComponent({
+                        name: 'ReviewsApp',
+                        data: {
+                            page,
+                            selector: '#reviews-react-app'
+                        }
+                    });
+                    return page.load();
                 }
             },
             {
@@ -985,9 +1000,10 @@ window.addEventListener('DOMContentLoaded', ()=>{
                         name: 'BookingApp',
                         data: {
                             page,
-                            selector: '#root'
+                            selector: '#booking-react-app'
                         }
                     });
+                    return page.load();
                 }
             }
         ],
@@ -3485,6 +3501,8 @@ var _Navbar = _interopRequireDefault(require("./Navbar"));
 var _Typewriter2 = _interopRequireDefault(require("./Typewriter"));
 var _Fleet = _interopRequireDefault(require("../apps/Fleet"));
 var _Login = _interopRequireDefault(require("../apps/Login"));
+var _Booking = _interopRequireDefault(require("../apps/Booking"));
+var _Reviews = _interopRequireDefault(require("../apps/Reviews"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -3492,13 +3510,16 @@ function _interopRequireDefault(obj) {
 }
 // Import Components
 // Import Apps
-// import BookingApp from '../BookingApp';
 const componentsRegistry = {
     Typewriter: (dta, ctn)=>new _Typewriter2.default(dta !== null && dta !== void 0 ? dta : '#typewrite', ctn)
     ,
     FleetApp: (dta, ctn)=>new _Fleet.default(dta, ctn)
     ,
     LoginApp: (dta, ctn)=>new _Login.default(dta, ctn)
+    ,
+    BookingApp: (dta, ctn)=>new _Booking.default(dta, ctn)
+    ,
+    ReviewsApp: (dta, ctn)=>new _Reviews.default(dta, ctn)
 }; // Create Page Class
 class Page {
     init() {
@@ -3573,7 +3594,7 @@ class Page {
 }
 exports.default = Page;
 
-},{"./Scroll":"2MJU8","./Typewriter":"3dS2T","./Navbar":"3g1LQ","../apps/Fleet":"5iAsK","../apps/Login":"72lIk"}],"2MJU8":[function(require,module,exports) {
+},{"./Scroll":"2MJU8","./Typewriter":"3dS2T","./Navbar":"3g1LQ","../apps/Fleet":"5iAsK","../apps/Login":"72lIk","../apps/Booking":"4Ykhq","../apps/Reviews":"4XhS9"}],"2MJU8":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -29242,20 +29263,13 @@ class LoginApp extends _ReactAppWrapper.default {
         const res = {
         };
         const promises = [
-            _axios.default('/api/vehicles').then((data)=>{
-                var _data$data, _data$data$data, _data$data$data$data;
-                // Filter and Localize Vehicles
-                res.vehicles = data === null || data === void 0 ? void 0 : (_data$data = data.data) === null || _data$data === void 0 ? void 0 : (_data$data$data = _data$data.data) === null || _data$data$data === void 0 ? void 0 : (_data$data$data$data = _data$data$data.data) === null || _data$data$data$data === void 0 ? void 0 : _data$data$data$data.filter((v)=>v.active
-                ).sort((a, b)=>a.seats - b.seats
-                );
-            }),
             _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
             )
         ];
         const code = this.getReferral();
         if (code) promises.push(_axios.default("/users/referrals/".concat(code)).then((data)=>{
-            var _data$data2;
-            return res.referral = data === null || data === void 0 ? void 0 : (_data$data2 = data.data) === null || _data$data2 === void 0 ? void 0 : _data$data2.user;
+            var _data$data;
+            return res.referral = data === null || data === void 0 ? void 0 : (_data$data = data.data) === null || _data$data === void 0 ? void 0 : _data$data.user;
         }));
         await Promise.all(promises);
         await this.render(res);
@@ -31529,7 +31543,291 @@ $RefreshReg$(_c, "ResetCode");
 },{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../components/Referral":"KtcU5","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","axios":"5FCRD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"GbZeI":[function(require,module,exports) {
 "use strict";
 
-},{}],"7cKho":[function(require,module,exports) {
+},{}],"4Ykhq":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _axios = _interopRequireDefault(require("axios"));
+var _Oopsie = _interopRequireDefault(require("../components/Oopsie"));
+var _ReactAppWrapper = _interopRequireDefault(require("../helpers/ReactAppWrapper"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Do Initial Request
+// import App from "./App";
+class BookingApp extends _ReactAppWrapper.default {
+    async load() {
+        const res = {
+        };
+        const promises = [
+            _axios.default("/api/copy/booking/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
+            )
+        ];
+        await Promise.all(promises);
+        await this.render(res);
+    }
+    constructor(dta, ctn){
+        super(dta.selector, ctn);
+        this.App = _Oopsie.default;
+    }
+}
+exports.default = BookingApp;
+
+},{"axios":"5FCRD","../helpers/ReactAppWrapper":"4R7YP","../components/Oopsie":"6eyM8"}],"6eyM8":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const copy = {
+    en: "We're having trouble loading this application. Please try again later.",
+    es: "Tenemos problemas para cargar esta aplicación. Por favor, inténtelo de nuevo más tarde."
+};
+const Oppsie = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("section", {
+        className: "oopsie"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: "/img/oopsie.svg",
+        alt: "Oopsie"
+    }), /*#__PURE__*/ _react.default.createElement("h3", null, copy[window.locale] || copy.en)));
+};
+_c = Oppsie;
+var _default = Oppsie;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Oppsie");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4XhS9":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _axios = _interopRequireDefault(require("axios"));
+var _App = _interopRequireDefault(require("./App"));
+var _ReactAppWrapper = _interopRequireDefault(require("../helpers/ReactAppWrapper"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Do Initial Request
+const copy = {
+    en: "What our riders say about us.",
+    es: "Lo que nuestros jinetes dicen de nosotros."
+};
+class ReviewsApp extends _ReactAppWrapper.default {
+    async load() {
+        const res = {
+        };
+        const promises = [
+            _axios.default('/api/reviews').then((r)=>{
+                var _r$data, _r$data$data;
+                return res.reviews = r === null || r === void 0 ? void 0 : (_r$data = r.data) === null || _r$data === void 0 ? void 0 : (_r$data$data = _r$data.data) === null || _r$data$data === void 0 ? void 0 : _r$data$data.data.filter((review)=>review.locale === window.locale
+                );
+            })
+        ];
+        await Promise.all(promises);
+        res.copy = copy[window.locale];
+        await this.render(res);
+    }
+    constructor(dta, ctn){
+        super(dta.selector, ctn);
+        this.App = _App.default;
+    }
+}
+exports.default = ReviewsApp;
+
+},{"axios":"5FCRD","../helpers/ReactAppWrapper":"4R7YP","./App":"30FSj"}],"30FSj":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Oopsie = _interopRequireDefault(require("../components/Oopsie"));
+var _Icon = _interopRequireDefault(require("../components/Icon"));
+var _animejs = _interopRequireDefault(require("animejs"));
+var _hooks = require("../helpers/hooks");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Helpers
+const getStars = (stars)=>{
+    const arr = new Array(5).fill("star-outline");
+    return arr.map((itm, i)=>{
+        if (i < parseInt(stars)) return "star";
+        else return itm;
+    });
+};
+const App = (_ref)=>{
+    let { reviews , copy  } = _ref;
+    // Create Refs
+    const reviewRef = _react.useRef(); // Set Up State
+    const [state, setState] = _hooks.useObjectState({
+        selected: 0,
+        isAnimating: false
+    }); // Get Current Review
+    const review = reviews[state.selected]; // Animate In Review
+    _react.useEffect(()=>{
+        // Create Timeline
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        }); // Add Animation
+        tl.add({
+            targets: $(reviewRef.current).children().e(),
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+    }, [
+        state.selected
+    ]);
+    return reviews.length ? /*#__PURE__*/ _react.default.createElement("section", {
+        className: "reviews"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "reviews__container"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "reviews__reviewers"
+    }, reviews.map((review1, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: $.join("reviewer", [
+                i == state.selected,
+                "selected"
+            ]),
+            key: i,
+            onClick: async ()=>{
+                // Disable Duplicate Clicks
+                if (state.isAnimating || i === state.selected) return;
+                setState({
+                    isAnimating: true
+                }); // Animate Current Review Out
+                const tl = _animejs.default.timeline({
+                    easing: 'easeOutQuad',
+                    duration: 250
+                }); // Add Animattion to Timeline
+                tl.add({
+                    targets: $(reviewRef.current).children().e(),
+                    translateY: _animejs.default.stagger([
+                        -25,
+                        -100
+                    ]),
+                    opacity: 0,
+                    delay: _animejs.default.stagger([
+                        0,
+                        250
+                    ])
+                }); // Wait For Timeline To Complete
+                await tl.finished; // Update The state
+                setState({
+                    selected: i
+                });
+            }
+        }, /*#__PURE__*/ _react.default.createElement("div", {
+            className: "reviewer__image"
+        }, /*#__PURE__*/ _react.default.createElement("img", {
+            src: review1.photo,
+            alt: review1.author
+        })), /*#__PURE__*/ _react.default.createElement("div", {
+            className: "reviewer__info"
+        }, /*#__PURE__*/ _react.default.createElement("h5", null, review1.author), /*#__PURE__*/ _react.default.createElement("p", null, new Date(review1.date).toLocaleDateString("".concat(window.locale, "-US"), {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        }))))
+    )), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "reviews__review"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "review",
+        ref: reviewRef
+    }, /*#__PURE__*/ _react.default.createElement("h3", null, review.author), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "review__stars"
+    }, getStars(review.rating).map((icon, i)=>/*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: icon,
+            key: "".concat(icon, "-").concat(i)
+        })
+    )), /*#__PURE__*/ _react.default.createElement("p", null, review.body))))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, null);
+};
+_c = App;
+var _default = App;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "App");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../components/Oopsie":"6eyM8","../components/Icon":"4VYCM","animejs":"1GvRs","../helpers/hooks":"4wqYR"}],"7cKho":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
