@@ -1,3 +1,31 @@
 {
-    "title": "Book a Ride - United Travel LLC"
+    "title": "Book a Ride - United Travel LLC",
+    "ServiceType": {
+        "title": "Select Service Type",
+        "heading": "What type of ride is this?",
+        "options": [
+            {
+                "name": "Airport",
+                "title": "Airport Service",
+                "description": "I need to be picked up or taken to the airport. Most common.",
+                "icon": "airplane",
+                "value": "airport"
+            },
+            {
+                "name": "Cruise",
+                "title": "Cruise Service",
+                "description": "I need to be dropped off or picked up at a cruise terminal.",
+                "icon": "ship",
+                "value": "cruise"
+            },
+            {
+                "name": "General",
+                "title": "Standard Service",
+                "description": "I need a ride to another specific location such as a hotels, restaurants, theme parks, etc.",
+                "icon": "location-pin",
+                "value": "general"
+            }
+        ],
+        "next": "Continue"
+    }
 }

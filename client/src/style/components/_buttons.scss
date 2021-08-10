@@ -198,3 +198,15 @@
         }
     }
 }
+
+
+.icon-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &.disabled {
+        pointer-events: none;
+        filter: opacity(0%);
+    }
+}

@@ -1,0 +1,103 @@
+.booking {
+
+    min-height: 100vh;
+
+    &__map {
+        position: fixed;
+        top: 0;
+        left: 0;
+
+        height: 100vh;
+        width: 100vw;
+
+        #google-map {
+            height: 100%;
+            width: 100%;
+
+            background-color: var(--black);
+        }
+    }
+
+    &__loader {
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        @include flexCenter;
+    }
+
+    &__app {
+        position: relative;
+    }
+
+    &__card {
+        position: relative;
+        min-height: 100vh;
+        width: max-content;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: var(--x-pad) 4.8rem;
+    }
+
+}
+
+.booking-card {
+    flex-grow: 10;
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    width: 44rem;
+
+    box-shadow: $soft-shadow;
+    background-color: var(--black);
+    border-radius: 2rem;
+
+    --card-gap: 3.2rem;
+
+    &__loader {
+        flex-grow: 10;
+        @include flexCenter;
+    }
+
+    &__nav {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        padding: 2.4rem 3.6rem;
+    }
+
+    &__body {
+        position: relative;
+
+        flex-grow: 10;
+        display: flex;
+        flex-direction: column;
+
+        background-color: var(--white);
+        padding: 4.8rem 3.6rem;
+        border-radius: 2rem;
+
+    }
+
+    &__content {
+        flex-grow: 10;
+        @include blockGap(var(--card-gap));
+    }
+
+    &__footer {
+        hr {
+            height: 2px;
+            width: 100%;
+            background-color: var(--slate-light);
+            margin-bottom: var(--card-gap);
+        }
+
+        h6 {
+            margin-bottom: 0.8rem;
+        }
+    }
+}

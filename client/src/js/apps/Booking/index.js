@@ -1,15 +1,15 @@
 // Do Initial Request
 import axios from 'axios';
 
-// import App from "./App";
-import Oopsie from '../components/Oopsie';
+import App from "./App";
+// import Oopsie from '../components/Oopsie';
 import ReactAppWrapper from "../helpers/ReactAppWrapper";
 
 export default class BookingApp extends ReactAppWrapper {
 
     constructor(dta, ctn) {
         super(dta.selector, ctn);
-        this.App = Oopsie;
+        this.App = App;
     }
 
     async load() {
