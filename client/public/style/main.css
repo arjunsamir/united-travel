@@ -308,14 +308,43 @@ html {
   --x-pad: 10rem;
   --y-pad: 20rem;
 }
-@media (max-width: tab-land) {
+@media (max-width: 85em) {
   html {
-    font-size: 56.25%;
+    --y-pad: 16rem;
+    --x-pad: 8rem;
   }
 }
-@media (max-width: tab-port) {
+@media (max-width: 75em) {
+  html {
+    font-size: 56.25%;
+    --y-pad: 14rem;
+    --x-pad: 7rem;
+  }
+}
+@media (max-width: 56.25em) {
   html {
     font-size: 50%;
+    --y-pad: 12rem;
+    --x-pad: 6rem;
+  }
+}
+@media (max-height: 47em) {
+  html {
+    --y-pad: 12rem;
+    --x-pad: 6rem;
+  }
+}
+@media (max-width: 37.5em) {
+  html {
+    --y-pad: 12rem;
+    --x-pad: 3.2rem;
+  }
+}
+@media (max-width: 23em) {
+  html {
+    font-size: 43.75%;
+    --y-pad: 10rem;
+    --x-pad: 2.4rem;
   }
 }
 body {
@@ -554,6 +583,9 @@ html.has-scroll-dragging {
 .section__grid.flex-start {
   align-items: flex-start;
 }
+main {
+  overflow-x: hidden;
+}
 .navbar, .nav-menu {
   --nav-min-top: 3.2rem;
   --nav-min-right: 4.8rem;
@@ -562,6 +594,11 @@ html.has-scroll-dragging {
 .navbar {
   --navbar-width: 96rem;
   --navbar-z: 100000;
+}
+@media (max-width: 75em) {
+  .navbar {
+    --navbar-width: 90rem;
+  }
 }
 .navbar .nb-esc {
   position: fixed;
@@ -588,7 +625,7 @@ html.has-scroll-dragging {
 .navbar.full .navbar__full {
   display: flex;
 }
-@media (max-width: 37.5em) {
+@media (max-width: 56.25em) {
   .navbar.full .navbar__full {
     display: none;
   }
@@ -624,7 +661,7 @@ html.has-scroll-dragging {
   border-radius: 50%;
   cursor: pointer;
 }
-@media (max-width: 37.5em) {
+@media (max-width: 56.25em) {
   .navbar__min {
     display: flex;
   }
@@ -1833,10 +1870,26 @@ svg.placeholder, .icon.placeholder {
   grid-template-columns: max-content 1fr;
   background-color: var(--jet);
 }
+@media (max-width: 56.25em) {
+  .footer {
+    grid-template-columns: 1fr;
+  }
+}
 .footer__brands {
   display: flex;
   flex-direction: column;
   height: 100%;
+}
+@media (max-width: 56.25em) {
+  .footer__brands {
+    grid-row: 2/3;
+    flex-direction: row;
+  }
+}
+@media (max-width: 37.5em) {
+  .footer__brands {
+    flex-direction: column;
+  }
 }
 .footer__brand {
   flex-grow: 1;
@@ -1855,6 +1908,23 @@ svg.placeholder, .icon.placeholder {
   height: 6.3rem;
   margin-bottom: 3.6rem;
 }
+@media (max-width: 56.25em) {
+  .footer__brand svg {
+    width: 7.1rem;
+    height: 3.9rem;
+    margin-bottom: 1.6rem;
+  }
+}
+@media (max-width: 56.25em) {
+  .footer__brand {
+    padding: 4.8rem var(--x-pad);
+  }
+}
+@media (max-width: 37.5em) {
+  .footer__brand {
+    padding: 3.6rem;
+  }
+}
 .footer__agency {
   flex-grow: 1;
   display: flex;
@@ -1866,14 +1936,35 @@ svg.placeholder, .icon.placeholder {
 .footer__agency, .footer__agency:link, .footer__agency:visited {
   color: var(--jet);
 }
+@media (max-width: 37.5em) {
+  .footer__agency {
+    padding: 3.6rem;
+  }
+}
 .footer__main {
   padding: var(--x-pad);
+}
+@media (max-width: 37.5em) {
+  .footer__main {
+    padding: var(--y-pad) var(--x-pad);
+  }
 }
 .footer__content {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 4.8rem;
   margin-bottom: 4.8rem;
+}
+@media (max-width: 56.25em) {
+  .footer__content {
+    grid-template-columns: 1fr -webkit-max-content;
+    grid-template-columns: 1fr max-content;
+  }
+}
+@media (max-width: 37.5em) {
+  .footer__content {
+    grid-template-columns: 1fr;
+  }
 }
 .footer__contact {
   display: grid;
@@ -2069,6 +2160,11 @@ svg.placeholder, .icon.placeholder {
   justify-content: center;
   align-items: center;
 }
+@media (max-width: 75em) {
+  .login {
+    padding-bottom: var(--y-pad);
+  }
+}
 .login__container {
   flex-grow: 10;
   display: flex;
@@ -2079,6 +2175,24 @@ svg.placeholder, .icon.placeholder {
 .login__container > *:not(:last-child) {
   margin-right: 16rem;
 }
+@media (max-width: 85em) {
+  .login__container > *:not(:last-child) {
+    margin-right: 8rem;
+  }
+}
+@media (max-width: 75em) {
+  .login__container {
+    flex-direction: column-reverse;
+    align-items: center;
+    padding-top: var(--y-pad);
+  }
+  .login__container > *:not(:last-child) {
+    margin-right: 0;
+  }
+  .login__container > *:not(:last-child) {
+    margin-top: 12rem;
+  }
+}
 .login__visual {
   width: 100%;
   position: relative;
@@ -2086,6 +2200,29 @@ svg.placeholder, .icon.placeholder {
   flex-direction: column;
   justify-content: flex-end;
   padding: 4.8rem;
+}
+@media (max-width: 75em) {
+  .login__visual {
+    flex-grow: 10;
+    padding: 4.8rem 24rem;
+    justify-content: flex-start;
+    min-height: 54rem;
+  }
+}
+@media (max-width: 56.25em) {
+  .login__visual {
+    padding: 4.8rem 16rem;
+  }
+}
+@media (max-width: 47em) {
+  .login__visual {
+    padding: 4.8rem 8rem;
+  }
+}
+@media (max-width: 37.5em) {
+  .login__visual {
+    padding: 2.4rem;
+  }
 }
 .login__image {
   position: absolute;
@@ -2113,11 +2250,19 @@ svg.placeholder, .icon.placeholder {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  align-items: stretch;
   width: 100%;
+  min-width: 42rem;
   max-width: 44rem;
 }
+@media (max-width: 37.5em) {
+  .login__content {
+    min-width: unset;
+    max-width: none;
+    width: 100%;
+  }
+}
 .login__form {
-  width: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -2142,6 +2287,15 @@ svg.placeholder, .icon.placeholder {
 .login__header > *:not(:last-child) {
   margin-bottom: 2.4rem;
 }
+@media (max-width: 37.5em) {
+  .login__header h2 {
+    line-height: 1.4;
+  }
+  .login__header h2 span:not(:last-child)::before {
+    content: "\a";
+    white-space: pre;
+  }
+}
 .referral {
   position: relative;
   padding: 1.2rem;
@@ -2150,6 +2304,11 @@ svg.placeholder, .icon.placeholder {
 }
 .referral > *:not(:last-child) {
   margin-right: 2.4rem;
+}
+@media (max-width: 37.5em) {
+  .referral > *:not(:last-child) {
+    margin-right: 1.2rem;
+  }
 }
 .referral__bg {
   position: absolute;
@@ -2175,9 +2334,18 @@ svg.placeholder, .icon.placeholder {
 }
 .referral__content {
   position: relative;
+  padding-right: 1.6rem;
 }
 .referral__content > *:not(:last-child) {
   margin-bottom: 0.4rem;
+}
+@media (max-width: 37.5em) {
+  .referral__content {
+    flex-shrink: 10;
+  }
+}
+.referral__content p {
+  line-height: 1.4;
 }
 .booking {
   min-height: 100vh;

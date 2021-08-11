@@ -9,6 +9,10 @@
     --navbar-width: 96rem;
     --navbar-z: 100000;
 
+    @include ipadPro {
+        --navbar-width: 90rem;
+    }
+
     .nb-esc {
         position: fixed;
         height: 100vh;
@@ -40,7 +44,7 @@
     &.full &__full {
         display: flex;
 
-        @include phone {
+        @include ipad {
             display: none;
         }
     }
@@ -84,7 +88,7 @@
 
         cursor: pointer;
 
-        @include phone {
+        @include ipad {
             display: flex;
         }
     }

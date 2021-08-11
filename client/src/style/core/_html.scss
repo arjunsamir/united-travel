@@ -13,13 +13,41 @@ html {
     --x-pad: 10rem;
     --y-pad: 20rem;
 
-    @include respond(tab-land){
+    @include laptop {
+        --y-pad: 16rem;
+        --x-pad: 8rem; 
+    }
+
+    @include ipadPro {
         font-size: 56.25%; //1rem = 9px
+        --y-pad: 14rem;
+        --x-pad: 7rem; 
     }
     
-    @include respond(tab-port){
+    @include ipad {
         font-size: 50%; //1rem = 8px
+        --y-pad: 12rem;
+        --x-pad: 6rem; 
     }
+
+    //  Height Media Queries    
+    @include respond-y(47em) {
+        --y-pad: 12rem;
+        --x-pad: 6rem;
+    }
+
+    @include phone {
+        --y-pad: 12rem;
+        --x-pad: 3.2rem; 
+    }
+
+    @include iphone {
+        font-size: 43.75%; //1rem = 7px;
+        --y-pad: 10rem;
+        --x-pad: 2.4rem;
+    }
+
+    
 
 }
 

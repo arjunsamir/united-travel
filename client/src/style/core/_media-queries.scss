@@ -32,6 +32,10 @@
     @media(max-width: $breakpoint) { @content }; //900px
 }
 
+@mixin respond-y($breakpoint) {
+    @media(max-height: $breakpoint) { @content }; //900px
+}
+
 
 @mixin light {
     @media( prefers-color-scheme: light ) { @content }; // Light Theme

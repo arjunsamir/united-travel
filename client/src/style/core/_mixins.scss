@@ -20,8 +20,14 @@
         @if $direction == "row" {
             margin-right: $gap;
         }
-        @else {
+        @else if $direction == "column" {
             margin-bottom: $gap;
+        }
+        @else if $direction == "row-reverse" {
+            margin-left: $gap;
+        }
+        @else if $direction == "column-reverse" {
+            margin-top: $gap;
         }
     }
 }
