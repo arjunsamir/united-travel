@@ -3,19 +3,17 @@ import Scroll from './Scroll';
 import Navbar from './Navbar';
 import Typewriter from './Typewriter';
 
-// Import Apps
-import FleetApp from '../apps/Fleet';
-import LoginApp from '../apps/Login';
-import BookingApp from '../apps/Booking';
-import ReviewsApp from '../apps/Reviews';
+// Import App Loader
+import AppLoader from './helpers/AppLoader';
 
 
+// Register Components
 const componentsRegistry = {
     Typewriter: (dta, ctn) => new Typewriter(dta ?? '#typewrite', ctn),
-    FleetApp: (dta, ctn) => new FleetApp(dta, ctn),
-    LoginApp: (dta, ctn) => new LoginApp(dta, ctn),
-    BookingApp: (dta, ctn) => new BookingApp(dta, ctn),
-    ReviewsApp: (dta, ctn) => new ReviewsApp(dta, ctn),
+    FleetApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Fleet')),
+    LoginApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Login')),
+    BookingApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Booking')),
+    ReviewsApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Reviews')),
 }
 
 
@@ -104,9 +102,7 @@ export default class Page {
 
 
     async load() {
-
         await Promise.all(this.promises.map(c => c.load()));
-
     }
 
 

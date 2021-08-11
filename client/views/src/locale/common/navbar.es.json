@@ -12,5 +12,10 @@
         "register": "Crear una cuenta",
         "account": "Mi cuenta"
     },
-    "hello": "Hola"
+    "hello": "Hola",
+    "block": {
+        "title": "¿Listo para reservar?",
+        "copy": "¿Está listo para reservar un viaje para su próximo viaje a Orlando? Puede reservar su viaje en línea utilizando nuestro sistema de reservas en línea."
+    },
+    "welcome": "Bienvenido Viajero"
 }

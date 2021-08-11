@@ -74,7 +74,7 @@ export default class Scroll {
         });
 
         // Define Links
-        this.links = $(this.container).children('a[href]').concat($('#navbar a').kill());
+        this.links = $(this.container).children('a[href]').concat($('#navbar a, #nav-menu a').kill());
 
 
         // Filter Out Relative Links
@@ -101,7 +101,7 @@ export default class Scroll {
 
 
             // Add Event Listener To Link
-            link.addEventListener('click', e => {
+            link.addEventListener('click', async (e) => {
                 e.preventDefault();
                 this.to('top');
             })
@@ -168,7 +168,7 @@ export default class Scroll {
 
         duration = Math.floor(Math.abs(this.position - t) * this.smoothScrollMultiplier) ?? 1000;
 
-        await this.page.navbar.close();
+        await this.page.navbar.closeMenu();
 
         this.locomotive.scrollTo(t, { offset, duration, callback });
 

@@ -27,13 +27,10 @@ import ServiceType from "./steps/ServiceType";
 const steps = { ServiceType };
 
 
+// Create Booking App
 const BookingApp = ({ copy }) => {
-    
-
-    // console.log(copy);
 
     const [state, dispatch] = useReducer(reducer, initialState);
-
 
     const update = (type) => (key, data) => type && key && dispatch({
         type: `${type}_${key}`,
@@ -52,33 +49,11 @@ const BookingApp = ({ copy }) => {
                         <Step
                             updateApp={update("SET_STEP")}
                             update={update("UPDATE_RESERVATION")}
-                            copy={copy[state.app.step]}
+                            copy={copy.steps[state.app.step]}
                         /> 
                         : 
                         <Loader />
                     }
-
-                    
-                    
-                    {/* <Step
-                        copy={getCopy(copy, state.step)}
-                        exit={back}
-                        authenticate={async (endpoint, data) => {
-                            const res = await axios.post(endpoint, data);
-                            console.log(res);
-                            if (!res?.data?.data?.user) return;
-                            return res.data.data.user;
-                            // onLogin && onLogin(res.data.data.user)
-                        }}
-                        update={(field) => {
-                            const type = `SET_${field.toUpperCase()}`;
-                            return (data) => dispatch({ type, data })
-                        }}
-                        state={state}
-                        referral={referral}
-                        validator={new Validator(copy.errors)}
-                        transition={transition.current}
-                    /> */}
                 </section>
             </MuiPickersUtilsProvider>
         </AppContext.Provider>

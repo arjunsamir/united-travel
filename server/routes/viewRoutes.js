@@ -24,6 +24,7 @@ module.exports = lang => {
     router.get('/account', auth.protect, render(views, 'account'));
     router.get('/privacy', render(views, 'privacy'));
     router.get('/terms', render(views, 'terms'));
+    router.get('/navbar', render(views, 'navbar'));
     
     return router;
 

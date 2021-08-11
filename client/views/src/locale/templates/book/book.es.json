@@ -1,31 +1,67 @@
 {
     "title": "Reserve un Viaje - United Travel LLC",
-    "ServiceType": {
-        "title": "Seleccione el tipo de servicio",
-        "heading": "¿Qué tipo de viaje es este?",
-        "options": [
-            {
-                "name": "Aeropuerto",
-                "title": "Servicio de aeropuerto",
-                "description": "Necesito que me recojan o me lleven al aeropuerto. Más común.",
-                "icon": "airplane",
-                "value": "airport"
-            },
-            {
-                "name": "Crucero",
-                "title": "Servicio de crucero",
-                "description": "Necesito que me dejen o me recojan en una terminal de cruceros.",
-                "icon": "ship",
-                "value": "cruise"
-            },
-            {
-                "name": "General",
-                "title": "Servicio estándar",
-                "description": "Necesito que me lleven a otra ubicación específica, como hoteles, restaurantes, parques temáticos, etc.",
-                "icon": "location-pin",
-                "value": "general"
-            }
-        ],
-        "next": "Continuar"
+    "steps": {
+        "ServiceType": {
+            "title": "Tipo de servicio",
+            "heading": "¿Qué tipo de viaje es este?",
+            "options": [
+                {
+                    "name": "Aeropuerto",
+                    "title": "Servicio de aeropuerto",
+                    "description": "Necesito que me recojan o me lleven al aeropuerto. Más común.",
+                    "icon": "airplane",
+                    "value": "airport"
+                },
+                {
+                    "name": "Crucero",
+                    "title": "Servicio de crucero",
+                    "description": "Necesito que me dejen o me recojan en una terminal de cruceros.",
+                    "icon": "ship",
+                    "value": "cruise"
+                },
+                {
+                    "name": "General",
+                    "title": "Servicio estándar",
+                    "description": "Necesito que me lleven a otra ubicación específica, como hoteles, restaurantes, parques temáticos, etc.",
+                    "icon": "location-pin",
+                    "value": "general"
+                }
+            ],
+            "next": "Continuar"
+        },
+        "PickupTime": {
+            "title": "Pickup Time"
+        },
+        "FlightLocation": {
+            "title": "Flight Location"
+        },
+        "FlightSchedule": {
+            "title": "Flight Schedule"
+        },
+        "CruiseLocation": {
+            "title": "Cruise Location"
+        },
+        "CruiseSchedule": {
+            "title": "Cruise Schedule"
+        },
+        "Route": {
+            "title": "Create Route"
+        },
+        "Passengers": {
+            "title": "Passengers"
+        },
+        "Vehicle": {
+            "title": "Vehicle"
+        },
+        "ChildSeats": {
+            "title": "Child Seats"
+        },
+        "Notes": {
+            "title": "Special Accomodations"
+        },
+        "Summary": {
+            "title": "Summary"
+        }
     }
+    
 }

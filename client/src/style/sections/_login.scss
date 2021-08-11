@@ -1,24 +1,24 @@
 .login {
 
     min-height: 100vh;
-    padding: var(--y-pad) var(--x-pad);
+    padding: var(--x-pad);
 
     @include flexCenter;
 
     &__container {
-        display: grid;
-        grid-template-columns: 1fr 44rem;
-        grid-gap: 16rem;
-    
+
+        flex-grow: 10;
+        display: flex;
+        @include flexGap(16rem);
+
         max-width: var(--track-width);
         width: 100%;
+        align-items: stretch;
     }
 
     &__visual {
-        height: 100%;
-        min-height: calc(100vh - (var(--y-pad) * 1.5));
+        width: 100%;
         position: relative;
-
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -47,6 +47,7 @@
     &__content {
         @include flexCenter;
         width: 100%;
+        max-width: 44rem;
     }
 
     &__form {

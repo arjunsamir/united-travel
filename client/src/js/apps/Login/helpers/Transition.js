@@ -36,7 +36,8 @@ export default class Transition {
 
         if (!ref.length) return;
 
-        ref.children('.referral__bg, .referral__content, .referral__photo').clearInlineStyles();
+        // ref.children('.referral__bg, .referral__content, .referral__photo').clearInlineStyles();
+        ref.children('*').clearInlineStyles();
 
         return {
             bg: ref.children(".referral__bg").e(),

@@ -74,18 +74,22 @@ window.addEventListener('DOMContentLoaded', () => {
             name: 'default-transition',
 
             // Animate Slide Into Place
-            leave() {
-
+            async leave() {
 
                 const tl = anime.timeline({
-                    easing: 'easeOutQuad'
+                    easing: 'easeOutQuad',
+                    autoplay: false
                 }).add({
                     targets: slide.e(),
                     translateY: ['100vh', '0vh'],
                     duration: 500
                 })
 
-                return tl.finished;
+                await page.navbar.closeMenu();
+
+                tl.play();
+
+                await tl.finished;
             },
 
             // Animate Slide Away to reveal new page
@@ -120,6 +124,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         selector: '#reviews-react-app'
                     }});
 
+                    page.navbar.applyView('full');
+
                     return page.load();
                 }
             },
@@ -133,6 +139,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         selector: '#reviews-react-app'
                     }});
 
+                    page.navbar.applyView('full');
+
                     return page.load();
                 }
             },
@@ -140,13 +148,15 @@ window.addEventListener('DOMContentLoaded', () => {
             // Fleet Namespace
             {
                 namespace: 'fleet',
-                beforeEnter: async () => {
+                beforeEnter() {
                     page.addComponent({ name: 'FleetApp', data: {
                         page,
                         selector: '#fleet-react-app'
                     }});
 
-                    await page.load();
+                    page.navbar.applyView('min');
+
+                    return page.load();
                 }
             },
 
@@ -159,6 +169,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         page,
                         selector: '#login-react-app'
                     }});
+
+                    page.navbar.applyView('min');
 
                     return page.load();
 
@@ -175,6 +187,8 @@ window.addEventListener('DOMContentLoaded', () => {
                         page,
                         selector: '#booking-react-app'
                     }});
+
+                    page.navbar.applyView('min');
 
                     return page.load();
 

@@ -26,8 +26,8 @@
 </section>
 
     <!-- Navbar -->
-    <!--  Main Navbar  -->
-<div class="navbar <%- user._id ? 'logged-in' : 'logged-out' %>" id="navbar">
+    <!--NBCTN-->
+<div class="navbar full" id="navbar">
 
     <div class="nb-esc no-esc"></div>
 
@@ -43,10 +43,11 @@
 
         <nav class="navbar__nav" aria-label="desktop">
             <ul class="navbar__nav-list">
-    <li><a href="/" data-nav-namespace="home">Home</a></li>
-    <li><a href="/about" data-nav-namespace="about">About</a></li>
-    <li><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
-    <li><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+    <li class="animate-item"><a href="/" data-nav-namespace="home">Home</a></li>
+    <li class="animate-item"><a href="/about" data-nav-namespace="about">About</a></li>
+    <li class="animate-item"><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li class="animate-item"><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+    
 </ul>
         </nav>
 
@@ -59,8 +60,8 @@
                 
                 <div class="navbar__lang-menu hidden">
                     <ul>
-                        <li data-nav-lang="en"><p class="small">English</p></li>
-                        <li data-nav-lang="es"><p class="small">Español</p></li>
+                        <li data-nav-lang="en" class="active"><p class="small">English</p></li>
+                        <li data-nav-lang="es" class=""><p class="small">Español</p></li>
                     </ul>
                 </div>
             </div>
@@ -69,38 +70,39 @@
             <hr>
 
             <!-- Profile Logged In -->
-            <div class="navbar__profile logged-in">
+            <% if (user._id) { %>
+                <div class="navbar__profile">
 
-                <!-- Logged In Icon -->
-                <div class="navbar__profile-pic nb-clt">
-                    <img src="<%- user.photo %>" alt="Profile Photo">
+                    <!-- Logged In Icon -->
+                    <div class="navbar__profile-pic nb-clt">
+                        <img src="<%- user.photo %>" alt="Profile Photo">
+                    </div>
+
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><p class="small">Hello <%- user.preferredName %></p></li>
+                            <hr>
+                            <li><a href="/account"><span>My account</span></a></li>
+                            <li><a href="#" id="nb-logout"><span>Log out</span></a></li>
+                        </ul>
+                    </div>
+
                 </div>
+            <% } else { %>
+                <div class="navbar__profile">
 
-                <div class="navbar__profile-menu hidden">
-                    <ul>
-                        <li><p class="small">Hello <%- user.preferredName %></p></li>
-                        <hr>
-                        <li><a href="/account"><span>My account</span></a></li>
-                        <li><a href="#" id="nb-logout"><span>Log out</span></a></li>
-                    </ul>
+                    <!-- Logged Out Icon -->
+                    <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                    
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><a href="/login"><span>Create account</span></a></li>
+                            <li><a href="/login"><span>Login</span></a></li>
+                        </ul>
+                    </div>
+
                 </div>
-
-            </div>
-            
-            <!-- Profile Logged Out -->
-            <div class="navbar__profile logged-out">
-
-                <!-- Logged Out Icon -->
-                <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
-                
-                <div class="navbar__profile-menu hidden">
-                    <ul>
-                        <li><a href="/login"><span>Create account</span></a></li>
-                        <li><a href="/login"><span>Login</span></a></li>
-                    </ul>
-                </div>
-
-            </div>
+            <% } %>
 
             <!-- Call To Action -->
             <a href="/book" class="navbar__cta">Book Now</a>
@@ -118,9 +120,142 @@
     
 </div>
 
-<div class="nav-menu">
+<div class="nav-menu hidden" id="nav-menu">
+
+    <!-- Menu Background -->
+    <div class="nav-menu__bg"></div>
+
+    <!-- Desktop Menu Layout -->
+    <div class="nav-menu__desktop">
+
+        <div class="nav-menu__visual">
+
+            <!-- Absolutely Positioned Nav menu -->
+            <div class="nav-menu__image">
+                <img src="/img/menu-visual.png" alt="Mercedes driving in fog">
+            </div>
+
+            <!-- Branding -->
+            <a href="/" class="nav-menu__brand">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+                <span class="h5">United Travel</span>
+            </a>
+
+            <!-- Log In Card -->
+            <div class="user-acct">
+
+                <!-- Backgronud -->
+                <div class="user-acct__bg"></div>
+
+                <% if (user._id) { %>
+                    <div class="user-acct__photo">
+                        <img src="<%- user.photo %>" alt="profile photo" />
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Hello <%- user.preferredName %></h6>
+                        <div>
+                            <a href="/account">My account</a>
+                            <hr>
+                            <a href="#">Log out</a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="user-acct__icon">
+                        <svg class="icon-xl"><use href="/img/icons.svg#person-circle"></use></svg>
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Welcome Traveller</h6>
+                        <div>
+                            <a href="/login">Create account</a>
+                            <hr>
+                            <a href="/login">Login</a>
+                        </div>
+                    </div>
+                <% } %>
+
+            </div>
+
+        </div>
+        
+        <div class="nav-menu__content">
+
+            <nav aria-label="desktop hamburger">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/" data-nav-namespace="home">Home</a></li>
+    <li class="animate-item"><a href="/about" data-nav-namespace="about">About</a></li>
+    <li class="animate-item"><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li class="animate-item"><a href="/contact" data-nav-namespace="contact">Contact</a></li>
     
+</ul>
+            </nav>
+
+            <div class="nav-menu__cta">
+                <div class="content">
+                    <h4 class="white animate-item">Ready to book?</h4>
+                    <p class="small animate-item">Ready to book a ride for your next trip to Orlando? You can book your ride online using our online booking system.</p>
+                    <a href="/book" class="btn-pill filled primary animate-item">Book Now </a>
+                </div>
+            </div>
+
+            <div class="nav-menu__lang">
+                <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
+                <ul>
+                    <li data-nav-lang="en" class="active animate-item"><h5>English</h5></li>
+                    <li data-nav-lang="es" class=" animate-item"><h5>Español</h5></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-menu__mobile">
+
+        <div class="nav-menu__content">
+            <a href="/" class="nav-menu__brand">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+            </a>
+    
+            <nav aria-label="mobile">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/" data-nav-namespace="home">Home</a></li>
+    <li class="animate-item"><a href="/about" data-nav-namespace="about">About</a></li>
+    <li class="animate-item"><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li class="animate-item"><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+    
+        <li class="animate-item"><a href="/book" data-nav-namespace="booking">Book Now</a></li>
+    
+</ul>
+            </nav>
+    
+            <div class="nav-menu__account">
+                <% if (user._id) { %>
+                    <h5 class="white">Hello <%- user.preferredName %></h5>
+                    <div>
+                        <a href="/account">My account</a>
+                        <a href="#">Log out</a>
+                    </div>
+                <% } else { %>
+                    <h5 class="white">Welcome Traveller</h5>
+                    <div>
+                        <a href="/login">Create account</a>
+                        <a href="/login">Login</a>
+                    </div>
+                <% } %>
+            </div>
+    
+            <ul class="nav-menu__lang">
+                <li data-nav-lang="en" class="active"><h5>English</h5></li>
+                <li data-nav-lang="es" class=""><h5>Español</h5></li>
+            </ul>
+        </div>
+
+    </div>
+
 </div>
+<!--NBCTN-->
 
     <!-- Main Block (Scroll Container) -->
     <main data-scroll-container data-barba="container" data-barba-namespace="home">
@@ -293,7 +428,7 @@
         <div class="content">
             <h2 class="white">Book a <span>ride with us.</span></h2>
             <p>Ready to book a ride for your next trip to Orlando? You can book your ride online using our online booking system. You will be able to complete the entire booking process online so that when it’s timefor your ride its effortless.</p>
-            <a href="#content" class="btn-pill filled primary">Book Reservation </a>
+            <a href="/book" class="btn-pill filled primary">Book Reservation </a>
         </div>
     </div>
 </section>
@@ -333,7 +468,7 @@
             <img src="/img/contact.jpg" alt="Mercedes car coming out of a circle">
         </picture>
     </div>
-    <div class="contact__card">
+    <div class="contact__card" data-scroll data-scroll-speed="2">
         <div class="content">
             <h2>Have a question? <span>Contact us.</span></h2>
             <p>We’re happy to help you. Please feel free to give us a call or send us an email and we will get back to you as soon as possible.</p>

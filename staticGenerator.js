@@ -48,6 +48,16 @@ const bundleLocale = async (template) => {
 
 }
 
+const bulkReplace = (str, ...items) => {
+    let replaced = str;
+
+    items.forEach(item => {
+        replaced = replaced.replaceAll(item[0], item[1]);
+    });
+
+    return replaced;
+}
+
 
 // Generate Static Files For Each View
 const generateStaticFiles = async (view) => {
@@ -67,7 +77,8 @@ const generateStaticFiles = async (view) => {
 
             ejs.renderFile(file, data[lang], (err, html) => {
 
-                const output = html.replaceAll('{{', '<%-').replaceAll('}}', '%>');
+                // const output = html.replaceAll('{{', '<%-').replaceAll('}}', '%>');
+                const output = bulkReplace(html, ['{{', '<%-'], ['}}', '%>'], ['{%', '<%'], ['%}', '%>']);
 
                 const filename = path_module.join(__dirname, `${base}/static/${lang}/${view}.ejs`);
 

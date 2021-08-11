@@ -63,7 +63,7 @@ class Dream {
     // Remove Inner Elements
     clear() {
         this.elements.forEach( e => e.innerHTML = "" );
-        return this.cycle();
+        return this;
     }
 
 

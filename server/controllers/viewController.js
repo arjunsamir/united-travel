@@ -41,6 +41,10 @@ class Views {
         this.render(res, 'terms');
     }
 
+    navbar(req, res) {
+        this.render(res, 'navbar');
+    }
+
     async render(res, page, data = {}) {
         if (!res.locals.user) res.locals.user = {};
         res.render(`${this.lang}/${page}`, { ...data })

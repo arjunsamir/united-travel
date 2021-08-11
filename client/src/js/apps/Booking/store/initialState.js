@@ -53,12 +53,7 @@ const state = {
     },
     app: {
         step: 'ServiceType',
-        steps: [
-            {
-                name: 'ServiceType',
-                title: 'Select Service Type'
-            }
-        ],
+        steps: [],
         airports: null,
         user: window.currentUser ? { ...window.currentUser } : {},
         map: null
