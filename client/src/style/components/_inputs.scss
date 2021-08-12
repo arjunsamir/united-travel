@@ -93,6 +93,10 @@
 
     &__field {
         flex-grow: 1;
+
+        &.clickable {
+            cursor: pointer;
+        }
     }
 
     &__errors {

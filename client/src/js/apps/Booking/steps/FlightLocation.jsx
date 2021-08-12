@@ -11,13 +11,15 @@ import BookingCard from "../components/BookingCard";
 
 
 // Import Unique Components
-import Input from '../../components/Input';
 import Dropdown from '../../components/Dropdown';
+import Input from '../../components/Input';
+import Autocomplete from '../../components/Autocomplete';
 import DateTimePicker from '../../components/DateTimePicker';
 
 
 // Import Helpers
 import axios from 'axios';
+import { useObjectState } from "../../helpers/hooks";
 
 
 // Create Step
@@ -28,17 +30,24 @@ const FlightLocation = ({ update, updateApp, copy }) => {
     const { airports } = state.app;
 
 
-    // Use Effect
+    // Create Local State
+    const [localState, setLocalState] = useObjectState({
+        date: null,
+        dateTimeStatus: null,
+        airlines: null
+    });
+
+
+    // Fetch Data On Mount
     useEffect(() => {
 
-        // Fetch Airports
-        const fetchAirports = async () => {
-            const res = await axios('/api/data/airports');
-            updateApp('AIRPORTS', res.data);
-        };
+        if (!state.app.airports) {
+            axios('/api/data/airports').then(res => updateApp('AIRPORTS', res.data));
+        }
 
-        // Fetch Airports if not set
-        if (!state.app.airports) fetchAirports();
+        if (!localState.airlines) {
+            axios('/api/data/airlines').then(res => setLocalState({ airlines: res.data }));
+        }
 
     }, []);
 
@@ -49,11 +58,12 @@ const FlightLocation = ({ update, updateApp, copy }) => {
     const airlineErrors = [];
     const flightNumErrors = [];
 
+
     return (
         <BookingCard
             back
             next={{ disabled: false }}
-            showLoader={!airports}
+            showLoader={!airports || !localState.airlines}
         >
 
             <fieldset>
@@ -77,13 +87,16 @@ const FlightLocation = ({ update, updateApp, copy }) => {
 
                 <h5 className="animate-item">{copy.infoTitle}</h5>
 
-                <Input
+                {/* <Input
                     id="airline-input"
                     icon="airplane"
                     label={copy.labels[1]}
                     placeholder={copy.placeholders[1]}
                     errors={airlineErrors}
-                />
+                /> */}
+
+                {/* <Autocomplete
+                /> */}
 
                 <Input
                     id="flight-num-input"
@@ -96,7 +109,20 @@ const FlightLocation = ({ update, updateApp, copy }) => {
             </fieldset>
 
             <fieldset>
-                <DateTimePicker />
+                <h5>Date Time Picker Test</h5>
+                <DateTimePicker
+                    value={localState.date}
+                    onChange={(val) => setLocalState({ date: val })}
+                    onStatusChange={(val) => setLocalState({ dateTimeStatus: val })}
+                    datePicker={{
+                        label: "Date",
+                        placeholder: "Select Date"
+                    }}
+                    timePicker={{
+                        label: "Time",
+                        placeholder: "Select Time"
+                    }}
+                />
             </fieldset>
 
         </BookingCard>

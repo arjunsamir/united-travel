@@ -1543,6 +1543,9 @@ svg.placeholder, .icon.placeholder {
 .input__field {
   flex-grow: 1;
 }
+.input__field.clickable {
+  cursor: pointer;
+}
 .input__errors {
   padding-top: 1.2rem;
 }
