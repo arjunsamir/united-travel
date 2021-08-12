@@ -10,7 +10,7 @@ const setSteps = (m) => {
     // Create Dynamic Steps
     let dynamicSteps;
 
-    // Get Dynami Steps
+    // Get Dynamic Steps
     switch (m.state.reservation.serviceType) {
         case 'airport':
             dynamicSteps = ['FlightLocation', 'FlightSchedule'];

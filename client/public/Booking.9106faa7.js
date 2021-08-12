@@ -47275,7 +47275,7 @@ const setSteps = (m)=>{
         steps: _objectSpread({
         }, _initialState.default.app.steps)
     }); // Create Dynamic Steps
-    let dynamicSteps; // Get Dynami Steps
+    let dynamicSteps; // Get Dynamic Steps
     switch(m.state.reservation.serviceType){
         case 'airport':
             dynamicSteps = [
