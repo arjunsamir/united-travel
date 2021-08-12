@@ -2,6 +2,11 @@
     --nav-min-top: 3.2rem;
     --nav-min-right: 4.8rem;
     --nav-min-size: 6rem;
+
+    @include phone {
+        --nav-min-top: 2.4rem;
+        --nav-min-right: 2.4rem;
+    }
 }
 
 .navbar {
@@ -95,7 +100,7 @@
 
     &__menu-icon {
         position: relative;
-        height: 1.2rem;
+        height: 1.3rem;
         width: 2.8rem;
 
         span {

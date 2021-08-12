@@ -202,8 +202,8 @@
             <div class="nav-menu__lang">
                 <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
                 <ul>
-                    <li data-nav-lang="en" class="active animate-item"><h5>English</h5></li>
-                    <li data-nav-lang="es" class=" animate-item"><h5>Español</h5></li>
+                    <li data-nav-lang="en" class="animate-item  active"><h5>English</h5></li>
+                    <li data-nav-lang="es" class="animate-item "><h5>Español</h5></li>
                 </ul>
             </div>
 
@@ -214,7 +214,7 @@
     <div class="nav-menu__mobile">
 
         <div class="nav-menu__content">
-            <a href="/" class="nav-menu__brand">
+            <a href="/" class="nav-menu__brand animate-item">
                 <svg><use href="/img/icons.svg#logo"></use></svg>
             </a>
     
@@ -234,21 +234,21 @@
                 <% if (user._id) { %>
                     <h5 class="white">Hello <%- user.preferredName %></h5>
                     <div>
-                        <a href="/account">My account</a>
-                        <a href="#">Log out</a>
+                        <a class="animate-item" href="/account">My account</a>
+                        <a class="animate-item" href="#">Log out</a>
                     </div>
                 <% } else { %>
-                    <h5 class="white">Welcome Traveller</h5>
+                    <h5 class="white animate-item">Welcome Traveller</h5>
                     <div>
-                        <a href="/login">Create account</a>
-                        <a href="/login">Login</a>
+                        <a class="animate-item" href="/login">Create account</a>
+                        <a class="animate-item" href="/login">Login</a>
                     </div>
                 <% } %>
             </div>
     
             <ul class="nav-menu__lang">
-                <li data-nav-lang="en" class="active"><h5>English</h5></li>
-                <li data-nav-lang="es" class=""><h5>Español</h5></li>
+                <li data-nav-lang="en" class="animate-item active"><h5>English</h5></li>
+                <li data-nav-lang="es" class="animate-item"><h5>Español</h5></li>
             </ul>
         </div>
 
@@ -290,7 +290,7 @@
         <section class="section">
 
             <!-- Section Grid -->
-            <div class="section__grid">
+            <div class="section__grid collapse-cards">
 
                 <!-- Content Block -->
                 <div class="content" >
@@ -365,7 +365,7 @@
         <section class="section">
 
             <!-- Section Grid -->
-            <div class="section__grid">
+            <div class="section__grid collapse-cards">
 
                 <!-- Content Block -->
                 <div class="content">

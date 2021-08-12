@@ -38,6 +38,8 @@
         flex-direction: column;
         justify-content: center;
         padding: var(--x-pad) 4.8rem;
+
+        overflow-y: hidden;
     }
 
 }
@@ -55,6 +57,7 @@
     border-radius: 2rem;
 
     --card-gap: 3.2rem;
+    --card-nav-height: 7.6rem;
 
     &__loader {
         flex-grow: 10;
@@ -66,8 +69,68 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        height: var(--card-nav-height);
+        padding: 0 3.6rem;
 
-        padding: 2.4rem 3.6rem;
+        h6 {
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+
+    &__menu {
+        padding: 0 3.6rem;
+        user-select: none;
+
+        position: absolute;
+        left: 0;
+        top: var(--card-nav-height);
+        width: 100%;
+
+        hr {
+            height: 3px;
+            width:40%;
+            background-color: var(--slate-dark);
+            border-radius: 1rem;
+            margin: 0 auto var(--card-gap);
+        }
+
+        &.disabled {
+            pointer-events: none
+        }
+    }
+
+    &__steps {
+        @include blockGap(1.2rem);
+        padding-bottom: var(--card-gap);
+    }
+
+    &__step {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        color: var(--slate-dark);
+        padding: 1.2rem 1.6rem;
+        border-radius: 0.8rem;
+        font-size: 1.6rem;
+
+        color: var(--white);
+
+        cursor: pointer;
+
+        &.active {
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        &.disabled {
+            color: var(--slate-dark);
+            cursor: default;
+            svg {
+                display: none;
+            }
+        }
     }
 
     &__body {
@@ -81,11 +144,35 @@
         padding: 4.8rem 3.6rem;
         border-radius: 2rem;
 
+        &-esc {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            height: 100%;
+            width: 100%;
+
+            z-index: -1;
+            pointer-events: none;
+
+            &.listening {
+                z-index: 5;
+                pointer-events: all;
+            }
+        }
+
     }
 
     &__content {
         flex-grow: 10;
         @include blockGap(var(--card-gap));
+
+        fieldset {
+            outline: none;
+            border: none;
+            display: block;
+            @include blockGap(1.6rem);
+        }
     }
 
     &__footer {

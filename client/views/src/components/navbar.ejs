@@ -162,8 +162,8 @@
             <div class="nav-menu__lang">
                 <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
                 <ul>
-                    <li data-nav-lang="en" class="<%- lang === 'en' ? 'active' : '' %> animate-item"><h5>English</h5></li>
-                    <li data-nav-lang="es" class="<%- lang === 'es' ? 'active' : '' %> animate-item"><h5>Español</h5></li>
+                    <li data-nav-lang="en" class="animate-item <%- lang === 'en' ? ' active' : '' %>"><h5>English</h5></li>
+                    <li data-nav-lang="es" class="animate-item <%- lang === 'es' ? ' active' : '' %>"><h5>Español</h5></li>
                 </ul>
             </div>
 
@@ -174,7 +174,7 @@
     <div class="nav-menu__mobile">
 
         <div class="nav-menu__content">
-            <a href="<%= path %>/" class="nav-menu__brand">
+            <a href="<%= path %>/" class="nav-menu__brand animate-item">
                 <svg><use href="/img/icons.svg#logo"></use></svg>
             </a>
     
@@ -186,21 +186,21 @@
                 {% if (user._id) { %}
                     <h5 class="white">Hello {{ user.preferredName }}</h5>
                     <div>
-                        <a href="<%= path %>/account"><%= account.account %></a>
-                        <a href="#"><%= account.logout %></a>
+                        <a class="animate-item" href="<%= path %>/account"><%= account.account %></a>
+                        <a class="animate-item" href="#"><%= account.logout %></a>
                     </div>
                 {% } else { %}
-                    <h5 class="white"><%= welcome %></h5>
+                    <h5 class="white animate-item"><%= welcome %></h5>
                     <div>
-                        <a href="<%= path %>/login"><%= account.register %></a>
-                        <a href="<%= path %>/login"><%= account.login %></a>
+                        <a class="animate-item" href="<%= path %>/login"><%= account.register %></a>
+                        <a class="animate-item" href="<%= path %>/login"><%= account.login %></a>
                     </div>
                 {% } %}
             </div>
     
             <ul class="nav-menu__lang">
-                <li data-nav-lang="en" class="<%- lang === 'en' ? 'active' : '' %>"><h5>English</h5></li>
-                <li data-nav-lang="es" class="<%- lang === 'es' ? 'active' : '' %>"><h5>Español</h5></li>
+                <li data-nav-lang="en" class="animate-item<%- lang === 'en' ? ' active' : '' %>"><h5>English</h5></li>
+                <li data-nav-lang="es" class="animate-item<%- lang === 'es' ? ' active' : '' %>"><h5>Español</h5></li>
             </ul>
         </div>
 

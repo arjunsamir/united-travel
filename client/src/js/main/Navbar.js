@@ -170,7 +170,9 @@ export default class Navbar {
         const isDesktop = styles.desktop !== 'none';
 
         // Define Variables
-        let targets;
+        let targets = {
+            lines: this.menuBtn.children('span').e()
+        };
 
         // Cretate Timeline
         const tl = anime.timeline({
@@ -184,31 +186,36 @@ export default class Navbar {
 
             ref.children('*').clearInlineStyles();
 
-            targets = {
+            const dt = {
                 bg: ref.children(".user-acct__bg").e(),
                 content: ref.children(".user-acct__content").e(),
                 photo: ref.children(".user-acct__bg, .user-acct__photo, .user-acct__icon").e(),
-                brand: desktop.children('.nav-menu__brand').e(),
-                lines: this.menuBtn.children('span').e()
-            }
+                brand: desktop.children('.nav-menu__brand').e()
+            };
+
+            targets = { ...targets, ...dt };
 
         }
 
         // Open The Menu
         if (!this.state.menu) {
 
+            // Reveal Menu
+            this.menu.removeClass('hidden');
+
             // Animate Menu Icon
             tl.add({
                 targets: targets.lines[0],
-                translateY: [0, 4],
+                translateY: [0, '0.5rem'],
                 duration: 200
             })
             
             tl.add({
                 targets: targets.lines[1],
-                translateY: [0, -5],
+                translateY: [0, '-0.5rem'],
                 duration: 200
             }, '-=200');
+
             
             tl.add({
                 targets: targets.lines[0],
@@ -222,11 +229,9 @@ export default class Navbar {
                 duration: 200
             }, '-=200');
 
+
             // Open Desktop Menu
             if (isDesktop) {
-
-                // Hide Menu
-                this.menu.removeClass('hidden');
 
                 tl.add({
                     targets: this.menu.children(".nav-menu__bg").e(),
@@ -285,7 +290,19 @@ export default class Navbar {
 
             // Open Mobile Menu
             else {
-                
+                tl.add({
+                    targets: this.menu.children(".nav-menu__bg").e(),
+                    scale: [1, 120],
+                    diration: 1200
+                }, '-=400');
+
+                tl.add({
+                    targets: mobile.children(".animate-item").e(),
+                    translateY: [anime.stagger([100, 25]), 0],
+                    opacity: [0, 1],
+                    delay: anime.stagger([0, 250]),
+                    duration: 250
+                }, "-=600");
             }
 
             // Wait for Animations to complete
@@ -383,7 +400,24 @@ export default class Navbar {
             }
 
             // Close Mobile Menu
-            else {}
+            else {
+
+                tl.add({
+                    targets: mobile.children(".animate-item").e(),
+                    translateY: anime.stagger([-25, -100]),
+                    opacity: 0,
+                    delay: anime.stagger([0, 250]),
+                    duration: 250
+                }, "-=400");
+
+                tl.add({
+                    targets: this.menu.children(".nav-menu__bg").e(),
+                    scale: 1,
+                    diration: 800,
+                    easing: 'easeInQuad'
+                }, '-=400');
+
+            }
 
             // Wait for Animations to complete
             await tl.finished;

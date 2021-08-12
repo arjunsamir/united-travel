@@ -3159,11 +3159,14 @@ const Button = (_ref2)=>{
 _c1 = Button;
 exports.Button = Button;
 const IconButton = (_ref3)=>{
-    let { onClick , icon , color , animationClass , domRef , size , disabled  } = _ref3;
+    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
     return(/*#__PURE__*/ _react.default.createElement("button", {
+        id: id,
         className: $.join("icon-button", animationClass || a, [
             disabled,
             "disabled"
+        ], [
+            className
         ]),
         onClick: onClick,
         ref: domRef

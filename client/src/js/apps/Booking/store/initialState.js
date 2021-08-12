@@ -1,3 +1,5 @@
+const commonSteps = ['Route', 'Passengers', 'Vehicle', 'ChildSeats', 'Notes', 'Summary']
+
 const state = {
     reservation: {
         serviceType: '',
@@ -30,12 +32,7 @@ const state = {
             duration: null,
             eta: null
         },
-        passengers: {
-            total: 1,
-            adults: 1,
-            children: 0,
-            infants: 0
-        },
+        passengers: 1,
         vehicle: null,
         quote: {
             id: '',
@@ -53,7 +50,23 @@ const state = {
     },
     app: {
         step: 'ServiceType',
-        steps: [],
+        steps: {
+            first: [{
+                name: 'ServiceType',
+                active: true,
+                complete: false,
+                group: 'first',
+                index: 0
+            }],
+            dynamic: [],
+            last: commonSteps.map((s, i) => ({
+                name: s,
+                active: false,
+                complete: false,
+                group: 'last',
+                index: i
+            }))
+        },
         airports: null,
         user: window.currentUser ? { ...window.currentUser } : {},
         map: null

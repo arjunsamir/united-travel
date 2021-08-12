@@ -18,6 +18,11 @@
         position: relative;
         @include flexCenter;
         @include flexGap(1.2rem, "column");
+
+        @include phone {
+            align-items: flex-start;
+            padding : var(--y-pad) var(--x-pad);
+        }
         
         h1, h4 {
             color: var(--white);
@@ -29,6 +34,15 @@
                 font-weight: 400;
                 color: var(--primary);
             }
+
+            @include phone {
+                span:not(:last-child)::before {
+                    content: "\A";
+                    white-space: pre;
+                }
+            }
+
+            
         }
 
         h4 {

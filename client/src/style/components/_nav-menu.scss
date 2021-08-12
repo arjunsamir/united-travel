@@ -37,7 +37,7 @@
         grid-gap: 9.6rem;
         padding: var(--nav-min-top) var(--nav-min-right);
         
-        @include ipad {
+        @include ipadPro {
             display: none;
         }
         
@@ -156,8 +156,19 @@
 
         @include flexCenter;
         display: none;
-        @include ipad {
+        @include ipadPro {
             display: flex;
+        }
+
+        a {
+            @include link {
+                transition: filter $dt;
+
+                &:hover {
+                    opacity: 1;
+                    filter: opacity(75%);
+                }
+            }
         }
 
         #{$s}__content {
@@ -169,6 +180,10 @@
             position: absolute;
             top: var(--nav-min-top);
             left: var(--nav-min-right);
+            
+            @include flexCenter;
+            height: var(--nav-min-size);
+            width: var(--nav-min-size);
 
             @include link {
                 color: var(--white);

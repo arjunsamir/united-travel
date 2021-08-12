@@ -15,7 +15,7 @@ import Options from '../../components/Options';
 
 
 // Create Step
-const ServiceType = ({ update, copy }) => {
+const ServiceType = ({ update, updateApp, copy }) => {
 
     const { state } = useContext(AppContext);
     const { serviceType } = state.reservation;
@@ -23,28 +23,26 @@ const ServiceType = ({ update, copy }) => {
 
     return (
         <BookingCard
-            copy={copy}
-            next={{
-                text: copy.next,
-                onClick: () => console.log('clicked next btn'),
-                disabled: !selected
-            }}
-            disableExpand
+            back={{ disabled: true }}
+            next={{ disabled: !selected }}
+            disableExpand={!serviceType}
             footer={selected && {
                 title: selected.title,
                 text: selected.description
             }}
         >
-            <Options
-                name="service-type"
-                options={copy.options.map(o => ({
-                    icon: o.icon,
-                    label: o.name,
-                    value: o.value
-                }))}
-                onChange={(checked, value) => checked && update("SERVICE-TYPE", value)}
-                selected={serviceType}
-            />
+            <fieldset>
+                <Options
+                    name="service-type"
+                    options={copy.options.map(o => ({
+                        icon: o.icon,
+                        label: o.name,
+                        value: o.value
+                    }))}
+                    onChange={(checked, value) => checked && update("SERVICE-TYPE", value)}
+                    selected={serviceType}
+                />
+            </fieldset>    
         </BookingCard>
     )
 

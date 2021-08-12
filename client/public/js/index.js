@@ -6648,6 +6648,41 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
 class Navbar {
     init() {
         this.loggedIn = !!window.currentUser._id;
@@ -6749,28 +6784,32 @@ class Navbar {
             mobile: window.getComputedStyle(mobile.e()).getPropertyValue('display')
         }; // Determine Which Menu To Open
         const isDesktop = styles.desktop !== 'none'; // Define Variables
-        let targets; // Cretate Timeline
+        let targets = {
+            lines: this.menuBtn.children('span').e()
+        }; // Cretate Timeline
         const tl = _animejs.default.timeline({
             easing: 'easeOutQuad'
         }); // Assign Desktop Targets
         if (isDesktop) {
             const ref = desktop.children(".user-acct");
             ref.children('*').clearInlineStyles();
-            targets = {
+            const dt = {
                 bg: ref.children(".user-acct__bg").e(),
                 content: ref.children(".user-acct__content").e(),
                 photo: ref.children(".user-acct__bg, .user-acct__photo, .user-acct__icon").e(),
-                brand: desktop.children('.nav-menu__brand').e(),
-                lines: this.menuBtn.children('span').e()
+                brand: desktop.children('.nav-menu__brand').e()
             };
+            targets = _objectSpread(_objectSpread({
+            }, targets), dt);
         } // Open The Menu
         if (!this.state.menu) {
-            // Animate Menu Icon
+            // Reveal Menu
+            this.menu.removeClass('hidden'); // Animate Menu Icon
             tl.add({
                 targets: targets.lines[0],
                 translateY: [
                     0,
-                    4
+                    '0.5rem'
                 ],
                 duration: 200
             });
@@ -6778,7 +6817,7 @@ class Navbar {
                 targets: targets.lines[1],
                 translateY: [
                     0,
-                    -5
+                    '-0.5rem'
                 ],
                 duration: 200
             }, '-=200');
@@ -6799,8 +6838,6 @@ class Navbar {
                 duration: 200
             }, '-=200'); // Open Desktop Menu
             if (isDesktop) {
-                // Hide Menu
-                this.menu.removeClass('hidden');
                 tl.add({
                     targets: this.menu.children(".nav-menu__bg").e(),
                     scale: [
@@ -6867,6 +6904,34 @@ class Navbar {
                 }, "-=250");
                 tl.add({
                     targets: desktop.children(".animate-item").e(),
+                    translateY: [
+                        _animejs.default.stagger([
+                            100,
+                            25
+                        ]),
+                        0
+                    ],
+                    opacity: [
+                        0,
+                        1
+                    ],
+                    delay: _animejs.default.stagger([
+                        0,
+                        250
+                    ]),
+                    duration: 250
+                }, "-=600");
+            } else {
+                tl.add({
+                    targets: this.menu.children(".nav-menu__bg").e(),
+                    scale: [
+                        1,
+                        120
+                    ],
+                    diration: 1200
+                }, '-=400');
+                tl.add({
+                    targets: mobile.children(".animate-item").e(),
                     translateY: [
                         _animejs.default.stagger([
                             100,
@@ -6954,6 +7019,26 @@ class Navbar {
                     ]),
                     duration: 250
                 }, "-=1000");
+                tl.add({
+                    targets: this.menu.children(".nav-menu__bg").e(),
+                    scale: 1,
+                    diration: 800,
+                    easing: 'easeInQuad'
+                }, '-=400');
+            } else {
+                tl.add({
+                    targets: mobile.children(".animate-item").e(),
+                    translateY: _animejs.default.stagger([
+                        -25,
+                        -100
+                    ]),
+                    opacity: 0,
+                    delay: _animejs.default.stagger([
+                        0,
+                        250
+                    ]),
+                    duration: 250
+                }, "-=400");
                 tl.add({
                     targets: this.menu.children(".nav-menu__bg").e(),
                     scale: 1,

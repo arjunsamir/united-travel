@@ -913,6 +913,7 @@ var _reducer = _interopRequireDefault(require("./store/reducer"));
 var _Map = _interopRequireDefault(require("./components/Map"));
 var _BookingLoader = _interopRequireDefault(require("./components/BookingLoader"));
 var _ServiceType = _interopRequireDefault(require("./steps/ServiceType"));
+var _FlightLocation = _interopRequireDefault(require("./steps/FlightLocation"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -956,7 +957,8 @@ function _interopRequireWildcard(obj) {
 // import Transition from './helpers/Transition';
 // Register Steps
 const steps = {
-    ServiceType: _ServiceType.default
+    ServiceType: _ServiceType.default,
+    FlightLocation: _FlightLocation.default
 }; // Create Booking App
 const BookingApp = (_ref)=>{
     let { copy  } = _ref;
@@ -970,7 +972,8 @@ const BookingApp = (_ref)=>{
     return(/*#__PURE__*/ _react.default.createElement(_context.default.Provider, {
         value: {
             state,
-            dispatch
+            dispatch,
+            appCopy: copy
         }
     }, /*#__PURE__*/ _react.default.createElement(_pickers.MuiPickersUtilsProvider, {
         utils: _dayjs.default
@@ -979,7 +982,7 @@ const BookingApp = (_ref)=>{
     }, /*#__PURE__*/ _react.default.createElement(_Map.default, {
         update: update("SET_APP")
     }), state.app.map ? /*#__PURE__*/ _react.default.createElement(Step, {
-        updateApp: update("SET_STEP"),
+        updateApp: update("SET_APP"),
         update: update("UPDATE_RESERVATION"),
         copy: copy.steps[state.app.step]
     }) : /*#__PURE__*/ _react.default.createElement(_BookingLoader.default, null)))));
@@ -995,7 +998,7 @@ $RefreshReg$(_c, "BookingApp");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","./store/context":"2o6qx","@material-ui/pickers":"5p95O","@date-io/dayjs":"2nWYV","./store/initialState":"Ab8BJ","./store/reducer":"8zh0y","./components/Map":"6uBK2","./components/BookingLoader":"5ToZm","./steps/ServiceType":"4rFBN","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3qVBT":[function(require,module,exports) {
+},{"react":"3qVBT","./store/context":"2o6qx","@material-ui/pickers":"5p95O","@date-io/dayjs":"2nWYV","./store/initialState":"Ab8BJ","./store/reducer":"8zh0y","./components/Map":"6uBK2","./components/BookingLoader":"5ToZm","./steps/ServiceType":"4rFBN","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./steps/FlightLocation":"xx0VC"}],"3qVBT":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -47129,6 +47132,14 @@ function _defineProperty(obj, key, value) {
     else obj[key] = value;
     return obj;
 }
+const commonSteps = [
+    'Route',
+    'Passengers',
+    'Vehicle',
+    'ChildSeats',
+    'Notes',
+    'Summary'
+];
 const state = {
     reservation: {
         serviceType: '',
@@ -47162,12 +47173,7 @@ const state = {
             duration: null,
             eta: null
         },
-        passengers: {
-            total: 1,
-            adults: 1,
-            children: 0,
-            infants: 0
-        },
+        passengers: 1,
         vehicle: null,
         quote: {
             id: '',
@@ -47185,7 +47191,26 @@ const state = {
     },
     app: {
         step: 'ServiceType',
-        steps: [],
+        steps: {
+            first: [
+                {
+                    name: 'ServiceType',
+                    active: true,
+                    complete: false,
+                    group: 'first',
+                    index: 0
+                }
+            ],
+            dynamic: [],
+            last: commonSteps.map((s, i)=>({
+                    name: s,
+                    active: false,
+                    complete: false,
+                    group: 'last',
+                    index: i
+                })
+            )
+        },
         airports: null,
         user: window.currentUser ? _objectSpread({
         }, window.currentUser) : {
@@ -47203,6 +47228,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _Merger = _interopRequireDefault(require("../helpers/Merger"));
+var _initialState = _interopRequireDefault(require("./initialState"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -47243,60 +47269,86 @@ function _defineProperty(obj, key, value) {
     else obj[key] = value;
     return obj;
 }
+const setSteps = (m)=>{
+    // Switch Merger To Aoo State
+    m.switch().merge({
+        steps: _objectSpread({
+        }, _initialState.default.app.steps)
+    }); // Create Dynamic Steps
+    let dynamicSteps; // Get Dynami Steps
+    switch(m.state.reservation.serviceType){
+        case 'airport':
+            dynamicSteps = [
+                'FlightLocation',
+                'FlightSchedule'
+            ];
+            break;
+        case 'cruise':
+            dynamicSteps = [
+                'CruiseLocation',
+                'CruiseSchedule'
+            ];
+            break;
+        default:
+            dynamicSteps = [
+                'PickupTime'
+            ];
+    }
+    m.merge({
+        dynamic: dynamicSteps.map((s, i)=>({
+                name: s,
+                active: false,
+                complete: false,
+                group: 'dynamic',
+                index: i
+            })
+        )
+    }, 'steps'); // Finally, Validate and return new state
+    return m.validate('ServiceType', m.state.reservation.serviceType);
+};
+const setAirport = (m, PL)=>{
+    var _m$state$app$airports;
+    const airport = (_m$state$app$airports = m.state.app.airports.find((apt)=>apt.code === PL
+    )) !== null && _m$state$app$airports !== void 0 ? _m$state$app$airports : m.state.reservation.flight.airport; // Destructure Properties
+    const { placeId , address , name  } = airport; // Update Airport
+    m.merge({
+        airport: _objectSpread({
+        }, airport)
+    }, 'flight'); // Update Origin/Destination
+    switch(m.state.reservation.flight.type){
+        case 'arriving':
+            m.merge({
+                origin: {
+                    placeId,
+                    address,
+                    name
+                }
+            });
+            break;
+        case 'departing':
+            m.merge({
+                destination: {
+                    placeId,
+                    address,
+                    name
+                }
+            });
+            break;
+    }
+    return m.state;
+};
 const reducer = (state, action)=>{
-    var _state$app$airports$f;
     const [method, category, type] = action.type.toLowerCase().split('_');
     if (!state[category]) return state;
-    const m = new _Merger.default(category, state);
-    let PL = action.payload; // Helper Functions
-    const setAirport = (newAirport)=>{
-        const airport = newAirport !== null && newAirport !== void 0 ? newAirport : state.reservation.flight.airport; // Destructure Properties
-        const { placeId , address , name  } = airport; // Update Airport
-        m.merge({
-            airport: _objectSpread({
-            }, airport)
-        }, 'flight'); // Update Origin/Destination
-        switch(m.state.reservation.flight.type){
-            case 'arriving':
-                m.merge({
-                    origin: {
-                        placeId,
-                        address,
-                        name
-                    }
-                });
-                break;
-            case 'departing':
-                m.merge({
-                    destination: {
-                        placeId,
-                        address,
-                        name
-                    }
-                });
-                break;
-        }
-        return _objectSpread({
-        }, m.state);
-    };
-    const setPassengersOrLuggage = (a, b, c)=>{
-        m.merge({
-            [PL.key]: PL.value
-        }, type);
-        const p = m.state.reservation[type];
-        return m.merge({
-            total: (p[a] || 0) + (p[b] || 0) + (p[c] || 0)
-        }, type);
-    }; // Update Reservation State
+    const m = new _Merger.default(category, _objectSpread({
+    }, state));
+    let PL = action.payload; // Update Reservation State
     if (method === 'update') switch(type){
         case 'service-type':
-            return m.merge({
+            m.merge({
                 serviceType: PL
             });
-        // case 'airport-ride':
-        //     m.merge({ airportRide: PL })
-        //     if (PL) setAirport()
-        //     return m.state
+            return setSteps(m);
         case 'flight-number':
             return m.merge({
                 number: PL
@@ -47313,15 +47365,13 @@ const reducer = (state, action)=>{
             m.merge({
                 type: PL
             }, 'flight');
-            return setAirport();
+            return setAirport(m);
         case 'flight-buffer':
             return m.merge({
                 buffer: parseFloat(PL)
             }, 'flight');
         case 'airport':
-            return setAirport((_state$app$airports$f = state.app.airports.find((apt)=>apt.code === PL
-            )) !== null && _state$app$airports$f !== void 0 ? _state$app$airports$f : {
-            });
+            return setAirport(m, PL);
         case 'origin':
         case 'destination':
             return m.merge({
@@ -47352,7 +47402,9 @@ const reducer = (state, action)=>{
                 }, PL)
             });
         case 'passengers':
-            return setPassengersOrLuggage('adults', 'children', 'infants');
+            return m.merge({
+                passengers: PL
+            });
         case 'vehicle':
             return m.merge({
                 vehicle: PL
@@ -47402,7 +47454,7 @@ const reducer = (state, action)=>{
 var _default = reducer;
 exports.default = _default;
 
-},{"../helpers/Merger":"2Z7en"}],"2Z7en":[function(require,module,exports) {
+},{"../helpers/Merger":"2Z7en","./initialState":"Ab8BJ"}],"2Z7en":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -47423,6 +47475,32 @@ class Merger {
             [this.category]: Object.assign({
             }, this.state[this.category], data)
         });
+        return this.state;
+    }
+    switch() {
+        const { category: c  } = this;
+        this.category = c === 'app' ? 'reservation' : 'app';
+        return this;
+    }
+    validate(step, valid) {
+        // Coerce Boolean Value
+        const isValid = !!valid; // Create Shortcut Reference
+        const app = this.state.app; // Destructure and construct array
+        const { first: f , dynamic: d , last: l  } = app.steps;
+        const steps = [
+            ...f,
+            ...d,
+            ...l
+        ]; // Find Match
+        const index = steps.findIndex((s)=>s.name === step
+        ); // Get Match. This should NEVER be null
+        const match = steps[index]; // Determine if step is valid
+        app.steps[match.group][match.index].complete = isValid; // Manage Future Steps
+        steps.slice(index + 1).forEach((s, i)=>{
+            // Activate or Deactivate the next step
+            if (!i) app.steps[s.group][s.index].active = isValid; // If invalid deactivate all other steps
+            else if (!isValid) app.steps[s.group][s.index].active = false;
+        }); // Never Forget To Return State
         return this.state;
     }
     constructor(category, state){
@@ -47777,25 +47855,24 @@ function _interopRequireWildcard(obj) {
 // Import Unique Components
 // Create Step
 const ServiceType = (_ref)=>{
-    let { update , copy  } = _ref;
+    let { update , updateApp , copy  } = _ref;
     const { state  } = _react.useContext(_context.default);
     const { serviceType  } = state.reservation;
     const selected = copy.options.find((o)=>o.value === serviceType
     );
     return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
-        copy: copy,
+        back: {
+            disabled: true
+        },
         next: {
-            text: copy.next,
-            onClick: ()=>console.log('clicked next btn')
-            ,
             disabled: !selected
         },
-        disableExpand: true,
+        disableExpand: !serviceType,
         footer: selected && {
             title: selected.title,
             text: selected.description
         }
-    }, /*#__PURE__*/ _react.default.createElement(_Options.default, {
+    }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement(_Options.default, {
         name: "service-type",
         options: copy.options.map((o)=>({
                 icon: o.icon,
@@ -47806,7 +47883,7 @@ const ServiceType = (_ref)=>{
         onChange: (checked, value)=>checked && update("SERVICE-TYPE", value)
         ,
         selected: serviceType
-    })));
+    }))));
 }; // Export Step
 _c = ServiceType;
 var _default = ServiceType;
@@ -47833,7 +47910,10 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _context = _interopRequireDefault(require("../store/context"));
+var _hooks = require("../../helpers/hooks");
+var _animejs = _interopRequireDefault(require("animejs"));
 var _Loader = _interopRequireDefault(require("../../components/Loader"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
 var _Buttons = require("../../components/Buttons");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -47867,42 +47947,173 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
-// Import React Defaults
-// Import App Context
-// Import Components
-const aI = "animate-item"; // Create Component
-const BookingCard = (_ref)=>{
-    let { children , next , back , copy , showLoader , footer , disableExpand  } = _ref;
-    const { state  } = _react.useContext(_context.default);
-    const { title , heading , text  } = copy || {
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
     };
+    return _extends.apply(this, arguments);
+}
+// Animation Class Shortcut
+const aI = "animate-item"; // Open Menu
+const openMenu = (e)=>{
+    const height = $(e).children('#bc-menu').height();
+    const tl = _animejs.default.timeline({
+        easing: 'easeInOutQuad'
+    });
+    tl.add({
+        targets: $(e).children('#bc-expand').e(),
+        rotate: [
+            0,
+            180
+        ],
+        duration: 250
+    });
+    tl.add({
+        targets: $(e).children('#bc-body').e(),
+        translateY: [
+            0,
+            height
+        ],
+        duration: 300
+    }, '-=250');
+    return tl.finished;
+}; // Close Menu
+const closeMenu = (e)=>{
+    const tl = _animejs.default.timeline({
+        easing: 'easeInOutQuad'
+    });
+    tl.add({
+        targets: $(e).children('#bc-expand').e(),
+        rotate: [
+            180,
+            0
+        ],
+        duration: 250
+    });
+    tl.add({
+        targets: $(e).children('#bc-body').e(),
+        translateY: 0,
+        duration: 300
+    }, '-=250');
+    return tl.finished;
+}; // Create Component
+const BookingCard = (_ref)=>{
+    let { children , next , back , showLoader , footer , disableExpand  } = _ref;
+    // Get App Context
+    const { state , dispatch , appCopy  } = _react.useContext(_context.default); // Get Copy
+    const copy = appCopy.steps[state.app.step];
+    const { title , heading , text , next: nextCopy  } = copy || {
+    }; // Get Steps
+    const { first , dynamic , last  } = state.app.steps;
+    const steps = [
+        ...first,
+        ...dynamic,
+        ...last
+    ];
+    const stepIndex = steps.findIndex((s)=>s.name === state.app.step
+    ); // Create Local State
+    const [localState, setLocalState] = _hooks.useObjectState({
+        isOpen: false,
+        isAnimating: false
+    }); // Create Refs
+    const element = _react.useRef(); // Create Function To Toggle Menu
+    const toggleMenu = async ()=>{
+        // Prevent Menu From Opening When Disabled
+        if (disableExpand) return; // Prevent Double Click
+        if (localState.isAnimating) return;
+        setLocalState({
+            isAnimating: true
+        }); // Open Menu
+        if (!localState.isOpen) await openMenu(element.current);
+        else await closeMenu(element.current); // Set State
+        setLocalState({
+            isOpen: !localState.isOpen,
+            isAnimating: false
+        });
+    }; // Navigate
+    const navigate = (delta)=>{
+        var _steps;
+        // Prevent Dev Errors
+        if (!delta) return ()=>console.warn('No direction defined')
+        ; // Get Target Index
+        const target = typeof delta === 'string' ? delta : (_steps = steps[stepIndex + delta]) === null || _steps === void 0 ? void 0 : _steps.name; // Prevent Another Dev Errors
+        if (!target) return ()=>console.warn('This is either the first or last step. Please provide a custom function to run for this step.')
+        ; // Return Navigation Function
+        return async ()=>{
+            dispatch({
+                type: "SET_APP_STEP",
+                payload: target
+            });
+        };
+    }; // Create Markup
     return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking__card"
+        className: "booking__card",
+        ref: element
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card__nav"
-    }, /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, {
+    }, /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, _extends({
         color: "white",
         size: "lg",
         icon: "arrow-back",
         animationClass: "no-animate",
-        onClick: back,
-        disabled: !back
-    }), /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "white"
+        onClick: navigate(-1)
+    }, back || {
+    })), /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "white",
+        onClick: toggleMenu
     }, title), /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, {
         color: "white",
         size: "lg",
         icon: "expand",
         animationClass: "no-animate",
-        onClick: null,
-        disabled: disableExpand
+        disabled: disableExpand,
+        id: "bc-expand",
+        onClick: toggleMenu
     })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__menu"
-    }), /*#__PURE__*/ _react.default.createElement("div", {
+        id: "bc-menu",
+        className: $.join("booking-card__menu", [
+            !localState.isOpen,
+            'disabled'
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("ul", {
+        className: "booking-card__steps"
+    }, steps.map((step, i)=>/*#__PURE__*/ _react.default.createElement("li", {
+            key: step.name,
+            className: $.join('booking-card__step', [
+                step.complete,
+                'complete'
+            ], [
+                !step.active,
+                'disabled'
+            ], [
+                step.name === state.app.step,
+                'active'
+            ]),
+            onClick: async ()=>{
+                // Close The menu
+                await toggleMenu(); // Navigate to Next Step
+                await navigate(step.name)();
+            }
+        }, /*#__PURE__*/ _react.default.createElement("span", null, appCopy.steps[step.name].title), step.complete && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "checkmark",
+            size: "sm"
+        }))
+    ))), /*#__PURE__*/ _react.default.createElement("div", {
+        id: "bc-body",
         className: "booking-card__body"
-    }, showLoader ? /*#__PURE__*/ _react.default.createElement("div", {
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("booking-card__body-esc", [
+            localState.isOpen,
+            "listening"
+        ]),
+        onClick: toggleMenu
+    }), showLoader ? /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card__loader"
     }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card__content"
@@ -47922,7 +48133,11 @@ const BookingCard = (_ref)=>{
         className: $.join("small", aI)
     }, footer.text) : footer.text))), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card__next"
-    }, next && typeof next === 'object' && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, next)))))));
+    }, next && typeof next === 'object' && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, _extends({
+        text: nextCopy,
+        onClick: navigate(1)
+    }, next || {
+    }))))))));
 }; // Export Component
 _c = BookingCard;
 var _default = BookingCard;
@@ -47935,7 +48150,7 @@ $RefreshReg$(_c, "BookingCard");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../../components/Loader":"7GUXD","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"7xzNC":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../../components/Loader":"7GUXD","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Icon":"4VYCM","../../helpers/hooks":"4wqYR","animejs":"1GvRs"}],"7xzNC":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -47996,11 +48211,14 @@ const Button = (_ref2)=>{
 _c1 = Button;
 exports.Button = Button;
 const IconButton = (_ref3)=>{
-    let { onClick , icon , color , animationClass , domRef , size , disabled  } = _ref3;
+    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
     return(/*#__PURE__*/ _react.default.createElement("button", {
+        id: id,
         className: $.join("icon-button", animationClass || a, [
             disabled,
             "disabled"
+        ], [
+            className
         ]),
         onClick: onClick,
         ref: domRef
@@ -48085,6 +48303,34 @@ var _default = Icon;
 exports.default = _default;
 var _c;
 $RefreshReg$(_c, "Icon");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4wqYR":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.useObjectState = void 0;
+var _react = require("react");
+const useObjectState = (initialState)=>{
+    const [state, setState] = _react.useState(initialState);
+    return [
+        state,
+        (newState)=>setState(Object.assign({
+            }, state, newState))
+    ];
+};
+exports.useObjectState = useObjectState;
 
   helpers.postlude(module);
 } finally {
@@ -48176,7 +48422,197 @@ $RefreshReg$(_c1, "Options");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4R7YP":[function(require,module,exports) {
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"xx0VC":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _context = _interopRequireDefault(require("../store/context"));
+var _BookingCard = _interopRequireDefault(require("../components/BookingCard"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import The Default Things
+// Import Context
+// Import Booking Card
+// Import Unique Components
+// Create Step
+const FlightLocation = (_ref)=>{
+    let { update , copy  } = _ref;
+    const { state  } = _react.useContext(_context.default);
+    console.log(copy); // Validate Fields
+    const airlineErrors = [];
+    const flightNumErrors = [];
+    return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
+        back: true,
+        next: {
+            disabled: false
+        }
+    }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement("h5", {
+        className: "animate-item"
+    }, copy.infoTitle), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "airline-input",
+        icon: "airplane",
+        label: copy.labels[1],
+        placeholder: copy.placeholders[1],
+        errors: airlineErrors
+    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "flight-num-input",
+        icon: "ticket",
+        label: copy.labels[2],
+        placeholder: copy.placeholders[2],
+        errors: flightNumErrors
+    }))));
+}; // Export Step
+_c = FlightLocation;
+var _default = FlightLocation;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "FlightLocation");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Input":"16GiB"}],"16GiB":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _hooks = require("../helpers/hooks");
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React Defaults
+// Import Helpers
+// Import Other Components
+// Create Component
+const Input = (_ref)=>{
+    let { value , placeholder , onChange , onBlur: _onBlur , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
+    const [state, setState] = _hooks.useObjectState({
+        type,
+        showErrors: false
+    });
+    const isText = state.type === "text";
+    const hasError = state.showErrors && errors && errors.length > 0;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "input"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("input__input", [
+            hasError,
+            "has-error"
+        ], animationClass || "animate-item")
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__main"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "lg"
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__field"
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("input", {
+        id: id,
+        type: state.type || "text",
+        value: value,
+        placeholder: placeholder,
+        onChange: (onChange || formatInput) && ((e)=>{
+            let val = e.target.value;
+            if (formatInput) val = formatInput(val);
+            onChange && onChange(val);
+        }),
+        onBlur: (e)=>{
+            if (!state.showErrors) setState({
+                showErrors: true
+            });
+            _onBlur && _onBlur(e);
+        },
+        onFocus: selectOnFocus && ((e)=>e.target.select()
+        ),
+        className: "input__text-input"
+    }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__toggle",
+        onClick: ()=>setState({
+                type: isText ? "password" : "text"
+            })
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: isText ? "eye-off" : "eye",
+        size: "lg"
+    }))), hasError && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__error",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
+};
+_c = Input;
+var _default = Input;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Input");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../helpers/hooks":"4wqYR","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

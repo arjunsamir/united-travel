@@ -1,61 +1,82 @@
 import Merger from '../helpers/Merger';
 
+import initialState from './initialState';
+
+const setSteps = (m) => {
+
+    // Switch Merger To Aoo State
+    m.switch().merge({ steps: { ...initialState.app.steps } });
+
+    // Create Dynamic Steps
+    let dynamicSteps;
+
+    // Get Dynami Steps
+    switch (m.state.reservation.serviceType) {
+        case 'airport':
+            dynamicSteps = ['FlightLocation', 'FlightSchedule'];
+            break;
+        case 'cruise':
+            dynamicSteps = ['CruiseLocation', 'CruiseSchedule'];
+            break;
+        default:
+            dynamicSteps = ['PickupTime'];
+    };
+
+    // Fill in step objects
+    m.merge({ dynamic: dynamicSteps.map((s, i) => ({
+        name: s,
+        active: false,
+        complete: false,
+        group: 'dynamic',
+        index: i
+    })) }, 'steps');
+
+    // Finally, Validate and return new state
+    return m.validate('ServiceType', m.state.reservation.serviceType)
+
+}
+
+
+const setAirport = (m, PL) => {
+
+    const airport = m.state.app.airports.find(apt => apt.code === PL) ?? m.state.reservation.flight.airport
+
+    // Destructure Properties
+    const { placeId, address, name } = airport;
+
+    // Update Airport
+    m.merge({ airport: { ...airport } }, 'flight')
+    
+    // Update Origin/Destination
+    switch (m.state.reservation.flight.type) {
+        case 'arriving':
+            m.merge({ origin: { placeId, address, name } })
+            break;
+        case 'departing':
+            m.merge({ destination: { placeId, address, name }})
+            break;
+    }
+
+    return m.state;
+}
+
+
+
 const reducer = (state, action) => {
     const [method, category, type] = action.type.toLowerCase().split('_');
 
     if (!state[category]) return state
 
-    const m = new Merger(category, state)
+    const m = new Merger(category, { ...state });
 
     let PL = action.payload;
-
-    // Helper Functions
-    const setAirport = (newAirport) => {
-
-        const airport = newAirport ?? state.reservation.flight.airport;
-
-        // Destructure Properties
-        const { placeId, address, name } = airport;
-
-        // Update Airport
-        m.merge({ airport: { ...airport } }, 'flight')
-        
-        // Update Origin/Destination
-        switch (m.state.reservation.flight.type) {
-            case 'arriving':
-                m.merge({ origin: { placeId, address, name } })
-                break;
-            case 'departing':
-                m.merge({ destination: { placeId, address, name }})
-                break;
-        }
-
-        return { ...m.state }
-    }
-
-    const setPassengersOrLuggage = (a, b, c) => {
-
-        m.merge({ [PL.key]: PL.value }, type)
-    
-        const p = m.state.reservation[type];
-
-        return m.merge({
-            total: (p[a]|| 0) + (p[b] || 0) + (p[c] || 0)
-        }, type)
-    }
 
     // Update Reservation State
     if (method === 'update') {
         switch(type) {
             case 'service-type':
-                return m.merge({ serviceType: PL })
-                
-            // case 'airport-ride':
-            //     m.merge({ airportRide: PL })
-
-            //     if (PL) setAirport()
-
-            //     return m.state
+                m.merge({ serviceType: PL });
+                return setSteps(m);
     
             case 'flight-number':
                 return m.merge({ number: PL }, 'flight')
@@ -68,13 +89,13 @@ const reducer = (state, action) => {
     
             case 'flight-type':
                 m.merge({ type: PL }, 'flight')
-                return setAirport()
+                return setAirport(m)
 
             case 'flight-buffer':
                 return m.merge({ buffer: parseFloat(PL) }, 'flight')
     
             case 'airport':
-                return setAirport(state.app.airports.find(apt => apt.code === PL) ?? {})
+                return setAirport(m, PL);
     
             case 'origin':
             case 'destination':
@@ -100,7 +121,7 @@ const reducer = (state, action) => {
                 return m.merge({ route: { ...PL } })
     
             case 'passengers':
-                return setPassengersOrLuggage('adults', 'children', 'infants')
+                return m.merge({ passengers: PL });
     
             case 'vehicle':
                 return m.merge({ vehicle: PL })

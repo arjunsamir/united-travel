@@ -33,7 +33,12 @@
             "title": "Pickup Time"
         },
         "FlightLocation": {
-            "title": "Flight Location"
+            "title": "Airport & Airline",
+            "heading": "Airport & Airline Info",
+            "labels": ["Select Airport", "Airline", "Flight Number"],
+            "placeholders": ["", "United", "A2204"],
+            "infoTitle": "Flight Information",
+            "next": "Continue"
         },
         "FlightSchedule": {
             "title": "Flight Schedule"

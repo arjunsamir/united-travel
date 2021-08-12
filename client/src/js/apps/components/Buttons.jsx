@@ -49,14 +49,16 @@ export const Button = ({ onClick, text, icon, theme, domRef, type, disabled, ani
 }
 
 
-export const IconButton = ({ onClick, icon, color, animationClass, domRef, size, disabled }) => {
+export const IconButton = ({ onClick, icon, color, animationClass, domRef, size, disabled, id, className }) => {
 
     return (
         <button
+            id={id}
             className={$.join(
                 "icon-button",
                 animationClass || a,
-                [disabled, "disabled"]
+                [disabled, "disabled"],
+                [className]
             )}
             onClick={onClick} ref={domRef}
         >
