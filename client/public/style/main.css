@@ -1523,6 +1523,7 @@ svg.placeholder, .icon.placeholder {
 .input__main hr {
   height: 4.8rem;
   width: 3px;
+  border-radius: 1rem;
   background-color: var(--placeholder);
 }
 .input__main svg {
@@ -1716,6 +1717,84 @@ svg.placeholder, .icon.placeholder {
 }
 .option.selected:hover label {
   background-color: var(--jet);
+}
+.dropdown__select {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  padding: 1.6rem 2.4rem;
+  background-color: var(--slate-light);
+  border-radius: 0.8rem;
+  border: 3px solid var(--slate-light);
+  transition: border 0.2s ease-in;
+}
+.dropdown__select:focus-within {
+  border-color: var(--slate);
+}
+.dropdown__select.has-error {
+  border-color: var(--error);
+}
+.dropdown__select select {
+  display: block;
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  opacity: 0;
+  z-index: 10;
+}
+.dropdown__field {
+  padding-right: 3.6rem;
+  flex-grow: 10;
+}
+.dropdown__field label {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 4px;
+  color: var(--slate);
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.dropdown__field div {
+  height: calc(1.8rem * 1.7);
+  position: relative;
+  width: 100%;
+}
+.dropdown__field p {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  color: var(--jet);
+  line-height: 1.7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.dropdown__field.placeholder p {
+  color: var(--placeholder);
+}
+.dropdown__errors {
+  padding-top: 1.2rem;
+}
+.dropdown__error {
+  display: flex;
+  align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.dropdown__error svg {
+  color: var(--error);
+  margin-right: 1.2rem;
 }
 .hero {
   height: 100vh;

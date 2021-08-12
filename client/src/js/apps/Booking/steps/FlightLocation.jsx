@@ -1,5 +1,5 @@
 // Import The Default Things
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect } from "react";
 
 
 // Import Context
@@ -12,12 +12,36 @@ import BookingCard from "../components/BookingCard";
 
 // Import Unique Components
 import Input from '../../components/Input';
+import Dropdown from '../../components/Dropdown';
+import DateTimePicker from '../../components/DateTimePicker';
+
+
+// Import Helpers
+import axios from 'axios';
 
 
 // Create Step
-const FlightLocation = ({ update, copy }) => {
+const FlightLocation = ({ update, updateApp, copy }) => {
 
+    // Destructure Global State
     const { state } = useContext(AppContext);
+    const { airports } = state.app;
+
+
+    // Use Effect
+    useEffect(() => {
+
+        // Fetch Airports
+        const fetchAirports = async () => {
+            const res = await axios('/api/data/airports');
+            updateApp('AIRPORTS', res.data);
+        };
+
+        // Fetch Airports if not set
+        if (!state.app.airports) fetchAirports();
+
+    }, []);
+
 
     console.log(copy);
 
@@ -29,7 +53,25 @@ const FlightLocation = ({ update, copy }) => {
         <BookingCard
             back
             next={{ disabled: false }}
+            showLoader={!airports}
         >
+
+            <fieldset>
+
+                <Dropdown
+                   id="airport-select"
+                   label={copy.labels[0]}
+                   placeholder={copy.placeholders[0] || "Placeholder Value"}
+                   options={(airports || []).map(apt => ({
+                       text: `${apt.code} - ${apt.name}`,
+                       value: apt.code
+                   }))}
+                   selected={state.reservation.flight.airport.code}
+                   onSelect={(selected) => update('AIRPORT', selected.value)}
+                   errors={[]}
+                />
+
+            </fieldset>
 
             <fieldset>
 
@@ -51,6 +93,10 @@ const FlightLocation = ({ update, copy }) => {
                     errors={flightNumErrors}
                 />
 
+            </fieldset>
+
+            <fieldset>
+                <DateTimePicker />
             </fieldset>
 
         </BookingCard>

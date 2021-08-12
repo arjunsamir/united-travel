@@ -48438,6 +48438,9 @@ var _react = _interopRequireWildcard(require("react"));
 var _context = _interopRequireDefault(require("../store/context"));
 var _BookingCard = _interopRequireDefault(require("../components/BookingCard"));
 var _Input = _interopRequireDefault(require("../../components/Input"));
+var _Dropdown = _interopRequireDefault(require("../../components/Dropdown"));
+var _DateTimePicker = _interopRequireDefault(require("../../components/DateTimePicker"));
+var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -48474,10 +48477,21 @@ function _interopRequireWildcard(obj) {
 // Import Context
 // Import Booking Card
 // Import Unique Components
+// Import Helpers
 // Create Step
 const FlightLocation = (_ref)=>{
-    let { update , copy  } = _ref;
+    let { update , updateApp , copy  } = _ref;
+    // Destructure Global State
     const { state  } = _react.useContext(_context.default);
+    const { airports  } = state.app; // Use Effect
+    _react.useEffect(()=>{
+        // Fetch Airports
+        const fetchAirports = async ()=>{
+            const res = await _axios.default('/api/data/airports');
+            updateApp('AIRPORTS', res.data);
+        }; // Fetch Airports if not set
+        if (!state.app.airports) fetchAirports();
+    }, []);
     console.log(copy); // Validate Fields
     const airlineErrors = [];
     const flightNumErrors = [];
@@ -48485,8 +48499,22 @@ const FlightLocation = (_ref)=>{
         back: true,
         next: {
             disabled: false
-        }
-    }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement("h5", {
+        },
+        showLoader: !airports
+    }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement(_Dropdown.default, {
+        id: "airport-select",
+        label: copy.labels[0],
+        placeholder: copy.placeholders[0] || "Placeholder Value",
+        options: (airports || []).map((apt)=>({
+                text: "".concat(apt.code, " - ").concat(apt.name),
+                value: apt.code
+            })
+        ),
+        selected: state.reservation.flight.airport.code,
+        onSelect: (selected)=>update('AIRPORT', selected.value)
+        ,
+        errors: []
+    })), /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement("h5", {
         className: "animate-item"
     }, copy.infoTitle), /*#__PURE__*/ _react.default.createElement(_Input.default, {
         id: "airline-input",
@@ -48500,7 +48528,7 @@ const FlightLocation = (_ref)=>{
         label: copy.labels[2],
         placeholder: copy.placeholders[2],
         errors: flightNumErrors
-    }))));
+    })), /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement(_DateTimePicker.default, null))));
 }; // Export Step
 _c = FlightLocation;
 var _default = FlightLocation;
@@ -48513,7 +48541,7 @@ $RefreshReg$(_c, "FlightLocation");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Input":"16GiB"}],"16GiB":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Input":"16GiB","../../components/Dropdown":"6OAua","axios":"5FCRD","../../components/DateTimePicker":"6guMX"}],"16GiB":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -48612,7 +48640,158 @@ $RefreshReg$(_c, "Input");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../helpers/hooks":"4wqYR","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4R7YP":[function(require,module,exports) {
+},{"react":"3qVBT","../helpers/hooks":"4wqYR","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6OAua":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const Dropdown = (_ref)=>{
+    var _items$find;
+    let { placeholder , label , errors , onSelect , selected , id , options  } = _ref;
+    // Configure Local State
+    const [changed, setChanged] = _react.useState(false); // Attach Placeholder Value
+    const items = changed ? options : [
+        {
+            value: -1,
+            text: placeholder
+        },
+        ...options
+    ]; // Get Currently Selected Value
+    const value = (typeof selected === 'object' ? selected.value : selected) || -1; // Determine if the Dropdown has errors
+    const hasErrors = errors && errors.length > 0; // Create Dropdown Component
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "dropdown"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("dropdown__select", [
+            hasErrors,
+            "has-error"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("select", {
+        id: id,
+        value: value,
+        onChange: (e)=>{
+            // Destructure Value
+            const { value: val  } = e.target; // Disable Clicking Placeholder from chaning state
+            if (val == -1) return; // Note the item has changed
+            if (!changed) setChanged(true); // Update value
+            onSelect && onSelect(items.find((item)=>item.value == val
+            ));
+        }
+    }, items.map((item)=>/*#__PURE__*/ _react.default.createElement("option", {
+            key: item.value,
+            value: item.value
+        }, item.text)
+    )), /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("dropdown__field", [
+            value === -1,
+            "placeholder"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("p", null, ((_items$find = items.find((i)=>i.value === value
+    )) === null || _items$find === void 0 ? void 0 : _items$find.text) || placeholder))), /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "expand"
+    })), hasErrors && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "dropdown__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "dropdown__error",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
+};
+_c = Dropdown;
+var _default = Dropdown;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Dropdown");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6guMX":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Create Component
+const DateTimePicker = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "date-time"
+    }, "Lets do this later"));
+};
+_c = DateTimePicker;
+var _default = DateTimePicker;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "DateTimePicker");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
