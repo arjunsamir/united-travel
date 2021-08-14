@@ -1,5 +1,5 @@
 // Import React Defaults
-import React, { useContext, useRef } from 'react';
+import React, { useContext, useRef, useEffect } from 'react';
 
 // Import App Context
 import AppContext from '../store/context';
@@ -71,7 +71,7 @@ const closeMenu = (e) => {
 const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }) => {
 
     // Get App Context
-    const { state, dispatch, appCopy } = useContext(AppContext);
+    const { state, transition, appCopy } = useContext(AppContext);
 
     // Get Copy
     const copy = appCopy.steps[state.app.step];
@@ -81,7 +81,6 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
     const { first, dynamic, last } = state.app.steps;
     const steps = [...first, ...dynamic, ...last];
     const stepIndex = steps.findIndex(s => s.name === state.app.step);
-    
 
     // Create Local State
     const [localState, setLocalState] = useObjectState({
@@ -91,7 +90,6 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
 
     // Create Refs
     const element = useRef();
-
 
     // Create Function To Toggle Menu
     const toggleMenu = async () => {
@@ -129,14 +127,20 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
         if (!target) return () => console.warn('This is either the first or last step. Please provide a custom function to run for this step.');
 
         // Return Navigation Function
-        return async () => {
-            dispatch({
-                type: "SET_APP_STEP",
-                payload: target
-            });
-        }        
+        return () => transition.to(target);
 
     }
+
+    // Set Up Transition
+    useEffect(() => {
+        transition.set(element.current);
+    })
+
+
+    // Apply UseEffect
+    useEffect(() => {
+        if (!showLoader) transition.in();
+    }, [showLoader]);
 
 
     // Create Markup
@@ -144,21 +148,23 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
         <div className="booking__card" ref={element}>
             <div className="booking-card">
 
-                <div className="booking-card__nav">
+                <div className="booking-card__nav" style={{
+                    opacity: showLoader ? 0 : 1
+                }}>
                     <IconButton
                         color="white"
                         size="lg"
                         icon="arrow-back"
-                        animationClass="no-animate"
+                        animationClass="animate-fade"
                         onClick={navigate(-1)}
                         { ...(back || {})}
                     />
-                    <h6 className="white" onClick={toggleMenu}>{title}</h6>
+                    <h6 className="white animate-fade" onClick={toggleMenu}>{title}</h6>
                     <IconButton
                         color="white"
                         size="lg"
                         icon="expand"
-                        animationClass="no-animate"
+                        animationClass="animate-fade"
                         disabled={disableExpand}
                         id="bc-expand"
                         onClick={toggleMenu}
@@ -183,7 +189,7 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
                                     await toggleMenu();
 
                                     // Navigate to Next Step
-                                    await navigate(step.name)();
+                                    navigate(step.name)();
 
                                 }}
                             >
@@ -230,10 +236,11 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
                             </div>
                             
                             <div className="booking-card__next">
-                                {next && typeof next === 'object' && (
+                                {(next !== false) && (
                                     <Button
                                         text={nextCopy}
                                         onClick={navigate(1)}
+                                        disabled={!steps[stepIndex].complete}
                                         {...(next || {})}
                                     />
                                 )}

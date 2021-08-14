@@ -32,7 +32,7 @@ const setSteps = (m) => {
     })) }, 'steps');
 
     // Finally, Validate and return new state
-    return m.validate('ServiceType', m.state.reservation.serviceType)
+    return m.validate('ServiceType');
 
 }
 
@@ -79,7 +79,9 @@ const reducer = (state, action) => {
                 return setSteps(m);
     
             case 'flight-number':
-                return m.merge({ number: PL }, 'flight')
+                m.merge({ number: PL }, 'flight');
+                return m.validate('FlightLocation');
+                
 
             case 'flight-time':
                 return m.merge({time: PL}, 'flight')
@@ -142,7 +144,8 @@ const reducer = (state, action) => {
     else if (method === 'set') {
         switch(type) {
             case 'step':
-                return m.merge({ step: PL })
+                m.merge({ step: PL });
+                return m.validate(PL);
             case 'airports':
                 return m.merge({ airports: [ ...PL ] })
             case 'user':

@@ -50,6 +50,7 @@ const state = {
     },
     app: {
         step: 'ServiceType',
+        // step: 'FlightLocation',
         steps: {
             first: [{
                 name: 'ServiceType',

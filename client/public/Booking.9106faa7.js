@@ -918,6 +918,7 @@ var _Map = _interopRequireDefault(require("./components/Map"));
 var _BookingLoader = _interopRequireDefault(require("./components/BookingLoader"));
 var _ServiceType = _interopRequireDefault(require("./steps/ServiceType"));
 var _FlightLocation = _interopRequireDefault(require("./steps/FlightLocation"));
+var _Transition = _interopRequireDefault(require("./helpers/Transition"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -955,32 +956,35 @@ function _interopRequireWildcard(obj) {
 // Import Store
 // Import Components
 // Import Steps
+// Import Helpers
+// Create Locale
 const locales = {
     en: _en.default,
     es: _es.default
-}; // // Import Tools
-// import axios from 'axios';
-// import Validator from './helpers/Validator';
-// import Transition from './helpers/Transition';
-// Register Steps
+}; // Register Steps
 const steps = {
     ServiceType: _ServiceType.default,
     FlightLocation: _FlightLocation.default
-}; // Create Booking App
+};
+const bindDispatcher = (dispatcher, type)=>(key, data)=>type && key && dispatcher({
+            type: "".concat(type, "_").concat(key),
+            payload: data
+        })
+; // Create Booking App
 const BookingApp = (_ref)=>{
     let { copy  } = _ref;
-    const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default);
-    const update = (type)=>(key, data)=>type && key && dispatch({
-                type: "".concat(type, "_").concat(key),
-                payload: data
-            })
-    ;
-    const Step = steps[state.app.step] || _BookingLoader.default;
+    // Set up Stae
+    const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default); // Get Current Stap
+    const Step = steps[state.app.step] || _BookingLoader.default; // Create Action Dispatcher
+    const updateApp = bindDispatcher(dispatch, "SET_APP");
+    const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
     return(/*#__PURE__*/ _react.default.createElement(_context.default.Provider, {
         value: {
             state,
-            dispatch,
-            appCopy: copy
+            update,
+            updateApp,
+            appCopy: copy,
+            transition: new _Transition.default(updateApp)
         }
     }, /*#__PURE__*/ _react.default.createElement(_pickers.MuiPickersUtilsProvider, {
         utils: _dayjs.default,
@@ -990,10 +994,10 @@ const BookingApp = (_ref)=>{
     }, /*#__PURE__*/ _react.default.createElement("section", {
         className: "booking"
     }, /*#__PURE__*/ _react.default.createElement(_Map.default, {
-        update: update("SET_APP")
+        update: updateApp
     }), state.app.map ? /*#__PURE__*/ _react.default.createElement(Step, {
-        updateApp: update("SET_APP"),
-        update: update("UPDATE_RESERVATION"),
+        updateApp: updateApp,
+        update: update,
         copy: copy.steps[state.app.step]
     }) : /*#__PURE__*/ _react.default.createElement(_BookingLoader.default, null))))));
 };
@@ -1008,7 +1012,7 @@ $RefreshReg$(_c, "BookingApp");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","./store/context":"2o6qx","@material-ui/pickers":"5p95O","@date-io/dayjs":"2nWYV","./store/initialState":"Ab8BJ","./store/reducer":"8zh0y","./components/Map":"6uBK2","./components/BookingLoader":"5ToZm","./steps/ServiceType":"4rFBN","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./steps/FlightLocation":"xx0VC","@material-ui/styles":"7rIOn","../data/materialTheme":"2hCIB","dayjs/locale/en":"28mEA","dayjs/locale/es":"7ypMW"}],"3qVBT":[function(require,module,exports) {
+},{"react":"3qVBT","./store/context":"2o6qx","@material-ui/pickers":"5p95O","@date-io/dayjs":"2nWYV","./store/initialState":"Ab8BJ","./store/reducer":"8zh0y","./components/Map":"6uBK2","./components/BookingLoader":"5ToZm","./steps/ServiceType":"4rFBN","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","./steps/FlightLocation":"xx0VC","@material-ui/styles":"7rIOn","../data/materialTheme":"2hCIB","dayjs/locale/en":"28mEA","dayjs/locale/es":"7ypMW","./helpers/Transition":"3PuMF"}],"3qVBT":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -47201,6 +47205,7 @@ const state = {
     },
     app: {
         step: 'ServiceType',
+        // step: 'FlightLocation',
         steps: {
             first: [
                 {
@@ -47314,7 +47319,7 @@ const setSteps = (m)=>{
             })
         )
     }, 'steps'); // Finally, Validate and return new state
-    return m.validate('ServiceType', m.state.reservation.serviceType);
+    return m.validate('ServiceType');
 };
 const setAirport = (m, PL)=>{
     var _m$state$app$airports;
@@ -47360,9 +47365,10 @@ const reducer = (state, action)=>{
             });
             return setSteps(m);
         case 'flight-number':
-            return m.merge({
+            m.merge({
                 number: PL
             }, 'flight');
+            return m.validate('FlightLocation');
         case 'flight-time':
             return m.merge({
                 time: PL
@@ -47438,9 +47444,10 @@ const reducer = (state, action)=>{
     }
     else if (method === 'set') switch(type){
         case 'step':
-            return m.merge({
+            m.merge({
                 step: PL
             });
+            return m.validate(PL);
         case 'airports':
             return m.merge({
                 airports: [
@@ -47492,9 +47499,38 @@ class Merger {
         this.category = c === 'app' ? 'reservation' : 'app';
         return this;
     }
-    validate(step, valid) {
+    getConditions(step) {
+        var _flight$airport;
+        // Desctructure Conditions
+        const r = this.state.reservation;
+        const { flight  } = r;
+        switch(step){
+            case 'ServiceType':
+                return [
+                    r.serviceType
+                ];
+            case 'FlightLocation':
+                return [
+                    flight.airline,
+                    flight.number,
+                    (_flight$airport = flight.airport) === null || _flight$airport === void 0 ? void 0 : _flight$airport.code
+                ];
+            default:
+                return [];
+        }
+    }
+    checkConditions(step) {
+        // Create Flag Variable
+        let valid = true; // Get Conditions
+        const conditions = this.getConditions(step); // Loop Through and check conditions
+        conditions.forEach((cond)=>{
+            if (!cond) valid = false;
+        });
+        return valid;
+    }
+    validate(step) {
         // Coerce Boolean Value
-        const isValid = !!valid; // Create Shortcut Reference
+        const isValid = this.checkConditions(step); // Create Shortcut Reference
         const app = this.state.app; // Destructure and construct array
         const { first: f , dynamic: d , last: l  } = app.steps;
         const steps = [
@@ -47874,9 +47910,6 @@ const ServiceType = (_ref)=>{
         back: {
             disabled: true
         },
-        next: {
-            disabled: !selected
-        },
         disableExpand: !serviceType,
         footer: selected && {
             title: selected.title,
@@ -48014,7 +48047,7 @@ const closeMenu = (e)=>{
 const BookingCard = (_ref)=>{
     let { children , next , back , showLoader , footer , disableExpand  } = _ref;
     // Get App Context
-    const { state , dispatch , appCopy  } = _react.useContext(_context.default); // Get Copy
+    const { state , transition , appCopy  } = _react.useContext(_context.default); // Get Copy
     const copy = appCopy.steps[state.app.step];
     const { title , heading , text , next: nextCopy  } = copy || {
     }; // Get Steps
@@ -48053,35 +48086,42 @@ const BookingCard = (_ref)=>{
         const target = typeof delta === 'string' ? delta : (_steps = steps[stepIndex + delta]) === null || _steps === void 0 ? void 0 : _steps.name; // Prevent Another Dev Errors
         if (!target) return ()=>console.warn('This is either the first or last step. Please provide a custom function to run for this step.')
         ; // Return Navigation Function
-        return async ()=>{
-            dispatch({
-                type: "SET_APP_STEP",
-                payload: target
-            });
-        };
-    }; // Create Markup
+        return ()=>transition.to(target)
+        ;
+    }; // Set Up Transition
+    _react.useEffect(()=>{
+        transition.set(element.current);
+    }); // Apply UseEffect
+    _react.useEffect(()=>{
+        if (!showLoader) transition.in();
+    }, [
+        showLoader
+    ]); // Create Markup
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "booking__card",
         ref: element
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card"
     }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__nav"
+        className: "booking-card__nav",
+        style: {
+            opacity: showLoader ? 0 : 1
+        }
     }, /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, _extends({
         color: "white",
         size: "lg",
         icon: "arrow-back",
-        animationClass: "no-animate",
+        animationClass: "animate-fade",
         onClick: navigate(-1)
     }, back || {
     })), /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "white",
+        className: "white animate-fade",
         onClick: toggleMenu
     }, title), /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, {
         color: "white",
         size: "lg",
         icon: "expand",
-        animationClass: "no-animate",
+        animationClass: "animate-fade",
         disabled: disableExpand,
         id: "bc-expand",
         onClick: toggleMenu
@@ -48108,7 +48148,7 @@ const BookingCard = (_ref)=>{
             onClick: async ()=>{
                 // Close The menu
                 await toggleMenu(); // Navigate to Next Step
-                await navigate(step.name)();
+                navigate(step.name)();
             }
         }, /*#__PURE__*/ _react.default.createElement("span", null, appCopy.steps[step.name].title), step.complete && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
             icon: "checkmark",
@@ -48143,9 +48183,10 @@ const BookingCard = (_ref)=>{
         className: $.join("small", aI)
     }, footer.text) : footer.text))), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-card__next"
-    }, next && typeof next === 'object' && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, _extends({
+    }, next !== false && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, _extends({
         text: nextCopy,
-        onClick: navigate(1)
+        onClick: navigate(1),
+        disabled: !steps[stepIndex].complete
     }, next || {
     }))))))));
 }; // Export Component
@@ -48449,10 +48490,9 @@ var _context = _interopRequireDefault(require("../store/context"));
 var _BookingCard = _interopRequireDefault(require("../components/BookingCard"));
 var _Dropdown = _interopRequireDefault(require("../../components/Dropdown"));
 var _Input = _interopRequireDefault(require("../../components/Input"));
-var _Autocomplete = _interopRequireDefault(require("../../components/Autocomplete"));
+var _AirlineSearch = _interopRequireDefault(require("../components/AirlineSearch"));
 var _DateTimePicker = _interopRequireDefault(require("../../components/DateTimePicker"));
 var _axios = _interopRequireDefault(require("axios"));
-var _hooks = require("../../helpers/hooks");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -48496,28 +48536,26 @@ const FlightLocation = (_ref)=>{
     // Destructure Global State
     const { state  } = _react.useContext(_context.default);
     const { airports  } = state.app; // Create Local State
-    const [localState, setLocalState] = _hooks.useObjectState({
-        date: null,
-        dateTimeStatus: null,
-        airlines: null
-    }); // Fetch Data On Mount
+    const [airlines, setAirlines] = _react.useState();
+    const [loaded, setLoaded] = _react.useState(false); // Fetch Data On Mount
     _react.useEffect(()=>{
-        if (!state.app.airports) _axios.default('/api/data/airports').then((res)=>updateApp('AIRPORTS', res.data)
-        );
-        if (!localState.airlines) _axios.default('/api/data/airlines').then((res)=>setLocalState({
-                airlines: res.data
-            })
-        );
+        const load = async ()=>{
+            const timer = $.timer(1000).start();
+            const promises = [
+                _axios.default('/api/data/airlines').then((res)=>setAirlines(res.data)
+                )
+            ];
+            if (!state.app.airports) promises.push(_axios.default('/api/data/airports').then((res)=>updateApp('AIRPORTS', res.data)
+            ));
+            await Promise.all(promises);
+            await timer.hold();
+            setLoaded(true);
+        };
+        if (!loaded) load();
     }, []);
-    console.log(copy); // Validate Fields
-    const airlineErrors = [];
-    const flightNumErrors = [];
     return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
         back: true,
-        next: {
-            disabled: false
-        },
-        showLoader: !airports || !localState.airlines
+        showLoader: !loaded
     }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement(_Dropdown.default, {
         id: "airport-select",
         label: copy.labels[0],
@@ -48529,34 +48567,21 @@ const FlightLocation = (_ref)=>{
         ),
         selected: state.reservation.flight.airport.code,
         onSelect: (selected)=>update('AIRPORT', selected.value)
-        ,
-        errors: []
     })), /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement("h5", {
         className: "animate-item"
-    }, copy.infoTitle), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+    }, copy.infoTitle), /*#__PURE__*/ _react.default.createElement(_AirlineSearch.default, {
+        id: "airline-search",
+        label: copy.labels[1],
+        placeholder: copy.placeholders[1],
+        airlines: airlines !== null && airlines !== void 0 ? airlines : {
+        },
+        onChange: (val)=>update('AIRLINE', val)
+    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
         id: "flight-num-input",
         icon: "ticket",
         label: copy.labels[2],
         placeholder: copy.placeholders[2],
-        errors: flightNumErrors
-    })), /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement("h5", null, "Date Time Picker Test"), /*#__PURE__*/ _react.default.createElement(_DateTimePicker.default, {
-        value: localState.date,
-        onChange: (val)=>setLocalState({
-                date: val
-            })
-        ,
-        onStatusChange: (val)=>setLocalState({
-                dateTimeStatus: val
-            })
-        ,
-        datePicker: {
-            label: "Date",
-            placeholder: "Select Date"
-        },
-        timePicker: {
-            label: "Time",
-            placeholder: "Select Time"
-        }
+        onChange: (val)=>update("FLIGHT-NUMBER", val)
     }))));
 }; // Export Step
 _c = FlightLocation;
@@ -48570,7 +48595,7 @@ $RefreshReg$(_c, "FlightLocation");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Input":"16GiB","../../components/Dropdown":"6OAua","axios":"5FCRD","../../components/DateTimePicker":"6guMX","../../helpers/hooks":"4wqYR","../../components/Autocomplete":"2SP09"}],"16GiB":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../components/Input":"16GiB","../../components/Dropdown":"6OAua","axios":"5FCRD","../../components/DateTimePicker":"6guMX","../components/AirlineSearch":"5vBTE"}],"16GiB":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -48730,7 +48755,7 @@ const Dropdown = (_ref)=>{
     const value = (typeof selected === 'object' ? selected.value : selected) || -1; // Determine if the Dropdown has errors
     const hasErrors = errors && errors.length > 0; // Create Dropdown Component
     return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "dropdown"
+        className: "dropdown animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: $.join("dropdown__select", [
             hasErrors,
@@ -48950,7 +48975,108 @@ $RefreshReg$(_c3, "DateTimePicker");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@material-ui/pickers":"5p95O","./Icon":"4VYCM","../helpers/hooks":"4wqYR"}],"2SP09":[function(require,module,exports) {
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@material-ui/pickers":"5p95O","./Icon":"4VYCM","../helpers/hooks":"4wqYR"}],"5vBTE":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Autocomplete = _interopRequireDefault(require("../../components/Autocomplete"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import React Defaults
+// Import Components
+// Helper Function To Get 
+const getOptions = (_ref)=>{
+    let { term , airlines , first: f  } = _ref;
+    if (!term || !term.length) return {
+        index: '',
+        options: []
+    };
+    const first = f !== null && f !== void 0 ? f : term[0].toLowerCase();
+    return {
+        index: first,
+        options: airlines[first] || []
+    };
+}; // Export Component
+const AirlineSearch = (_ref2)=>{
+    let { id , icon , label , placeholder , errors , airlines , onChange  } = _ref2;
+    const [options, setOptions] = _react.useState(getOptions({
+        airlines
+    }));
+    const onInputChange = (e, term)=>{
+        if (!e) return;
+        if (onChange) onChange(term);
+        if (term.length > 1) return;
+        const first = term ? term[0].toLowerCase() : '';
+        if (first !== options.index) setOptions(getOptions({
+            first,
+            airlines,
+            term
+        }));
+    };
+    console.log(options);
+    return(/*#__PURE__*/ _react.default.createElement(_Autocomplete.default, {
+        id: id,
+        icon: icon || "airplane",
+        label: label,
+        placeholder: placeholder,
+        errors: errors,
+        options: options.options,
+        onInputChange: onInputChange,
+        limit: 5,
+        freeSolo: true
+    }));
+};
+_c = AirlineSearch;
+var _default = AirlineSearch;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AirlineSearch");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../components/Autocomplete":"2SP09","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"2SP09":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -48964,6 +49090,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _Autocomplete = _interopRequireWildcard(require("@material-ui/lab/Autocomplete"));
+var _Icon = _interopRequireDefault(require("./Icon"));
 function _getRequireWildcardCache() {
     if (typeof WeakMap !== "function") return null;
     var cache = new WeakMap();
@@ -48996,10 +49123,72 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
-// Create Component
-const Autocomplete = (_ref)=>{
-    let { id , options  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("div", null));
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const createInput = (_ref)=>{
+    let { icon , label , placeholder  } = _ref;
+    return (_ref2)=>{
+        let { inputProps: props , InputProps: { ref  }  } = _ref2;
+        return(/*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__input",
+            ref: ref
+        }, /*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__main"
+        }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: icon,
+            size: "lg"
+        }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__field"
+        }, /*#__PURE__*/ _react.default.createElement("label", {
+            htmlFor: props.id
+        }, label), /*#__PURE__*/ _react.default.createElement("input", _extends({
+        }, props, {
+            type: "text",
+            className: $.join("input__text-input", props.className),
+            placeholder: placeholder
+        }))))));
+    };
+}; // Create Component
+const Autocomplete = (_ref3)=>{
+    let { id , icon , label , placeholder , errors , options , onChange , onInputChange , customProps , value , freeSolo , limit  } = _ref3;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "input animate-item"
+    }, /*#__PURE__*/ _react.default.createElement(_Autocomplete.default, _extends({
+        id: id,
+        options: options,
+        renderInput: createInput({
+            label,
+            placeholder,
+            icon
+        }),
+        onChange: onChange,
+        onInputChange: onInputChange,
+        value: value,
+        freeSolo: freeSolo,
+        filterOptions: _Autocomplete.createFilterOptions({
+            limit
+        })
+    }, customProps || {
+    })), errors && errors.length > 0 && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__error",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
 };
 _c = Autocomplete;
 var _default = Autocomplete;
@@ -49012,7 +49201,7 @@ $RefreshReg$(_c, "Autocomplete");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","@material-ui/lab/Autocomplete":"5FwX3","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"5FwX3":[function(require,module,exports) {
+},{"react":"3qVBT","@material-ui/lab/Autocomplete":"5FwX3","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"5FwX3":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "default", ()=>_autocompleteDefault.default
@@ -69758,7 +69947,107 @@ exports.default = _default;
     return s.default.locale(d, null, true), d;
 });
 
-},{"dayjs":"2UVMx"}],"4R7YP":[function(require,module,exports) {
+},{"dayjs":"2UVMx"}],"3PuMF":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+class Transition {
+    set(container) {
+        this.container = $(container);
+        this.navbar = this.container.children(".animate-fade").e();
+        this.targets = this.container.children(".animate-item").e();
+    }
+    async to(step) {
+        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+        await this.out();
+        await $.delay(delay);
+        this.setStep(step);
+    }
+    in() {
+        // Create Timeline
+        const tl = _animejs.default.timeline({
+            easing: 'easeInOutQuad',
+            duration: 250
+        }); // Add Default Animation
+        tl.add({
+            targets: this.targets,
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        }); // Fade Out Navbar
+        tl.add({
+            targets: this.navbar,
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                150
+            ])
+        }); // Return Promise to be awaited
+        return tl.finished;
+    }
+    out() {
+        // Create Timeline
+        const tl = _animejs.default.timeline({
+            easing: 'easeInOutQuad',
+            duration: 250
+        }); // Fade In Navbar
+        tl.add({
+            targets: this.navbar,
+            opacity: [
+                1,
+                0
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                150
+            ])
+        }); // Add Default Animation
+        tl.add({
+            targets: this.targets,
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
+            opacity: 0,
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        }, '-=250'); // Return Promise to be awaited
+        return tl.finished;
+    }
+    // Create Dispatcher
+    constructor(dispatcher){
+        this.setStep = (step)=>dispatcher("STEP", step)
+        ;
+    }
+}
+exports.default = Transition;
+
+},{"animejs":"1GvRs"}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

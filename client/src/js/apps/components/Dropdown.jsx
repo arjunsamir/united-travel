@@ -25,7 +25,7 @@ const Dropdown = ({ placeholder, label, errors, onSelect, selected, id, options 
 
     // Create Dropdown Component
     return (
-        <div className="dropdown">
+        <div className="dropdown animate-item">
             <div className={$.join("dropdown__select", [hasErrors, "has-error"])}>
                 <select
                     id={id}

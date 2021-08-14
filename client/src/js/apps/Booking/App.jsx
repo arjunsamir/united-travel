@@ -22,15 +22,16 @@ import Loader from './components/BookingLoader';
 import ServiceType from "./steps/ServiceType";
 import FlightLocation from "./steps/FlightLocation";
 
+// Import Helpers
+import Transition from './helpers/Transition';
+
+
+// Create Locale
 const locales = {
     en: enLocale,
     es: esLocale
 };
 
-// // Import Tools
-// import axios from 'axios';
-// import Validator from './helpers/Validator';
-// import Transition from './helpers/Transition';
 
 // Register Steps
 const steps = {
@@ -38,28 +39,43 @@ const steps = {
     FlightLocation
 };
 
+const bindDispatcher = (dispatcher, type) => (key, data) => type && key && dispatcher({
+    type: `${type}_${key}`,
+    payload: data
+});
+
 // Create Booking App
 const BookingApp = ({ copy }) => {
 
+    // Set up Stae
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const update = (type) => (key, data) => type && key && dispatch({
-        type: `${type}_${key}`,
-        payload: data
-    });
 
+    // Get Current Stap
     const Step = steps[state.app.step] || Loader;
 
+
+    // Create Action Dispatcher
+    const updateApp = bindDispatcher(dispatch, "SET_APP");
+    const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
+
+    
     return (
-        <AppContext.Provider value={{ state, dispatch, appCopy: copy }}>
+        <AppContext.Provider value={{ 
+            state,
+            update,
+            updateApp,
+            appCopy: copy,
+            transition: new Transition(updateApp)
+        }}>
             <MuiPickersUtilsProvider utils={DayjsUtils} locale={locales[window.locale]}>
                 <ThemeProvider theme={theme}>
                     <section className="booking">
-                        <Map update={update("SET_APP")} />
+                        <Map update={updateApp} />
                         {state.app.map ? 
                             <Step
-                                updateApp={update("SET_APP")}
-                                update={update("UPDATE_RESERVATION")}
+                                updateApp={updateApp}
+                                update={update}
                                 copy={copy.steps[state.app.step]}
                             /> 
                             : 

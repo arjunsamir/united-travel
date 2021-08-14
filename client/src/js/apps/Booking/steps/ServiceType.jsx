@@ -24,7 +24,6 @@ const ServiceType = ({ update, updateApp, copy }) => {
     return (
         <BookingCard
             back={{ disabled: true }}
-            next={{ disabled: !selected }}
             disableExpand={!serviceType}
             footer={selected && {
                 title: selected.title,

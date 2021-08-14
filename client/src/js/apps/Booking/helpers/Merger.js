@@ -27,10 +27,46 @@ export default class Merger {
         return this;
     }
 
-    validate(step, valid) {
+    getConditions(step) {
+
+        // Desctructure Conditions
+        const r = this.state.reservation;
+        const { flight } = r;
+
+        switch (step) {
+            case 'ServiceType':
+                return [r.serviceType];
+
+            case 'FlightLocation':
+                return [flight.airline, flight.number, flight.airport?.code];
+
+            default:
+                return [];
+        }
+
+    }
+
+    checkConditions(step) {
+ 
+        // Create Flag Variable
+        let valid = true;
+
+        // Get Conditions
+        const conditions = this.getConditions(step);
+
+        // Loop Through and check conditions
+        conditions.forEach(cond => {
+            if (!cond) valid = false;
+        });
+
+        return valid;
+
+    }
+
+    validate(step) {
 
         // Coerce Boolean Value
-        const isValid = !!valid;
+        const isValid = this.checkConditions(step);
 
         // Create Shortcut Reference
         const app = this.state.app;
