@@ -14,7 +14,6 @@ import BookingCard from "../components/BookingCard";
 import Dropdown from '../../components/Dropdown';
 import Input from '../../components/Input';
 import AirlineSearch from '../components/AirlineSearch';
-import DateTimePicker from '../../components/DateTimePicker';
 
 
 // Import Helpers
@@ -27,6 +26,7 @@ const FlightLocation = ({ update, updateApp, copy }) => {
     // Destructure Global State
     const { state } = useContext(AppContext);
     const { airports } = state.app;
+    const { flight } = state.reservation;
 
 
     // Create Local State
@@ -73,7 +73,7 @@ const FlightLocation = ({ update, updateApp, copy }) => {
                        text: `${apt.code} - ${apt.name}`,
                        value: apt.code
                    }))}
-                   selected={state.reservation.flight.airport.code}
+                   selected={flight.airport.code}
                    onSelect={(selected) => update('AIRPORT', selected.value)}
                 />
 
@@ -88,6 +88,7 @@ const FlightLocation = ({ update, updateApp, copy }) => {
                     label={copy.labels[1]}
                     placeholder={copy.placeholders[1]}
                     airlines={airlines ?? {}}
+                    value={flight.airline}
                     onChange={(val) => update('AIRLINE', val)}
                 />
 
@@ -96,27 +97,11 @@ const FlightLocation = ({ update, updateApp, copy }) => {
                     icon="ticket"
                     label={copy.labels[2]}
                     placeholder={copy.placeholders[2]}
+                    value={flight.number}
                     onChange={(val) => update("FLIGHT-NUMBER", val)}
                 />
 
             </fieldset>
-
-            {/* <fieldset>
-                <h5>Date Time Picker Test</h5>
-                <DateTimePicker
-                    value={localState.date}
-                    onChange={(val) => setLocalState({ date: val })}
-                    onStatusChange={(val) => setLocalState({ dateTimeStatus: val })}
-                    datePicker={{
-                        label: "Date",
-                        placeholder: "Select Date"
-                    }}
-                    timePicker={{
-                        label: "Time",
-                        placeholder: "Select Time"
-                    }}
-                />
-            </fieldset> */}
 
         </BookingCard>
     )

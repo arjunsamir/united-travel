@@ -39,25 +39,31 @@
         justify-content: center;
         padding: var(--x-pad) 4.8rem;
 
-        overflow-y: hidden;
+        // overflow-y: hidden;
     }
 
 }
 
 .booking-card {
+
+    // Declare Custom Properties
+    --card-gap: 3.2rem;
+    --card-nav-height: 7.6rem;
+    --card-width: 44rem;
+    --card-body-padding-x: 3.6rem;
+    --card-body-padding-y: 4.8rem;
+
     flex-grow: 10;
     display: flex;
     flex-direction: column;
 
     position: relative;
-    width: 44rem;
+    width: var(--card-width);
 
     box-shadow: $soft-shadow;
     background-color: var(--black);
     border-radius: 2rem;
 
-    --card-gap: 3.2rem;
-    --card-nav-height: 7.6rem;
 
     &__loader {
         flex-grow: 10;
@@ -100,6 +106,7 @@
         }
     }
 
+
     &__steps {
         @include blockGap(1.2rem);
         padding-bottom: var(--card-gap);
@@ -133,6 +140,17 @@
         }
     }
 
+    &__header {
+        @include blockGap(1.6rem);
+        user-select: none;
+
+        a {
+            @include link {
+                color: var(--google);
+            }
+        }
+    }
+
     &__body {
         position: relative;
 
@@ -141,7 +159,7 @@
         flex-direction: column;
 
         background-color: var(--white);
-        padding: 4.8rem 3.6rem;
+        padding: var(--card-body-padding-y) var(--card-body-padding-x);
         border-radius: 2rem;
 
         &-esc {
@@ -173,6 +191,12 @@
             display: block;
             @include blockGap(1.6rem);
         }
+
+        &.flex-col {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
     }
 
     &__footer {
@@ -187,4 +211,30 @@
             margin-bottom: 0.8rem;
         }
     }
+
+
+    &__route {
+        display: flex;
+        align-items: center;
+
+        @include flexGap(3.2rem);
+
+        div {
+            display: flex;
+            align-items: center;
+        }
+
+        svg {
+            color: var(--slate-dark);
+            margin-right: 0.8rem;
+        }
+
+        p {
+           color: var(--slate); 
+        }
+    }
+}
+
+#booking-react-app {
+    overflow-y: hidden;
 }

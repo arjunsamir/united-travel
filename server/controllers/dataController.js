@@ -11,3 +11,11 @@ exports.getAirlines = (req, res) => {
 exports.getMapData = (req, res) => {
     res.sendFile(path.join(__dirname, '../data/config/map.json'))
 }
+
+exports.getPorts = (req, res) => {
+    res.sendFile(path.join(__dirname, '../data/aviation/ports.json'))
+}
+
+exports.getCruiseLines = (req, res) => {
+    res.sendFile(path.join(__dirname, '../data/aviation/cruise-lines.json'))
+}

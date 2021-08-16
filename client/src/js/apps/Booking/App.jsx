@@ -4,11 +4,17 @@ import React, { useReducer, useRef } from "react";
 // Import Contexts
 import AppContext from "./store/context";
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+
+
+// Import Date Time Libraries
 import DayjsUtils from '@date-io/dayjs'
 import enLocale from 'dayjs/locale/en';
 import esLocale from 'dayjs/locale/es';
+
+// Import Theming
 import { ThemeProvider } from '@material-ui/styles';
 import theme from '../data/materialTheme';
+
 
 // Import Store
 import initialState from './store/initialState';
@@ -20,7 +26,16 @@ import Loader from './components/BookingLoader';
 
 // Import Steps
 import ServiceType from "./steps/ServiceType";
+import PickupTime from './steps/PickupTime';
 import FlightLocation from "./steps/FlightLocation";
+import FlightSchedule from "./steps/FlightSchedule";
+import CruiseLocation from "./steps/CruiseLocation";
+import CruiseSchedule from "./steps/CruiseSchedule";
+import Route from "./steps/Route";
+import Passengers from './steps/Passengers';
+import Vehicle from './steps/Vehicle';
+import ChildSeats from './steps/ChildSeats';
+import Notes from './steps/Notes';
 
 // Import Helpers
 import Transition from './helpers/Transition';
@@ -36,7 +51,16 @@ const locales = {
 // Register Steps
 const steps = {
     ServiceType,
-    FlightLocation
+    PickupTime,
+    FlightLocation,
+    FlightSchedule,
+    CruiseLocation,
+    CruiseSchedule,
+    Route,
+    Passengers,
+    Vehicle,
+    ChildSeats,
+    Notes
 };
 
 const bindDispatcher = (dispatcher, type) => (key, data) => type && key && dispatcher({
@@ -59,7 +83,7 @@ const BookingApp = ({ copy }) => {
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
 
-    
+
     return (
         <AppContext.Provider value={{ 
             state,
@@ -71,7 +95,7 @@ const BookingApp = ({ copy }) => {
             <MuiPickersUtilsProvider utils={DayjsUtils} locale={locales[window.locale]}>
                 <ThemeProvider theme={theme}>
                     <section className="booking">
-                        <Map update={updateApp} />
+                        <Map />
                         {state.app.map ? 
                             <Step
                                 updateApp={updateApp}

@@ -68,7 +68,7 @@ const closeMenu = (e) => {
 
 
 // Create Component
-const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }) => {
+const BookingCard = ({ children, next, back, showLoader, footer, disableExpand, customText, contentClass }) => {
 
     // Get App Context
     const { state, transition, appCopy } = useContext(AppContext);
@@ -214,11 +214,11 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
                         </div>
                     ) : (
                         <>
-                            <div className="booking-card__content">
+                            <div className={$.join("booking-card__content", [contentClass])}>
                                 {(heading || text) && (
                                     <div className="booking-card__header">
                                         {heading && <h5 className={aI}>{heading}</h5>}
-                                        {text && <p className={aI}>{text}</p>}
+                                        {customText ? customText : (text && <p className={$.join("small", aI)}>{text}</p>)}
                                     </div>
                                 )}
 
@@ -238,9 +238,9 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand }
                             <div className="booking-card__next">
                                 {(next !== false) && (
                                     <Button
-                                        text={nextCopy}
+                                        text={nextCopy || appCopy.common.next}
                                         onClick={navigate(1)}
-                                        disabled={!steps[stepIndex].complete}
+                                        disabled={!steps[stepIndex]?.complete}
                                         {...(next || {})}
                                     />
                                 )}

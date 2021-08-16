@@ -3650,7 +3650,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
 const bemify = (block)=>{
     return (element)=>element ? "".concat(block, "__").concat(element) : block
     ;
@@ -3705,6 +3705,12 @@ const lettersOnly = (val)=>{
     return val.replace(/[^A-Za-z ]+$/, '');
 };
 exports.lettersOnly = lettersOnly;
+const toHalf = (val)=>{
+    const [integer, decimal] = val.toString().split('.');
+    if (!decimal) return val;
+    else return "".concat(integer, " 1/2");
+};
+exports.toHalf = toHalf;
 
 },{}],"7cRna":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");

@@ -2,6 +2,9 @@ import Merger from '../helpers/Merger';
 
 import initialState from './initialState';
 
+import dayjs from 'dayjs';
+
+// Set Current Steps
 const setSteps = (m) => {
 
     // Switch Merger To Aoo State
@@ -37,29 +40,49 @@ const setSteps = (m) => {
 }
 
 
-const setAirport = (m, PL) => {
+// Stet Current Port
+const setServicePort = (m, PL, { portType, service }) => {
 
-    const airport = m.state.app.airports.find(apt => apt.code === PL) ?? m.state.reservation.flight.airport
+    const port = m.state.app[`${portType}s`].find(p => p.code === PL) ?? m.state.reservation[service][portType]
 
     // Destructure Properties
-    const { placeId, address, name } = airport;
+    const { placeId, address, name } = port;
 
     // Update Airport
-    m.merge({ airport: { ...airport } }, 'flight')
+    m.merge({ [portType]: { ...port } }, service)
     
     // Update Origin/Destination
-    switch (m.state.reservation.flight.type) {
-        case 'arriving':
-            m.merge({ origin: { placeId, address, name } })
-            break;
+    switch (m.state.reservation[service].type) {
         case 'departing':
             m.merge({ destination: { placeId, address, name }})
+            m.merge({ origin: { ...initialState.reservation.origin } });
             break;
+
+        default:
+            m.merge({ origin: { placeId, address, name } })
+            m.merge({ destination: { ...initialState.reservation.destination } });
     }
 
     return m.state;
 }
 
+
+const setServiceTime = (m, key) => {
+
+    const { reservation } = m.state;
+    const { type, time, buffer } = reservation[key];
+
+    if (type === 'departing') {
+        // Add Buffer
+        if (!buffer) return;
+        reservation.schedule.dropoff = dayjs(time).subtract(buffer, 'hours').format('YYYY-MM-DDTHH:mm');
+    }
+    else {
+        reservation.schedule.pickup = time;
+        reservation.schedule.dropoff = null;
+    }
+
+}
 
 
 const reducer = (state, action) => {
@@ -81,27 +104,60 @@ const reducer = (state, action) => {
             case 'flight-number':
                 m.merge({ number: PL }, 'flight');
                 return m.validate('FlightLocation');
-                
+            
+            case 'cruise-ship': 
+                m.merge({ ship: PL }, 'cruise');
+                return m.validate('CruiseLocation');
 
             case 'flight-time':
-                return m.merge({time: PL}, 'flight')
+                m.merge({time: PL}, 'flight');
+                setServiceTime(m, 'flight');
+                return m.validate('FlightSchedule');
+
+            case 'cruise-time':
+                m.merge({time: PL}, 'cruise');
+                setServiceTime(m, 'cruise');
+                return m.validate('CruiseSchedule');
     
             case 'airline': 
-                return m.merge({ airline: PL }, 'flight')
+                m.merge({ airline: PL }, 'flight');
+                return m.validate('FlightLocation');
+
+            case 'cruise-line':
+                m.merge({ line: PL }, 'cruise');
+                return m.validate('CruiseLocation');
     
             case 'flight-type':
                 m.merge({ type: PL }, 'flight')
-                return setAirport(m)
+                setServicePort(m, null, { portType: 'airport', service: 'flight' });
+                return m.validate('FlightSchedule');
+
+            case 'cruise-type':
+                m.merge({ type: PL }, 'cruise');
+                setServicePort(m, null, { portType: 'port', service: 'cruise' });
+                return m.validate('CruiseSchedule');
 
             case 'flight-buffer':
-                return m.merge({ buffer: parseFloat(PL) }, 'flight')
+                m.merge({ buffer: parseFloat(PL) }, 'flight');
+                setServiceTime(m, 'flight')
+                return m.validate('FlightSchedule');
+
+            case 'cruise-buffer':
+                m.merge({ buffer: parseFloat(PL) }, 'cruise');
+                setServiceTime(m, 'cruise')
+                return m.validate('CruiseSchedule');
     
             case 'airport':
-                return setAirport(m, PL);
+                setServicePort(m, PL, { portType: 'airport', service: 'flight' });
+                return m.validate('FlightLocation');
+
+            case 'cruise-port':
+                setServicePort(m, PL, { portType: 'port', service: 'cruise' });
+                return m.validate('CruiseLocation');
     
             case 'origin':
             case 'destination':
-                return m.merge({ [type]: PL ? {
+                m.merge({ [type]: PL ? {
                     selected: { ...PL },
                     placeId: PL.place_id,
                     name: PL.structured_formatting.main_text,
@@ -112,9 +168,11 @@ const reducer = (state, action) => {
                     name: '',
                     address: ''
                 }});
+                return m.validate('Route');
     
             case 'pickup-time':
-                return m.merge({ pickup: PL }, 'schedule')
+                m.merge({ pickup: PL }, 'schedule');
+                return m.validate('PickupTime');
     
             case 'dropoff-time':
                 return m.merge({ dropoff: PL }, 'schedule')
@@ -123,17 +181,22 @@ const reducer = (state, action) => {
                 return m.merge({ route: { ...PL } })
     
             case 'passengers':
-                return m.merge({ passengers: PL });
+                m.merge({ passengers: PL });
+                return m.validate('Passengers');
+
+            case 'child-seats':
+                const [key, value] = PL;
+                m.merge({ [key]: value }, 'childSeats');
+                return m.validate('ChildSeats');
     
             case 'vehicle':
-                return m.merge({ vehicle: PL })
+                m.merge({ vehicle: PL })
+                return m.validate('Vehicle');
 
             case 'notes':
-                return m.merge({ notes: PL })
+                m.merge({ notes: PL })
+                return m.validate('Notes');
 
-            case 'quote':
-                return m.merge({ quote: { ...PL } })
-    
             case 'payment': 
                 return m.merge({ payment: { ...PL } })
             default:
@@ -148,6 +211,8 @@ const reducer = (state, action) => {
                 return m.validate(PL);
             case 'airports':
                 return m.merge({ airports: [ ...PL ] })
+            case 'ports':
+                return m.merge({ ports: [ ...PL ] })
             case 'user':
                 return m.merge({ user: { ... PL } })
             case 'map':

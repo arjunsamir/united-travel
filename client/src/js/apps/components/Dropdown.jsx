@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Icon from './Icon';
 
 
-const Dropdown = ({ placeholder, label, errors, onSelect, selected, id, options }) => {
+const Dropdown = ({ placeholder, label, errors, onSelect, selected, id, options, customClasses }) => {
 
     // Configure Local State
     const [changed, setChanged] = useState(false);
@@ -16,16 +16,15 @@ const Dropdown = ({ placeholder, label, errors, onSelect, selected, id, options 
 
 
     // Get Currently Selected Value
-    const value = (typeof selected === 'object' ? selected.value : selected) || -1;
+    const value = (selected && typeof selected === 'object' ? selected.value : selected) || -1;
 
 
     // Determine if the Dropdown has errors
     const hasErrors = errors && errors.length > 0;
 
-
     // Create Dropdown Component
     return (
-        <div className="dropdown animate-item">
+        <div className={$.join("dropdown animate-item", [customClasses])}>
             <div className={$.join("dropdown__select", [hasErrors, "has-error"])}>
                 <select
                     id={id}

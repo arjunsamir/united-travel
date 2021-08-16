@@ -9,8 +9,10 @@ const router = express.Router();
 
 // Retrieve Booking Data
 router.get('/airports', data.getAirports);
-router.get('/airlines', data.getAirlines)
-router.get('/map', data.getMapData)
+router.get('/airlines', data.getAirlines);
+router.get('/cruise-lines', data.getCruiseLines);
+router.get('/ports', data.getPorts);
+router.get('/map', data.getMapData);
 
 
 // Export Router

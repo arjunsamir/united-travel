@@ -1,0 +1,32 @@
+[
+    {
+        "code":"PC",
+        "name":"Port Canaveral",
+        "placeId":"ChIJOenR2Qen4IgRRkVPbiS4qXQ",
+        "address": "220 Christopher Columbus Dr, Cape Canaveral, FL 32920, USA"
+    },
+    {
+        "code":"PE",
+        "name":"Port Everglades",
+        "placeId":"ChIJ2wqRSWsA2YgRtp5vlrc94xM",
+        "address": "Port Everglades Terminal 1, Fort Lauderdale, FL 33316, USA"
+    },
+    {
+        "code":"PTB",
+        "name":"Port of Tampa Bay",
+        "placeId":"ChIJV8JZy_fEwogReeUyG4rpn3g",
+        "address": "1101 Channelside Dr, Tampa, FL 33602, USA"
+    },
+    {
+        "code":"PMIA",
+        "name":"Port of Miami",
+        "placeId":"ChIJwfzzDD202YgR5FP1QmpHO7w",
+        "address": "1015 N America Way #2, Miami, FL 33132, USA"
+    },
+    {
+        "code":"PJAX",
+        "name":"Port of Jacksonville",
+        "placeId":"ChIJYxPzDkqx5YgRYzqUnRW5Sdc",
+        "address": "E 18th St, Jacksonville, FL 32206, USA"
+    }
+]

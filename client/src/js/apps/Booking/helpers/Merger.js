@@ -31,7 +31,9 @@ export default class Merger {
 
         // Desctructure Conditions
         const r = this.state.reservation;
-        const { flight } = r;
+        const { flight, cruise } = r;
+
+        let c;
 
         switch (step) {
             case 'ServiceType':
@@ -39,6 +41,31 @@ export default class Merger {
 
             case 'FlightLocation':
                 return [flight.airline, flight.number, flight.airport?.code];
+
+            case 'FlightSchedule':
+                c = [flight.type, flight.time]
+                if (flight.type === 'departing') c.push(flight.buffer)
+                return c;
+
+            case 'CruiseLocation':
+                return [cruise.line, cruise.ship, cruise.port?.code];
+
+            case 'CruiseSchedule':
+                c = [cruise.type, cruise.time]
+                if (cruise.type === 'departing') c.push(cruise.buffer)
+                return c;
+
+            case 'Route':
+                return [r.origin.placeId, r.destination.placeId];
+
+            case 'PickupTime':
+                return [r.schedule.pickup];
+
+            case 'Passengers':
+                return [r.passengers];
+
+            case 'Vehicle':
+                return [!!r.vehicle]
 
             default:
                 return [];

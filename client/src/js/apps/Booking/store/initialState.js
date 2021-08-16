@@ -11,6 +11,14 @@ const state = {
             buffer: null,
             airport: {}
         },
+        cruise: {
+            ship: '',
+            line: '',
+            type: '',
+            time: null,
+            buffer: null,
+            port: {}
+        },
         origin: {
             selected: null,
             placeId: '',
@@ -32,15 +40,13 @@ const state = {
             duration: null,
             eta: null
         },
-        passengers: 1,
-        vehicle: null,
-        quote: {
-            id: '',
-            cost: 0,
-            origin: '',
-            destination: '',
-            vehicle: ''
+        passengers: '',
+        childSeats: {
+            rear: 0,
+            front: 0,
+            booster: 0
         },
+        vehicle: null,
         payment: {
             method: '',
             appliedCredit: '',
@@ -50,7 +56,6 @@ const state = {
     },
     app: {
         step: 'ServiceType',
-        // step: 'FlightLocation',
         steps: {
             first: [{
                 name: 'ServiceType',
@@ -69,6 +74,7 @@ const state = {
             }))
         },
         airports: null,
+        ports: null,
         user: window.currentUser ? { ...window.currentUser } : {},
         map: null
     }

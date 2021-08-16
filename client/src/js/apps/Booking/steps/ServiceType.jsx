@@ -15,7 +15,7 @@ import Options from '../../components/Options';
 
 
 // Create Step
-const ServiceType = ({ update, updateApp, copy }) => {
+const ServiceType = ({ update, copy }) => {
 
     const { state } = useContext(AppContext);
     const { serviceType } = state.reservation;

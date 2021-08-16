@@ -862,7 +862,7 @@ $.join = (...items) => {
             default:
                 return null;
         }
-    }).filter(i => i).join(' ');
+    }).filter(i => i).join(' ') || null;
 
 }
 

@@ -1,5 +1,11 @@
 .dropdown {
 
+    transition: filter $dt;
+
+    &.hidden {
+        filter: opacity(0%);
+    }
+
     &__select {
         display: flex;
         align-items: center;

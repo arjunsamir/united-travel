@@ -26,46 +26,130 @@
                     "icon": "location-pin",
                     "value": "general"
                 }
-            ],
-            "next": "Continue"
+            ]
         },
         "PickupTime": {
-            "title": "Pickup Time"
+            "title": "Pickup Time",
+            "heading": "When do you want to be picked up?",
+            "labels": ["Date", "Time"],
+            "placeholder": "Select"
         },
         "FlightLocation": {
             "title": "Airport & Airline",
             "heading": "Airport & Airline Info",
             "labels": ["Select Airport", "Airline", "Flight Number"],
-            "placeholders": ["", "United", "A2204"],
-            "infoTitle": "Flight Information",
-            "next": "Continue"
+            "placeholders": ["Please Select", "United", "A2204"],
+            "infoTitle": "Flight Information"
         },
         "FlightSchedule": {
-            "title": "Flight Schedule"
+            "title": "Flight Schedule",
+            "heading": "Let’s get your flight schedule",
+            "options": ["Arriving", "Departing"],
+            "placeholders": ["Select", "Please Select"],
+            "labels": ["Date", "Time", "Arrive at the airport"],
+            "fieldsetTitles": {
+                "type": "Flight Type",
+                "arriving": "Flight Arrival Time",
+                "departing": "Flight Departure Time",
+                "default": "Flight Time"
+            },
+            "dropdownText": "{time} hours early",
+            "footerText": "We'll get you to the airport by {time}"
         },
         "CruiseLocation": {
-            "title": "Cruise Location"
+            "title": "Cruise Location",
+            "heading": "Port & Ship Info",
+            "labels": ["Select Port", "Cruise Line", "Ship Name"],
+            "placeholders": ["Please Select", "Carnival", "Dream"],
+            "infoTitle": "Cruise Information"
         },
         "CruiseSchedule": {
-            "title": "Cruise Schedule"
+            "title": "Cruise Schedule",
+            "heading": "Let’s get your cruise schedule",
+            "options": ["Arriving", "Departing"],
+            "placeholders": ["Select", "Please Select"],
+            "labels": ["Date", "Time", "Arrive at the cruise port"],
+            "fieldsetTitles": {
+                "type": "Cruise Status",
+                "arriving": "Cruise Arrival Time",
+                "departing": "Cruise Departure Time",
+                "default": "Cruise Time"
+            },
+            "dropdownText": "{time} hours early",
+            "footerText": "We'll get you to the port by {time}"
         },
         "Route": {
-            "title": "Create Route"
+            "title": "Create Route",
+            "heading": "",
+            "labels": {
+                "origin": "Origin",
+                "destination": "Destination"
+            },
+            "placeholders": {
+                "origin": "Search",
+                "destination": "Search"
+            }
         },
         "Passengers": {
-            "title": "Passengers"
+            "title": "Passengers",
+            "heading": "Passengers",
+            "text": "How many passengers will be under your reservation? Please include children and infants in this total. You will be able to select car seats for them in the next step.",
+            "hint": "All Ages",
+            "errors": {
+                "min": "Minimum of {min} passenger",
+                "max": "Maximum of {max} passengers. Please contact us for larger groups."
+            }
         },
         "Vehicle": {
-            "title": "Vehicle"
+            "title": "Vehicle",
+            "heading": "Select a vehicle",
+            "seats": "Seats",
+            "bags": "Bags"
         },
         "ChildSeats": {
-            "title": "Child Seats"
+            "title": "Child Seats",
+            "heading": "Child Seats",
+            "text": "No additional charges, we just want your children to travel safely. Check out {link} for more information.",
+            "link": {
+                "text": "NHTSA recommendations",
+                "url": "https://www.nhtsa.gov/equipment/car-seats-and-booster-seats#age-size-rec"
+            },
+            "inputs": [
+                {
+                    "label": "Rear-Facing",
+                    "hint": "Ages 0 - 3"
+                },
+                {
+                    "label": "Forward-Facing",
+                    "hint": "Ages 1 - 7"
+                },
+                {
+                    "label": "Booster",
+                    "hint": "Ages 4 - 12"
+                }
+            ],
+            "errors": {
+                "min": "",
+                "max": "Maximum of {max} seats available"
+            }
         },
         "Notes": {
-            "title": "Special Accomodations"
+            "title": "Reservation Notes",
+            "heading": "Notes",
+            "text": "Please let us know if there are any special requests you might have, or anything we can do to make your experience even better.",
+            "label": "Your Notes",
+            "placeholder": "Say something, or don't. Up to you..."
         },
         "Summary": {
             "title": "Summary"
+        }
+    },
+    "common": {
+        "next": "Continue",
+        "units": {
+            "miles": "Miles",
+            "mins": "Mins",
+            "hours": "Hours"
         }
     }
 }

@@ -1,21 +1,15 @@
 // Import Default React Stuff
-import React, { useContext, useEffect } from 'react';
-
-// Import Context
-import AppContext from '../store/context';
+import React from 'react';
 
 // Import Google Maps
 import useGoogleMaps from '../helpers/useGoogleMaps';
 
 
 // Cteate Map Component
-const Map = ({ update }) => {
+const Map = () => {
 
-    // Import Global State
-    const { state } = useContext(AppContext);
-
-    // Load Google Maps
-    const mapElement = useGoogleMaps(update);
+    // Enable Google Maps
+    const mapElement = useGoogleMaps();
 
     // Create Map
     return (

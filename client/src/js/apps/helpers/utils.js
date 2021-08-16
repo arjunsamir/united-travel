@@ -62,3 +62,12 @@ export const validatePassword = (val) => {
 export const lettersOnly = (val) => {
     return val.replace(/[^A-Za-z ]+$/, '');
 }
+
+export const toHalf = (val) => {
+    const [integer, decimal] = val.toString().split('.');
+
+    if (!decimal) return val;
+
+    else return `${integer} 1/2`
+
+}

@@ -27,6 +27,7 @@ const reviewRouter = require('./server/routes/reviewRoutes');
 const dataRouter = require('./server/routes/dataRoutes');
 const copyRouter = require('./server/routes/copyRoutes');
 const uploadRouter = require('./server/routes/uploadRoutes');
+const adminRouter = require('./server/routes/adminRoutes');
 
 
 
@@ -76,6 +77,7 @@ app.use('/api/reviews', reviewRouter);
 app.use('/api/data', dataRouter);
 app.use('/api/copy', copyRouter);
 app.use('/api/upload', uploadRouter);
+app.use('/admin', adminRouter);
 app.all('*', (req, res, next) => res.redirect('/'));
 
 

@@ -4,6 +4,8 @@ const path = require('path');
 
 // Import Models
 const Quote = require('../models/quote');
+const Vehicle = require('../models/vehicle');
+const Settings = require('../models/settings');
 
 // Import Utilities
 const { Client } = require("@googlemaps/google-maps-services-js");
@@ -18,12 +20,10 @@ const client = new Client({})
 // Initialize Stripe
 const stripe = require('stripe')(process.env.STRIPE_SECRET);
 
-
-// Read Algorithm Data into memory
-let touristZips = fs.readFileSync(path.join(__dirname, '../data/pricing/tourist-zip-codes.json'), 'utf8');
-let algorithmData = fs.readFileSync(path.join(__dirname, '../data/pricing/algorithm.json'), 'utf8');
-touristZips = touristZips ? JSON.parse(touristZips) : [];
-algorithmData = algorithmData ? JSON.parse(algorithmData) : {};
+// Get Settings on App Load
+const settings = {
+    promise: Settings.findOne({ active: true }).then(res => settings.data = res.toObject())
+}
 
 
 // Geocode Location to retrieve zip codes
@@ -55,26 +55,30 @@ const geocode = async (place_id) => {
 
 // Check if zip is whitelisted
 const checkZipList = (origin, destination) => {
-    return touristZips.filter(zip => zip === origin || zip === destination).length === 2;
+    return settings.data.touristZips.filter(zip => zip === origin || zip === destination).length === 2;
 }
 
 
 // Calculate cost of trip
 const calculateCost = (vehicle, distance, isTouristZip) => {
 
-    // Destructure Items
-    const { fees, rates, thresholds, mpg } = algorithmData;
-    const { extended, tourist } = thresholds;
-    const { discounts, base } = rates;
+    // Destructure Values
+    const { thresholds: { extended, tourist }, baseMpg } = settings.data;
+    const { rates, mpg } = vehicle;
 
-    // Convert To Miles
-    const d = distance;
+
+    // Set Up Variables
+    let d = distance;
+    const multiplier = baseMpg / mpg;
+
+
+    // Set Up Miles Counter
     const miles = {
         total: d,
         under: 0,
         tourist: 0,
         extended: 0
-    }
+    };
 
     if (d >= extended) {
         miles.extended = d - extended;
@@ -88,55 +92,68 @@ const calculateCost = (vehicle, distance, isTouristZip) => {
 
     miles.under = d;
 
-    // Get base Fare
-    const baseFee = fees[vehicle] || fees.base;
+    const variableCost = (miles.under * (isTouristZip ? rates.tourist : rates.base)) +
+        (miles.tourist * rates.tourist) +
+        (miles.extended * rates.extended);
 
-    // Get Multiplier
-    const multiplier = mpg.base / (mpg[vehicle] || mpg.base);
+    const cost = Math.ceil(variableCost * multiplier + rates.fee);
 
-    // Calculate Variable Cost
-    const variableCost =
-        (miles.under * (base - (isTouristZip ? discounts.tourist : 0))) + 
-        (miles.tourist * (base - discounts.tourist)) + 
-        (miles.extended * (base - (discounts.extended[vehicle] || discounts.extended.base)))
-    ;
+    return {
+        cents: cost,
+        dollars: (cost / 100).toFixed(2)
+    }
 
-    // Return Calculated Total
-    return Math.round((baseFee + (multiplier * variableCost)) * 100) / 100
 }
 
 
 // Create Exports
 exports.getQuote = catchAsync(async (req, res, next) => {
 
-    const { vehicle, origin, destination } = req.body;
-    const distance = Math.ceil(req.body.distance / 1609.34);
+    // In case settins isn't loaded wait for it
+    await settings.promise;
 
-    if (!origin || !destination || !vehicle || !distance) return res.json({
+
+    // Destructure Params
+    const { passengers, origin, destination, distance: meters } = req.body;
+
+
+    // If Params are missing then return
+    if (!origin || !destination || !passengers || !meters) return res.json({
         status: 'ERROR',
         message: 'Missimg request data'
     })
 
-    const geocoded = {
-        origin: geocode(origin).then(data => geocoded.origin = data),
-        destination: geocode(destination).then(data => geocoded.destination = data)
-    }
 
-    await Promise.all([geocoded.origin, geocoded.destination]);
+    // Retrtieve Vehicles From Database
+    const eligibleVehicles = await Vehicle.find({ active: true, seats: { $gte: passengers } });
 
-    const cost = calculateCost(vehicle, distance, checkZipList(geocoded.origin.zip, geocoded.destination.zip));
 
-    const quote = await Quote.create({
-        origin,
-        destination,
-        distance,
-        vehicle,
-        cost
-    })
+    // Convert Distance To Miles
+    const distance = Math.ceil(meters / 1609.34);
 
+
+    // Geocode Locations
+    const geocoded = {};
+    await Promise.all([
+        geocode(origin).then(data => geocoded.origin = data),
+        geocode(destination).then(data => geocoded.destination = data)
+    ]);
+
+
+    // Check if Zip Codes are Whitelisted
+    const isTouristZip = checkZipList(geocoded.origin.zip, geocoded.destination.zip);
+
+
+    // Get Cost for each Vehicle
+    const vehicles = eligibleVehicles.map(vehicle => {
+        return { ...vehicle.toObject(), cost: calculateCost(vehicle, distance, isTouristZip) }
+    });
+
+    
+    // Return Response
     res.json({
         status: 'SUCCESS',
-        quote
+        vehicles
     })
 
 });

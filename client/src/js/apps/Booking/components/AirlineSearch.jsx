@@ -22,7 +22,7 @@ const getOptions = ({ term, airlines, first: f }) => {
 }
 
 // Export Component
-const AirlineSearch = ({ id, icon, label, placeholder, errors, airlines, onChange }) => {
+const AirlineSearch = ({ id, icon, label, placeholder, errors, airlines, onChange, value }) => {
 
     const [options, setOptions] = useState(getOptions({ airlines }));
 
@@ -34,7 +34,6 @@ const AirlineSearch = ({ id, icon, label, placeholder, errors, airlines, onChang
         if (first !== options.index) setOptions(getOptions({ first, airlines, term }));
     }
 
-    console.log(options);
 
     return (
         <Autocomplete
@@ -47,6 +46,10 @@ const AirlineSearch = ({ id, icon, label, placeholder, errors, airlines, onChang
             onInputChange={onInputChange}
             limit={5}
             freeSolo
+            inputValue={value}
+            customProps={{
+                autoHighlight: true
+            }}
         />
     );
 

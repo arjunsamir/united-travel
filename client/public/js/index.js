@@ -4008,7 +4008,7 @@ $.join = function() {
                 return null;
         }
     }).filter((i)=>i
-    ).join(' ');
+    ).join(' ') || null;
 };
 window.$ = $;
 var _default = $;

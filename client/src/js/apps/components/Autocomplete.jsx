@@ -37,19 +37,21 @@ const createInput = ({ icon, label, placeholder }) => {
 
 
 // Create Component
-const Autocomplete = ({ id, icon, label, placeholder, errors, options, onChange, onInputChange, customProps, value, freeSolo, limit }) => {
+const Autocomplete = ({ id, icon, label, placeholder, errors, options, onChange, onInputChange, customProps, value, inputValue, freeSolo, limit, renderInput, filterOptions }) => {
+
 
     return (
         <div className="input animate-item">
             <MaterialAutoComplete
                 id={id}
                 options={options}
-                renderInput={createInput({ label, placeholder, icon })}
+                renderInput={renderInput || createInput({ label, placeholder, icon })}
                 onChange={onChange}
                 onInputChange={onInputChange}
                 value={value}
+                inputValue={inputValue}
                 freeSolo={freeSolo}
-                filterOptions={createFilterOptions({ limit })}
+                filterOptions={filterOptions || createFilterOptions({ limit })}
                 { ...(customProps || {}) }
             />
             {errors && errors.length > 0 && (

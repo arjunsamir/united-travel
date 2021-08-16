@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // Import Dependencies
 import { DatePicker as MaterialDatePicker, TimePicker as MaterialTimePicker } from '@material-ui/pickers';
 import Icon from './Icon';
 
-// Import Hooks
-import { useObjectState } from '../helpers/hooks';
+import dayjs from 'dayjs';
 
 
 const TextFieldComponent = (label, placeholder, showPlaceholder) => {
@@ -13,13 +12,13 @@ const TextFieldComponent = (label, placeholder, showPlaceholder) => {
     return ({ value, onClick }) => (
         <div className="input__field clickable" onClick={onClick}>
             {label && <label>{label}</label>}
-            <p>{showPlaceholder ? placeholder : value}</p>
+            <p className={$.join("input__date-time-p", [showPlaceholder, "placeholder"])}>{showPlaceholder ? placeholder : value}</p>
         </div>
     );
 }
 
 
-const DatePicker = ({ date, label, placeholder, onChange, customProps, isSet }) => {
+const DatePicker = ({ date, label, placeholder, onChange, customProps, showPlaceholder }) => {
     return (
         <MaterialDatePicker
             value={date}
@@ -29,59 +28,42 @@ const DatePicker = ({ date, label, placeholder, onChange, customProps, isSet }) 
             format="MMM D, YYYY"
             onChange={onChange}
             { ...(customProps || {}) }
-            TextFieldComponent={TextFieldComponent(label, placeholder, !isSet)}
+            TextFieldComponent={TextFieldComponent(label, placeholder, showPlaceholder)}
         />
     )
 }
 
 
-const TimePicker = ({ time, label, placeholder, onChange, customProps, isSet }) => {
+const TimePicker = ({ time, label, placeholder, onChange, customProps, showPlaceholder }) => {
     return (
         <MaterialTimePicker
             autoOk
             value={time}
             onChange={onChange}
             minutesStep={5}
+            format="h:mm A"
             { ...(customProps || {}) }
-            TextFieldComponent={TextFieldComponent(label, placeholder, !isSet)}
+            TextFieldComponent={TextFieldComponent(label, placeholder, showPlaceholder)}
         />
     )
 }
 
 
 // Create Component
-const DateTimePicker = ({ value, defaultValue, onChange, onStatusChange, datePicker, timePicker, icon }) => {
+const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker, icon }) => {
 
-    // Configure Local State
-    const [isSet, setIsSet] = useObjectState({
-        date: !datePicker,
-        time: !timePicker,
-        all: false
-    });
-
-    const handleChange = (field) => {
-        return (val) => {
-
-            // Update Placeholder State
-            if (!isSet[field]) setIsSet({[field]: true });
-
-            // Check if all validated
-            if (!isSet.all) setIsSet({ all: isSet.date && isSet.time });
-
-            // Update Validation
-            if (onStatusChange) onStatusChange({ ...isSet });
-
-            // Handle Change
-            onChange(val.toString());
-
-        }
+    const handleChange = (val) => {
+        onChange(val.format('YYYY-MM-DDTHH:mm'));
+        setShow(false);
     }
 
     const initialDate = defaultValue || new Date().setHours(12, 0, 0, 0);
-    const date = value || initialDate;
+    const date = value ? dayjs(value) : initialDate;
+
+    const [show, setShow] = useState(!value);
 
     return (
-        <div className="input">
+        <div className="input animate-item">
             <div className="input__input">
                 <div className="input__main">
                     {icon && (
@@ -93,8 +75,8 @@ const DateTimePicker = ({ value, defaultValue, onChange, onStatusChange, datePic
                     {datePicker && typeof datePicker === 'object' && (
                         <DatePicker
                             date={date}
-                            onChange={handleChange('date')}
-                            isSet={isSet.date}
+                            onChange={handleChange}
+                            showPlaceholder={show}
                             { ...(datePicker || {}) }
                         />
                     )}
@@ -102,8 +84,8 @@ const DateTimePicker = ({ value, defaultValue, onChange, onStatusChange, datePic
                     {timePicker && typeof timePicker === 'object' && (
                         <TimePicker
                             time={date}
-                            onChange={handleChange('time')}
-                            isSet={isSet.time}
+                            onChange={handleChange}
+                            showPlaceholder={show}
                             { ...(timePicker || {}) }
                         />
                     )}
