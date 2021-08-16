@@ -1034,7 +1034,6 @@ const LoginApp = (_ref)=>{
         authenticate: async (endpoint, data)=>{
             var _res$data, _res$data$data;
             const res = await _axios.default.post(endpoint, data);
-            console.log(res);
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.user)) return;
             return res.data.data.user; // onLogin && onLogin(res.data.data.user)
         },

@@ -98,6 +98,8 @@ export default class Page {
             this.components.mounted[component.name].init();
         });
         
+        this.scroll.update();
+
     }
 
 

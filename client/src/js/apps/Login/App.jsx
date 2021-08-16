@@ -48,7 +48,7 @@ const LoginApp = ({ copy, back, onLogin, referral }) => {
 
     const Step = steps[state.step] || <div>Something went wrong...</div>;
 
-    const transition = useRef(new Transition(dispatch));
+    const transition = useRef(new Transition(dispatch));f
 
     return (
         <section className="login">
@@ -57,7 +57,6 @@ const LoginApp = ({ copy, back, onLogin, referral }) => {
                 exit={back}
                 authenticate={async (endpoint, data) => {
                     const res = await axios.post(endpoint, data);
-                    console.log(res);
                     if (!res?.data?.data?.user) return;
                     return res.data.data.user;
                     // onLogin && onLogin(res.data.data.user)

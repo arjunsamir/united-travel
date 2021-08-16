@@ -4106,6 +4106,7 @@ class Page {
         this.components.registrar.forEach((component)=>{
             this.components.mounted[component.name].init();
         });
+        this.scroll.update();
     }
     async load() {
         await Promise.all(this.promises.map((c)=>c.load()
