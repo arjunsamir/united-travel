@@ -38,7 +38,7 @@ const Route = ({ copy }) => {
     return (
         <BookingCard
             back
-            footer={route.distance  && {
+            footer={route?.distance && route?.eta && {
                 text: (
                     <div className="booking-card__route">
                         <Stat

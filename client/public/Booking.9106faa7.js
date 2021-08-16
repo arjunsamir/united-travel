@@ -998,6 +998,7 @@ const BookingApp = (_ref)=>{
     const Step = steps[state.app.step] || _BookingLoader.default; // Create Action Dispatcher
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
+    console.log(state.reservation);
     return(/*#__PURE__*/ _react.default.createElement(_context.default.Provider, {
         value: {
             state,
@@ -47393,11 +47394,29 @@ const setServiceTime = (m, key)=>{
     if (type === 'departing') {
         // Add Buffer
         if (!buffer) return;
-        reservation.schedule.dropoff = _dayjs.default(time).subtract(buffer, 'hours').format('YYYY-MM-DDTHH:mm');
+        reservation.schedule.dropoff = _dayjs.default(time, 'MM-DD-YYYY H:mm').subtract(buffer, 'hours').format('MM-DD-YYYY H:mm');
+        reservation.schedule.pickup = null;
     } else {
         reservation.schedule.pickup = time;
         reservation.schedule.dropoff = null;
     }
+};
+const setRoute = (m, PL)=>{
+    var _PL$eta;
+    const { pickup , dropoff  } = m.state.reservation.schedule;
+    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule';
+    if (PL !== null && PL !== void 0 && (_PL$eta = PL.eta) !== null && _PL$eta !== void 0 && _PL$eta.value) {
+        if (!pickup) m.merge({
+            pickup: _dayjs.default(dropoff, f).subtract(PL.eta.value, u).format(f)
+        }, k);
+        else m.merge({
+            dropoff: _dayjs.default(pickup, f).add(PL.eta.value, u).format(f)
+        }, k);
+    }
+    return m.merge({
+        route: _objectSpread({
+        }, PL)
+    });
 };
 const reducer = (state, action)=>{
     const [method, category, type] = action.type.toLowerCase().split('_');
@@ -47512,10 +47531,7 @@ const reducer = (state, action)=>{
                 dropoff: PL
             }, 'schedule');
         case 'route':
-            return m.merge({
-                route: _objectSpread({
-                }, PL)
-            });
+            return setRoute(m, PL);
         case 'passengers':
             m.merge({
                 passengers: PL
@@ -47762,6 +47778,7 @@ var _react = require("react");
 var _config = _interopRequireDefault(require("../../data/config"));
 var _context = _interopRequireDefault(require("../store/context"));
 var _axios = _interopRequireDefault(require("axios"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
 var _utils = require("../../helpers/utils");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -47799,15 +47816,17 @@ class AppMap {
         else this.bounds.extend(place.geometry.location); // Apply bounds
         this.map.fitBounds(this.bounds);
     }
-    getRoute(origin, destination) {
+    getRoute(origin, destination, _ref) {
+        let { pickup , dropoff  } = _ref;
         // Set Map
-        this.renderer.setMap(this.map);
+        this.renderer.setMap(this.map); // Get Departure Time
+        const departureTime = _dayjs.default("".concat(pickup || dropoff, " -04:00"), 'MM-DD-YYYY H:mm Z').toDate();
         this.directions.route({
             origin,
             destination,
             travelMode: "DRIVING",
             drivingOptions: {
-                departureTime: new Date(),
+                departureTime,
                 trafficModel: "pessimistic"
             }
         }, (r, s)=>this.renderRoute(r, s)
@@ -47848,7 +47867,7 @@ class AppMap {
             eta: null
         });
     }
-    update(origin, destination, route) {
+    update(origin, destination, route, schedule) {
         // Clear The Map
         this.clear(route); // Reset Map if No Locations Set
         if (!origin && !destination) this.reset(); // Render Route if Both Set
@@ -47856,7 +47875,7 @@ class AppMap {
             placeId: origin
         }, {
             placeId: destination
-        }); // Render Single Marker
+        }, schedule); // Render Single Marker
         else this.placeMarker(origin, destination);
     }
     // Initialize Map
@@ -47885,7 +47904,7 @@ class AppMap {
 } // Create Custom Hook
 const useGoogleMaps = ()=>{
     // Destructure State
-    const { state: { app: { map  } , reservation: { origin , destination , route  }  } , update , updateApp  } = _react.useContext(_context.default); // Create Reference
+    const { state: { app: { map  } , reservation: { origin , destination , route , schedule  }  } , update , updateApp  } = _react.useContext(_context.default); // Create Reference
     const e = _react.useRef(); // Load Map
     _react.useEffect(()=>{
         const load = async ()=>{
@@ -47900,7 +47919,7 @@ const useGoogleMaps = ()=>{
         load();
     }, []); // Update Map
     _react.useEffect(()=>{
-        if (map) map.update(origin.placeId, destination.placeId, route);
+        if (map) map.update(origin.placeId, destination.placeId, route, schedule);
     }, [
         map,
         origin.placeId,
@@ -47916,7 +47935,7 @@ exports.default = _default;
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../data/config":"3Re6c","axios":"5FCRD","../../helpers/utils":"5inPj","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx"}],"3Re6c":[function(require,module,exports) {
+},{"react":"3qVBT","../../data/config":"3Re6c","axios":"5FCRD","../../helpers/utils":"5inPj","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","dayjs":"2UVMx"}],"3Re6c":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -70367,7 +70386,8 @@ _c2 = TimePicker;
 const DateTimePicker = (_ref4)=>{
     let { value , defaultValue , onChange , datePicker , timePicker , icon  } = _ref4;
     const handleChange = (val)=>{
-        onChange(val.format('YYYY-MM-DDTHH:mm'));
+        // onChange(val.format('YYYY-MM-DDTHH:mm'));
+        onChange(val.format('MM-DD-YYYY H:mm'));
         setShow(false);
     };
     const initialDate = defaultValue || new Date().setHours(12, 0, 0, 0);
@@ -70479,7 +70499,7 @@ const Route = (_ref2)=>{
     const { state: { reservation: { route  }  } , appCopy: { common: { units  }  }  } = _react.useContext(_context.default);
     return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
         back: true,
-        footer: route.distance && {
+        footer: (route === null || route === void 0 ? void 0 : route.distance) && (route === null || route === void 0 ? void 0 : route.eta) && {
             text: /*#__PURE__*/ _react.default.createElement("div", {
                 className: "booking-card__route"
             }, /*#__PURE__*/ _react.default.createElement(Stat, {

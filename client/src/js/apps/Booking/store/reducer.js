@@ -75,12 +75,29 @@ const setServiceTime = (m, key) => {
     if (type === 'departing') {
         // Add Buffer
         if (!buffer) return;
-        reservation.schedule.dropoff = dayjs(time).subtract(buffer, 'hours').format('YYYY-MM-DDTHH:mm');
+        reservation.schedule.dropoff = dayjs(time, 'MM-DD-YYYY H:mm').subtract(buffer, 'hours').format('MM-DD-YYYY H:mm');
+        reservation.schedule.pickup = null;
     }
     else {
         reservation.schedule.pickup = time;
         reservation.schedule.dropoff = null;
     }
+
+}
+
+
+const setRoute = (m, PL) => {
+
+    const { pickup, dropoff } = m.state.reservation.schedule;
+
+    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule';
+
+    if (PL?.eta?.value)  {
+        if (!pickup) m.merge({ pickup: dayjs(dropoff, f).subtract(PL.eta.value, u).format(f) }, k);
+        else m.merge({ dropoff: dayjs(pickup, f).add(PL.eta.value, u).format(f) }, k);
+    }
+
+    return m.merge({ route: { ...PL } });
 
 }
 
@@ -178,7 +195,7 @@ const reducer = (state, action) => {
                 return m.merge({ dropoff: PL }, 'schedule')
     
             case 'route':
-                return m.merge({ route: { ...PL } })
+                return setRoute(m, PL);
     
             case 'passengers':
                 m.merge({ passengers: PL });

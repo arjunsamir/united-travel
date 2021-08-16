@@ -8,6 +8,7 @@ import AppContext from '../store/context';
 
 // Import Helpers
 import axios from "axios";
+import dayjs from 'dayjs';
 import { insertScript } from '../../helpers/utils';
 
 
@@ -84,18 +85,20 @@ class AppMap {
 
 
     // Get Route From Google Maps
-    getRoute(origin, destination) {
+    getRoute(origin, destination, { pickup, dropoff }) {
 
         // Set Map
         this.renderer.setMap(this.map);
 
+        // Get Departure Time
+        const departureTime = dayjs(`${pickup || dropoff} -04:00`, 'MM-DD-YYYY H:mm Z').toDate();
 
         this.directions.route({
             origin,
             destination,
             travelMode: "DRIVING",
             drivingOptions: {
-                departureTime: new Date(),
+                departureTime,
                 trafficModel: "pessimistic"
             }
         }, (r, s) => this.renderRoute(r, s));
@@ -105,7 +108,7 @@ class AppMap {
 
     // Render Route To Map and update state
     renderRoute(res, status) {
-        
+
         // Check if response is valid
         if (status !== 'OK' || !res) return;
 
@@ -167,7 +170,7 @@ class AppMap {
 
 
     // Update Map on Change
-    update(origin, destination, route) {
+    update(origin, destination, route, schedule) {
 
         // Clear The Map
         this.clear(route);
@@ -176,7 +179,7 @@ class AppMap {
         if (!origin && !destination) this.reset();
 
         // Render Route if Both Set
-        else if (origin && destination) this.getRoute({ placeId: origin }, { placeId: destination });
+        else if (origin && destination) this.getRoute({ placeId: origin }, { placeId: destination }, schedule);
 
         // Render Single Marker
         else this.placeMarker(origin, destination);
@@ -193,7 +196,7 @@ const useGoogleMaps = () => {
     const {
         state: {
             app: { map },
-            reservation: { origin, destination, route }
+            reservation: { origin, destination, route, schedule }
         },
         update,
         updateApp
@@ -227,7 +230,7 @@ const useGoogleMaps = () => {
     // Update Map
     useEffect(() => {
 
-        if (map) map.update(origin.placeId, destination.placeId, route)
+        if (map) map.update(origin.placeId, destination.placeId, route, schedule)
     
     }, [map, origin.placeId, destination.placeId]);
 

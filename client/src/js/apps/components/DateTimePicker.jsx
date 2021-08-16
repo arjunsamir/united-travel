@@ -53,7 +53,8 @@ const TimePicker = ({ time, label, placeholder, onChange, customProps, showPlace
 const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker, icon }) => {
 
     const handleChange = (val) => {
-        onChange(val.format('YYYY-MM-DDTHH:mm'));
+        // onChange(val.format('YYYY-MM-DDTHH:mm'));
+        onChange(val.format('MM-DD-YYYY H:mm'));
         setShow(false);
     }
 
