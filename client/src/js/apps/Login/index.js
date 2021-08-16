@@ -9,6 +9,7 @@ export default class LoginApp extends ReactAppWrapper {
     constructor(dta, ctn) {
         super(dta.selector, ctn);
         this.App = App;
+        this.page = dta.page;
     }
 
     getReferral() {
@@ -16,9 +17,21 @@ export default class LoginApp extends ReactAppWrapper {
         return url.get('code')
     }
 
+    async loginCallback() {
+
+        // Refresh Page Navbar
+        await this.page.navbar.refresh();
+
+        // Navigate to Home Page
+        this.page.barba.go('/');
+
+    }
+
     async load() {
 
-        const res = {};
+        const res = {
+            onLogin: () => this.loginCallback()
+        };
 
         const promises = [
             axios(`/api/copy/login/${window.locale}`).then(data => res.copy = data?.data)

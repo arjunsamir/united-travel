@@ -28,7 +28,6 @@ const Login = ({ copy, authenticate, transition, update, state, validator }) => 
     const passwordErrors = [...validator.checkPassword(state.password), ...localState.errors];
 
     useEffect(() => {
-        console.log(copy);
         transition.set(mainRef.current).in();
     }, []);
 

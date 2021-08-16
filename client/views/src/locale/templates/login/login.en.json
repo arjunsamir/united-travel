@@ -85,6 +85,13 @@
         "button": "Update Password",
         "back": "Back"
     },
+    "greeting": {
+        "titles": {
+            "login": "Welcome back",
+            "signup": "Nice to meet you"
+        },
+        "inputs": {}
+    },
     "common": {
         "email": {
             "label": "Email Address",

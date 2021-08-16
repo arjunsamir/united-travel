@@ -32,6 +32,17 @@
         }
     }
 
+    &__greeting {
+        flex-grow: 10;
+        @include flexCenter;
+
+        user-select: none;
+
+        span {
+            color: var(--google);
+        }
+    }
+
     &__visual {
         width: 100%;
         position: relative;

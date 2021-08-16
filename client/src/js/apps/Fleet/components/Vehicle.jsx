@@ -87,7 +87,7 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
                     </div>
                 </div>
                 <div className="vehicle__image">
-                    <img src={`/img/vehicles/${vehicle.image}`} alt={`${info.name} Vehicle`} ref={refs.img} />
+                    <img src={vehicle.image} alt={`${info.name} Vehicle`} ref={refs.img} />
                 </div>
             </div>
         </div>

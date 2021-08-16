@@ -85,6 +85,13 @@
         "button": "Actualiza Contraseña",
         "back": "Atrás"
     },
+    "greeting": {
+        "titles": {
+            "login": "Bienvenido de nuevo,",
+            "signup": "Encantado de conocerte"
+        },
+        "inputs": {}
+    },
     "common": {
         "email": {
             "label": "Correo Electrónico",

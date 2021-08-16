@@ -7,11 +7,11 @@ const upload = require('../controllers/uploadController');
 // 2. Create Router
 const router = express.Router();
 
-router.post('/profile-photo', upload.userPhoto, upload.resize);
+router.post('/profile-photo', upload.photo, upload.processProfilePhoto);
 
 // Restrict Routes
 router.use(auth.restrictTo('admin'));
-router.post('/vehicle', upload.vehiclePhoto, upload.completeVehicleUpload);
+router.post('/vehicle', upload.photo, upload.processVehiclePhoto);
 
 module.exports = router;
 

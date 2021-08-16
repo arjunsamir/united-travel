@@ -12,7 +12,7 @@ const VehiclePicker = ({ vehicles, selected, setVehicle }) => {
                 >
                     <div>
                         <img
-                            src={`/img/vehicles/${v.thumbnail}`}
+                            src={v.thumbnail}
                             alt={`Thumbnail for ${v[`info_${window.locale}`].name}`}
                         />
                     </div>

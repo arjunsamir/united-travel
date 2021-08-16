@@ -6708,10 +6708,12 @@ class Navbar {
         ); // Update Active Language
         this.main.children('.navbar__lang-menu li').concat(this.menu.children('.nav-menu__lang li')).forEach((l)=>{
             const link = $(l);
-            const lang = link.data('navLang'); // if (lang == window.locale) link.addClass('active');
+            const lang = link.data('navLang');
             link.click(()=>this.changeLocale(lang)
             );
         });
+        $('.app-logout').click(()=>this.logout()
+        );
     }
     changeLocale(lang) {
         if (lang == window.locale) return this.toggleDesktopMenu(this.selectors.lang, 'lang');
@@ -7056,6 +7058,10 @@ class Navbar {
     applyView(view) {
         this.main.removeClass("full min");
         this.main.addClass(view);
+    }
+    async logout() {
+        await _axios.default('/auth/revoke-session');
+        window.location.reload();
     }
     async refresh() {
         // Make Request

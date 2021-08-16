@@ -6,7 +6,7 @@ import Icon from './Icon';
 
 import axios from 'axios';
 
-const ImageUpload = ({ label, placeholder, success, error, id, endpoint, onUpload }) => {
+const ImageUpload = ({ label, placeholder, success, error, id, endpoint, onUpload, filename }) => {
 
     // Set Up Object State
     const [state, setState] = useObjectState({
@@ -34,6 +34,8 @@ const ImageUpload = ({ label, placeholder, success, error, id, endpoint, onUploa
         files.forEach(file => {
             formData.append('photo', file);
         });
+
+        formData.append('name', filename.replaceAll(' ', '-').toLowerCase());
 
         const timer = $.timer(1000).start();
 

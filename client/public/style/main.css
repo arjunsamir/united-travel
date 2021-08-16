@@ -834,6 +834,9 @@ main {
   transition: filter 0.2s ease-in;
   transition: filter 0.2s ease-in, -webkit-filter 0.2s ease-in;
   color: var(--jet);
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
 }
 .navbar__lang-menu li.active {
   color: var(--primary);
@@ -851,7 +854,6 @@ main {
   cursor: pointer;
 }
 .navbar__profile-pic {
-  display: none;
   height: 3.2rem;
   width: 3.2rem;
   overflow: hidden;
@@ -887,6 +889,11 @@ main {
 }
 .navbar__profile-menu ul > *:not(:last-child) {
   margin-bottom: 1.6rem;
+}
+.navbar__profile-menu li {
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
 }
 .navbar__profile-menu a {
   font-size: 1.4rem;
@@ -2714,6 +2721,20 @@ svg.placeholder, .icon.placeholder {
   .login__container > *:not(:last-child) {
     margin-top: 12rem;
   }
+}
+.login__greeting {
+  flex-grow: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.login__greeting span {
+  color: var(--google);
 }
 .login__visual {
   width: 100%;

@@ -97,6 +97,7 @@ const Registration = ({ copy, authenticate, transition, update, state, validator
                         endpoint="/api/upload/profile-photo"
                         success={copy.inputs.profilePhoto.success}
                         onUpload={update('profile_photo')}
+                        filename={state.fullName || 'user-photo'}
                     />
                     <Button
                         text={copy.button}

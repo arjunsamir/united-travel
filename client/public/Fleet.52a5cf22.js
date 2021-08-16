@@ -2937,7 +2937,7 @@ const Vehicle = (_ref2)=>{
     }))), /*#__PURE__*/ _react.default.createElement("div", {
         className: "vehicle__image"
     }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: "/img/vehicles/".concat(vehicle.image),
+        src: vehicle.image,
         alt: "".concat(info.name, " Vehicle"),
         ref: refs.img
     })))));
@@ -2981,7 +2981,7 @@ const VehiclePicker = (_ref)=>{
             key: v._id,
             onClick: ()=>setVehicle(v)
         }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("img", {
-            src: "/img/vehicles/".concat(v.thumbnail),
+            src: v.thumbnail,
             alt: "Thumbnail for ".concat(v["info_".concat(window.locale)].name)
         })), /*#__PURE__*/ _react.default.createElement("p", null, v["info_".concat(window.locale)].name))
     )));

@@ -7,6 +7,7 @@ export const initialState = {
     preferredName: 'Arjun',
     profilePhoto: '',
     code: '',
+    loginType: '',
     user: {}
 }
 
@@ -44,6 +45,9 @@ export const reducer = (state = initialState, action) => {
 
         case 'SET_USER':
             return merge('user');
+
+        case 'SET_LOGIN_TYPE':
+            return merge('loginType');
         
         default:
             return state;

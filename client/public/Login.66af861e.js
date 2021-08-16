@@ -878,8 +878,14 @@ class LoginApp extends _ReactAppWrapper.default {
         const url = new URLSearchParams(window.location.search);
         return url.get('code');
     }
+    async loginCallback() {
+        // Refresh Page Navbar
+        await this.page.navbar.refresh(); // Navigate to Home Page
+        this.page.barba.go('/');
+    }
     async load() {
         const res = {
+            onLogin: ()=>this.loginCallback()
         };
         const promises = [
             _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
@@ -896,6 +902,7 @@ class LoginApp extends _ReactAppWrapper.default {
     constructor(dta, ctn){
         super(dta.selector, ctn);
         this.App = _App.default;
+        this.page = dta.page;
     }
 }
 exports.default = LoginApp;
@@ -1042,7 +1049,8 @@ const LoginApp = (_ref)=>{
         state: state,
         referral: referral,
         validator: new _Validator.default(copy.errors),
-        transition: transition.current
+        transition: transition.current,
+        callback: onLogin
     })));
 };
 _c = LoginApp;
@@ -2823,7 +2831,9 @@ const Hello = (_ref)=>{
                 };
                 await timer.hold();
                 typewriter.current.destroy();
-                transition.to(exists ? "login" : "signup");
+                const loginType = exists ? "login" : "signup";
+                update('login_type')(loginType);
+                transition.to(loginType);
             });
         }
     }, /*#__PURE__*/ _react.default.createElement("div", {
@@ -2901,16 +2911,17 @@ function _interopRequireDefault(obj) {
 }
 const Image1 = (_ref)=>{
     let { src , domRef , children  } = _ref;
+    const img = src || "https://storage.googleapis.com/utravel-site-content/img/login-1.jpg";
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__visual",
         ref: domRef
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "login__image"
     }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: "/img/".concat(src || "login-1.jpg"),
+        src: img,
         alt: "Login Visual"
     }), /*#__PURE__*/ _react.default.createElement("img", {
-        src: "/img/".concat(src || "login-1.jpg"),
+        src: img,
         alt: "Login Visual"
     })), children));
 };
@@ -3779,7 +3790,6 @@ const Login = (_ref)=>{
         ...localState.errors
     ];
     _react.useEffect(()=>{
-        console.log(copy);
         transition.set(mainRef.current).in();
     }, []);
     return(/*#__PURE__*/ _react.default.createElement("div", {
@@ -3982,7 +3992,8 @@ const Registration = (_ref)=>{
         placeholder: copy.inputs.profilePhoto.placeholder,
         endpoint: "/api/upload/profile-photo",
         success: copy.inputs.profilePhoto.success,
-        onUpload: update('profile_photo')
+        onUpload: update('profile_photo'),
+        filename: state.fullName || 'user-photo'
     }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
         text: copy.button,
         type: "submit",
@@ -4050,7 +4061,7 @@ function _interopRequireWildcard(obj) {
     return newObj;
 }
 const ImageUpload = (_ref)=>{
-    let { label , placeholder , success , error , id , endpoint , onUpload  } = _ref;
+    let { label , placeholder , success , error , id , endpoint , onUpload , filename  } = _ref;
     // Set Up Object State
     const [state, setState] = _hooks.useObjectState({
         image: null,
@@ -4069,6 +4080,7 @@ const ImageUpload = (_ref)=>{
         files.forEach((file)=>{
             formData.append('photo', file);
         });
+        formData.append('name', filename.replaceAll(' ', '-').toLowerCase());
         const timer = $.timer(1000).start(); // Upload File
         const res = await _axios.default.post(endpoint, formData);
         await timer.hold();
@@ -4604,9 +4616,91 @@ $RefreshReg$(_c, "Signup");
   window.$RefreshSig$ = prevRefreshSig;
 }
 },{"react":"3qVBT","../components/Image":"7yi7W","../components/LoginForm":"1bP9e","../components/Referral":"KtcU5","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"GbZeI":[function(require,module,exports) {
-"use strict";
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
 
-},{}],"3dy7A":[function(require,module,exports) {
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const Greeting = (_ref)=>{
+    let { copy , state , callback  } = _ref;
+    // Create Refs
+    const mainRef = _react.useRef();
+    _react.useEffect(()=>{
+        // Animate Title in
+        _animejs.default({
+            targets: mainRef.current,
+            opacity: [
+                0,
+                1
+            ],
+            easing: 'easeOutQuad',
+            duration: 800,
+            complete: ()=>$.delay(1000).then(()=>{
+                    callback(state.user);
+                })
+        });
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__container"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "login__greeting"
+    }, /*#__PURE__*/ _react.default.createElement("h1", {
+        className: "light",
+        ref: mainRef
+    }, copy.titles[state.loginType], " ", /*#__PURE__*/ _react.default.createElement("span", null, state.user.preferredName)))));
+};
+_c = Greeting;
+var _default = Greeting;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Greeting");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","animejs":"1GvRs"}],"3dy7A":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -4920,6 +5014,7 @@ const initialState = {
     preferredName: 'Arjun',
     profilePhoto: '',
     code: '',
+    loginType: '',
     user: {
     }
 }; // Create the reducer
@@ -4950,6 +5045,8 @@ const reducer = function reducer1() {
             return merge('code');
         case 'SET_USER':
             return merge('user');
+        case 'SET_LOGIN_TYPE':
+            return merge('loginType');
         default:
             return state;
     }

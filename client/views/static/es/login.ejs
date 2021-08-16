@@ -83,7 +83,7 @@
                             <li><p class="small">Hola <%- user.preferredName %></p></li>
                             <hr>
                             <li><a href="/es/account"><span>Mi cuenta</span></a></li>
-                            <li><a href="#" id="nb-logout"><span>Cerrar sesión</span></a></li>
+                            <li><a class="app-logout" href="#" id="nb-logout"><span>Cerrar sesión</span></a></li>
                         </ul>
                     </div>
 
@@ -132,7 +132,7 @@
 
             <!-- Absolutely Positioned Nav menu -->
             <div class="nav-menu__image">
-                <img src="/img/menu-visual.png" alt="Mercedes driving in fog">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/menu-visual.png" alt="Mercedes driving in fog">
             </div>
 
             <!-- Branding -->
@@ -157,7 +157,7 @@
                         <div>
                             <a href="/es/account">Mi cuenta</a>
                             <hr>
-                            <a href="#">Cerrar sesión</a>
+                            <a href="#" class="app-logout">Cerrar sesión</a>
                         </div>
                     </div>
                 <% } else { %>
@@ -235,7 +235,7 @@
                     <h5 class="white">Hello <%- user.preferredName %></h5>
                     <div>
                         <a class="animate-item" href="/es/account">Mi cuenta</a>
-                        <a class="animate-item" href="#">Cerrar sesión</a>
+                        <a class="animate-item app-logout" href="#">Cerrar sesión</a>
                     </div>
                 <% } else { %>
                     <h5 class="white animate-item">Bienvenido Viajero</h5>

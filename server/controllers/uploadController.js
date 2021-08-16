@@ -1,64 +1,67 @@
 // Import Node Mouduled and shit
 const multer = require('multer');
 const sharp = require('sharp');
+const util = require('util');
 
 const AppError = require('../utils/appError');
 const catchAsync = require('../utils/catchAsync');
-const filterObj = require('../utils/filterObjects');
 const send = require('../utils/sendResponse');
 const uniqid = require('uniqid');
+const googleCloud = require('../utils/storage');
+const bucket = googleCloud.bucket('utravel-site-content');
 
 
-// Create Multer File Filter
-const multerFilter = (req, file, cb) => {
+// Upload To Google Cloud Storage
+const uploadToCloud = (file, directory) => new Promise((resolve, reject) => {
+    
+    const { name, buffer } = file;
 
-    if (file.mimetype.startsWith('image')) {
-        cb(null, true);
-    }
+    const filePath = directory ? `${directory}/${name}` : name;
 
-    else {
-        cb(new AppError('Not an image! Please upload only images.', 400), false);
-    }
-
-}
-
-// Create Multer Uploaders
-const uploaders = {
-    userUpload: multer({
-        storage: multer.memoryStorage(),
-        fileFilter: multerFilter
-    }),
-    vehicleUpload: multer({
-        storage: multer.diskStorage({
-            destination: (req, file, cb) => {
-                cb(null, 'client/public/img/vehicles');
-            },
-            filename: (req, file, cb) => {
-                const ext = file.mimetype.split('/')[1];
-                req.body.fileName = `vehicle-${uniqid()}.${ext}`
-                cb(null, req.body.fileName)
-            }
-        }),
-        fileFilter: multerFilter
+    const blob = bucket.file(filePath);
+    const blobStream = blob.createWriteStream({
+        resumable: false
+    });
+    blobStream.on('finish', () => {
+        const publicUrl = util.format(
+            `https://storage.googleapis.com/${bucket.name}/${blob.name}`
+            );
+        resolve(publicUrl);
     })
-};
+    .on('error', () => reject('Unable to upload image, something went wrong'))
+    .end(buffer);
 
-// Upload Photo
-exports.userPhoto = uploaders.userUpload.single('photo');
+})
 
-// Resize Photo
-exports.resize = catchAsync(async (req, res, next) => {
+
+// Create Multer Uploader
+const upload = multer({
+    storage: multer.memoryStorage(),
+    fileFilter(req, file, cb) {
+        if (file.mimetype.startsWith('image')) cb(null, true);
+        else cb(new AppError('Not an image! Please upload only images.', 400), false);
+    }
+});
+
+
+// Multer Upload Middleware
+exports.photo = upload.single('photo');
+
+
+// Process Profile Photo
+exports.processProfilePhoto = catchAsync(async (req, res, next) => {
 
     if (!req.file) return next();
 
-    const file = `/img/profile-photos/${uniqid()}.jpg`;
+    const name = `${req.body.name || 'user-photo'}-${uniqid.time()}.jpg`;
 
-    await sharp(req.file.buffer)
+    const buffer = await sharp(req.file.buffer)
         .resize(500, 500)
         .toFormat('jpeg')
         .jpeg({ quality: 90 })
-        .toFile(`client/public${file}`)
-    ;
+        .toBuffer();
+
+    const file = await uploadToCloud({ name, buffer }, 'user-photos');
 
     send(res, {
         status: 'success',
@@ -68,12 +71,17 @@ exports.resize = catchAsync(async (req, res, next) => {
 });
 
 
-exports.vehiclePhoto = uploaders.vehicleUpload.single('photo');
+// Process Vehicle Photo
+exports.processVehiclePhoto = catchAsync(async (req, res, next) => {
 
+    if (!req.file) return next();
 
-exports.completeVehicleUpload = (req, res, next) => {
+    const buffer = await sharp(req.file.buffer).png().toBuffer();
+    const name = `vehicle-${uniqid.time()}.png`;
+    const file = await uploadToCloud({ name, buffer }, 'vehicles');
+
     send(res, {
         status: 'success',
-        file: req.body.fileName
+        file
     })
-}
+});

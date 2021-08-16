@@ -228,6 +228,7 @@
                 cursor: pointer;
                 transition: filter $dt;
                 color: var(--jet);
+                width: max-content;
 
                 &.active {
                     color: var(--primary);
@@ -253,7 +254,6 @@
         cursor: pointer;
 
         &-pic {
-            display: none;
 
             height: 3.2rem;
             width: 3.2rem;
@@ -301,6 +301,10 @@
 
             ul {
                 @include blockGap(1.6rem);
+            }
+
+            li {
+                width: max-content;
             }
 
             a {

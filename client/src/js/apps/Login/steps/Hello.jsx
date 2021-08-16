@@ -68,7 +68,9 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
                         const { exists } = res.data || {};
                         await timer.hold();
                         typewriter.current.destroy();
-                        transition.to(exists ? "login" : "signup");
+                        const loginType = exists ? "login" : "signup";
+                        update('login_type')(loginType);
+                        transition.to(loginType);
                     })
                 }}
             >

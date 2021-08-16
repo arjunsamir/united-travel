@@ -83,8 +83,6 @@ const BookingApp = ({ copy }) => {
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
 
-    console.log(state.reservation);
-
     return (
         <AppContext.Provider value={{ 
             state,

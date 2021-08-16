@@ -70,6 +70,7 @@ const LoginApp = ({ copy, back, onLogin, referral }) => {
                 referral={referral}
                 validator={new Validator(copy.errors)}
                 transition={transition.current}
+                callback={onLogin}
             />
         </section>
     )
