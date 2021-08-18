@@ -18,7 +18,7 @@ const TextFieldComponent = (label, placeholder, showPlaceholder) => {
 }
 
 
-const DatePicker = ({ date, label, placeholder, onChange, customProps, showPlaceholder }) => {
+const DatePicker = ({ date, label, placeholder, onChange, customProps, showPlaceholder, minDate }) => {
     return (
         <MaterialDatePicker
             value={date}
@@ -27,6 +27,7 @@ const DatePicker = ({ date, label, placeholder, onChange, customProps, showPlace
             onChange
             format="MMM D, YYYY"
             onChange={onChange}
+            minDate={minDate}
             { ...(customProps || {}) }
             TextFieldComponent={TextFieldComponent(label, placeholder, showPlaceholder)}
         />
@@ -58,7 +59,7 @@ const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker,
         setShow(false);
     }
 
-    const initialDate = defaultValue || new Date().setHours(12, 0, 0, 0);
+    const initialDate = defaultValue || dayjs().add(1, 'days').set('hour', 12).set('minute', 0).set('second', 0);
     const date = value ? dayjs(value) : initialDate;
 
     const [show, setShow] = useState(!value);
@@ -78,6 +79,7 @@ const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker,
                             date={date}
                             onChange={handleChange}
                             showPlaceholder={show}
+                            minDate={dayjs().add(1, 'day')}
                             { ...(datePicker || {}) }
                         />
                     )}

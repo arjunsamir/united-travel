@@ -20,10 +20,10 @@ const componentsRegistry = {
 // Create Page Class
 export default class Page {
 
-    constructor({ barba, smoothScroll, container }) {
+    constructor({ barba, container }) {
 
         this.options = {
-            smoothScroll: smoothScroll ?? true
+            smooth: true
         }
 
         this.elements = {
@@ -105,6 +105,25 @@ export default class Page {
 
     async load() {
         await Promise.all(this.promises.map(c => c.load()));
+    }
+
+
+    async loginRefresh() {
+
+        // Destroy Navbar
+        await this.navbar.refresh();
+
+        // Destroy Instances
+        this.scroll.destroy();
+
+        // Create New Instances
+        this.scroll = new Scroll(this);
+        this.navbar = new Navbar(this);
+
+        // Reinitialize Components
+        this.scroll.init();
+        this.navbar.init();
+
     }
 
 

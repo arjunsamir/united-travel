@@ -107,6 +107,8 @@ export default class Merger {
 
         // Get Match. This should NEVER be null
         const match = steps[index];
+
+        if (!match || index < 0) return this.state;
         
         // Determine if step is valid
         app.steps[match.group][match.index].complete = isValid;

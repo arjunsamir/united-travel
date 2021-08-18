@@ -121,25 +121,33 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand, 
         if (!delta) return () => console.warn('No direction defined');
 
         // Get Target Index
-        const target = typeof delta === 'string' ? delta : steps[stepIndex + delta]?.name;
+        let target = typeof delta === 'string' ? delta : steps[stepIndex + delta]?.name;
 
         // Prevent Another Dev Errors
-        if (!target) return () => console.warn('This is either the first or last step. Please provide a custom function to run for this step.');
+        if (!target) target = "Summary"
+
+        // Get Direction
+        const direction = stepIndex === steps.length - 1 ? 'exit' : 'out';
 
         // Return Navigation Function
-        return () => transition.to(target);
+        return () => transition.to(target, direction);
 
     }
 
     // Set Up Transition
     useEffect(() => {
-        transition.set(element.current);
+        transition.set({ container: element.current, animation: 'card' });
+        state.app.map.show();
+        state.app.map.setClass(null);
     })
 
 
     // Apply UseEffect
     useEffect(() => {
-        if (!showLoader) transition.in();
+        if (!showLoader) {
+            const prev = steps.findIndex(s => s.name === state.app.previousStep);
+            transition.in(prev >=  0 ? 'in' : 'enter');
+        }
     }, [showLoader]);
 
 

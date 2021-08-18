@@ -36,6 +36,7 @@ import Passengers from './steps/Passengers';
 import Vehicle from './steps/Vehicle';
 import ChildSeats from './steps/ChildSeats';
 import Notes from './steps/Notes';
+import CheckoutApp from "./checkout/CheckoutApp";
 
 // Import Helpers
 import Transition from './helpers/Transition';
@@ -69,14 +70,14 @@ const bindDispatcher = (dispatcher, type) => (key, data) => type && key && dispa
 });
 
 // Create Booking App
-const BookingApp = ({ copy }) => {
+const BookingApp = ({ copy, page }) => {
 
     // Set up Stae
     const [state, dispatch] = useReducer(reducer, initialState);
 
 
     // Get Current Stap
-    const Step = steps[state.app.step] || Loader;
+    const Step = steps[state.app.step] || CheckoutApp;
 
 
     // Create Action Dispatcher
@@ -86,6 +87,7 @@ const BookingApp = ({ copy }) => {
     return (
         <AppContext.Provider value={{ 
             state,
+            page,
             update,
             updateApp,
             appCopy: copy,

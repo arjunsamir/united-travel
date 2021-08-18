@@ -1,4 +1,4 @@
-const commonSteps = ['Route', 'Passengers', 'Vehicle', 'ChildSeats', 'Notes', 'Summary']
+const commonSteps = ['Route', 'Passengers', 'Vehicle', 'ChildSeats', 'Notes']
 
 const state = {
     reservation: {
@@ -55,7 +55,9 @@ const state = {
         notes: ''
     },
     app: {
-        step: 'ServiceType',
+        // step: 'ServiceType',
+        step: 'Login',
+        previousStep: '',
         steps: {
             first: [{
                 name: 'ServiceType',
@@ -76,6 +78,7 @@ const state = {
         airports: null,
         ports: null,
         user: window.currentUser ? { ...window.currentUser } : {},
+        isLoggedIn: !!window.currentUser.name,
         map: null
     }
 };

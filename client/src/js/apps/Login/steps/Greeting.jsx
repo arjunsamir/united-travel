@@ -2,24 +2,33 @@ import React, { useRef, useEffect } from 'react';
 
 import anime from 'animejs';
 
+
+
 const Greeting = ({ copy, state, callback }) => {
 
     // Create Refs
     const mainRef = useRef();
 
-
+    // Animate Out of app
     useEffect(() => {
 
-        // Animate Title in
-        anime({
+        const tl = anime.timeline({
+            easing: 'easeOutQuad',
+            duration: 800
+        });
+
+        tl.add({
             targets: mainRef.current,
             opacity: [0, 1],
-            easing: 'easeOutQuad',
-            duration: 800,
-            complete: () => $.delay(1000).then(() => {
-                callback(state.user);
-            })
-        })
+        });
+
+        tl.add({
+            targets: mainRef.current,
+            opacity: 0,
+            delay: 1500,
+        });
+
+        tl.finished.then(() => callback(state.user));
 
     }, []);
 
@@ -31,7 +40,7 @@ const Greeting = ({ copy, state, callback }) => {
             </div>
             
         </div>
-    )
+    );
 }
 
 export default Greeting;

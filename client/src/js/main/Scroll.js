@@ -51,7 +51,7 @@ export default class Scroll {
 
 
         // Remove Fixed Class If Mobile
-        if (this.isMobile) this.body.removeClass('fixed');
+        if (this.isMobile || !this.page.options.smooth) this.body.removeClass('fixed');
 
 
     }
@@ -67,7 +67,7 @@ export default class Scroll {
         // Create New Locomotive Scroll Instance
         this.locomotive = new LocomotiveScroll({
             el: this.container,
-            smooth: true,
+            smooth: this.page.options.smooth,
             multiplier: this.scrollMultiplier,
             lerp: this.lerp,
             scrollFromAnywhere: true

@@ -1,3 +1,7 @@
+#booking-react-app {
+    overflow-y: hidden;
+}
+
 .booking {
 
     min-height: 100vh;
@@ -5,10 +9,16 @@
     &__map {
         position: fixed;
         top: 0;
-        left: 0;
+        right: 0;
 
         height: 100vh;
         width: 100vw;
+
+        transition: width 0.4s ease-in-out;
+
+        &.min {
+            width: 50vw;
+        }
 
         #google-map {
             height: 100%;
@@ -40,6 +50,16 @@
         padding: var(--x-pad) 4.8rem;
 
         // overflow-y: hidden;
+    }
+
+    &__container {
+        position: relative;
+        width: 50vw;
+        min-height: 100vh;
+
+        @include flexCenter;
+        padding: var(--x-pad);
+        
     }
 
 }
@@ -235,6 +255,136 @@
     }
 }
 
-#booking-react-app {
-    overflow-y: hidden;
+.booking-view {
+
+    // Set Custom Properties
+    --view-width: 44rem;
+    // --card-gap: 3.2rem;
+    // --card-body-padding-x: 3.6rem;
+    // --card-body-padding-y: 4.8rem;
+
+    position: relative;
+
+    width: 100%;
+    max-width: var(--view-width);
+
+    &__content {
+        @include blockGap(3.6rem);
+    }
+
+    &__header {
+        @include blockGap(3.2rem);
+    }
+
+    &__res-total {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__route {
+
+        --route-font-size: 1.6rem;
+
+        p {
+            font-size: var(--route-font-size);
+            color: var(--slate);
+        }
+        
+        &-container {
+            display: flex;
+            margin-top: 1.2rem;
+        }
+
+        &-icon {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            margin-right: 1.6rem;
+
+            padding: calc((var(--route-font-size) - 1.2rem) / 2) 0;
+
+            span {
+                display: block;
+                height: 1.2rem;
+                width: 1.2rem;
+
+                border-radius: 50%;
+
+                &:first-child {
+                    background-color: var(--google);
+                }
+
+                &:last-child {
+                    border: 2px solid var(--google);
+                }
+            }
+
+            hr {
+                width: 2px;
+                background-color: var(--google);
+                flex-grow: 10;
+            }
+        }
+
+        &-details {
+            p {
+                line-height: 1;
+
+                &:first-child {
+                    margin-bottom: 1.6rem;
+                }
+            }
+        }
+    }
+
+    &__divider {
+        height: 3px;
+        width: 9.6rem;
+        border-radius: 1rem;
+        background-color: var(--slate-light);
+    }
+
+    &__block {
+        h6 {
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        p {
+            font-size: $p-small;
+        }
+    }
+
+    &__vehicle {
+
+        background-color: var(--slate-light);
+        padding: 0.8rem 2.4rem;
+        border-radius: 0.8rem;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+
+        &-image {
+            img {
+                width: 100%;
+            }
+        }
+
+        h6 {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--slate-dark);
+        }
+
+        p {
+            font-size: $p-small;
+            line-height: 1.4;
+            color: var(--slate);
+        }
+
+    }
+
 }

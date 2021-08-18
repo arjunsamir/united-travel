@@ -995,6 +995,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
                             selector: '#login-react-app'
                         }
                     });
+                    page.options.smooth = false;
                     page.navbar.applyView('min');
                     return page.load();
                 }
@@ -1010,6 +1011,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
                             selector: '#booking-react-app'
                         }
                     });
+                    page.options.smooth = false;
                     page.navbar.applyView('min');
                     return page.load();
                 }
@@ -4112,6 +4114,15 @@ class Page {
         await Promise.all(this.promises.map((c)=>c.load()
         ));
     }
+    async loginRefresh() {
+        // Destroy Navbar
+        await this.navbar.refresh(); // Destroy Instances
+        this.scroll.destroy(); // Create New Instances
+        this.scroll = new _Scroll.default(this);
+        this.navbar = new _Navbar.default(this); // Reinitialize Components
+        this.scroll.init();
+        this.navbar.init();
+    }
     addComponent() {
         for(var _len = arguments.length, components = new Array(_len), _key = 0; _key < _len; _key++)components[_key] = arguments[_key];
         components.forEach((component)=>{
@@ -4129,9 +4140,9 @@ class Page {
     }
     constructor(_ref){
         var _barba$url$clean;
-        let { barba , smoothScroll , container  } = _ref;
+        let { barba , container  } = _ref;
         this.options = {
-            smoothScroll: smoothScroll !== null && smoothScroll !== void 0 ? smoothScroll : true
+            smooth: true
         };
         this.elements = {
             container: container !== null && container !== void 0 ? container : $('main').e(),
@@ -4183,7 +4194,7 @@ class Scroll {
         }; // Update Values
         this.position = this.locomotive.scroll.instance.scroll.y; // Determine If Mobile
         this.isMobile = this.page.state.isMobile = this.locomotive.scroll.isMobile; // Remove Fixed Class If Mobile
-        if (this.isMobile) this.body.removeClass('fixed');
+        if (this.isMobile || !this.page.options.smooth) this.body.removeClass('fixed');
     }
     destroy() {
         this.locomotive.destroy();
@@ -4192,7 +4203,7 @@ class Scroll {
         // Create New Locomotive Scroll Instance
         this.locomotive = new _locomotiveScroll.default({
             el: this.container,
-            smooth: true,
+            smooth: this.page.options.smooth,
             multiplier: this.scrollMultiplier,
             lerp: this.lerp,
             scrollFromAnywhere: true
@@ -7073,6 +7084,7 @@ class Navbar {
         const menuItems = nav.children("#nav-menu > *"); // Update Elements
         this.main.clear().append(navbarItems);
         this.menu.clear().append(menuItems);
+        await this.handleEscapeClick();
     }
     destroy() {
         this.handleEscapeClick(false);

@@ -45,5 +45,13 @@ export default class LoginApp extends ReactAppWrapper {
         await this.render(res);
 
     }
+
+    static async getReactApp() {
+
+        const res = await axios(`/api/copy/login/${window.locale}`);
+
+        console.log(res);
+
+    }
     
 }

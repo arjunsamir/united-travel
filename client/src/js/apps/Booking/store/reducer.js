@@ -224,6 +224,7 @@ const reducer = (state, action) => {
     else if (method === 'set') {
         switch(type) {
             case 'step':
+                m.merge({ previousStep: m.state.app.step });
                 m.merge({ step: PL });
                 return m.validate(PL);
             case 'airports':
@@ -231,6 +232,7 @@ const reducer = (state, action) => {
             case 'ports':
                 return m.merge({ ports: [ ...PL ] })
             case 'user':
+                m.merge({ isLoggedIn: !!PL });
                 return m.merge({ user: { ... PL } })
             case 'map':
                 return m.merge({ map: PL })

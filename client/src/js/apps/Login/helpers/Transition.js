@@ -97,11 +97,11 @@ export default class Transition {
             });
         }
 
-        return timeline.finished;
+        await timeline.finished;
 
     }
 
-    out() {
+    async out() {
 
         const targets = this.getReferralTargets();
 
@@ -140,7 +140,7 @@ export default class Transition {
             opacity: [1, 0]
         }, "-=500")
 
-        return timeline.finished;
+        await timeline.finished;
 
     }
 

@@ -9,11 +9,11 @@ import useGoogleMaps from '../helpers/useGoogleMaps';
 const Map = () => {
 
     // Enable Google Maps
-    const mapElement = useGoogleMaps();
+    const [mapElement, mapClass] = useGoogleMaps();
 
     // Create Map
     return (
-        <div className="booking__map">
+        <div className={$.join("booking__map", [mapClass])}>
             <div id="google-map" ref={mapElement}></div>
         </div>
     )

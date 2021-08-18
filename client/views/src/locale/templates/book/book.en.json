@@ -141,11 +141,43 @@
             "placeholder": "Say something, or don't. Up to you..."
         },
         "Summary": {
-            "title": "Summary"
+            "title": "Reservation",
+            "back": "Back",
+            "services": {
+                "airport": "Airport Service",
+                "cruise": "Cruise Service",
+                "general": "Standard"
+            },
+            "airport": {
+                "arriving": "Arriving Flight",
+                "departing": "Departing Flight",
+                "buffer": "(arrive {h} hours early)",
+                "flight": "Flight"
+            },
+            "cruise": {
+                "arriving": "Arriving Cruise",
+                "departing": "Departing Cruise",
+                "buffer": "(arrive {h} hours early)"
+            },
+            "notes": "Your Notes",
+            "next": "Continue To Payment"
+        },
+        "Login": {
+            "title": "Login or sign up to continue.",
+            "text": "In order to complete your booking please sign in to your account. If you don't have an account you will be able to sign up.",
+            "next": "Continue"
+        },
+        "Checkout": {
+            "title": "Complete Payment",
+            "notice": "Complete the payment to book your reservation. You can cancel your reservation at no cost until 48 hours prior to your reservation.",
+            "method": "Payment Method",
+            "back": "Summary",
+            "next": "Confirm & Pay ${total}"
         }
     },
     "common": {
         "next": "Continue",
+        "back": "Back",
         "units": {
             "miles": "Miles",
             "mins": "Mins",

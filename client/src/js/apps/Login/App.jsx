@@ -48,18 +48,21 @@ const LoginApp = ({ copy, back, onLogin, referral }) => {
 
     const Step = steps[state.step] || <div>Something went wrong...</div>;
 
-    const transition = useRef(new Transition(dispatch));f
+    const transition = useRef(new Transition(dispatch));
 
     return (
         <section className="login">
             <Step
                 copy={getCopy(copy, state.step)}
-                exit={back}
+                exit={back && (async ()  => {
+                    await transition.current.out();
+                    await $.delay(250);
+                    back();
+                })} 
                 authenticate={async (endpoint, data) => {
                     const res = await axios.post(endpoint, data);
                     if (!res?.data?.data?.user) return;
                     return res.data.data.user;
-                    // onLogin && onLogin(res.data.data.user)
                 }}
                 update={(field) => {
                     const type = `SET_${field.toUpperCase()}`;

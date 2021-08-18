@@ -138,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         page,
                         selector: '#reviews-react-app'
                     }});
-
+                    
                     page.navbar.applyView('full');
 
                     return page.load();
@@ -169,7 +169,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         page,
                         selector: '#login-react-app'
                     }});
-
+                    page.options.smooth = false;
                     page.navbar.applyView('min');
 
                     return page.load();
@@ -188,6 +188,7 @@ window.addEventListener('DOMContentLoaded', () => {
                         selector: '#booking-react-app'
                     }});
 
+                    page.options.smooth = false;
                     page.navbar.applyView('min');
 
                     return page.load();

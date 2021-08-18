@@ -899,6 +899,10 @@ class LoginApp extends _ReactAppWrapper.default {
         await Promise.all(promises);
         await this.render(res);
     }
+    static async getReactApp() {
+        const res = await _axios.default("/api/copy/login/".concat(window.locale));
+        console.log(res);
+    }
     constructor(dta, ctn){
         super(dta.selector, ctn);
         this.App = _App.default;
@@ -1030,12 +1034,16 @@ const LoginApp = (_ref)=>{
         className: "login"
     }, /*#__PURE__*/ _react.default.createElement(Step, {
         copy: getCopy(copy, state.step),
-        exit: back,
+        exit: back && (async ()=>{
+            await transition.current.out();
+            await $.delay(250);
+            back();
+        }),
         authenticate: async (endpoint, data)=>{
             var _res$data, _res$data$data;
             const res = await _axios.default.post(endpoint, data);
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.user)) return;
-            return res.data.data.user; // onLogin && onLogin(res.data.data.user)
+            return res.data.data.user;
         },
         update: (field)=>{
             const type = "SET_".concat(field.toUpperCase());
@@ -4663,21 +4671,26 @@ function _interopRequireWildcard(obj) {
 const Greeting = (_ref)=>{
     let { copy , state , callback  } = _ref;
     // Create Refs
-    const mainRef = _react.useRef();
+    const mainRef = _react.useRef(); // Animate Out of app
     _react.useEffect(()=>{
-        // Animate Title in
-        _animejs.default({
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 800
+        });
+        tl.add({
             targets: mainRef.current,
             opacity: [
                 0,
                 1
-            ],
-            easing: 'easeOutQuad',
-            duration: 800,
-            complete: ()=>$.delay(1000).then(()=>{
-                    callback(state.user);
-                })
+            ]
         });
+        tl.add({
+            targets: mainRef.current,
+            opacity: 0,
+            delay: 1500
+        });
+        tl.finished.then(()=>callback(state.user)
+        );
     }, []);
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__container"
@@ -4849,9 +4862,9 @@ class Transition {
                 ]
             });
         }
-        return timeline.finished;
+        await timeline.finished;
     }
-    out() {
+    async out() {
         const targets = this.getReferralTargets();
         const timeline = _animejs.default.timeline({
             easing: 'easeOutQuad',
@@ -4897,7 +4910,7 @@ class Transition {
                 0
             ]
         }, "-=500");
-        return timeline.finished;
+        await timeline.finished;
     }
     constructor(dispatch){
         this.dispatch = dispatch;

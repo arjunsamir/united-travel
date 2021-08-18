@@ -465,6 +465,7 @@ export default class Navbar {
         this.main.clear().append(navbarItems);
         this.menu.clear().append(menuItems);
 
+        await this.handleEscapeClick();
     }
 
     destroy() {

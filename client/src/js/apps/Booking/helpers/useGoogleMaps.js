@@ -1,4 +1,4 @@
-import { useEffect, useRef, useContext } from "react";
+import { useEffect, useRef, useContext, useState } from "react";
 
 // Import Config
 import config from '../../data/config';
@@ -9,6 +9,7 @@ import AppContext from '../store/context';
 // Import Helpers
 import axios from "axios";
 import dayjs from 'dayjs';
+import anime from "animejs";
 import { insertScript } from '../../helpers/utils';
 
 
@@ -16,7 +17,7 @@ import { insertScript } from '../../helpers/utils';
 class AppMap {
 
     // Initialize Map
-    constructor(data, element, dispatcher) {
+    constructor(data, element, dispatcher, classUpdater) {
 
         // Destructure Things
         const { options, polylineOptions } = data;
@@ -32,14 +33,17 @@ class AppMap {
 
         // Class Used Properties
         this.dispatcher = dispatcher;
+        this.classUpdater = classUpdater;
         this.element = element;
         this.bounds = null;
         this.markers = [];
-        this.data = data
+        this.data = data;
+        this.isHidden = false;
         this.places = {
             origin: {},
             destination: {}
         }
+        this.className = null;
 
     }
 
@@ -186,6 +190,46 @@ class AppMap {
 
     }
 
+
+    hide() {
+        if (this.isHidden) return;
+        anime({
+            targets: this.element,
+            opacity: 0,
+            duration: 500,
+            easing: 'easeOutExpo',
+            complete: () => {
+                this.isHidden = true;
+            }
+        })
+    }
+
+
+    show() {
+        if (!this.isHidden) return;
+        anime({
+            targets: this.element,
+            opacity: 1,
+            duration: 500,
+            easing: 'easeOutExpo',
+            complete: () => {
+                this.isHidden = false;
+            }
+        })
+    }
+
+    
+    setClass(className) {
+
+        // Prevent Duplicate Class
+        if (className === this.className) return;
+
+        // Set Class
+        this.className = className;
+        this.classUpdater(this.className);
+        
+    }
+
 }
 
 
@@ -206,6 +250,9 @@ const useGoogleMaps = () => {
     // Create Reference
     const e = useRef();
 
+    // Create Class Reference
+    const [mapClass, setMapClass] = useState();
+
 
     // Load Map
     useEffect(() => {
@@ -219,7 +266,7 @@ const useGoogleMaps = () => {
                 axios('/api/data/map').then(res => data = res.data)
             ]);
 
-            updateApp("MAP", new AppMap(data, e.current, update));
+            updateApp("MAP", new AppMap(data, e.current, update, setMapClass));
 
         }
         
@@ -235,7 +282,7 @@ const useGoogleMaps = () => {
     }, [map, origin.placeId, destination.placeId]);
 
     // Return Element
-    return e;
+    return [e, mapClass];
 
 }
 
