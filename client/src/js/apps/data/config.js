@@ -14,7 +14,7 @@ const config = {
         cookiepolicy: 'single_host_origin'
     },
     stripe: {
-        key: 'pk_test_51J70jVAp1pPqDtncwRsmLJMVkDjxjhm1PF188lChMuCDW99i3xZU2lLrWYKpTdGqlUEG1JrqIyRE3eFe0M9YLIPc00G2vkTDIg'
+        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
     }
 }
 

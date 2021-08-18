@@ -47229,11 +47229,12 @@ const state = {
             appliedCredit: '',
             total: 0
         },
-        notes: ''
+        notes: '',
+        quote: ''
     },
     app: {
         // step: 'ServiceType',
-        step: 'Login',
+        step: 'Checkout',
         previousStep: '',
         steps: {
             first: [
@@ -47558,6 +47559,10 @@ const reducer = (state, action)=>{
                 notes: PL
             });
             return m.validate('Notes');
+        case 'quote':
+            return m.merge({
+                quote: PL
+            });
         case 'payment':
             return m.merge({
                 payment: _objectSpread({
@@ -48009,7 +48014,7 @@ const config = {
         cookiepolicy: 'single_host_origin'
     },
     stripe: {
-        key: 'pk_test_51J70jVAp1pPqDtncwRsmLJMVkDjxjhm1PF188lChMuCDW99i3xZU2lLrWYKpTdGqlUEG1JrqIyRE3eFe0M9YLIPc00G2vkTDIg'
+        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
     }
 };
 var _default = config;
@@ -71877,15 +71882,17 @@ const Vehicle = (_ref)=>{
     const [loaded, setLoaded] = _react.useState(false); // Fetch Data On Mount
     _react.useEffect(()=>{
         const load = async ()=>{
+            var _res$data, _res$data2;
             const timer = $.timer(1000).start();
             const res = await _axios.default.post('/api/booking/quote', {
                 origin,
                 destination,
                 passengers,
                 distance
-            });
-            setVehicles(res.data.vehicles);
-            await timer.hold();
+            }); // Update State
+            update('QUOTE', res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.quote);
+            setVehicles(res === null || res === void 0 ? void 0 : (_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : _res$data2.vehicles); // Artificial Delay
+            await timer.hold(); // Update State
             setLoaded(true);
         };
         if (!loaded) load();
@@ -74819,6 +74826,11 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _context = _interopRequireDefault(require("../store/context"));
 var _BookingPage = _interopRequireDefault(require("../components/BookingPage"));
+var _Buttons = require("../../components/Buttons");
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _hooks = require("../../helpers/hooks");
+var _reactStripeJs = require("@stripe/react-stripe-js");
+var _useStripeCheckout2 = _interopRequireWildcard(require("../helpers/useStripeCheckout"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -74851,36 +74863,83 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
-// Import Context
-// Import Components
+function _objectWithoutProperties(source, excluded) {
+    if (source == null) return {
+    };
+    var target = _objectWithoutPropertiesLoose(source, excluded);
+    var key, i;
+    if (Object.getOwnPropertySymbols) {
+        var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+        for(i = 0; i < sourceSymbolKeys.length; i++){
+            key = sourceSymbolKeys[i];
+            if (excluded.indexOf(key) >= 0) continue;
+            if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {
+    };
+    var target = {
+    };
+    var sourceKeys = Object.keys(source);
+    var key, i;
+    for(i = 0; i < sourceKeys.length; i++){
+        key = sourceKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        target[key] = source[key];
+    }
+    return target;
+}
+// Create Checkout Component
 const Checkout = ()=>{
+    var _app$user;
     // Destructure State and create shortcut variables
-    const { state , appCopy  } = _react.useContext(_context.default);
-    const copy = appCopy.steps[state.app.step]; // Set Up Local State
-    const [loaded, setLoaded] = _react.useState(); // Load Login Copy
-    _react.useEffect(()=>{
-        const load = async ()=>{
-            // Set Up Vars
-            const timer = $.timer(1000).start(); // Wait For Timer
-            await timer.hold(); // Set Loaded Flag
-            setLoaded(true);
-        };
-        if (!loaded) load();
-    }, []);
+    const { state: { app  } , appCopy  } = _react.useContext(_context.default);
+    const copy = appCopy.steps[app.step]; // Load Stripe
+    const _useStripeCheckout = _useStripeCheckout2.default(), { stripe , cost  } = _useStripeCheckout, payment = _objectWithoutProperties(_useStripeCheckout, [
+        "stripe",
+        "cost"
+    ]); // Create State
+    const [state, setState] = _hooks.useObjectState({
+        method: null,
+        error: '',
+        saveCard: null,
+        name: (_app$user = app.user) === null || _app$user === void 0 ? void 0 : _app$user.name
+    });
     return(/*#__PURE__*/ _react.default.createElement(_BookingPage.default, {
         back: "Summary",
-        nextText: copy.next.replace("{total}", "72.50"),
-        next: ()=>{
-            console.log('process the payment');
-        },
-        showLoader: !loaded
+        showLoader: !stripe
+    }, stripe && /*#__PURE__*/ _react.default.createElement(_reactStripeJs.Elements, {
+        options: _useStripeCheckout2.stripeOptions,
+        stripe: stripe
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__header animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h3", null, copy.title), /*#__PURE__*/ _react.default.createElement("h5", null, "$72.50")), /*#__PURE__*/ _react.default.createElement("hr", {
+    }, /*#__PURE__*/ _react.default.createElement("h3", null, copy.title), /*#__PURE__*/ _react.default.createElement("h5", null, "$", (cost / 100).toFixed(2))), /*#__PURE__*/ _react.default.createElement("hr", {
         className: "booking-view__divider animate-item"
     }), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__block animate-item"
-    }, /*#__PURE__*/ _react.default.createElement("p", null, copy.notice))));
+    }, /*#__PURE__*/ _react.default.createElement("p", null, copy.notice)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__section animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Payment Method"), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method",
+        onClick: ()=>console.log('select payment method')
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method__info"
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "bold"
+    }, "American Express"), /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "amex"
+    }), /*#__PURE__*/ _react.default.createElement("p", null, "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 1234"))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method__expand"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "more",
+        size: "xl"
+    })))), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: copy.next.replace("{total}", (cost / 100).toFixed(2))
+    }))));
 };
 _c = Checkout;
 var _default = Checkout;
@@ -74893,7 +74952,716 @@ $RefreshReg$(_c, "Checkout");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4R7YP":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../helpers/useStripeCheckout":"wuaxU","../../components/Buttons":"7xzNC","../../components/Icon":"4VYCM","../../helpers/hooks":"4wqYR"}],"3BTVB":[function(require,module,exports) {
+(function(global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react')) : typeof define === 'function' && define.amd ? define([
+        'exports',
+        'react'
+    ], factory) : (global = global || self, factory(global.ReactStripe = {
+    }, global.React));
+})(this, function(exports, React) {
+    'use strict';
+    React = React && Object.prototype.hasOwnProperty.call(React, 'default') ? React['default'] : React;
+    function _typeof(obj) {
+        if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") _typeof = function(obj1) {
+            return typeof obj1;
+        };
+        else _typeof = function(obj1) {
+            return obj1 && typeof Symbol === "function" && obj1.constructor === Symbol && obj1 !== Symbol.prototype ? "symbol" : typeof obj1;
+        };
+        return _typeof(obj);
+    }
+    function _objectWithoutPropertiesLoose(source, excluded) {
+        if (source == null) return {
+        };
+        var target = {
+        };
+        var sourceKeys = Object.keys(source);
+        var key, i;
+        for(i = 0; i < sourceKeys.length; i++){
+            key = sourceKeys[i];
+            if (excluded.indexOf(key) >= 0) continue;
+            target[key] = source[key];
+        }
+        return target;
+    }
+    function _objectWithoutProperties(source, excluded) {
+        if (source == null) return {
+        };
+        var target = _objectWithoutPropertiesLoose(source, excluded);
+        var key, i;
+        if (Object.getOwnPropertySymbols) {
+            var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+            for(i = 0; i < sourceSymbolKeys.length; i++){
+                key = sourceSymbolKeys[i];
+                if (excluded.indexOf(key) >= 0) continue;
+                if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+                target[key] = source[key];
+            }
+        }
+        return target;
+    }
+    function _slicedToArray(arr, i) {
+        return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest();
+    }
+    function _arrayWithHoles(arr) {
+        if (Array.isArray(arr)) return arr;
+    }
+    function _iterableToArrayLimit(arr, i) {
+        if (typeof Symbol === "undefined" || !(Symbol.iterator in Object(arr))) return;
+        var _arr = [];
+        var _n = true;
+        var _d = false;
+        var _e = undefined;
+        try {
+            for(var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true){
+                _arr.push(_s.value);
+                if (i && _arr.length === i) break;
+            }
+        } catch (err) {
+            _d = true;
+            _e = err;
+        } finally{
+            try {
+                if (!_n && _i["return"] != null) _i["return"]();
+            } finally{
+                if (_d) throw _e;
+            }
+        }
+        return _arr;
+    }
+    function _unsupportedIterableToArray(o, minLen) {
+        if (!o) return;
+        if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+        var n = Object.prototype.toString.call(o).slice(8, -1);
+        if (n === "Object" && o.constructor) n = o.constructor.name;
+        if (n === "Map" || n === "Set") return Array.from(o);
+        if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+    }
+    function _arrayLikeToArray(arr, len) {
+        if (len == null || len > arr.length) len = arr.length;
+        for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+        return arr2;
+    }
+    function _nonIterableRest() {
+        throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+    }
+    function createCommonjsModule(fn, module) {
+        return module = {
+            exports: {
+            }
+        }, fn(module, module.exports), module.exports;
+    }
+    /**
+   * Copyright (c) 2013-present, Facebook, Inc.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   */ var ReactPropTypesSecret = 'SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED';
+    var ReactPropTypesSecret_1 = ReactPropTypesSecret;
+    function emptyFunction() {
+    }
+    function emptyFunctionWithReset() {
+    }
+    emptyFunctionWithReset.resetWarningCache = emptyFunction;
+    var factoryWithThrowingShims = function() {
+        function shim(props, propName, componentName, location, propFullName, secret) {
+            if (secret === ReactPropTypesSecret_1) // It is still safe when called from React.
+            return;
+            var err = new Error("Calling PropTypes validators directly is not supported by the `prop-types` package. Use PropTypes.checkPropTypes() to call them. Read more at http://fb.me/use-check-prop-types");
+            err.name = 'Invariant Violation';
+            throw err;
+        }
+        shim.isRequired = shim;
+        function getShim() {
+            return shim;
+        }
+        // Keep this list in sync with production version in `./factoryWithTypeCheckers.js`.
+        var ReactPropTypes = {
+            array: shim,
+            bool: shim,
+            func: shim,
+            number: shim,
+            object: shim,
+            string: shim,
+            symbol: shim,
+            any: shim,
+            arrayOf: getShim,
+            element: shim,
+            elementType: shim,
+            instanceOf: getShim,
+            node: shim,
+            objectOf: getShim,
+            oneOf: getShim,
+            oneOfType: getShim,
+            shape: getShim,
+            exact: getShim,
+            checkPropTypes: emptyFunctionWithReset,
+            resetWarningCache: emptyFunction
+        };
+        ReactPropTypes.PropTypes = ReactPropTypes;
+        return ReactPropTypes;
+    };
+    var propTypes = createCommonjsModule(function(module) {
+        // By explicitly using `prop-types` you are opting into new production behavior.
+        // http://fb.me/prop-types-in-prod
+        module.exports = factoryWithThrowingShims();
+    });
+    var isUnknownObject = function isUnknownObject1(raw) {
+        return raw !== null && _typeof(raw) === 'object';
+    };
+    var isPromise = function isPromise1(raw) {
+        return isUnknownObject(raw) && typeof raw.then === 'function';
+    }; // We are using types to enforce the `stripe` prop in this lib,
+    // but in an untyped integration `stripe` could be anything, so we need
+    // to do some sanity validation to prevent type errors.
+    var isStripe = function isStripe1(raw) {
+        return isUnknownObject(raw) && typeof raw.elements === 'function' && typeof raw.createToken === 'function' && typeof raw.createPaymentMethod === 'function' && typeof raw.confirmCardPayment === 'function';
+    };
+    var PLAIN_OBJECT_STR = '[object Object]';
+    var isEqual = function isEqual1(left, right) {
+        if (!isUnknownObject(left) || !isUnknownObject(right)) return left === right;
+        var leftArray = Array.isArray(left);
+        var rightArray = Array.isArray(right);
+        if (leftArray !== rightArray) return false;
+        var leftPlainObject = Object.prototype.toString.call(left) === PLAIN_OBJECT_STR;
+        var rightPlainObject = Object.prototype.toString.call(right) === PLAIN_OBJECT_STR;
+        if (leftPlainObject !== rightPlainObject) return false;
+        if (!leftPlainObject && !leftArray) return false;
+        var leftKeys = Object.keys(left);
+        var rightKeys = Object.keys(right);
+        if (leftKeys.length !== rightKeys.length) return false;
+        var keySet = {
+        };
+        for(var i = 0; i < leftKeys.length; i += 1)keySet[leftKeys[i]] = true;
+        for(var _i = 0; _i < rightKeys.length; _i += 1)keySet[rightKeys[_i]] = true;
+        var allKeys = Object.keys(keySet);
+        if (allKeys.length !== leftKeys.length) return false;
+        var l = left;
+        var r = right;
+        var pred = function pred1(key) {
+            return isEqual1(l[key], r[key]);
+        };
+        return allKeys.every(pred);
+    };
+    var usePrevious = function usePrevious1(value) {
+        var ref = React.useRef(value);
+        React.useEffect(function() {
+            ref.current = value;
+        }, [
+            value
+        ]);
+        return ref.current;
+    };
+    var INVALID_STRIPE_ERROR = 'Invalid prop `stripe` supplied to `Elements`. We recommend using the `loadStripe` utility from `@stripe/stripe-js`. See https://stripe.com/docs/stripe-js/react#elements-props-stripe for details.'; // We are using types to enforce the `stripe` prop in this lib, but in a real
+    // integration `stripe` could be anything, so we need to do some sanity
+    // validation to prevent type errors.
+    var validateStripe = function validateStripe1(maybeStripe) {
+        if (maybeStripe === null || isStripe(maybeStripe)) return maybeStripe;
+        throw new Error(INVALID_STRIPE_ERROR);
+    };
+    var parseStripeProp = function parseStripeProp1(raw) {
+        if (isPromise(raw)) return {
+            tag: 'async',
+            stripePromise: Promise.resolve(raw).then(validateStripe)
+        };
+        var stripe = validateStripe(raw);
+        if (stripe === null) return {
+            tag: 'empty'
+        };
+        return {
+            tag: 'sync',
+            stripe: stripe
+        };
+    };
+    var ElementsContext = /*#__PURE__*/ React.createContext(null);
+    ElementsContext.displayName = 'ElementsContext';
+    var parseElementsContext = function parseElementsContext1(ctx, useCase) {
+        if (!ctx) throw new Error("Could not find Elements context; You need to wrap the part of your app that ".concat(useCase, " in an <Elements> provider."));
+        return ctx;
+    };
+    /**
+   * The `Elements` provider allows you to use [Element components](https://stripe.com/docs/stripe-js/react#element-components) and access the [Stripe object](https://stripe.com/docs/js/initializing) in any nested component.
+   * Render an `Elements` provider at the root of your React app so that it is available everywhere you need it.
+   *
+   * To use the `Elements` provider, call `loadStripe` from `@stripe/stripe-js` with your publishable key.
+   * The `loadStripe` function will asynchronously load the Stripe.js script and initialize a `Stripe` object.
+   * Pass the returned `Promise` to `Elements`.
+   *
+   * @docs https://stripe.com/docs/stripe-js/react#elements-provider
+   */ var Elements = function Elements1(_ref) {
+        var rawStripeProp = _ref.stripe, options = _ref.options, children = _ref.children;
+        var _final = React.useRef(false);
+        var isMounted = React.useRef(true);
+        var parsed = React.useMemo(function() {
+            return parseStripeProp(rawStripeProp);
+        }, [
+            rawStripeProp
+        ]);
+        var _React$useState = React.useState(function() {
+            return {
+                stripe: null,
+                elements: null
+            };
+        }), _React$useState2 = _slicedToArray(_React$useState, 2), ctx = _React$useState2[0], setContext = _React$useState2[1];
+        var prevStripe = usePrevious(rawStripeProp);
+        var prevOptions = usePrevious(options);
+        if (prevStripe !== null) {
+            if (prevStripe !== rawStripeProp) console.warn('Unsupported prop change on Elements: You cannot change the `stripe` prop after setting it.');
+            if (!isEqual(options, prevOptions)) console.warn('Unsupported prop change on Elements: You cannot change the `options` prop after setting the `stripe` prop.');
+        }
+        if (!_final.current) {
+            if (parsed.tag === 'sync') {
+                _final.current = true;
+                setContext({
+                    stripe: parsed.stripe,
+                    elements: parsed.stripe.elements(options)
+                });
+            }
+            if (parsed.tag === 'async') {
+                _final.current = true;
+                parsed.stripePromise.then(function(stripe) {
+                    if (stripe && isMounted.current) // Only update Elements context if the component is still mounted
+                    // and stripe is not null. We allow stripe to be null to make
+                    // handling SSR easier.
+                    setContext({
+                        stripe: stripe,
+                        elements: stripe.elements(options)
+                    });
+                });
+            }
+        }
+        React.useEffect(function() {
+            return function() {
+                isMounted.current = false;
+            };
+        }, []);
+        React.useEffect(function() {
+            var anyStripe = ctx.stripe;
+            if (!anyStripe || !anyStripe._registerWrapper || !anyStripe.registerAppInfo) return;
+            anyStripe._registerWrapper({
+                name: 'react-stripe-js',
+                version: "1.4.1"
+            });
+            anyStripe.registerAppInfo({
+                name: 'react-stripe-js',
+                version: "1.4.1",
+                url: 'https://stripe.com/docs/stripe-js/react'
+            });
+        }, [
+            ctx.stripe
+        ]);
+        return(/*#__PURE__*/ React.createElement(ElementsContext.Provider, {
+            value: ctx
+        }, children));
+    };
+    Elements.propTypes = {
+        stripe: propTypes.any,
+        options: propTypes.object
+    };
+    var useElementsContextWithUseCase = function useElementsContextWithUseCase1(useCaseMessage) {
+        var ctx = React.useContext(ElementsContext);
+        return parseElementsContext(ctx, useCaseMessage);
+    };
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#useelements-hook
+   */ var useElements = function useElements1() {
+        var _useElementsContextWi = useElementsContextWithUseCase('calls useElements()'), elements = _useElementsContextWi.elements;
+        return elements;
+    };
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#usestripe-hook
+   */ var useStripe = function useStripe1() {
+        var _useElementsContextWi2 = useElementsContextWithUseCase('calls useStripe()'), stripe = _useElementsContextWi2.stripe;
+        return stripe;
+    };
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#elements-consumer
+   */ var ElementsConsumer = function ElementsConsumer1(_ref2) {
+        var children = _ref2.children;
+        var ctx = useElementsContextWithUseCase('mounts <ElementsConsumer>'); // Assert to satisfy the busted React.FC return type (it should be ReactNode)
+        return children(ctx);
+    };
+    ElementsConsumer.propTypes = {
+        children: propTypes.func.isRequired
+    };
+    var useCallbackReference = function useCallbackReference1(cb) {
+        var ref = React.useRef(cb);
+        React.useEffect(function() {
+            ref.current = cb;
+        }, [
+            cb
+        ]);
+        return function() {
+            if (ref.current) ref.current.apply(ref, arguments);
+        };
+    };
+    var extractUpdateableOptions = function extractUpdateableOptions1(options) {
+        if (!isUnknownObject(options)) return {
+        };
+        var _ = options.paymentRequest, rest = _objectWithoutProperties(options, [
+            "paymentRequest"
+        ]);
+        return rest;
+    };
+    var noop = function noop1() {
+    };
+    var capitalized = function capitalized1(str) {
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    };
+    var createElementComponent = function createElementComponent1(type, isServer) {
+        var displayName = "".concat(capitalized(type), "Element");
+        var ClientElement = function ClientElement1(_ref) {
+            var id = _ref.id, className = _ref.className, _ref$options = _ref.options, options = _ref$options === void 0 ? {
+            } : _ref$options, _ref$onBlur = _ref.onBlur, onBlur = _ref$onBlur === void 0 ? noop : _ref$onBlur, _ref$onFocus = _ref.onFocus, onFocus = _ref$onFocus === void 0 ? noop : _ref$onFocus, _ref$onReady = _ref.onReady, onReady = _ref$onReady === void 0 ? noop : _ref$onReady, _ref$onChange = _ref.onChange, onChange = _ref$onChange === void 0 ? noop : _ref$onChange, _ref$onEscape = _ref.onEscape, onEscape = _ref$onEscape === void 0 ? noop : _ref$onEscape, _ref$onClick = _ref.onClick, onClick = _ref$onClick === void 0 ? noop : _ref$onClick;
+            var _useElementsContextWi = useElementsContextWithUseCase("mounts <".concat(displayName, ">")), elements = _useElementsContextWi.elements;
+            var elementRef = React.useRef(null);
+            var domNode = React.useRef(null);
+            var callOnReady = useCallbackReference(onReady);
+            var callOnBlur = useCallbackReference(onBlur);
+            var callOnFocus = useCallbackReference(onFocus);
+            var callOnClick = useCallbackReference(onClick);
+            var callOnChange = useCallbackReference(onChange);
+            var callOnEscape = useCallbackReference(onEscape);
+            React.useLayoutEffect(function() {
+                if (elementRef.current == null && elements && domNode.current != null) {
+                    var element = elements.create(type, options);
+                    elementRef.current = element;
+                    element.mount(domNode.current);
+                    element.on('ready', function() {
+                        return callOnReady(element);
+                    });
+                    element.on('change', callOnChange);
+                    element.on('blur', callOnBlur);
+                    element.on('focus', callOnFocus);
+                    element.on('escape', callOnEscape); // Users can pass an an onClick prop on any Element component
+                    // just as they could listen for the `click` event on any Element,
+                    // but only the PaymentRequestButton will actually trigger the event.
+                    element.on('click', callOnClick);
+                }
+            });
+            var prevOptions = React.useRef(options);
+            React.useEffect(function() {
+                if (prevOptions.current && prevOptions.current.paymentRequest !== options.paymentRequest) console.warn('Unsupported prop change: options.paymentRequest is not a customizable property.');
+                var updateableOptions = extractUpdateableOptions(options);
+                if (Object.keys(updateableOptions).length !== 0 && !isEqual(updateableOptions, extractUpdateableOptions(prevOptions.current))) {
+                    if (elementRef.current) {
+                        elementRef.current.update(updateableOptions);
+                        prevOptions.current = options;
+                    }
+                }
+            }, [
+                options
+            ]);
+            React.useLayoutEffect(function() {
+                return function() {
+                    if (elementRef.current) elementRef.current.destroy();
+                };
+            }, []);
+            return(/*#__PURE__*/ React.createElement("div", {
+                id: id,
+                className: className,
+                ref: domNode
+            }));
+        }; // Only render the Element wrapper in a server environment.
+        var ServerElement = function ServerElement1(props) {
+            // Validate that we are in the right context by calling useElementsContextWithUseCase.
+            useElementsContextWithUseCase("mounts <".concat(displayName, ">"));
+            var id = props.id, className = props.className;
+            return(/*#__PURE__*/ React.createElement("div", {
+                id: id,
+                className: className
+            }));
+        };
+        var Element1 = isServer ? ServerElement : ClientElement;
+        Element1.propTypes = {
+            id: propTypes.string,
+            className: propTypes.string,
+            onChange: propTypes.func,
+            onBlur: propTypes.func,
+            onFocus: propTypes.func,
+            onReady: propTypes.func,
+            onClick: propTypes.func,
+            options: propTypes.object
+        };
+        Element1.displayName = displayName;
+        Element1.__elementType = type;
+        return Element1;
+    };
+    var isServer = typeof window === 'undefined';
+    /**
+   * Requires beta access:
+   * Contact [Stripe support](https://support.stripe.com/) for more information.
+   *
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var AuBankAccountElement = createElementComponent('auBankAccount', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var CardElement = createElementComponent('card', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var CardNumberElement = createElementComponent('cardNumber', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var CardExpiryElement = createElementComponent('cardExpiry', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var CardCvcElement = createElementComponent('cardCvc', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var FpxBankElement = createElementComponent('fpxBank', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var IbanElement = createElementComponent('iban', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var IdealBankElement = createElementComponent('idealBank', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var P24BankElement = createElementComponent('p24Bank', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var EpsBankElement = createElementComponent('epsBank', isServer);
+    var PaymentElement = createElementComponent('payment', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var PaymentRequestButtonElement = createElementComponent('paymentRequestButton', isServer);
+    /**
+   * @docs https://stripe.com/docs/stripe-js/react#element-components
+   */ var AfterpayClearpayMessageElement = createElementComponent('afterpayClearpayMessage', isServer);
+    exports.AfterpayClearpayMessageElement = AfterpayClearpayMessageElement;
+    exports.AuBankAccountElement = AuBankAccountElement;
+    exports.CardCvcElement = CardCvcElement;
+    exports.CardElement = CardElement;
+    exports.CardExpiryElement = CardExpiryElement;
+    exports.CardNumberElement = CardNumberElement;
+    exports.Elements = Elements;
+    exports.ElementsConsumer = ElementsConsumer;
+    exports.EpsBankElement = EpsBankElement;
+    exports.FpxBankElement = FpxBankElement;
+    exports.IbanElement = IbanElement;
+    exports.IdealBankElement = IdealBankElement;
+    exports.P24BankElement = P24BankElement;
+    exports.PaymentElement = PaymentElement;
+    exports.PaymentRequestButtonElement = PaymentRequestButtonElement;
+    exports.useElements = useElements;
+    exports.useStripe = useStripe;
+    Object.defineProperty(exports, '__esModule', {
+        value: true
+    });
+});
+
+},{"react":"3qVBT"}],"wuaxU":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = exports.stripeOptions = void 0;
+var _react = require("react");
+var _context = _interopRequireDefault(require("../store/context"));
+var _stripeJs = require("@stripe/stripe-js");
+var _axios = _interopRequireDefault(require("axios"));
+var _config = _interopRequireDefault(require("../../data/config"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Create Stripe Options
+const stripeOptions = {
+    fonts: [
+        {
+            family: 'Silka',
+            src: "url(".concat(window.location.origin, "/fonts/silka/medium/silka-medium-webfont.woff2)"),
+            weight: '400'
+        }
+    ]
+};
+exports.stripeOptions = stripeOptions;
+const testData = {
+    quote: "611c6bd216d9c70f9a052b4e",
+    vehicle: "610b1cdf6c7bf65df87de41d"
+}; // Create Payment Processing Function
+const processPayment = (stripe, secret)=>{
+    const errMsg = {
+        complete: false,
+        message: "Problem confirming card"
+    };
+    const succesMsg = {
+        complete: true
+    };
+    return async (id, e, saveCard)=>{
+        const { paymentIntent , error  } = await stripe.confirmCardPayment(secret, {
+            payment_method: id,
+            setup_future_usage: saveCard && 'off_session'
+        }, {
+            handleActions: false
+        });
+        if (error) {
+            e && e.complete('fail');
+            return errMsg;
+        } else e && e.complete('success');
+        if (paymentIntent.status === 'requires_action') {
+            const { error: error1  } = await stripe.confirmCardPayment(secret);
+            return error1 ? errMsg : succesMsg;
+        } else return succesMsg;
+    };
+}; // Ceraete The Hook
+const useStripeCheckout = ()=>{
+    const { state: { reservation: r  }  } = _react.useContext(_context.default);
+    const [data, setData] = _react.useState({
+    });
+    _react.useEffect(()=>{
+        const loadStripeAPI = async ()=>{
+            var _r$vehicle, _res$data;
+            const timer = $.timer(1000).start(); // Load Stripe API
+            const stripe = await _stripeJs.loadStripe(_config.default.stripe.key); // Create payment intent on server
+            const res = await _axios.default.post('/api/booking/create-payment', {
+                quote_id: r.quote || testData.quote,
+                vehicle_id: (r === null || r === void 0 ? void 0 : (_r$vehicle = r.vehicle) === null || _r$vehicle === void 0 ? void 0 : _r$vehicle._id) || testData.vehicle
+            }); // Emergency Return
+            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.cost)) return; // Destructure Payment Intent
+            const { cost , secret , paymentMethods  } = res === null || res === void 0 ? void 0 : res.data; // Create Payment Request For Mobile Wallets
+            const paymentRequest = stripe.paymentRequest({
+                country: 'US',
+                currency: 'usd',
+                total: {
+                    label: 'Car Reservation Total',
+                    amount: cost
+                },
+                requestPayerName: true,
+                requestPayerEmail: true
+            }); // Get Mobile Wallets
+            const wallets = await paymentRequest.canMakePayment() || {
+            }; // Attach Wallet Event Listers
+            if (wallets) paymentRequest.on('paymentmethod', (e)=>processPayment(e.paymentMethods, e)
+            );
+             // Artifical Delay
+            await timer.hold(); // Finally Update The State
+            setData({
+                stripe,
+                secret,
+                cost,
+                methods: {
+                    all: paymentMethods,
+                    default: null
+                },
+                request: paymentRequest,
+                wallets,
+                processPayment: processPayment(stripe, secret)
+            });
+        };
+        if (!data.stripe) loadStripeAPI();
+    }, []);
+    return data;
+}; // Export the hook
+var _default = useStripeCheckout;
+exports.default = _default;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","@stripe/stripe-js":"3ghLS","../../data/config":"3Re6c","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","axios":"5FCRD"}],"3ghLS":[function(require,module,exports) {
+'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var V3_URL = 'https://js.stripe.com/v3';
+var V3_URL_REGEX = /^https:\/\/js\.stripe\.com\/v3\/?(\?.*)?$/;
+var EXISTING_SCRIPT_MESSAGE = 'loadStripe.setLoadParameters was called but an existing Stripe.js script already exists in the document; existing script parameters will be used';
+var findScript = function findScript1() {
+    var scripts = document.querySelectorAll("script[src^=\"".concat(V3_URL, "\"]"));
+    for(var i = 0; i < scripts.length; i++){
+        var script = scripts[i];
+        if (!V3_URL_REGEX.test(script.src)) continue;
+        return script;
+    }
+    return null;
+};
+var injectScript = function injectScript1(params) {
+    var queryString = params && !params.advancedFraudSignals ? '?advancedFraudSignals=false' : '';
+    var script = document.createElement('script');
+    script.src = "".concat(V3_URL).concat(queryString);
+    var headOrBody = document.head || document.body;
+    if (!headOrBody) throw new Error('Expected document.body not to be null. Stripe.js requires a <body> element.');
+    headOrBody.appendChild(script);
+    return script;
+};
+var registerWrapper = function registerWrapper1(stripe, startTime) {
+    if (!stripe || !stripe._registerWrapper) return;
+    stripe._registerWrapper({
+        name: 'stripe-js',
+        version: "1.15.1",
+        startTime: startTime
+    });
+};
+var stripePromise = null;
+var loadScript = function loadScript1(params) {
+    // Ensure that we only attempt to load Stripe.js at most once
+    if (stripePromise !== null) return stripePromise;
+    stripePromise = new Promise(function(resolve, reject) {
+        if (typeof window === 'undefined') {
+            // Resolve to null when imported server side. This makes the module
+            // safe to import in an isomorphic code base.
+            resolve(null);
+            return;
+        }
+        if (window.Stripe && params) console.warn(EXISTING_SCRIPT_MESSAGE);
+        if (window.Stripe) {
+            resolve(window.Stripe);
+            return;
+        }
+        try {
+            var script = findScript();
+            if (script && params) console.warn(EXISTING_SCRIPT_MESSAGE);
+            else if (!script) script = injectScript(params);
+            script.addEventListener('load', function() {
+                if (window.Stripe) resolve(window.Stripe);
+                else reject(new Error('Stripe.js not available'));
+            });
+            script.addEventListener('error', function() {
+                reject(new Error('Failed to load Stripe.js'));
+            });
+        } catch (error) {
+            reject(error);
+            return;
+        }
+    });
+    return stripePromise;
+};
+var initStripe = function initStripe1(maybeStripe, args, startTime) {
+    if (maybeStripe === null) return null;
+    var stripe = maybeStripe.apply(undefined, args);
+    registerWrapper(stripe, startTime);
+    return stripe;
+};
+// own script injection.
+var stripePromise$1 = Promise.resolve().then(function() {
+    return loadScript(null);
+});
+var loadCalled = false;
+stripePromise$1["catch"](function(err) {
+    if (!loadCalled) console.warn(err);
+});
+var loadStripe = function loadStripe1() {
+    for(var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)args[_key] = arguments[_key];
+    loadCalled = true;
+    var startTime = Date.now();
+    return stripePromise$1.then(function(maybeStripe) {
+        return initStripe(maybeStripe, args, startTime);
+    });
+};
+exports.loadStripe = loadStripe;
+
+},{}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

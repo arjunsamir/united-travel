@@ -149,11 +149,25 @@ exports.getQuote = catchAsync(async (req, res, next) => {
         return { ...vehicle.toObject(), cost: calculateCost(vehicle, distance, isTouristZip) }
     });
 
+
+    // Create Quote
+    const quote = await Quote.create({
+        origin,
+        destination,
+        distance: meters,
+        passengers,
+        vehicles: vehicles.map(v => ({
+            vehicle_id: v._id,
+            cost: v.cost.cents
+        }))
+    })
+
     
     // Return Response
     res.json({
         status: 'SUCCESS',
-        vehicles
+        vehicles,
+        quote: quote.id
     })
 
 });
@@ -174,7 +188,7 @@ exports.confirmPayment = async (req, res, next) => {
 
 
 // Create Payment Intent and Send to Client
-exports.createPayment = async (req, res) => {
+exports.createPaymentOLD = async (req, res) => {
 
     const { id } = req.body;
 
@@ -256,3 +270,93 @@ exports.createPayment = async (req, res) => {
     }
 
 }
+
+
+const getStripeUser = async (user) => {
+
+    // Initialize Mutable variables
+    let customer, paymentMethods = [];
+
+    // Create or Retrieve Customer
+    if (user && user.stripeID) {
+        customer = await stripe.customers.retrieve(user.stripeID);
+    }
+    else if (user) {
+        customer = await stripe.customers.create({
+            name: user.name,
+            email: user.email
+        });
+
+        user.stripeID = customer.id;
+        await user.save()
+    }
+
+    // Retrieve Saved Payment Methods
+    if (customer) {
+        const list = await stripe.paymentMethods.list({
+            customer: customer.id,
+            type: 'card'
+        })
+
+        paymentMethods = list.data.map(item => {
+            const { card } = item;
+            return {
+                id: item.id,
+                brand: card.brand,
+                digits: card.last4,
+                expiration: {
+                    month: card.exp_month,
+                    year: card.exp_year
+                }
+            }
+        })
+    }
+
+    return [customer, paymentMethods]
+
+}
+
+
+exports.createPayment = catchAsync(async (req, res, next) => {
+
+    // Destructure Request Object
+    const { user, body: { quote_id, vehicle_id } } = req;
+
+    // Retrieve Quote
+    const quote = await Quote.findById(quote_id);
+
+    // Retrieve Vehicle
+    const vehicle = quote.vehicles.find(v => v.vehicle_id.toString() === vehicle_id);
+
+    // Handle Errors
+    if (!vehicle) throw new Error('No vehicle found!');
+
+    // Retrieve Cost
+    const { cost } = vehicle;
+
+    // Retrieve Stripe User
+    const [customer, paymentMethods] = await getStripeUser(user);
+
+    // Prepare Payment Intent Data
+    const intentData = {
+        amount: cost,
+        currency: 'USD',
+        statement_descriptor: 'Ride Transport',
+        payment_method_types: ['card']
+    }
+
+    // Append Customer 
+    if (customer) intentData.customer = customer.id;
+
+    // Create Payment Intent
+    const paymentIntent = await stripe.paymentIntents.create(intentData);
+
+    // Send Response
+    send(res, {
+        status: 'SUCCESS',
+        secret: paymentIntent.client_secret,
+        paymentMethods,
+        cost
+    });
+
+});

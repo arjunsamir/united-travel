@@ -52,11 +52,12 @@ const state = {
             appliedCredit: '',
             total: 0
         },
-        notes: ''
+        notes: '',
+        quote: ''
     },
     app: {
         // step: 'ServiceType',
-        step: 'Login',
+        step: 'Checkout',
         previousStep: '',
         steps: {
             first: [{

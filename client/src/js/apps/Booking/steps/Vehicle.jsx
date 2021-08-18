@@ -53,10 +53,14 @@ const Vehicle = ({ update, copy }) => {
                 distance
             });
 
-            setVehicles(res.data.vehicles);
+            // Update State
+            update('QUOTE', res?.data?.quote)
+            setVehicles(res?.data?.vehicles);
 
+            // Artificial Delay
             await timer.hold();
 
+            // Update State
             setLoaded(true);
 
         }

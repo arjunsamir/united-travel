@@ -272,6 +272,10 @@
         @include blockGap(3.6rem);
     }
 
+    &__section {
+        @include blockGap(2.4rem);
+    }
+
     &__header {
         @include blockGap(3.2rem);
     }

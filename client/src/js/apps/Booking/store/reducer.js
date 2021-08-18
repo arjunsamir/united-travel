@@ -214,8 +214,12 @@ const reducer = (state, action) => {
                 m.merge({ notes: PL })
                 return m.validate('Notes');
 
+            case 'quote':
+                return m.merge({ quote: PL });
+
             case 'payment': 
                 return m.merge({ payment: { ...PL } })
+
             default:
                 return state
         }
