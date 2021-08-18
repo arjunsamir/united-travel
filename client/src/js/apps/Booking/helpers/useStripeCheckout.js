@@ -15,6 +15,18 @@ export const stripeOptions = {
     ]
 };
 
+export const stripeStyle = {
+    base: {
+        color: "#333333",
+        fontWeight: 400,
+        fontFamily: "Silka, sans-serif",
+        fontSize: "18px",
+        fontSmoothing: "antialiased",
+        ":-webkit-autofill": { color: "#333" },
+        "::placeholder": { color: "#C6CAD2" }
+    },
+}
+
 const testData = {
     quote: "611c6bd216d9c70f9a052b4e",
     vehicle: "610b1cdf6c7bf65df87de41d"
@@ -121,7 +133,10 @@ const useStripeCheckout = () => {
             setData({
                 stripe,
                 secret,
-                cost,
+                cost: {
+                    cents: cost,
+                    dollars: (cost / 100).toFixed(2)
+                },
                 methods: {
                     all: paymentMethods,
                     default: null

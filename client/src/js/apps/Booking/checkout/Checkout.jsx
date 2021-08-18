@@ -1,26 +1,32 @@
 import React, { useContext, useEffect } from 'react';
 
+
 // Import Context
 import AppContext from '../store/context';
+
 
 // Import Components
 import BookingPage from '../components/BookingPage';
 import { Button } from '../../components/Buttons';
-import Icon from '../../components/Icon';
+import PaymentMethod from '../components/PaymentMethod';
+import { ConfirmCheckout, SelectPaymentMethod } from './CheckoutSections';
+
 
 // Import Helpers
 import { useObjectState } from '../../helpers/hooks';
+
 
 // Import Stripe Checkout
 import { Elements } from '@stripe/react-stripe-js';
 import useStripeCheckout, { stripeOptions } from '../helpers/useStripeCheckout';
 
 
+
 // Create Checkout Component
 const Checkout = () => {
 
     // Destructure State and create shortcut variables
-    const { state: { app }, appCopy } = useContext(AppContext);
+    const { state: { app }, appCopy, transition } = useContext(AppContext);
     const copy = appCopy.steps[app.step];
 
     // Load Stripe
@@ -28,51 +34,62 @@ const Checkout = () => {
 
     // Create State
     const [state, setState] = useObjectState({
-        method: null,
+        method: {},
         error: '',
         saveCard: null,
-        name: app.user?.name
+        name: app.user?.name,
+        view: 'main'
     });
+
+    const changeView = (view) => {
+
+        return async () => {
+            await transition.out();
+            await $.delay(150);
+            setState({ view });
+            await transition.in();
+        }
+       
+    }
+
+    console.log(payment);
     
 
     return (
         <BookingPage
-            back="Summary"
+            back={state.view === 'main' ? "Summary" : changeView('main')}
+            backText={state.view === 'main' ? copy.back : "Back"}
             showLoader={!stripe}
         >
             {stripe && (
                 <Elements options={stripeOptions} stripe={stripe}>
 
-                    <div className="booking-view__header animate-children">
-                        <h3>{copy.title}</h3>
-                        <h5>${(cost / 100).toFixed(2)}</h5>
-                    </div>
+                    {state.view === 'main' && (
+                        <ConfirmCheckout
+                            cost={cost.dollars}
+                            paymentRequest={payment.request}
+                            wallet={state.method.wallet}
+                        >
 
-                    <hr className="booking-view__divider animate-item" />
+                            <PaymentMethod
+                                type="main"
+                                label="American Express"
+                                icon="amex"
+                                onClick={changeView('methods')}
+                                isCard
+                                text="1234"
+                            />
 
-                    <div className="booking-view__block animate-item">
-                        <p>{copy.notice}</p>
-                    </div>
+                        </ConfirmCheckout>
+                    )}
 
-                    <div className="booking-view__section animate-children">
-                        <h5>Payment Method</h5>
-                        <div className="payment-method" onClick={() => console.log('select payment method')}>
-                            <div className="payment-method__info">
-                                <h6 className="bold">American Express</h6>
-                                <div>
-                                    <Icon icon="amex" />
-                                    <p>•••• •••• •••• •••• 1234</p>
-                                </div>
-                            </div>
-                            <div className="payment-method__expand">
-                                <Icon icon="more" size="xl" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <Button
-                        text={copy.next.replace("{total}", (cost / 100).toFixed(2))}
-                    />
+                    {state.view === 'methods' && (
+                        <SelectPaymentMethod
+                            wallets={[]}
+                            cards={[]}
+                        /> 
+                    )}
+                    
 
                 </Elements>
             )}

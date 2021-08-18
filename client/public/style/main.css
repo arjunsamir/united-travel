@@ -2158,6 +2158,10 @@ svg.placeholder, .icon.placeholder {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
   cursor: pointer;
 }
 .payment-method__info h6, .payment-method__info p {
@@ -2168,11 +2172,12 @@ svg.placeholder, .icon.placeholder {
 }
 .payment-method__info div {
   display: flex;
+  align-items: center;
 }
 .payment-method__info div > *:not(:last-child) {
   margin-right: 1.2rem;
 }
-.payment-method__info svg {
+.payment-method__info svg.icon-xl {
   height: 3.2rem;
   width: 4.4rem;
 }

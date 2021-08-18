@@ -35,6 +35,7 @@ const schema = new mongoose.Schema({
     googleID: String,
     facebookID: String,
     stripeID: String,
+    defaultPaymentMethod: String,
     role: {
         type: String,
         enum: ['admin', 'driver', 'user'],

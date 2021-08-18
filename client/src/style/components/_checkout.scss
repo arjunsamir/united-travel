@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    user-select: none;
 
     cursor: pointer;
 
@@ -18,9 +19,10 @@
         div {
             display: flex;
             @include flexGap(1.2rem);
+            align-items: center;
         }
 
-        svg {
+        svg.icon-xl {
             height: 3.2rem;
             width: 4.4rem;
         }
