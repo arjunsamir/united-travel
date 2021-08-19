@@ -76117,7 +76117,7 @@ const AddPaymentMethod = (_ref)=>{
             type,
             brand,
             last4,
-            name: "".concat(_cardBrands.getBrand(brand))
+            name: _cardBrands.getBrand(brand)
         }); // Change View
         changeView();
     }; // Render Component

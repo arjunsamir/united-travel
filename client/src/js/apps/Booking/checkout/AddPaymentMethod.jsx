@@ -73,7 +73,7 @@ export const AddPaymentMethod = ({ email, name, onNameChange, stripe, setMethod,
             type,
             brand,
             last4,
-            name: `${getBrand(brand)}`
+            name: getBrand(brand)
         });
 
         // Change View
