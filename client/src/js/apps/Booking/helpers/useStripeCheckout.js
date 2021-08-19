@@ -1,8 +1,10 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import AppContext from '../store/context';
 import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import config from '../../data/config';
+import { useObjectState } from '../../helpers/hooks';
+import { getBrand } from './cardBrands';
 
 // Create Stripe Options
 export const stripeOptions = {
@@ -81,7 +83,7 @@ const useStripeCheckout = () => {
 
     const { state: { reservation: r } } = useContext(AppContext);
 
-    const [data, setData] = useState({});
+    const [state, setState] = useObjectState({});
 
     useEffect(() => {
 
@@ -130,7 +132,7 @@ const useStripeCheckout = () => {
             await timer.hold();
 
             // Finally Update The State
-            setData({
+            setState({
                 stripe,
                 secret,
                 cost: {
@@ -138,21 +140,36 @@ const useStripeCheckout = () => {
                     dollars: (cost / 100).toFixed(2)
                 },
                 methods: {
-                    all: paymentMethods,
+                    all: paymentMethods.map(card => ({
+                        brand: card.brand,
+                        last4: card.digits,
+                        id: card.id,
+                        name: getBrand(card.brand),
+                        type: 'card'
+                    })),
                     default: null
                 },
                 request: paymentRequest,
-                wallets,
-                processPayment: processPayment(stripe, secret)
+                wallets: {
+                    ...wallets,
+                    enabled: Array.from(Object.entries(wallets)).map(([key, val]) => ({
+                        provider: key.replace(/[A-Z]/g, m => "-" + m.toLowerCase()),
+                        enabled: val,
+                        id: key,
+                        type: 'wallet',
+                    })).filter(itm => itm.enabled),
+
+                },
+                process: processPayment(stripe, secret)
             });
 
         }
 
-        if (!data.stripe) loadStripeAPI();
+        if (!state.stripe) loadStripeAPI();
 
     }, []);
 
-    return data;
+    return state;
 
 }
 

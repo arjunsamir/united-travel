@@ -1483,7 +1483,7 @@ svg.placeholder, .icon.placeholder {
   border: 3px solid var(--slate-light);
   transition: border 0.2s ease-in;
 }
-.input__input:focus-within {
+.input__input:focus-within, .input__input.focused {
   border-color: var(--slate);
 }
 .input__input.has-error {
@@ -1516,7 +1516,16 @@ svg.placeholder, .icon.placeholder {
 .input__main > *:not(:last-child) {
   margin-right: 2.4rem;
 }
-.input__main label {
+.input__main hr {
+  height: 4.8rem;
+  width: 3px;
+  border-radius: 1rem;
+  background-color: var(--placeholder);
+}
+.input__main svg {
+  color: var(--slate-dark);
+}
+.input__main label, .input__stripe label {
   font-size: 1.4rem;
   font-weight: 700;
   line-height: 1.2;
@@ -1526,15 +1535,6 @@ svg.placeholder, .icon.placeholder {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
-}
-.input__main hr {
-  height: 4.8rem;
-  width: 3px;
-  border-radius: 1rem;
-  background-color: var(--placeholder);
-}
-.input__main svg {
-  color: var(--slate-dark);
 }
 .input__toggle {
   align-self: stretch;
@@ -1552,6 +1552,12 @@ svg.placeholder, .icon.placeholder {
 }
 .input__field.clickable {
   cursor: pointer;
+}
+.input__stripe {
+  flex-grow: 10;
+}
+.input__stripe-container {
+  padding: 0.8rem 0;
 }
 .input__errors {
   padding-top: 1.2rem;
@@ -1734,6 +1740,44 @@ svg.placeholder, .icon.placeholder {
   font-size: 1.8rem;
   line-height: 1.7;
   color: var(--jet);
+}
+.checkbox {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+  cursor: pointer;
+}
+.checkbox input {
+  display: none;
+}
+.checkbox label {
+  color: var(--slate-dark);
+  display: flex;
+  flex-grow: 10;
+  align-self: stretch;
+  align-items: center;
+  cursor: pointer;
+}
+.checkbox span {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 2.4rem;
+  width: 2.4rem;
+  margin-right: 0.8rem;
+  border-radius: 0.4rem;
+  background-color: var(--slate-light);
+  color: var(--jet);
+  transition: background-color 0.2s ease-in;
+}
+.checkbox input:checked + label span {
+  background-color: var(--black);
+  color: var(--white);
 }
 .loader {
   --loader-border: 3px solid;
@@ -2168,7 +2212,7 @@ svg.placeholder, .icon.placeholder {
   color: var(--slate-dark);
 }
 .payment-method__info h6 {
-  margin-bottom: 0.8rem;
+  margin-bottom: 0.4rem;
 }
 .payment-method__info div {
   display: flex;
@@ -2178,8 +2222,8 @@ svg.placeholder, .icon.placeholder {
   margin-right: 1.2rem;
 }
 .payment-method__info svg.icon-xl {
-  height: 3.2rem;
-  width: 4.4rem;
+  height: 3.9rem;
+  width: 5.4rem;
 }
 .payment-method__expand {
   color: var(--slate-dark);
@@ -3244,5 +3288,8 @@ svg.placeholder, .icon.placeholder {
   font-size: 1.4rem;
   line-height: 1.4;
   color: var(--slate);
+}
+.booking-view__form > *:not(:last-child) {
+  margin-bottom: 1.6rem;
 }
 /*# sourceMappingURL=main.css.map */

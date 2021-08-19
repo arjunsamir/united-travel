@@ -5,13 +5,19 @@ import AppContext from '../store/context';
 import { Button } from '../../components/Buttons';
 import PaymentMethod from '../components/PaymentMethod';
 
+// Import Helpers
+import { getWalletProvider } from '../helpers/cardBrands';
+
+
 // Import Stripe Components
 import {
-    PaymentRequestButtonElement as Walletbutton
+    PaymentRequestButtonElement as Walletbutton,
 } from '@stripe/react-stripe-js';
 
 
-export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet }) => {
+
+// Creat First Page
+export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet, paymentReady, onSubmit, paymentLoading }) => {
 
     const { state: { app: { step } }, appCopy: { steps } } = useContext(AppContext);
     const copy = steps[step];
@@ -41,6 +47,9 @@ export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet }) => {
             ) : (
                 <Button
                     text={copy.next.replace("{total}", cost)}
+                    disabled={!paymentReady}
+                    onClick={onSubmit}
+                    showLoader={paymentLoading}
                 />
             )}
 
@@ -50,37 +59,66 @@ export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet }) => {
 };
 
 
-export const SelectPaymentMethod = ({ wallets, cards, onSelect }) => {
+// Create Second Page
+export const SelectPaymentMethod = ({ wallets, cards, selected, onSelect, addCardHandler }) => {
+
+    const { state: { app: { step } }, appCopy: { steps } } = useContext(AppContext);
+    const copy = steps[step].views.methods;
+
     return (
         <>
             <div className="booking-view__header animate-children">
-                <h3>Select Payment Method</h3>
+                <h3>{copy.title}</h3>
             </div>
 
             <hr className="booking-view__divider animate-item" />
 
             {wallets && wallets.length > 0 && (
                 <div className="booking-view__section animate-children">
-                    <h5>Digital Wallets</h5>
-                    <PaymentMethod
-                        type="button"
-                        text="Add Credit/Debit Card"
-                    />
+                    <h5>{copy.wallets}</h5>
+                    {wallets.map(wallet => (
+                        <PaymentMethod
+                            key={wallet.provider}
+                            type="option"
+                            icon={wallet.provider}
+                            text={getWalletProvider(wallet.provider)}
+                            selected={selected === wallet.provider}
+                        />
+                    ))}
+                    
                 </div>
             )}
 
             <div className="booking-view__section animate-children">
-                <h5>Your Credit/Debit Cards</h5>
+                <h5>{copy.cards}</h5>
+                {(cards && cards.length > 0) ? (cards.map(card => (
+                    <PaymentMethod
+                        key={card.id}
+                        icon={card.brand}
+                        type="option"
+                        label={card.name}
+                        text={card.last4}
+                        isCard
+                        selected={card.id === selected.id}
+                    />
+
+                ))) : (
+                    <p>{copy.text}</p>
+                )}
                 <PaymentMethod
                     type="button"
-                    text="Add new card"
+                    text={copy.add}
+                    onClick={addCardHandler}
                 />
             </div>
 
             <Button
-                text="Select to continue"
-                disabled
+                text={selected.id ?
+                    copy.button.enabled.replace('{method}', `${selected.name} ${selected.last4 || ''}`.trim()) :
+                    copy.button.disabled
+                }
+                disabled={!selected.id}
             />
         </>
     )
-}
+};

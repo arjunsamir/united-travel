@@ -74826,8 +74826,8 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _context = _interopRequireDefault(require("../store/context"));
 var _BookingPage = _interopRequireDefault(require("../components/BookingPage"));
-var _Buttons = require("../../components/Buttons");
 var _PaymentMethod = _interopRequireDefault(require("../components/PaymentMethod"));
+var _AddPaymentMethod = _interopRequireDefault(require("./AddPaymentMethod"));
 var _CheckoutSections = require("./CheckoutSections");
 var _hooks = require("../../helpers/hooks");
 var _reactStripeJs = require("@stripe/react-stripe-js");
@@ -74894,9 +74894,18 @@ function _objectWithoutPropertiesLoose(source, excluded) {
     }
     return target;
 }
-// Create Checkout Component
+const getPrevView = (current)=>{
+    switch(current){
+        case 'methods':
+            return 'main';
+        case 'add-card':
+            return 'methods';
+        default:
+            return 'main';
+    }
+}; // Create Checkout Component
 const Checkout = ()=>{
-    var _app$user;
+    var _app$user, _app$user2;
     // Destructure State and create shortcut variables
     const { state: { app  } , appCopy , transition  } = _react.useContext(_context.default);
     const copy = appCopy.steps[app.step]; // Load Stripe
@@ -74904,48 +74913,101 @@ const Checkout = ()=>{
         "stripe",
         "cost"
     ]); // Create State
+    const [view, setView] = _react.useState('main');
     const [state, setState] = _hooks.useObjectState({
         method: {
         },
+        addedMethods: [],
         error: '',
-        saveCard: null,
+        saveCard: true,
         name: (_app$user = app.user) === null || _app$user === void 0 ? void 0 : _app$user.name,
-        view: 'main'
-    });
-    const changeView = (view)=>{
+        processing: false
+    }); // Navigate wiithin checkout
+    const changeView = (newView)=>{
         return async ()=>{
             await transition.out();
             await $.delay(150);
-            setState({
-                view
-            });
+            setView(newView);
             await transition.in();
         };
+    }; // Handle Card Submit
+    const handleCardSubmit = async ()=>{
+        // Start Timer
+        setState({
+            processing: true,
+            error: ''
+        });
+        const timer = $.timer(1000).start(); // Process Payment
+        const status = await payment.process(state.method.id, null, state.saveCard); // Await Timer
+        await timer.hold(); // Do something with the status;
+        if (!status.complete) return setState({
+            processing: false,
+            error: copy.errors.fucked
+        }); // Get Ready To Go To Confirmation
+        setState({
+            processing: false
+        });
     };
-    console.log(payment);
     return(/*#__PURE__*/ _react.default.createElement(_BookingPage.default, {
-        back: state.view === 'main' ? "Summary" : changeView('main'),
-        backText: state.view === 'main' ? copy.back : "Back",
+        back: view === 'main' ? "Summary" : changeView(getPrevView(view)),
+        backText: copy.back,
         showLoader: !stripe
     }, stripe && /*#__PURE__*/ _react.default.createElement(_reactStripeJs.Elements, {
         options: _useStripeCheckout2.stripeOptions,
         stripe: stripe
-    }, state.view === 'main' && /*#__PURE__*/ _react.default.createElement(_CheckoutSections.ConfirmCheckout, {
+    }, view === 'main' && /*#__PURE__*/ _react.default.createElement(_CheckoutSections.ConfirmCheckout, {
         cost: cost.dollars,
         paymentRequest: payment.request,
-        wallet: state.method.wallet
-    }, /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+        wallet: state.method.wallet,
+        paymentReady: !!state.method.id,
+        paymentLoading: state.processing,
+        onSubmit: handleCardSubmit
+    }, state.method.id ? /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
         type: "main",
-        label: "American Express",
-        icon: "amex",
+        label: state.method.name,
+        icon: state.method.brand,
         onClick: changeView('methods'),
         isCard: true,
-        text: "1234"
-    })), state.view === 'methods' && /*#__PURE__*/ _react.default.createElement(_CheckoutSections.SelectPaymentMethod, {
-        wallets: [],
-        cards: []
+        text: state.method.last4
+    }) : /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+        type: "main",
+        onClick: changeView('methods'),
+        text: "Select Payment Method",
+        isMainBtn: true
+    })), view === 'methods' && /*#__PURE__*/ _react.default.createElement(_CheckoutSections.SelectPaymentMethod, {
+        wallets: payment.wallets.enabled,
+        cards: [
+            ...payment.methods.all,
+            ...state.addedMethods
+        ],
+        addCardHandler: changeView('add-card'),
+        onSelect: null,
+        selected: state.method
+    }), view === 'add-card' && /*#__PURE__*/ _react.default.createElement(_AddPaymentMethod.default, {
+        name: state.name,
+        email: (_app$user2 = app.user) === null || _app$user2 === void 0 ? void 0 : _app$user2.email,
+        onNameChange: (val)=>setState({
+                name: val
+            })
+        ,
+        stripe: stripe,
+        setMethod: (val)=>{
+            setState({
+                method: val,
+                addedMethods: [
+                    ...state.addedMethods,
+                    val
+                ]
+            });
+        },
+        setSaveCard: (val)=>setState({
+                saveCard: val
+            })
+        ,
+        saveCard: state.saveCard,
+        changeView: changeView('main')
     }))));
-};
+}; // Export Checkout Component
 _c = Checkout;
 var _default = Checkout;
 exports.default = _default;
@@ -74957,7 +75019,7 @@ $RefreshReg$(_c, "Checkout");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../helpers/useStripeCheckout":"wuaxU","../../components/Buttons":"7xzNC","../../helpers/hooks":"4wqYR","../components/PaymentMethod":"766fa","./CheckoutSections":"4BkiM"}],"3BTVB":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../helpers/useStripeCheckout":"wuaxU","../../helpers/hooks":"4wqYR","../components/PaymentMethod":"766fa","./CheckoutSections":"4BkiM","./AddPaymentMethod":"2WJWe"}],"3BTVB":[function(require,module,exports) {
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react')) : typeof define === 'function' && define.amd ? define([
         'exports',
@@ -75473,10 +75535,47 @@ var _context = _interopRequireDefault(require("../store/context"));
 var _stripeJs = require("@stripe/stripe-js");
 var _axios = _interopRequireDefault(require("axios"));
 var _config = _interopRequireDefault(require("../../data/config"));
+var _hooks = require("../../helpers/hooks");
+var _cardBrands = require("./cardBrands");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
 }
 // Create Stripe Options
 const stripeOptions = {
@@ -75536,7 +75635,7 @@ const processPayment = (stripe, secret)=>{
 }; // Ceraete The Hook
 const useStripeCheckout = ()=>{
     const { state: { reservation: r  }  } = _react.useContext(_context.default);
-    const [data, setData] = _react.useState({
+    const [state, setState] = _hooks.useObjectState({
     });
     _react.useEffect(()=>{
         const loadStripeAPI = async ()=>{
@@ -75565,7 +75664,7 @@ const useStripeCheckout = ()=>{
             );
              // Artifical Delay
             await timer.hold(); // Finally Update The State
-            setData({
+            setState({
                 stripe,
                 secret,
                 cost: {
@@ -75573,17 +75672,38 @@ const useStripeCheckout = ()=>{
                     dollars: (cost / 100).toFixed(2)
                 },
                 methods: {
-                    all: paymentMethods,
+                    all: paymentMethods.map((card)=>({
+                            brand: card.brand,
+                            last4: card.digits,
+                            id: card.id,
+                            name: _cardBrands.getBrand(card.brand),
+                            type: 'card'
+                        })
+                    ),
                     default: null
                 },
                 request: paymentRequest,
-                wallets,
-                processPayment: processPayment(stripe, secret)
+                wallets: _objectSpread(_objectSpread({
+                }, wallets), {
+                }, {
+                    enabled: Array.from(Object.entries(wallets)).map((_ref)=>{
+                        let [key, val] = _ref;
+                        return {
+                            provider: key.replace(/[A-Z]/g, (m)=>"-" + m.toLowerCase()
+                            ),
+                            enabled: val,
+                            id: key,
+                            type: 'wallet'
+                        };
+                    }).filter((itm)=>itm.enabled
+                    )
+                }),
+                process: processPayment(stripe, secret)
             });
         };
-        if (!data.stripe) loadStripeAPI();
+        if (!state.stripe) loadStripeAPI();
     }, []);
-    return data;
+    return state;
 }; // Export the hook
 var _default = useStripeCheckout;
 exports.default = _default;
@@ -75593,7 +75713,7 @@ exports.default = _default;
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","@stripe/stripe-js":"3ghLS","../../data/config":"3Re6c","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","axios":"5FCRD"}],"3ghLS":[function(require,module,exports) {
+},{"react":"3qVBT","@stripe/stripe-js":"3ghLS","../../data/config":"3Re6c","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","axios":"5FCRD","../../helpers/hooks":"4wqYR","./cardBrands":"3Xko7"}],"3ghLS":[function(require,module,exports) {
 'use strict';
 Object.defineProperty(exports, '__esModule', {
     value: true
@@ -75685,6 +75805,39 @@ var loadStripe = function loadStripe1() {
 };
 exports.loadStripe = loadStripe;
 
+},{}],"3Xko7":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getWalletProvider = exports.getBrand = void 0;
+const getBrand = (brand)=>{
+    switch(brand){
+        case 'mastercard':
+            return 'MasterCard';
+        case 'visa':
+            return 'Visa';
+        case 'amex':
+            return 'American Express';
+        case 'discover':
+            return 'Discover';
+        default:
+            return brand;
+    }
+};
+exports.getBrand = getBrand;
+const getWalletProvider = (provider)=>{
+    switch(provider){
+        case 'google-pay':
+        case 'googlePay':
+            return 'Google Pay';
+        case 'apple-pay':
+        case 'applePay':
+            return 'Apple Pay';
+    }
+};
+exports.getWalletProvider = getWalletProvider;
+
 },{}],"766fa":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
@@ -75705,7 +75858,7 @@ function _interopRequireDefault(obj) {
     };
 }
 const PaymentMethod = (_ref)=>{
-    let { onClick , label , icon , type , selected , text , isCard  } = _ref;
+    let { onClick , label , icon , type , selected , text , isCard , isMainBtn  } = _ref;
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "payment-method",
         onClick: onClick
@@ -75713,7 +75866,7 @@ const PaymentMethod = (_ref)=>{
         className: "payment-method__info"
     }, label && /*#__PURE__*/ _react.default.createElement("h6", {
         className: "bold"
-    }, label), /*#__PURE__*/ _react.default.createElement("div", null, type === 'button' ? /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+    }, label), /*#__PURE__*/ _react.default.createElement("div", null, type === 'button' || isMainBtn ? /*#__PURE__*/ _react.default.createElement(_Icon.default, {
         icon: "plus"
     }) : /*#__PURE__*/ _react.default.createElement(_Icon.default, {
         icon: icon,
@@ -75754,6 +75907,7 @@ var _react = _interopRequireWildcard(require("react"));
 var _context = _interopRequireDefault(require("../store/context"));
 var _Buttons = require("../../components/Buttons");
 var _PaymentMethod = _interopRequireDefault(require("../components/PaymentMethod"));
+var _cardBrands = require("../helpers/cardBrands");
 var _reactStripeJs = require("@stripe/react-stripe-js");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -75788,9 +75942,11 @@ function _interopRequireWildcard(obj) {
     return newObj;
 }
 // Import Components
+// Import Helpers
 // Import Stripe Components
+// Creat First Page
 const ConfirmCheckout = (_ref)=>{
-    let { children , cost , paymentRequest , wallet  } = _ref;
+    let { children , cost , paymentRequest , wallet , paymentReady , onSubmit , paymentLoading  } = _ref;
     const { state: { app: { step  }  } , appCopy: { steps  }  } = _react.useContext(_context.default);
     const copy = steps[step];
     return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
@@ -75808,30 +75964,49 @@ const ConfirmCheckout = (_ref)=>{
             paymentRequest
         }
     })) : /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.next.replace("{total}", cost)
+        text: copy.next.replace("{total}", cost),
+        disabled: !paymentReady,
+        onClick: onSubmit,
+        showLoader: paymentLoading
     })));
-};
+}; // Create Second Page
 _c = ConfirmCheckout;
 exports.ConfirmCheckout = ConfirmCheckout;
 const SelectPaymentMethod = (_ref2)=>{
-    let { wallets , cards , onSelect  } = _ref2;
+    let { wallets , cards , selected , onSelect , addCardHandler  } = _ref2;
+    const { state: { app: { step  }  } , appCopy: { steps  }  } = _react.useContext(_context.default);
+    const copy = steps[step].views.methods;
     return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__header animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h3", null, "Select Payment Method")), /*#__PURE__*/ _react.default.createElement("hr", {
+    }, /*#__PURE__*/ _react.default.createElement("h3", null, copy.title)), /*#__PURE__*/ _react.default.createElement("hr", {
         className: "booking-view__divider animate-item"
     }), wallets && wallets.length > 0 && /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__section animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Digital Wallets"), /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
-        type: "button",
-        text: "Add Credit/Debit Card"
-    })), /*#__PURE__*/ _react.default.createElement("div", {
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, copy.wallets), wallets.map((wallet)=>/*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+            key: wallet.provider,
+            type: "option",
+            icon: wallet.provider,
+            text: _cardBrands.getWalletProvider(wallet.provider),
+            selected: selected === wallet.provider
+        })
+    )), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__section animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Your Credit/Debit Cards"), /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, copy.cards), cards && cards.length > 0 ? cards.map((card)=>/*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+            key: card.id,
+            icon: card.brand,
+            type: "option",
+            label: card.name,
+            text: card.last4,
+            isCard: true,
+            selected: card.id === selected.id
+        })
+    ) : /*#__PURE__*/ _react.default.createElement("p", null, copy.text), /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
         type: "button",
-        text: "Add new card"
+        text: copy.add,
+        onClick: addCardHandler
     })), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: "Select to continue",
-        disabled: true
+        text: selected.id ? copy.button.enabled.replace('{method}', "".concat(selected.name, " ").concat(selected.last4 || '').trim()) : copy.button.disabled,
+        disabled: !selected.id
     })));
 };
 _c1 = SelectPaymentMethod;
@@ -75845,7 +76020,237 @@ $RefreshReg$(_c1, "SelectPaymentMethod");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../../components/Buttons":"7xzNC","../components/PaymentMethod":"766fa"}],"4R7YP":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../../components/Buttons":"7xzNC","../components/PaymentMethod":"766fa","../helpers/cardBrands":"3Xko7"}],"2WJWe":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = exports.AddPaymentMethod = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _context = _interopRequireDefault(require("../store/context"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Checkbox = _interopRequireDefault(require("../../components/Checkbox"));
+var _hooks = require("../../helpers/hooks");
+var _cardBrands = require("../helpers/cardBrands");
+var _useStripeCheckout = require("../helpers/useStripeCheckout");
+var _reactStripeJs = require("@stripe/react-stripe-js");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Components
+// Import Helpers
+// Import Stripe Components
+// Create Third Page
+const AddPaymentMethod = (_ref)=>{
+    let { email , name , onNameChange , stripe , setMethod , changeView , saveCard , setSaveCard  } = _ref;
+    // Create Stripe Elements
+    const elements = _reactStripeJs.useElements(); // Get State copy
+    const { state: { app: { step  }  } , appCopy: { steps  }  } = _react.useContext(_context.default);
+    const copy = steps[step];
+    const viewCopy = copy.views["add-card"]; // Create Local State
+    const [state, setState] = _hooks.useObjectState({
+        cardFocused: false,
+        cardError: false,
+        cardComplete: false,
+        cardBrand: '',
+        nameErrors: [],
+        showLoader: false
+    }); // Create Submission Handler
+    const handleSubmit = async ()=>{
+        // Show Loader
+        setState({
+            showLoader: true
+        }); // Start Timer
+        const timer = $.timer(1000).start(); // Add Payment Method
+        const { error , paymentMethod  } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(_reactStripeJs.CardElement),
+            billing_details: {
+                email,
+                name
+            }
+        }); // Catch Error
+        if (error) return setState({
+            cardError: 'failed'
+        }); // Artificial Delay
+        await timer.hold(); // Set Method and change view
+        const { id , type , card: { brand , last4  }  } = paymentMethod;
+        setMethod({
+            id,
+            type,
+            brand,
+            last4,
+            name: "".concat(_cardBrands.getBrand(brand))
+        }); // Change View
+        changeView();
+    }; // Render Component
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__header animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h3", null, viewCopy.title)), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__form"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-full-name",
+        type: "name",
+        icon: "person-circle",
+        label: copy.labels.name,
+        placeholder: viewCopy.placeholder,
+        value: name,
+        onChange: onNameChange,
+        errors: state.nameErrors
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("input__input", [
+            state.cardFocused,
+            "focused"
+        ], [
+            state.cardError,
+            "has-error"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__stripe"
+    }, /*#__PURE__*/ _react.default.createElement("label", null, copy.labels.card), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__stripe-container"
+    }, /*#__PURE__*/ _react.default.createElement(_reactStripeJs.CardElement, {
+        options: {
+            style: _useStripeCheckout.stripeStyle
+        },
+        onChange: (e)=>{
+            var _e$error;
+            return setState({
+                cardError: (_e$error = e.error) === null || _e$error === void 0 ? void 0 : _e$error.code,
+                cardComplete: e.complete,
+                cardBrand: e.brand
+            });
+        },
+        onFocus: ()=>setState({
+                cardFocused: true
+            })
+        ,
+        onBlur: ()=>setState({
+                cardFocused: false
+            })
+    })))), state.cardError && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__error"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "error",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small bold"
+    }, copy.errors[state.cardError] || copy.errors.default)))), /*#__PURE__*/ _react.default.createElement(_Checkbox.default, {
+        id: "save-payment-method",
+        label: viewCopy.save,
+        checked: saveCard,
+        onChange: setSaveCard
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__form"
+    }, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: viewCopy.button,
+        disabled: !!(!state.cardComplete || state.nameErrors.length),
+        showLoader: state.showLoader,
+        onClick: handleSubmit
+    }))));
+};
+_c = AddPaymentMethod;
+exports.AddPaymentMethod = AddPaymentMethod;
+var _default = AddPaymentMethod;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AddPaymentMethod");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../store/context":"2o6qx","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../components/Icon":"4VYCM","../../components/Checkbox":"1fRxr","../../helpers/hooks":"4wqYR","../helpers/cardBrands":"3Xko7","../helpers/useStripeCheckout":"wuaxU","@stripe/react-stripe-js":"3BTVB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"1fRxr":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Checkbox = (_ref)=>{
+    let { id , label , checked , onChange: _onChange  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "checkbox animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("input", {
+        type: "checkbox",
+        id: id,
+        checked: checked,
+        onChange: (e)=>_onChange(e.target.checked)
+    }), /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, /*#__PURE__*/ _react.default.createElement("span", null, checked && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "check",
+        size: "xs"
+    })), /*#__PURE__*/ _react.default.createElement("h6", null, label))));
+};
+_c = Checkbox;
+var _default = Checkbox;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Checkbox");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

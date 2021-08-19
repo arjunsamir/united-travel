@@ -14,7 +14,7 @@
 
         transition: border $dt;
 
-        &:focus-within {
+        &:focus-within, &.focused {
             border-color: var(--slate);
         }
 
@@ -54,16 +54,6 @@
         display: flex;
         align-items: center;
         @include flexGap(2.4rem);
-        
-
-        label {
-            font-size: $p-small;
-            font-weight: 700;
-            line-height: 1.2;
-            margin-bottom: 4px;
-            color: var(--slate);
-            user-select: none;
-        }
 
         hr {
             height: 4.8rem;
@@ -75,6 +65,19 @@
         svg {
             color: var(--slate-dark);
         }
+    }
+
+    &__main, &__stripe {
+
+        label {
+            font-size: $p-small;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            color: var(--slate);
+            user-select: none;
+        }
+
     }
 
     &__toggle {
@@ -96,6 +99,14 @@
 
         &.clickable {
             cursor: pointer;
+        }
+    }
+
+    &__stripe {
+        flex-grow: 10;
+
+        &-container {
+            padding: 0.8rem 0;
         }
     }
 
@@ -291,6 +302,48 @@
         font-size: $p;
         line-height: 1.7;
         color: var(--jet);
+    }
+
+}
+
+
+.checkbox {
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+
+    input {
+        display: none;
+    }
+
+    label {
+        color: var(--slate-dark);
+        display: flex;
+        flex-grow: 10;
+        align-self: stretch;
+        align-items: center;
+        cursor: pointer
+    }
+
+    span {
+        @include flexCenter;
+        height: 2.4rem;
+        width: 2.4rem;
+        margin-right: 0.8rem;
+        border-radius: 0.4rem;
+        background-color: var(--slate-light);
+        color: var(--jet);
+        transition: background-color $dt;
+    }
+
+    input:checked + label {
+        span {
+            background-color: var(--black);
+            color: var(--white);
+        }
     }
 
 }

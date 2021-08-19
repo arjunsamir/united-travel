@@ -391,4 +391,8 @@
 
     }
 
+    &__form {
+        @include blockGap(1.6rem);
+    }
+
 }

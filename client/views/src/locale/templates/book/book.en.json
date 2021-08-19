@@ -171,8 +171,43 @@
             "title": "Complete Payment",
             "notice": "Complete the payment to book your reservation. You can cancel your reservation at no cost until 48 hours prior to your reservation.",
             "method": "Payment Method",
-            "back": "Summary",
-            "next": "Confirm & Pay ${total}"
+            "back": "Back",
+            "next": "Confirm & Pay ${total}",
+            "errors": {
+                "invalid_number": "This card number is invalid.",
+                "incomplete_number": "Card number is incomplete. Most cards have 16 digits.",
+                "incomplete_cvc": "The CVC code is incomplete",
+                "incomplete_expiry": "The card expiration date is incomplete",
+                "invalid_expiry_year_past": "Expriation year is in the past",
+                "incomplete_zip": "The zip code is incomplete",
+                "failed": "Sorry, your card could not be added.",          
+                "default": "Your card informaiton is invalid.",
+                "fucked": "We had a hard time processing your card. Please try again or select a different payment method.",
+                "name": "Name is required."
+            },
+            "labels": {
+                "name": "Name on card",
+                "card": "Card information"
+            },
+            "views": {
+                "add-card": {
+                    "title": "Add New Card",
+                    "button": "Add card",
+                    "save": "Save this card for future use",
+                    "placeholder": "Jamie Lopez"
+                },
+                "methods": {
+                    "title": "Select Payment Method",
+                    "wallets": "Digital Wallets",
+                    "cards": "Your Credit/Debit Cards",
+                    "text":"You don't have any saved credit/debit cards yet. Add one below.",
+                    "add": "Add new card",
+                    "button": {
+                        "disabled": "Select to continue",
+                        "enabled": "Use {method}"
+                    }
+                }
+            }
         }
     },
     "common": {

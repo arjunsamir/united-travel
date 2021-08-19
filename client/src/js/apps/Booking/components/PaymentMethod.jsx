@@ -2,14 +2,14 @@ import React from 'react';
 
 import Icon from '../../components/Icon';
 
-const PaymentMethod = ({ onClick, label, icon, type, selected, text, isCard }) => {
+const PaymentMethod = ({ onClick, label, icon, type, selected, text, isCard, isMainBtn }) => {
 
     return (
         <div className="payment-method" onClick={onClick}>
             <div className="payment-method__info">
                 {label && <h6 className="bold">{label}</h6>}
                 <div>
-                    {type === 'button' ? (
+                    {type === 'button' || isMainBtn ? (
                         <Icon icon="plus" />
                     ) : (
                         <Icon icon={icon} size="xl" />
