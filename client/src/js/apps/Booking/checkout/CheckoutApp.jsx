@@ -7,12 +7,14 @@ import AppContext from '../store/context';
 import Summary from './Summary';
 import Login from './Login';
 import Checkout from './Checkout';
+import Confirmation from './Confirmation';
 
 
 const steps = {
     Summary,
     Login,
-    Checkout
+    Checkout,
+    Confirmation
 }
 
 

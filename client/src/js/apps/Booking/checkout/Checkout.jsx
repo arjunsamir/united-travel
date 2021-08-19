@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 
 
 // Import Context
@@ -18,9 +18,10 @@ import { useObjectState } from '../../helpers/hooks';
 
 // Import Stripe Checkout
 import { Elements } from '@stripe/react-stripe-js';
-import useStripeCheckout, { stripeOptions } from '../helpers/useStripeCheckout';
+import useStripeCheckout, { stripeOptions } from '../helpers/useCheckout';
 
 
+// Get Previous View For Navigation
 const getPrevView = (current) => {
 
     switch (current) {
@@ -37,7 +38,6 @@ const getPrevView = (current) => {
 }
 
 
-
 // Create Checkout Component
 const Checkout = () => {
 
@@ -45,8 +45,10 @@ const Checkout = () => {
     const { state: { app }, appCopy, transition } = useContext(AppContext);
     const copy = appCopy.steps[app.step];
 
+
     // Load Stripe
     const { stripe, cost, ...payment } = useStripeCheckout();
+
 
     // Create State
     const [view, setView] = useState('main');
@@ -58,6 +60,40 @@ const Checkout = () => {
         name: app.user?.name,
         processing: false
     });
+
+
+    // Update State After Payment Methods Are Loaded
+    useEffect(() => {
+
+        if (!payment.methods) return;
+
+        const { default: d, all } = payment.methods;
+
+        if (!d && !all.length) return;
+
+        // If 
+        // if (d) find the default method;
+
+        setState({ method: all[0] });
+
+    }, [payment.methods]);
+
+
+    // Handle Final Payment Processing
+    useEffect(() => {
+
+        if (!payment.status.complete) return;
+
+        // Do something with the status;
+        if (!payment.status.complete) return setState({
+            processing: false,
+            error: copy.errors.fucked
+        })
+
+        // Go To Confirmation
+        transition.to("Confirmation");
+
+    }, [payment.status.success]);
 
 
     // Navigate wiithin checkout
@@ -89,15 +125,9 @@ const Checkout = () => {
         // Await Timer
         await timer.hold();
 
-        // Do something with the status;
-        if (!status.complete) return setState({
-            processing: false,
-            error: copy.errors.fucked
-        })
-
-        
-        // Get Ready To Go To Confirmation
+        // Update State
         setState({ processing: false });
+        payment.update({ status });
 
     }
 
@@ -112,23 +142,33 @@ const Checkout = () => {
 
                     {view === 'main' && (
                         <ConfirmCheckout
-                            cost={cost.dollars}
+                            cost={cost}
+                            credits={payment.credits}
                             paymentRequest={payment.request}
-                            wallet={state.method.wallet}
-                            paymentReady={!!state.method.id}
+                            method={state.method}
                             paymentLoading={state.processing}
                             onSubmit={handleCardSubmit}
+                            error={state.error}
                         >
 
                             {state.method.id ? (
-                                <PaymentMethod
-                                    type="main"
-                                    label={state.method.name}
-                                    icon={state.method.brand}
-                                    onClick={changeView('methods')}
-                                    isCard
-                                    text={state.method.last4}
-                                />
+                                state.method.type === 'card' ? (
+                                    <PaymentMethod
+                                        type="main"
+                                        label={state.method.name}
+                                        icon={state.method.brand}
+                                        onClick={changeView('methods')}
+                                        isCard
+                                        text={state.method.last4}
+                                    />
+                                ) : (
+                                    <PaymentMethod
+                                        type="main"
+                                        icon={state.method.provider}
+                                        onClick={changeView('methods')}
+                                        text={state.method.name}
+                                    />
+                                )
                             ) : (
                                 <PaymentMethod
                                     type="main"
@@ -146,8 +186,9 @@ const Checkout = () => {
                             wallets={payment.wallets.enabled}
                             cards={[...payment.methods.all, ...state.addedMethods]}
                             addCardHandler={changeView('add-card')}
-                            onSelect={null}
+                            onSelect={(m) => setState({ method: m })}
                             selected={state.method}
+                            changeView={changeView('main')}
                         /> 
                     )}
 

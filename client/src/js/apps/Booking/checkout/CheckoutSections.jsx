@@ -3,13 +3,12 @@ import AppContext from '../store/context';
 
 // Import Components
 import { Button } from '../../components/Buttons';
+import Icon from '../../components/Icon';
 import PaymentMethod from '../components/PaymentMethod';
-
-// Import Helpers
-import { getWalletProvider } from '../helpers/cardBrands';
 
 
 // Import Stripe Components
+import { walletButtonStyle as style } from '../helpers/useCheckout';
 import {
     PaymentRequestButtonElement as Walletbutton,
 } from '@stripe/react-stripe-js';
@@ -17,16 +16,24 @@ import {
 
 
 // Creat First Page
-export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet, paymentReady, onSubmit, paymentLoading }) => {
+export const ConfirmCheckout = ({ children, cost, credits, paymentRequest, method, onSubmit, paymentLoading, error }) => {
 
     const { state: { app: { step } }, appCopy: { steps } } = useContext(AppContext);
     const copy = steps[step];
-    
+
     return (
         <>
             <div className="booking-view__header animate-children">
                 <h3>{copy.title}</h3>
-                <h5>${cost}</h5>
+                {credits.cents ? (
+                    <div>
+                        <h5><span>${cost.subtotal.dollars}</span> ${cost.total.dollars}</h5>
+                        <p className="small bold">${credits.dollars} Credit Applied</p>
+                    </div>
+                ) : (
+                    <h5>${cost.subtotal.dollars}</h5>
+                )}
+                
             </div>
 
             <hr className="booking-view__divider animate-item" />
@@ -40,17 +47,28 @@ export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet, paymen
                 {children}
             </div>
 
-            {wallet ? (
+            {method.type === 'wallet' ? (
                 <div className="animate-item">
-                    <Walletbutton options={{ paymentRequest }} />
+                    <Walletbutton options={{ paymentRequest, style }} />
                 </div>
             ) : (
                 <Button
-                    text={copy.next.replace("{total}", cost)}
-                    disabled={!paymentReady}
+                    text={copy.next.replace("{total}", cost.total.dollars)}
+                    disabled={!method.id}
                     onClick={onSubmit}
                     showLoader={paymentLoading}
                 />
+            )}
+
+            {error && (
+                <div className="input">
+                    <div className="input__errors animate-children">
+                        <div className="input__error">
+                            <Icon icon="error" size="sm" />
+                            <p className="small bold">{error}</p>
+                        </div>
+                    </div>
+                </div>
             )}
 
         </>
@@ -60,7 +78,7 @@ export const ConfirmCheckout = ({ children, cost, paymentRequest, wallet, paymen
 
 
 // Create Second Page
-export const SelectPaymentMethod = ({ wallets, cards, selected, onSelect, addCardHandler }) => {
+export const SelectPaymentMethod = ({ wallets, cards, selected, onSelect, addCardHandler, changeView }) => {
 
     const { state: { app: { step } }, appCopy: { steps } } = useContext(AppContext);
     const copy = steps[step].views.methods;
@@ -81,8 +99,9 @@ export const SelectPaymentMethod = ({ wallets, cards, selected, onSelect, addCar
                             key={wallet.provider}
                             type="option"
                             icon={wallet.provider}
-                            text={getWalletProvider(wallet.provider)}
-                            selected={selected === wallet.provider}
+                            text={wallet.name}
+                            selected={selected.id === wallet.id}
+                            onClick={() => onSelect(wallet)}
                         />
                     ))}
                     
@@ -100,6 +119,7 @@ export const SelectPaymentMethod = ({ wallets, cards, selected, onSelect, addCar
                         text={card.last4}
                         isCard
                         selected={card.id === selected.id}
+                        onClick={() => onSelect(card)}
                     />
 
                 ))) : (
@@ -118,6 +138,7 @@ export const SelectPaymentMethod = ({ wallets, cards, selected, onSelect, addCar
                     copy.button.disabled
                 }
                 disabled={!selected.id}
+                onClick={changeView}
             />
         </>
     )

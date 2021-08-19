@@ -1015,6 +1015,20 @@ window.addEventListener('DOMContentLoaded', ()=>{
                     page.navbar.applyView('min');
                     return page.load();
                 }
+            },
+            {
+                namespace: 'account',
+                beforeEnter () {
+                    page.addComponent({
+                        name: 'AccountApp',
+                        data: {
+                            page,
+                            selector: '#account-react-app'
+                        }
+                    });
+                    page.navbar.applyView('min');
+                    return page.load();
+                }
             }
         ],
         // Prevent Double Clicking Links
@@ -4081,6 +4095,11 @@ const componentsRegistry = {
             return require('../apps/Reviews');
         }).then((res)=>_interopRequireWildcard(res)
         ))
+    ,
+    AccountApp: (dta, ctn)=>new _AppLoader.default(dta, ctn, Promise.resolve().then(function() {
+            return require('../apps/Account');
+        }).then((res)=>_interopRequireWildcard(res)
+        ))
 }; // Create Page Class
 class Page {
     init() {
@@ -4165,7 +4184,7 @@ class Page {
 }
 exports.default = Page;
 
-},{"./Scroll":"2MJU8","./Navbar":"3g1LQ","./Typewriter":"3dS2T","./helpers/AppLoader":"1m6OV","../apps/Fleet":"5vzVZ","../apps/Login":"51t1y","../apps/Booking":"10Hxt","../apps/Reviews":"6ZVLU"}],"2MJU8":[function(require,module,exports) {
+},{"./Scroll":"2MJU8","./Navbar":"3g1LQ","./Typewriter":"3dS2T","./helpers/AppLoader":"1m6OV","../apps/Fleet":"5vzVZ","../apps/Login":"51t1y","../apps/Booking":"10Hxt","../apps/Reviews":"6ZVLU","../apps/Account":"5O2K2"}],"2MJU8":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8662,6 +8681,13 @@ module.exports = require("./loaders/browser/js-loader")(require('./bundle-url').
     delete module.bundle.cache[module.id];
     throw err;
 }).then(()=>module.bundle.root('4XhS9')
+);
+
+},{"./loaders/browser/js-loader":"6Yn6U","./bundle-url":"7i9Uf"}],"5O2K2":[function(require,module,exports) {
+module.exports = require("./loaders/browser/js-loader")(require('./bundle-url').getBundleURL() + "../Account.a605c286.js").catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('5l22r')
 );
 
 },{"./loaders/browser/js-loader":"6Yn6U","./bundle-url":"7i9Uf"}],"7cKho":[function(require,module,exports) {

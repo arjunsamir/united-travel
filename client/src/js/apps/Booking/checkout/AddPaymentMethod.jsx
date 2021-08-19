@@ -13,7 +13,7 @@ import { getBrand } from '../helpers/cardBrands';
 
 
 // Import Stripe Components
-import { stripeStyle as style } from '../helpers/useStripeCheckout';
+import { stripeStyle as style } from '../helpers/useCheckout';
 import { CardElement, useElements } from '@stripe/react-stripe-js';
 
 

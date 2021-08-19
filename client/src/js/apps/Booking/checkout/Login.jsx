@@ -70,6 +70,7 @@ const Login = () => {
                 await page.loginRefresh();
                 updateApp("USER", user)
                 await $.delay(100);
+                window.currentUser = user;
                 updateApp("STEP", "Checkout")
             }}
         />

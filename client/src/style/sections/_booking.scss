@@ -278,6 +278,20 @@
 
     &__header {
         @include blockGap(3.2rem);
+
+        h5 {
+            color: var(--success);
+            span {
+                color: var(--placeholder);
+                text-decoration: line-through;
+            }
+
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            color: var(--slate);
+        }
     }
 
     &__res-total {

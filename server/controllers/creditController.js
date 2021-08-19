@@ -1,43 +1,41 @@
 const User = require('./../models/user');
 const Credit = require('../models/credit');
+const Settings = require('../models/credit');
 //const Email = require('./../utils/email');
 
 
-exports.issue = async (referralCode, name) => {
+exports.issue = async (referralCode) => {
 
-    // 1. Define Credit Values
-    const val = {
-        user: 15,
-        sponsor: 10
-    };
+    // Get Current Settings
+    const settings = await Settings.findOne({ active: true });
 
 
     // 2. Find Sponsor & User
-    const sponsor = await User.findOne({ referralCode });
+    const recruiter = await User.findOne({ referralCode });
 
-    if (!sponsor) return [];
+    if (!recruiter) return [];
 
 
     // 3. Create User Credit
-    const sponsorCredit = await Credit.create({
-        value: val.sponsor,
+    const recruiterCredit = await Credit.create({
+        value: settings.referrals.recruiter.bonus,
+        expiration: settings.referrals.recruiter.expiration * 1000 * 60 * 60 * 24,
         status: 'pending',
-        description: `Congrats! You got a ${val.sponsor}$ ride credit for inviting ${name}. Your ride credit will expire 1 year from now.`,
-        userRef: sponsor._id
+        userRef: recruiter._id
     });
 
 
     // 4. Create User Credit And Reference Sponsor
     const userCredit = await Credit.create({
-        value: val.user,
-        description: `Congrats! You get ${val.user}$ off your first ride from being invited by ${sponsor.name}. Your ride credit will expire 1 year from now.`,
-        creditRef: sponsorCredit._id
+        value: settings.referrals.candidate.bonus,
+        expiration: settings.referrals.candidate.expiration * 1000 * 60 * 60 * 24,
+        creditRef: recruiterCredit._id
     });
 
 
     // 5. Apply Credit To Sponsor
-    sponsor.credits.push(sponsorCredit._id);
-    sponsor.save();
+    recruiter.credits.push(recruiterCredit._id);
+    recruiter.save();
 
 
     // 6. Apply Credit To New User

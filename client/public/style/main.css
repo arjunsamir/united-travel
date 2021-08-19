@@ -3210,6 +3210,17 @@ svg.placeholder, .icon.placeholder {
 .booking-view__header > *:not(:last-child) {
   margin-bottom: 3.2rem;
 }
+.booking-view__header h5 {
+  color: var(--success);
+  margin-bottom: 0.8rem;
+}
+.booking-view__header h5 span {
+  color: var(--placeholder);
+  text-decoration: line-through;
+}
+.booking-view__header p {
+  color: var(--slate);
+}
 .booking-view__res-total {
   display: flex;
   justify-content: space-between;

@@ -6,6 +6,7 @@ const path = require('path');
 const Quote = require('../models/quote');
 const Vehicle = require('../models/vehicle');
 const Settings = require('../models/settings');
+const Reservation = require('../models/reservation');
 
 // Import Utilities
 const { Client } = require("@googlemaps/google-maps-services-js");
@@ -22,7 +23,22 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET);
 
 // Get Settings on App Load
 const settings = {
-    promise: Settings.findOne({ active: true }).then(res => settings.data = res.toObject())
+    promise: Settings.findOne({ active: true }).then(res => settings.data = res.toObject()),
+    fetched: Date.now()
+}
+
+
+
+// Refresh Settings
+const refreshSettings = async () => {
+
+    await settings.promise;
+
+    if (Date.now() - settings.fetched > (60000 * 30)) {
+        settings.promise = Settings.findOne({ active: true }).then(res => settings.data = res.toObject());
+        await settings.promise;
+    }
+
 }
 
 
@@ -105,12 +121,111 @@ const calculateCost = (vehicle, distance, isTouristZip) => {
 
 }
 
+// Validate Booking
+const validateReservation = async (intent) => {
+
+    try {
+        console.log(intent);
+    }
+
+    catch (err) {
+        console.error(err);
+    }
+
+}
+
+
+// Get Stripe User
+const getStripeUser = async (user) => {
+
+    // Initialize Mutable variables
+    let customer, paymentMethods = [];
+
+    // Create or Retrieve Customer
+    if (user && user.stripeID) {
+        customer = await stripe.customers.retrieve(user.stripeID);
+    }
+    else if (user) {
+        customer = await stripe.customers.create({
+            name: user.name,
+            email: user.email
+        });
+
+        user.stripeID = customer.id;
+        await user.save()
+    }
+
+    // Retrieve Saved Payment Methods
+    if (customer) {
+        const list = await stripe.paymentMethods.list({
+            customer: customer.id,
+            type: 'card'
+        })
+
+        paymentMethods = list.data.map(item => {
+            const { card } = item;
+            return {
+                id: item.id,
+                brand: card.brand,
+                digits: card.last4,
+                expiration: {
+                    month: card.exp_month,
+                    year: card.exp_year
+                }
+            }
+        })
+    }
+
+    return [customer, paymentMethods]
+
+}
+
+
+// Get User Credits
+const getUserCredits = async (user, cost) => {
+
+    return [1500, cost - 1500, []]
+
+}
+
+
+// Called By Webhook. Charge Payment
+exports.confirmPayment = async (req, res, next) => {
+
+    const signature = req.headers['stripe-signature'];
+    let event, intent;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
+    }
+
+    catch (e) {
+        res.status(400).send(`Webhook Error: ${e.message}`);
+    }
+
+    switch(event.type) {
+        case 'payment_intent.succeeded':
+            intent = event.data.object;
+            break;
+        default:
+            console.log(`Unhandled event type ${event.type}`);
+    }
+
+    send(res, {
+        recieved: true
+    });
+
+    // Validate Payment In Database
+    validateReservation(intent);
+    
+};
+
 
 // Create Exports
 exports.getQuote = catchAsync(async (req, res, next) => {
 
     // In case settins isn't loaded wait for it
-    await settings.promise;
+    await refreshSettings();
 
 
     // Destructure Params
@@ -173,175 +288,37 @@ exports.getQuote = catchAsync(async (req, res, next) => {
 });
 
 
-// Called By Webhook. Charge Payment
-exports.confirmPayment = async (req, res, next) => {
-
-    const event = req.body;
-
-    console.log(event);
-
-    send(res, {
-        recieved: true
-    })
-    
-};
-
-
-// Create Payment Intent and Send to Client
-exports.createPaymentOLD = async (req, res) => {
-
-    const { id } = req.body;
-
-    try {
-
-        // Retrieve Quote to calculate cost
-        const quote = await Quote.findById(id)
-        if (!quote) throw new Error('No quote found!')
-
-        // Initialize Variables
-        const amount = quote.cost * 100;
-        const { user } = req;
-        let customer, paymentMethods = [];
-
-        // Create or Retrieve Customer
-        if (user && user.stripeID) {
-            customer = await stripe.customers.retrieve(user.stripeID);
-            
-        }
-        else if (user) {
-            customer = await stripe.customers.create({
-                name: user.name,
-                email: user.email
-            });
-
-            user.stripeID = customer.id;
-            await user.save()
-        }
-
-        // Retrieve Saved Payment Methods
-        if (customer) {
-
-            const list = await stripe.paymentMethods.list({
-                customer: customer.id,
-                type: 'card'
-            })
-
-            paymentMethods = list.data.map(item => {
-                const { card } = item;
-                return {
-                    id: item.id,
-                    brand: card.brand,
-                    digits: card.last4,
-                    expiration: {
-                        month: card.exp_month,
-                        year: card.exp_year
-                    }
-                }
-            })
-
-        }
-
-        // Create Payment Intent
-        const paymentIntent = await stripe.paymentIntents.create({
-            amount,
-            currency: 'USD',
-            statement_descriptor: 'Ride Transport',
-            payment_method_types: ['card'],
-            customer: customer ? customer.id : null
-        })
-
-        // Send Response
-        send(res, {
-            message: 'Success',
-            secret: paymentIntent.client_secret,
-            paymentMethods,
-            amount,
-            cost: quote.cost
-        })
-
-    }
-
-    catch (error) {
-        send(res, {
-            message: 'Error',
-            success: false,
-            error
-        })
-    }
-
-}
-
-
-const getStripeUser = async (user) => {
-
-    // Initialize Mutable variables
-    let customer, paymentMethods = [];
-
-    // Create or Retrieve Customer
-    if (user && user.stripeID) {
-        customer = await stripe.customers.retrieve(user.stripeID);
-    }
-    else if (user) {
-        customer = await stripe.customers.create({
-            name: user.name,
-            email: user.email
-        });
-
-        user.stripeID = customer.id;
-        await user.save()
-    }
-
-    // Retrieve Saved Payment Methods
-    if (customer) {
-        const list = await stripe.paymentMethods.list({
-            customer: customer.id,
-            type: 'card'
-        })
-
-        paymentMethods = list.data.map(item => {
-            const { card } = item;
-            return {
-                id: item.id,
-                brand: card.brand,
-                digits: card.last4,
-                expiration: {
-                    month: card.exp_month,
-                    year: card.exp_year
-                }
-            }
-        })
-    }
-
-    return [customer, paymentMethods]
-
-}
-
-
+// Create Reservation & Payment
 exports.createPayment = catchAsync(async (req, res, next) => {
 
     // Destructure Request Object
-    const { user, body: { quote_id, vehicle_id } } = req;
+    const { user, body: r } = req;
 
     // Retrieve Quote
-    const quote = await Quote.findById(quote_id);
+    const quote = await Quote.findById(r.quote);
 
     // Retrieve Vehicle
-    const vehicle = quote.vehicles.find(v => v.vehicle_id.toString() === vehicle_id);
+    const vehicle = quote.vehicles.find(v => v.vehicle_id.toString() === r.vehicle);
 
     // Handle Errors
     if (!vehicle) throw new Error('No vehicle found!');
 
     // Retrieve Cost
-    const { cost } = vehicle;
+    const { cost: sub_total } = vehicle;
 
     // Retrieve Stripe User
     const [customer, paymentMethods] = await getStripeUser(user);
 
+
+    // Retrieve Credits
+    const [credits_total, total, applied_credits] = await getUserCredits(user, sub_total);
+
+
     // Prepare Payment Intent Data
     const intentData = {
-        amount: cost,
+        amount: total,
         currency: 'USD',
-        statement_descriptor: 'Ride Transport',
+        statement_descriptor: 'Black Car Service',
         payment_method_types: ['card']
     }
 
@@ -351,12 +328,30 @@ exports.createPayment = catchAsync(async (req, res, next) => {
     // Create Payment Intent
     const paymentIntent = await stripe.paymentIntents.create(intentData);
 
+    // Create Reservation
+    // const reservation = await Reservation.create({
+    //     ...r,
+    //     user: user._id,
+    //     payment: {
+    //         intent: paymentIntent.id,
+    //         status: 'pending',
+    //         total,
+    //         sub_total,
+    //         credits_total,
+    //         applied_credits
+    //     },
+    //     status: 'pending'
+    // });
+
     // Send Response
     send(res, {
         status: 'SUCCESS',
         secret: paymentIntent.client_secret,
         paymentMethods,
-        cost
+        sub_total,
+        total,
+        credits: credits_total,
+        reservation: {}
     });
 
 });

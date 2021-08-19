@@ -21,11 +21,11 @@ const schema = new mongoose.Schema({
     referrals: {
         recruiter: {
             bonus: Number,
-            expiration: Number
+            expiration: Number // In Days
         },
         candidate: {
             bonus: Number,
-            expiration: Number
+            expiration: Number // In Days
         }
     },
     baseMpg: Number,

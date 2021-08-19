@@ -194,6 +194,21 @@ window.addEventListener('DOMContentLoaded', () => {
                     return page.load();
 
                 }
+            },
+
+            // Account Namespace
+            {
+                namespace: 'account',
+                beforeEnter() {
+                    page.addComponent({ name: 'AccountApp', data: {
+                        page,
+                        selector: '#account-react-app'
+                    }});
+
+                    page.navbar.applyView('min');
+
+                    return page.load();
+                }
             }
         ],
 

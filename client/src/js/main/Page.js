@@ -14,6 +14,7 @@ const componentsRegistry = {
     LoginApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Login')),
     BookingApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Booking')),
     ReviewsApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Reviews')),
+    AccountApp: (dta, ctn) => new AppLoader(dta, ctn, import('../apps/Account')),
 }
 
 
