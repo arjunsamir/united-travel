@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reservation - United Travel LLC</title>
+
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/style/main.css">
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="/fonts/silka.css">
+
+</head>
+
+<body class="booking-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use href="/img/icons.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
+
+    <!-- Navbar -->
+    <!--NBCTN-->
+<div class="navbar full" id="navbar">
+
+    <div class="nb-esc no-esc"></div>
+
+    <!-- Desktop Navbar -->
+    <div class="navbar__full">
+
+        <div class="navbar__background"></div>
+
+        <a class="navbar__brand" href="/es/">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <span>United Travel</span>
+        </a>
+
+        <nav class="navbar__nav" aria-label="desktop">
+            <ul class="navbar__nav-list">
+    <li class="animate-item"><a href="/es/" data-nav-namespace="home">Casa</a></li>
+    <li class="animate-item"><a href="/es/about" data-nav-namespace="about">Acerca de</a></li>
+    <li class="animate-item"><a href="/es/fleet" data-nav-namespace="fleet">Flota</a></li>
+    <li class="animate-item"><a href="/es/contact" data-nav-namespace="contact">Contacto</a></li>
+    
+</ul>
+        </nav>
+
+        <div class="navbar__actions">
+            <!-- Language -->
+            <div class="navbar__lang">
+                <div class="navbar__lang-icon nb-lng">
+                    <svg><use href="/img/icons.svg#language"></use></svg>
+                </div>
+                
+                <div class="navbar__lang-menu hidden">
+                    <ul>
+                        <li data-nav-lang="en" class=""><p class="small">English</p></li>
+                        <li data-nav-lang="es" class="active"><p class="small">Español</p></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr>
+
+            <!-- Profile Logged In -->
+            <% if (user._id) { %>
+                <div class="navbar__profile">
+
+                    <!-- Logged In Icon -->
+                    <div class="navbar__profile-pic nb-clt">
+                        <img src="<%- user.photo %>" alt="Profile Photo">
+                    </div>
+
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><p class="small">Hola <%- user.preferredName %></p></li>
+                            <hr>
+                            <li><a href="/es/account"><span>Mi cuenta</span></a></li>
+                            <li><a class="app-logout" href="#" id="nb-logout"><span>Cerrar sesión</span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            <% } else { %>
+                <div class="navbar__profile">
+
+                    <!-- Logged Out Icon -->
+                    <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                    
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><a href="/es/login"><span>Crear una cuenta</span></a></li>
+                            <li><a href="/es/login"><span>Acceso</span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            <% } %>
+
+            <!-- Call To Action -->
+            <a href="/es/book" class="navbar__cta">Reservar Ahora</a>
+        </div>
+
+    </div>
+
+    <!-- Hamburger Menu Only -->
+    <div class="navbar__min">
+        <div class="navbar__menu-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+</div>
+
+<div class="nav-menu hidden" id="nav-menu">
+
+    <!-- Menu Background -->
+    <div class="nav-menu__bg"></div>
+
+    <!-- Desktop Menu Layout -->
+    <div class="nav-menu__desktop">
+
+        <div class="nav-menu__visual">
+
+            <!-- Absolutely Positioned Nav menu -->
+            <div class="nav-menu__image">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/menu-visual.png" alt="Mercedes driving in fog">
+            </div>
+
+            <!-- Branding -->
+            <a href="/es/" class="nav-menu__brand">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+                <span class="h5">United Travel</span>
+            </a>
+
+            <!-- Log In Card -->
+            <div class="user-acct">
+
+                <!-- Backgronud -->
+                <div class="user-acct__bg"></div>
+
+                <% if (user._id) { %>
+                    <div class="user-acct__photo">
+                        <img src="<%- user.photo %>" alt="profile photo" />
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Hello <%- user.preferredName %></h6>
+                        <div>
+                            <a href="/es/account">Mi cuenta</a>
+                            <hr>
+                            <a href="#" class="app-logout">Cerrar sesión</a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="user-acct__icon">
+                        <svg class="icon-xl"><use href="/img/icons.svg#person-circle"></use></svg>
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Bienvenido Viajero</h6>
+                        <div>
+                            <a href="/es/login">Crear una cuenta</a>
+                            <hr>
+                            <a href="/es/login">Acceso</a>
+                        </div>
+                    </div>
+                <% } %>
+
+            </div>
+
+        </div>
+        
+        <div class="nav-menu__content">
+
+            <nav aria-label="desktop hamburger">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/es/" data-nav-namespace="home">Casa</a></li>
+    <li class="animate-item"><a href="/es/about" data-nav-namespace="about">Acerca de</a></li>
+    <li class="animate-item"><a href="/es/fleet" data-nav-namespace="fleet">Flota</a></li>
+    <li class="animate-item"><a href="/es/contact" data-nav-namespace="contact">Contacto</a></li>
+    
+</ul>
+            </nav>
+
+            <div class="nav-menu__cta">
+                <div class="content">
+                    <h4 class="white animate-item">¿Listo para reservar?</h4>
+                    <p class="small animate-item">¿Está listo para reservar un viaje para su próximo viaje a Orlando? Puede reservar su viaje en línea utilizando nuestro sistema de reservas en línea.</p>
+                    <a href="/es/book" class="btn-pill filled primary animate-item">Reservar Ahora </a>
+                </div>
+            </div>
+
+            <div class="nav-menu__lang">
+                <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
+                <ul>
+                    <li data-nav-lang="en" class="animate-item "><h5>English</h5></li>
+                    <li data-nav-lang="es" class="animate-item  active"><h5>Español</h5></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-menu__mobile">
+
+        <div class="nav-menu__content">
+            <a href="/es/" class="nav-menu__brand animate-item">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+            </a>
+    
+            <nav aria-label="mobile">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/es/" data-nav-namespace="home">Casa</a></li>
+    <li class="animate-item"><a href="/es/about" data-nav-namespace="about">Acerca de</a></li>
+    <li class="animate-item"><a href="/es/fleet" data-nav-namespace="fleet">Flota</a></li>
+    <li class="animate-item"><a href="/es/contact" data-nav-namespace="contact">Contacto</a></li>
+    
+        <li class="animate-item"><a href="/es/book" data-nav-namespace="booking">Reservar Ahora</a></li>
+    
+</ul>
+            </nav>
+    
+            <div class="nav-menu__account">
+                <% if (user._id) { %>
+                    <h5 class="white">Hello <%- user.preferredName %></h5>
+                    <div>
+                        <a class="animate-item" href="/es/account">Mi cuenta</a>
+                        <a class="animate-item app-logout" href="#">Cerrar sesión</a>
+                    </div>
+                <% } else { %>
+                    <h5 class="white animate-item">Bienvenido Viajero</h5>
+                    <div>
+                        <a class="animate-item" href="/es/login">Crear una cuenta</a>
+                        <a class="animate-item" href="/es/login">Acceso</a>
+                    </div>
+                <% } %>
+            </div>
+    
+            <ul class="nav-menu__lang">
+                <li data-nav-lang="en" class="animate-item"><h5>English</h5></li>
+                <li data-nav-lang="es" class="animate-item active"><h5>Español</h5></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<!--NBCTN-->
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="reservation">
+
+        <!-- Fleet React App -->
+        <div id="reservation-react-app"></div>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <!-- Decalre Global Locale -->
+<script>
+    window.locale = "es";
+    window.currentUser = JSON.parse('<%- JSON.stringify(user) %>');
+</script>
+
+<!-- External JavaScript Links -->
+<script src="/js/index.js"></script> 
+
+</body>
+
+</html
