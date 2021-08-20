@@ -876,6 +876,7 @@ function _interopRequireDefault(obj) {
 class FleetApp extends _ReactAppWrapper.default {
     async load() {
         const res = {
+            scroll: this.scroll
         };
         await Promise.all([
             _axios.default('/api/vehicles').then((data)=>{
@@ -893,6 +894,7 @@ class FleetApp extends _ReactAppWrapper.default {
     constructor(dta, ctn){
         super(dta.selector, ctn);
         this.App = _App.default;
+        this.scroll = dta.page.scroll;
     }
 }
 exports.default = FleetApp;
@@ -948,7 +950,7 @@ function _interopRequireWildcard(obj) {
 // Import Context
 // Import Components
 const App = (_ref)=>{
-    let { copy , vehicles  } = _ref;
+    let { copy , vehicles , scroll  } = _ref;
     const [vehicle, setVehicle] = _react.useState(vehicles[0]);
     const [change, setChange] = _react.useState();
     return(/*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
@@ -969,7 +971,8 @@ const App = (_ref)=>{
     }), /*#__PURE__*/ _react.default.createElement(_VehiclePicker.default, {
         vehicles: vehicles,
         selected: vehicle,
-        setVehicle: setChange
+        setVehicle: setChange,
+        scroll: scroll
     }))));
 };
 _c = App;
@@ -2973,13 +2976,16 @@ function _interopRequireDefault(obj) {
     };
 }
 const VehiclePicker = (_ref)=>{
-    let { vehicles , selected , setVehicle  } = _ref;
+    let { vehicles , selected , setVehicle , scroll  } = _ref;
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "fleet__picker"
     }, vehicles.map((v)=>/*#__PURE__*/ _react.default.createElement("div", {
             className: "fleet__picker-item".concat(v._id === selected._id ? ' selected' : ''),
             key: v._id,
-            onClick: ()=>setVehicle(v)
+            onClick: ()=>{
+                scroll.to('top');
+                setVehicle(v);
+            }
         }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("img", {
             src: v.thumbnail,
             alt: "Thumbnail for ".concat(v["info_".concat(window.locale)].name)

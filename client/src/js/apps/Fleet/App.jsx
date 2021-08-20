@@ -7,7 +7,7 @@ import AppContext from './AppContext';
 import Vehicle from "./components/Vehicle";
 import VehiclePicker from "./components/VehiclePicker";
 
-const App = ({ copy, vehicles }) => {
+const App = ({ copy, vehicles, scroll }) => {
 
     const [vehicle, setVehicle] = useState(vehicles[0]);
     const [change, setChange] = useState();
@@ -31,6 +31,7 @@ const App = ({ copy, vehicles }) => {
                     vehicles={vehicles}
                     selected={vehicle}
                     setVehicle={setChange}
+                    scroll={scroll}
                 />
             </section>
         </AppContext.Provider>

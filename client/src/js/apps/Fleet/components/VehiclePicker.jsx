@@ -1,6 +1,6 @@
 import React from "react";
 
-const VehiclePicker = ({ vehicles, selected, setVehicle }) => {
+const VehiclePicker = ({ vehicles, selected, setVehicle, scroll }) => {
     
     return (
         <div className="fleet__picker">
@@ -8,7 +8,10 @@ const VehiclePicker = ({ vehicles, selected, setVehicle }) => {
                 <div
                     className={`fleet__picker-item${v._id === selected._id ? ' selected' : ''}`}
                     key={v._id}
-                    onClick={() => setVehicle(v)}
+                    onClick={() => {
+                        scroll.to('top');
+                        setVehicle(v)
+                    }}
                 >
                     <div>
                         <img

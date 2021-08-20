@@ -5,6 +5,11 @@
     background-color: #222325;
 
     @include flexCenter;
+
+    @include respond(48em) {
+        flex-direction: column-reverse;
+        padding: 0;
+    }
     
     &__map {
         @include overlay;
@@ -15,12 +20,37 @@
             right: 0;
             top: 0;
         }
+
+        @include respond(48em) {
+            position: relative;
+            height: auto;
+            width: 100%;
+
+            img {
+                position: relative;
+                height: auto;
+                width: 100%;
+            }
+        }
     }
 
     &__content {
         position: relative;
         width: 100%;
         max-width: var(--track-width);
+
+        @include respond(48em) {
+            max-width: unset;
+            display: flex;
+            justify-content: center;
+            padding: var(--y-pad) var(--x-pad) 0;
+        }
+
+        @include phone {
+            h2 {
+                font-size: $h3;
+            }
+        }
 
     }
 

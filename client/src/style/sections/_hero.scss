@@ -6,11 +6,25 @@
 
     @include flexCenter;
 
+    &.smol {
+        @include ipadPro {
+            height: 50vh;
+        }
+
+        @include phone {
+            height: 100vh;
+        }
+    }
+
     &__background {
         @include overlay;
 
         img {
             @include cover;
+
+            @include phone {
+                object-position: right;
+            }
         }
     }
 
@@ -36,6 +50,9 @@
             }
 
             @include phone {
+
+                font-size: $h2;
+
                 span:not(:last-child)::before {
                     content: "\A";
                     white-space: pre;
@@ -47,6 +64,11 @@
 
         h4 {
             opacity: .85;
+
+            @include phone {
+                opacity: 1;
+                font-size: $h5;
+            }
         }
 
         a {

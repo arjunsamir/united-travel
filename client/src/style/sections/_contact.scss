@@ -6,6 +6,11 @@
     display: flex;
     justify-content: flex-end;
 
+    @include phone {
+        padding: 0;
+        flex-direction: column;
+    }
+
     &__image {
         position: absolute;
         top: 0;
@@ -16,6 +21,15 @@
         img {
             height: 100%;
         }
+
+        @include phone {
+            position: relative;
+
+            img {
+                height: auto;
+                width: 100%;
+            }
+        }
     }
 
     &__card {
@@ -25,6 +39,17 @@
         padding: var(--x-pad);
 
         background-color: var(--white);
+
+        @include phone {
+            box-shadow: none;
+            padding: 6.4rem var(--x-pad) var(--y-pad);
+
+            top: -2rem;
+
+            h2 {
+                font-size: $h3;
+            }
+        }
     }
 
     &__method {

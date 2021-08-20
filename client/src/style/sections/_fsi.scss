@@ -11,6 +11,11 @@
 
     padding: var(--y-pad) var(--x-pad);
 
+    @include ipad {
+        height: auto;
+        min-height: 75vh;
+    }
+
     &__background {
         @include overlay;
 
@@ -23,6 +28,19 @@
 
     &__overlay {
         @include overlay;
+        --bg-gradient-ipad: linear-gradient(0deg, rgba(0,0,0,0.9) 60%, rgba(0,0,0,0) 100%);
+        &.cruise {
+            --bg-gradient-ipad: linear-gradient(0deg, rgba(28, 41, 50, .9) 40%, rgba(28, 41, 50, 0) 100%)
+        }
+
+        background: var(--bg-gradient-desktop);
+
+        @include ipad {
+            background: var(--bg-gradient-ipad);
+        }
+
+        
+
     }
 
     &__content {

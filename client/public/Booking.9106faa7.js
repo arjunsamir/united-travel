@@ -47234,9 +47234,9 @@ const state = {
         code: ''
     },
     app: {
-        // step: 'ServiceType',
+        step: 'ServiceType',
         // step: 'Checkout',
-        step: 'Confirmation',
+        // step: 'Confirmation',
         previousStep: '',
         steps: {
             first: [

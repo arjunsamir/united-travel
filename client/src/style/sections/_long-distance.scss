@@ -11,8 +11,17 @@
 
     height: 100vh;
 
+    @include ipad {
+        padding: 0;
+        height: auto;
+    }
+
     &__map {
         @include overlay;
+
+        @include ipad {
+            position: relative;
+        }
 
         img {
             height:100%;
@@ -24,6 +33,17 @@
                 right: -10rem;
             }
 
+            @include ipadPro {
+                right: -12rem;
+                height: 90%;
+            }
+
+            @include ipad {
+                position: relative;
+                width: 100%;
+                right: 0;
+            }
+
         }
     }
 
@@ -32,6 +52,19 @@
         width: 100%;
         max-width: var(--track-width);
 
+        top: calc(-1 * var(--y-pad));
+
+        @include ipad {
+            padding: 0 var(--x-pad);
+            display: flex;
+            justify-content: center;
+        }
+
+        h2 {
+            @include phone {
+                font-size: $h3;
+            }
+        }
     }
 
 }

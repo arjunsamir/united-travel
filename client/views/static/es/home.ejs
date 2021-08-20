@@ -232,7 +232,7 @@
     
             <div class="nav-menu__account">
                 <% if (user._id) { %>
-                    <h5 class="white">Hello <%- user.preferredName %></h5>
+                    <h5 class="white animate-item">Hello <%- user.preferredName %></h5>
                     <div>
                         <a class="animate-item" href="/es/account">Mi cuenta</a>
                         <a class="animate-item app-logout" href="#">Cerrar sesión</a>
@@ -325,7 +325,7 @@
             </div>
 
             <!-- Gradient Overlay -->
-            <div class="fsi__overlay" style="background-image: linear-gradient(90.2deg, #000000 30.31%, rgba(0, 0, 0, 0.25) 99.86%)"></div>
+            <div class="fsi__overlay" style="--bg-gradient-desktop: linear-gradient(90.2deg, #000000 30.31%, rgba(0, 0, 0, 0.25) 99.86%)"></div>
 
             <!-- Section Content -->
             <div class="fsi__content">
@@ -349,6 +349,9 @@
                     <img src="https://storage.googleapis.com/utravel-site-content/img/cruise.jpg" alt="Cruise Ship">
                 </picture>
             </div>
+
+            <!-- Gradient Overlay -->
+            <div class="fsi__overlay cruise" style="--bg-gradient-desktop: transparent"></div>
 
             <!-- Section Content -->
             <div class="fsi__content align-right">

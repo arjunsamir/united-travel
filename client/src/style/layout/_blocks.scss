@@ -19,6 +19,15 @@
         p {
             font-size: $p-large;
         }
+
+        @include phone {
+            p {
+                font-size: $p;
+            }
+            h2 {
+                font-size: $h3;
+            }
+        }
     }
 
     @include phone {
@@ -48,6 +57,12 @@
         grid-template-columns: 1fr 1fr;
         grid-gap: 8rem;
         align-items: center;
+
+        h2 {
+            @include ipad {
+                font-size: $h3;
+            }
+        }
 
         &.flex-start {
             align-items: flex-start;
@@ -108,6 +123,18 @@
 
             }
         }
+
+        &:not(.collapse-cards) {
+            @include ipad {
+                grid-gap: 5.4rem;
+            }            
+    
+            @include respond(48em) {
+                grid-template-columns: 1fr;
+                grid-gap: 6.4rem;
+            }
+        }
+        
     }
 }
 

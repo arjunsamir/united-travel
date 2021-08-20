@@ -3,6 +3,10 @@
     padding: var(--y-pad) var(--x-pad);
     min-height: 100vh;
     @include flexCenter;
+
+    &.fallback {
+        min-height: unset;
+    }
     
     h2 {
         max-width: var(--track-width);
@@ -36,7 +40,11 @@
         border-radius: 2.4rem;
         box-shadow: $soft-shadow;
 
-        padding: 4.8rem;
+        padding: 20rem 4.8rem;
+
+        @include phone {
+            padding: 18rem 3.2rem;
+        }
 
         &-img {
             @include overlay;
@@ -46,6 +54,10 @@
         img {
             width: 100%;
             opacity: .5;
+
+            @include ipad {
+                @include cover;
+            }
         }
 
         h2 {
@@ -55,6 +67,12 @@
             font-weight: 300;
             max-width: 96rem;
             line-height: 1.4;
+            margin: 0;
+            @include flexCenter;
+
+            @include phone {
+                font-size: $h3;
+            }
         }
 
     }

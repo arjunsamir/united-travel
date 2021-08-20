@@ -9,12 +9,15 @@ export default class FleetApp extends ReactAppWrapper {
     constructor(dta, ctn) {
         super(dta.selector, ctn);
         this.App = App;
+        this.scroll = dta.page.scroll;
     }
 
     
     async load() {
 
-        const res = {};
+        const res = {
+            scroll: this.scroll
+        };
 
         await Promise.all([
             axios('/api/vehicles').then(data => {

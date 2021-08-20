@@ -4254,8 +4254,7 @@ class Scroll {
         this.locomotive && this.locomotive.update();
     }
     pause() {
-        this.locomotive.stop();
-        if (this.isMobile) this.body.addClass('fixed');
+        this.locomotive.stop(); // if (this.isMobile) this.body.addClass('fixed');
     }
     resume() {
         this.locomotive.start();

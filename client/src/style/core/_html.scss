@@ -38,13 +38,13 @@ html {
 
     @include phone {
         --y-pad: 12rem;
-        --x-pad: 3.2rem; 
+        --x-pad: 2rem; 
     }
 
     @include iphone {
         font-size: 43.75%; //1rem = 7px;
         --y-pad: 10rem;
-        --x-pad: 2.4rem;
+        --x-pad: 1.2rem;
     }
 
     

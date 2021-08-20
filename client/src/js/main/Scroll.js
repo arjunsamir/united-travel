@@ -131,7 +131,7 @@ export default class Scroll {
 
     pause() {
         this.locomotive.stop();
-        if (this.isMobile) this.body.addClass('fixed');
+        // if (this.isMobile) this.body.addClass('fixed');
     }
 
 
