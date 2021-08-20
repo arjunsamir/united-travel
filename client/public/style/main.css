@@ -2385,6 +2385,39 @@ svg.placeholder, .icon.placeholder {
 .reviews__reviewers .reviewer:not(:last-child) {
   margin-bottom: 3.6rem;
 }
+.reviews__fallback {
+  flex-grow: 10;
+  align-self: stretch;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 2.4rem;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
+  padding: 4.8rem;
+}
+.reviews__fallback-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #000;
+}
+.reviews__fallback img {
+  width: 100%;
+  opacity: 0.5;
+}
+.reviews__fallback h2 {
+  position: relative;
+  text-align: center;
+  color: var(--white);
+  font-weight: 300;
+  max-width: 96rem;
+  line-height: 1.4;
+}
 .reviewer {
   display: flex;
   align-items: center;

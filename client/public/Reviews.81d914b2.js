@@ -880,6 +880,7 @@ const copy = {
 class ReviewsApp extends _ReactAppWrapper.default {
     async load() {
         const res = {
+            scroll: this.scroll
         };
         const promises = [
             _axios.default('/api/reviews').then((r)=>{
@@ -895,6 +896,7 @@ class ReviewsApp extends _ReactAppWrapper.default {
     constructor(dta, ctn){
         super(dta.selector, ctn);
         this.App = _App.default;
+        this.scroll = dta.page.scroll;
     }
 }
 exports.default = ReviewsApp;
@@ -957,7 +959,7 @@ const getStars = (stars)=>{
     });
 };
 const App = (_ref)=>{
-    let { reviews , copy  } = _ref;
+    let { reviews , copy , scroll  } = _ref;
     // Create Refs
     const reviewRef = _react.useRef(); // Set Up State
     const [state, setState] = _hooks.useObjectState({
@@ -988,7 +990,8 @@ const App = (_ref)=>{
                 0,
                 250
             ])
-        });
+        }); // Update Parallax Scroll 
+        scroll && scroll.update();
     }, [
         state.selected
     ]);
@@ -1054,7 +1057,18 @@ const App = (_ref)=>{
             icon: icon,
             key: "".concat(icon, "-").concat(i)
         })
-    )), /*#__PURE__*/ _react.default.createElement("p", null, review.body))))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, null);
+    )), /*#__PURE__*/ _react.default.createElement("p", null, review.body))))) : /*#__PURE__*/ _react.default.createElement("section", {
+        className: "reviews fallback"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "reviews__fallback"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "reviews__fallback-img"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: "https://storage.googleapis.com/utravel-site-content/img/reviews-fallback.jpeg",
+        alt: "Woman sitting in back seat of car smiling",
+        "data-scroll": true,
+        "data-scroll-speed": "-1.25"
+    })), /*#__PURE__*/ _react.default.createElement("h2", null, /*#__PURE__*/ _react.default.createElement("q", null, "A completely stress-free experience from start to finish."))));
 };
 _c = App;
 var _default = App;

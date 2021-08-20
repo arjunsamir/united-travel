@@ -4251,7 +4251,7 @@ class Scroll {
         this.position = y;
     }
     update() {
-        this.locomotive.update();
+        this.locomotive && this.locomotive.update();
     }
     pause() {
         this.locomotive.stop();

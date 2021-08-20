@@ -125,7 +125,7 @@ export default class Scroll {
 
 
     update() {
-        this.locomotive.update();
+        this.locomotive && this.locomotive.update();
     }
 
 

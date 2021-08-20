@@ -15,7 +15,7 @@ const getStars = (stars) => {
     });
 }
 
-const App = ({ reviews, copy }) => {
+const App = ({ reviews, copy, scroll }) => {
 
     // Create Refs
     const reviewRef = useRef();
@@ -45,6 +45,9 @@ const App = ({ reviews, copy }) => {
             opacity: [0, 1],
             delay: anime.stagger([0, 250])
         });
+
+        // Update Parallax Scroll 
+        scroll && scroll.update();
 
     }, [state.selected]);
 
@@ -116,7 +119,18 @@ const App = ({ reviews, copy }) => {
             </div>
 
         </section>
-    ) : <Oopsie />;
+    ) : (
+        <section className="reviews fallback">
+
+            <div className="reviews__fallback">
+                <div className="reviews__fallback-img">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/reviews-fallback.jpeg" alt="Woman sitting in back seat of car smiling" data-scroll data-scroll-speed="-1.25" />
+                </div>
+                <h2><q>A completely stress-free experience from start to finish.</q></h2>
+            </div>
+
+        </section>
+    );
     
 
 }

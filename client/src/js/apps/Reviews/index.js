@@ -15,11 +15,14 @@ export default class ReviewsApp extends ReactAppWrapper {
     constructor(dta, ctn) {
         super(dta.selector, ctn);
         this.App = App;
+        this.scroll = dta.page.scroll
     }
 
     async load() {
 
-        const res = {};
+        const res = {
+            scroll: this.scroll
+        };
 
         const promises = [
             axios('/api/reviews').then(r => res.reviews = r?.data?.data?.data.filter(review => review.locale === window.locale))

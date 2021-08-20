@@ -25,6 +25,39 @@
         }
 
     }
+
+    &__fallback {
+
+        flex-grow: 10;
+        align-self: stretch;
+        position: relative;
+        @include flexCenter;
+        overflow: hidden;
+        border-radius: 2.4rem;
+        box-shadow: $soft-shadow;
+
+        padding: 4.8rem;
+
+        &-img {
+            @include overlay;
+            background-color: #000;
+        }
+
+        img {
+            width: 100%;
+            opacity: .5;
+        }
+
+        h2 {
+            position: relative;
+            text-align: center;
+            color: var(--white);
+            font-weight: 300;
+            max-width: 96rem;
+            line-height: 1.4;
+        }
+
+    }
     
 }
 
