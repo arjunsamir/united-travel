@@ -53,11 +53,13 @@ const state = {
             total: 0
         },
         notes: '',
-        quote: ''
+        quote: '',
+        code: ''
     },
     app: {
         // step: 'ServiceType',
-        step: 'Checkout',
+        // step: 'Checkout',
+        step: 'Confirmation',
         previousStep: '',
         steps: {
             first: [{

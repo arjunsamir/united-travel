@@ -6,7 +6,7 @@ const schema = new mongoose.Schema({
     flight: {
         number: String,
         airline: String,
-        type: String,
+        type: { type: String },
         time: String,
         buffer: Number,
         airport: String
@@ -14,7 +14,7 @@ const schema = new mongoose.Schema({
     cruise: {
         ship: String,
         line: String,
-        type: String,
+        type: { type: String },
         time: String,
         buffer: Number,
         port: String
@@ -59,8 +59,10 @@ const schema = new mongoose.Schema({
             enum: ['pending', 'paid', 'refunded']
         },
         method: {
-            name: String,
-            stripe_id: String
+            brand: String,
+            last4: String,
+            stripe_id: String,
+            wallet: String
         },
         total: Number,
         sub_total: Number,
@@ -74,6 +76,7 @@ const schema = new mongoose.Schema({
             zip: String
         }
     },
+    code: String,
     status: {
         type: String,
         enum: ['pending', 'ready', 'complete', 'cancelled']

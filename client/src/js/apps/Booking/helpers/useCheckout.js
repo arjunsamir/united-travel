@@ -95,7 +95,7 @@ const processPayment = (stripe, secret) => {
 // Ceraete The Hook
 const useCheckout = () => {
 
-    const { state: { reservation: r } } = useContext(AppContext);
+    const { state: { reservation: r }, update } = useContext(AppContext);
 
     const [state, setState] = useObjectState({
         status: {},
@@ -110,7 +110,7 @@ const useCheckout = () => {
 
         const loadStripeAPI = async () => {
 
-            const timer = $.timer(1000).start();
+            const timer = $.timer(850).start();
 
             // Load Stripe API
             const stripe = await loadStripe(config.stripe.key);
@@ -142,8 +142,10 @@ const useCheckout = () => {
             if (!res?.data?.total) return;
 
             // Destructure Payment Intent
-            const { total, sub_total, secret, paymentMethods, credits } = res?.data;
+            const { total, sub_total, secret, paymentMethods, credits, code } = res?.data;
 
+            // Update Global State
+            update("CODE", code);
 
             // Create Payment Request For Mobile Wallets
             const paymentRequest = stripe.paymentRequest({
@@ -172,6 +174,7 @@ const useCheckout = () => {
 
             // Artifical Delay
             await timer.hold();
+            await $.delay(150);
 
 
             // Finally Update The State

@@ -25,6 +25,7 @@ module.exports = lang => {
     router.get('/privacy', render(views, 'privacy'));
     router.get('/terms', render(views, 'terms'));
     router.get('/navbar', render(views, 'navbar'));
+    router.get('/reservations/:code', render(views, 'reservation'))
     
     return router;
 

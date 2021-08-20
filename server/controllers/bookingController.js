@@ -4,18 +4,18 @@ const path = require('path');
 
 // Import Models
 const Quote = require('../models/quote');
+const Credit = require('../models/credit');
 const Vehicle = require('../models/vehicle');
 const Settings = require('../models/settings');
 const Reservation = require('../models/reservation');
 
 // Import Utilities
-const { Client } = require("@googlemaps/google-maps-services-js");
 const send = require('../utils/sendResponse');
-
-// Import Helpers
 const catchAsync = require('../utils/catchAsync');
+const uniqid = require('uniqid');
 
 // Initialize Maps Client
+const { Client } = require("@googlemaps/google-maps-services-js");
 const client = new Client({})
 
 // Initialize Stripe
@@ -26,7 +26,6 @@ const settings = {
     promise: Settings.findOne({ active: true }).then(res => settings.data = res.toObject()),
     fetched: Date.now()
 }
-
 
 
 // Refresh Settings
@@ -121,19 +120,6 @@ const calculateCost = (vehicle, distance, isTouristZip) => {
 
 }
 
-// Validate Booking
-const validateReservation = async (intent) => {
-
-    try {
-        console.log(intent);
-    }
-
-    catch (err) {
-        console.error(err);
-    }
-
-}
-
 
 // Get Stripe User
 const getStripeUser = async (user) => {
@@ -184,41 +170,61 @@ const getStripeUser = async (user) => {
 // Get User Credits
 const getUserCredits = async (user, cost) => {
 
-    return [1500, cost - 1500, []]
+    return [0, cost, []]
 
 }
 
 
 // Called By Webhook. Charge Payment
-exports.confirmPayment = async (req, res, next) => {
+exports.confirmPayment = catchAsync(async (req, res, next) => {
 
-    const signature = req.headers['stripe-signature'];
-    let event, intent;
-
-    try {
-        event = stripe.webhooks.constructEvent(req.body, signature, process.env.STRIPE_WEBHOOK_SECRET);
-    }
-
-    catch (e) {
-        res.status(400).send(`Webhook Error: ${e.message}`);
-    }
-
-    switch(event.type) {
-        case 'payment_intent.succeeded':
-            intent = event.data.object;
-            break;
-        default:
-            console.log(`Unhandled event type ${event.type}`);
-    }
-
+    // Immediately Send Response
     send(res, {
         recieved: true
     });
 
-    // Validate Payment In Database
-    validateReservation(intent);
+    if (!req.body.data || !req.body.data.object) return console.log("Stripe Webhook failed");
+
+    // Get Intent
+    const intent = req.body.data?.object;
+
+    // Get Reservation
+    const reservation = await Reservation.findOne({ "payment.intent": intent.id });
+    if (!reservation) return console.log("No reservation found for this payment");
+
+
+    // Destructure Shit
+    const { payment_method_details: { card, type: wallet }, billing_details: billing, payment_method: stripe_id } = intent.charges.data[0];
+
+
+    // Update Reservation
+    reservation.payment.status = "paid";
+    reservation.payment.method = {
+        stripe_id,
+        brand: card.brand,
+        last4: card.last4,
+        wallet: wallet
+    };
+    reservation.payment.biilling = {
+        name: billing.name,
+        zip: billing.address.postal_code
+    };
+    reservation.status = "ready";
+
+
+    // Update Credits
+    await Promise.all(reservation.payment.applied_credits.map(credit_id => {
+        return Credit.findByIdAndUpdate(credit_id, { status: "redeemed"})
+    }));
+
+    // Finally Save Reservation
+    await reservation.save();
+
+    // Console Log For Debugging
+    console.log('reservation saved')
+    console.log(reservation)
     
-};
+});
 
 
 // Create Exports
@@ -309,10 +315,8 @@ exports.createPayment = catchAsync(async (req, res, next) => {
     // Retrieve Stripe User
     const [customer, paymentMethods] = await getStripeUser(user);
 
-
     // Retrieve Credits
     const [credits_total, total, applied_credits] = await getUserCredits(user, sub_total);
-
 
     // Prepare Payment Intent Data
     const intentData = {
@@ -329,19 +333,20 @@ exports.createPayment = catchAsync(async (req, res, next) => {
     const paymentIntent = await stripe.paymentIntents.create(intentData);
 
     // Create Reservation
-    // const reservation = await Reservation.create({
-    //     ...r,
-    //     user: user._id,
-    //     payment: {
-    //         intent: paymentIntent.id,
-    //         status: 'pending',
-    //         total,
-    //         sub_total,
-    //         credits_total,
-    //         applied_credits
-    //     },
-    //     status: 'pending'
-    // });
+    const reservation = await Reservation.create({
+        ...r,
+        user: user._id,
+        payment: {
+            intent: paymentIntent.id,
+            status: 'pending',
+            total,
+            sub_total,
+            credits_total,
+            applied_credits
+        },
+        status: 'pending',
+        code: uniqid.time()
+    });
 
     // Send Response
     send(res, {
@@ -351,7 +356,7 @@ exports.createPayment = catchAsync(async (req, res, next) => {
         sub_total,
         total,
         credits: credits_total,
-        reservation: {}
+        code: reservation.code
     });
 
 });

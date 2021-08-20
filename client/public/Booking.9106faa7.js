@@ -47230,11 +47230,13 @@ const state = {
             total: 0
         },
         notes: '',
-        quote: ''
+        quote: '',
+        code: ''
     },
     app: {
         // step: 'ServiceType',
-        step: 'Checkout',
+        // step: 'Checkout',
+        step: 'Confirmation',
         previousStep: '',
         steps: {
             first: [
@@ -47567,6 +47569,10 @@ const reducer = (state, action)=>{
             return m.merge({
                 payment: _objectSpread({
                 }, PL)
+            });
+        case 'code':
+            return m.merge({
+                code: PL
             });
         default:
             return state;
@@ -75878,7 +75884,7 @@ const processPayment = (stripe, secret)=>{
     };
 }; // Ceraete The Hook
 const useCheckout = ()=>{
-    const { state: { reservation: r  }  } = _react.useContext(_context.default);
+    const { state: { reservation: r  } , update  } = _react.useContext(_context.default);
     const [state, setState] = _hooks.useObjectState({
         status: {
         },
@@ -75894,7 +75900,7 @@ const useCheckout = ()=>{
     _react.useEffect(()=>{
         const loadStripeAPI = async ()=>{
             var _r$route, _r$route$distance, _r$route2, _r$route2$eta, _r$vehicle, _res$data;
-            const timer = $.timer(1000).start(); // Load Stripe API
+            const timer = $.timer(850).start(); // Load Stripe API
             const stripe = await _stripeJs.loadStripe(_config.default.stripe.key); // Create payment intent on server
             const res = await _axios.default.post('/api/booking/create-payment', {
                 service_type: r.serviceType,
@@ -75926,7 +75932,8 @@ const useCheckout = ()=>{
                 quote: r.quote || testData.quote
             }); // Emergency Return
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.total)) return; // Destructure Payment Intent
-            const { total , sub_total , secret , paymentMethods , credits  } = res === null || res === void 0 ? void 0 : res.data; // Create Payment Request For Mobile Wallets
+            const { total , sub_total , secret , paymentMethods , credits , code  } = res === null || res === void 0 ? void 0 : res.data; // Update Global State
+            update("CODE", code); // Create Payment Request For Mobile Wallets
             const paymentRequest = stripe.paymentRequest({
                 country: 'US',
                 currency: 'usd',
@@ -75946,7 +75953,8 @@ const useCheckout = ()=>{
                 });
             });
              // Artifical Delay
-            await timer.hold(); // Finally Update The State
+            await timer.hold();
+            await $.delay(150); // Finally Update The State
             setState({
                 stripe,
                 secret,
@@ -76378,6 +76386,7 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _context = _interopRequireDefault(require("../store/context"));
 var _BookingPage = _interopRequireDefault(require("../components/BookingPage"));
+var _Buttons = require("../../components/Buttons");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -76411,12 +76420,18 @@ function _interopRequireWildcard(obj) {
     return newObj;
 }
 // Import Components
-const Confirmation = (_ref)=>{
-    let {} = _ref;
-    const { state , appCopy  } = _react.useContext(_context.default);
+const Confirmation = ()=>{
+    const { state: { reservation: { code  }  } , appCopy , page  } = _react.useContext(_context.default);
     return(/*#__PURE__*/ _react.default.createElement(_BookingPage.default, null, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__header"
-    }, /*#__PURE__*/ _react.default.createElement("h4", null, "You're all set!"))));
+        className: "booking-view__header animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h3", null, "You're all set!"), /*#__PURE__*/ _react.default.createElement("h5", null, "Confirmation Code: sb377ce")), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__section animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, "A confirmation email has been sent to me@arjunsamir.com"), /*#__PURE__*/ _react.default.createElement("p", null, "Thank you for booking with us! We look forward to making your journey a great one."), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "View my reservation",
+        onClick: ()=>page.barba.go("/reservations/".concat(code))
+    }))));
 };
 _c = Confirmation;
 var _default = Confirmation;
@@ -76429,7 +76444,7 @@ $RefreshReg$(_c, "Confirmation");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","../components/BookingPage":"55aoD"}],"4R7YP":[function(require,module,exports) {
+},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../components/Buttons":"7xzNC"}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
