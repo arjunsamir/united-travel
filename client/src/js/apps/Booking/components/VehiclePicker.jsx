@@ -43,7 +43,7 @@ const VehiclePicker = ({ vehicles, onChange, selected, copy }) => {
         if (!x) return;
         const index = vehicles.findIndex(v => v._id === selected._id) + (-1 * x);
 
-        if (index < 0 || index !== index) return;
+        if (index < 0 || index !== index || index === vehicles.length) return;
 
         onChange(vehicles[index]);
 
