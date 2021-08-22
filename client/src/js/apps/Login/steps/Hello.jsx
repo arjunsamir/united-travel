@@ -25,7 +25,11 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
     const typewriter = useRef();
 
     // Enable Third Party Login
-    const { loaded, useAuthProvider } = useOAuth(authenticate);
+    const { loaded, useAuthProvider } = useOAuth(async (endpoint, data) => {
+        const user = await authenticate(endpoint, data);
+        update('user')(user);
+        transition.to("greeting");
+    });
 
     // Use State
     const [isFetching, setIsFetching] = useState(false);

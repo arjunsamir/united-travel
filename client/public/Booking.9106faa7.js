@@ -46559,7 +46559,7 @@ module.exports = DayjsUtils;
     "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
 })(this, function() {
     "use strict";
-    var t = 1000, e = 60000, n = 3600000, r = "millisecond", i = "second", s = "minute", u = "hour", a = "day", o = "week", f = "month", h = "quarter", c = "year", d = "date", $ = "Invalid Date", l = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[^0-9]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, y = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, M = {
+    var t = 1000, e = 60000, n = 3600000, r = "millisecond", i = "second", s = "minute", u = "hour", a = "day", o = "week", f = "month", h = "quarter", c = "year", d = "date", $ = "Invalid Date", l = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, y = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, M = {
         name: "en",
         weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
         months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_")
@@ -46734,13 +46734,13 @@ module.exports = DayjsUtils;
         }, m1.subtract = function(t1, e1) {
             return this.add(-1 * t1, e1);
         }, m1.format = function(t1) {
-            var e1 = this;
-            if (!this.isValid()) return $;
-            var n1 = t1 || "YYYY-MM-DDTHH:mm:ssZ", r2 = O.z(this), i3 = this.$locale(), s2 = this.$H, u1 = this.$m, a1 = this.$M, o1 = i3.weekdays, f1 = i3.months, h1 = function(t2, r3, i4, s3) {
-                return t2 && (t2[r3] || t2(e1, n1)) || i4[r3].substr(0, s3);
+            var e1 = this, n1 = this.$locale();
+            if (!this.isValid()) return n1.invalidDate || $;
+            var r2 = t1 || "YYYY-MM-DDTHH:mm:ssZ", i3 = O.z(this), s2 = this.$H, u1 = this.$m, a1 = this.$M, o1 = n1.weekdays, f1 = n1.months, h1 = function(t2, n2, i4, s3) {
+                return t2 && (t2[n2] || t2(e1, r2)) || i4[n2].substr(0, s3);
             }, c1 = function(t2) {
                 return O.s(s2 % 12 || 12, t2, "0");
-            }, d1 = i3.meridiem || function(t2, e2, n2) {
+            }, d1 = n1.meridiem || function(t2, e2, n2) {
                 var r3 = t2 < 12 ? "AM" : "PM";
                 return n2 ? r3.toLowerCase() : r3;
             }, l1 = {
@@ -46748,13 +46748,13 @@ module.exports = DayjsUtils;
                 YYYY: this.$y,
                 M: a1 + 1,
                 MM: O.s(a1 + 1, 2, "0"),
-                MMM: h1(i3.monthsShort, a1, f1, 3),
+                MMM: h1(n1.monthsShort, a1, f1, 3),
                 MMMM: h1(f1, a1),
                 D: this.$D,
                 DD: O.s(this.$D, 2, "0"),
                 d: String(this.$W),
-                dd: h1(i3.weekdaysMin, this.$W, o1, 2),
-                ddd: h1(i3.weekdaysShort, this.$W, o1, 3),
+                dd: h1(n1.weekdaysMin, this.$W, o1, 2),
+                ddd: h1(n1.weekdaysShort, this.$W, o1, 3),
                 dddd: o1[this.$W],
                 H: String(s2),
                 HH: O.s(s2, 2, "0"),
@@ -46767,10 +46767,10 @@ module.exports = DayjsUtils;
                 s: String(this.$s),
                 ss: O.s(this.$s, 2, "0"),
                 SSS: O.s(this.$ms, 3, "0"),
-                Z: r2
+                Z: i3
             };
-            return n1.replace(y, function(t2, e2) {
-                return e2 || l1[t2] || r2.replace(":", "");
+            return r2.replace(y, function(t2, e2) {
+                return e2 || l1[t2] || i3.replace(":", "");
             });
         }, m1.utcOffset = function() {
             return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
@@ -46856,12 +46856,14 @@ module.exports = DayjsUtils;
         LLL: "MMMM D, YYYY h:mm A",
         LLLL: "dddd, MMMM D, YYYY h:mm A"
     }, e = /(\[[^[]*\])|([-:/.()\s]+)|(A|a|YYYY|YY?|MM?M?M?|Do|DD?|hh?|HH?|mm?|ss?|S{1,3}|z|ZZ?)/g, n = /\d\d/, r = /\d\d?/, i = /\d*[^\s\d-_:/()]+/, o = {
+    }, s = function(t1) {
+        return (t1 = +t1) + (t1 > 68 ? 1900 : 2000);
     };
-    var s = function(t1) {
+    var a = function(t1) {
         return function(e1) {
             this[t1] = +e1;
         };
-    }, a = [
+    }, f = [
         /[+-]\d\d:?(\d\d)?|Z/,
         function(t1) {
             (this.zone || (this.zone = {
@@ -46872,7 +46874,7 @@ module.exports = DayjsUtils;
                 return 0 === n1 ? 0 : "+" === e1[0] ? -n1 : n1;
             })(t1);
         }
-    ], f = function(t1) {
+    ], u = function(t1) {
         var e1 = o[t1];
         return e1 && (e1.indexOf ? e1 : e1.s.concat(e1.f));
     }, h = function(t1, e1) {
@@ -46884,7 +46886,7 @@ module.exports = DayjsUtils;
             }
         } else n1 = t1 === (e1 ? "pm" : "PM");
         return n1;
-    }, u = {
+    }, d = {
         A: [
             i,
             function(t1) {
@@ -46917,43 +46919,43 @@ module.exports = DayjsUtils;
         ],
         s: [
             r,
-            s("seconds")
+            a("seconds")
         ],
         ss: [
             r,
-            s("seconds")
+            a("seconds")
         ],
         m: [
             r,
-            s("minutes")
+            a("minutes")
         ],
         mm: [
             r,
-            s("minutes")
+            a("minutes")
         ],
         H: [
             r,
-            s("hours")
+            a("hours")
         ],
         h: [
             r,
-            s("hours")
+            a("hours")
         ],
         HH: [
             r,
-            s("hours")
+            a("hours")
         ],
         hh: [
             r,
-            s("hours")
+            a("hours")
         ],
         D: [
             r,
-            s("day")
+            a("day")
         ],
         DD: [
             n,
-            s("day")
+            a("day")
         ],
         Do: [
             i,
@@ -46964,16 +46966,16 @@ module.exports = DayjsUtils;
         ],
         M: [
             r,
-            s("month")
+            a("month")
         ],
         MM: [
             n,
-            s("month")
+            a("month")
         ],
         MMM: [
             i,
             function(t1) {
-                var e1 = f("months"), n1 = (f("monthsShort") || e1.map(function(t2) {
+                var e1 = u("months"), n1 = (u("monthsShort") || e1.map(function(t2) {
                     return t2.substr(0, 3);
                 })).indexOf(t1) + 1;
                 if (n1 < 1) throw new Error;
@@ -46983,29 +46985,29 @@ module.exports = DayjsUtils;
         MMMM: [
             i,
             function(t1) {
-                var e1 = f("months").indexOf(t1) + 1;
+                var e1 = u("months").indexOf(t1) + 1;
                 if (e1 < 1) throw new Error;
                 this.month = e1 % 12 || e1;
             }
         ],
         Y: [
             /[+-]?\d+/,
-            s("year")
+            a("year")
         ],
         YY: [
             n,
             function(t1) {
-                t1 = +t1, this.year = t1 + (t1 > 68 ? 1900 : 2000);
+                this.year = s(t1);
             }
         ],
         YYYY: [
             /\d{4}/,
-            s("year")
+            a("year")
         ],
-        Z: a,
-        ZZ: a
+        Z: f,
+        ZZ: f
     };
-    function d(n1) {
+    function c(n1) {
         var r1, i2;
         r1 = n1, i2 = o && o.formats;
         for(var s1 = (n1 = r1.replace(/(\[[^\]]+])|(LTS?|l{1,4}|L{1,4})/g, function(e1, n2, r2) {
@@ -47014,11 +47016,11 @@ module.exports = DayjsUtils;
                 return e2 || n3.slice(1);
             });
         })).match(e), a1 = s1.length, f1 = 0; f1 < a1; f1 += 1){
-            var h1 = s1[f1], d1 = u[h1], c = d1 && d1[0], l = d1 && d1[1];
+            var u1 = s1[f1], h1 = d[u1], c1 = h1 && h1[0], l = h1 && h1[1];
             s1[f1] = l ? {
-                regex: c,
+                regex: c1,
                 parser: l
-            } : h1.replace(/^\[|\]$/g, "");
+            } : u1.replace(/^\[|\]$/g, "");
         }
         return function(t1) {
             for(var e1 = {
@@ -47026,8 +47028,8 @@ module.exports = DayjsUtils;
                 var i3 = s1[n2];
                 if ("string" == typeof i3) r2 += i3.length;
                 else {
-                    var o1 = i3.regex, f2 = i3.parser, h2 = t1.substr(r2), u1 = o1.exec(h2)[0];
-                    f2.call(e1, u1), t1 = t1.replace(u1, "");
+                    var o1 = i3.regex, f2 = i3.parser, u2 = t1.substr(r2), h2 = o1.exec(u2)[0];
+                    f2.call(e1, h2), t1 = t1.replace(h2, "");
                 }
             }
             return (function(t2) {
@@ -47040,24 +47042,28 @@ module.exports = DayjsUtils;
         };
     }
     return function(t1, e1, n1) {
-        n1.p.customParseFormat = true;
+        n1.p.customParseFormat = true, t1 && t1.parseTwoDigitYear && (s = t1.parseTwoDigitYear);
         var r1 = e1.prototype, i2 = r1.parse;
         r1.parse = function(t2) {
             var e2 = t2.date, r2 = t2.utc, s1 = t2.args;
             this.$u = r2;
             var a1 = s1[1];
             if ("string" == typeof a1) {
-                var f1 = true === s1[2], h3 = true === s1[3], u2 = f1 || h3, c = s1[2];
-                h3 && (c = s1[2]), o = this.$locale(), !f1 && c && (o = n1.Ls[c]), this.$d = (function(t3, e3, n2) {
+                var f1 = true === s1[2], u3 = true === s1[3], h3 = f1 || u3, d1 = s1[2];
+                u3 && (d1 = s1[2]), o = this.$locale(), !f1 && d1 && (o = n1.Ls[d1]), this.$d = (function(t3, e3, n2) {
                     try {
-                        var r3 = d(e3)(t3), i4 = r3.year, o2 = r3.month, s2 = r3.day, a2 = r3.hours, f3 = r3.minutes, h4 = r3.seconds, u3 = r3.milliseconds, c1 = r3.zone, l = new Date, m = s2 || (i4 || o2 ? 1 : l.getDate()), M = i4 || l.getFullYear(), Y = 0;
+                        if ([
+                            "x",
+                            "X"
+                        ].indexOf(e3) > -1) return new Date(("X" === e3 ? 1000 : 1) * t3);
+                        var r3 = c(e3)(t3), i4 = r3.year, o2 = r3.month, s2 = r3.day, a2 = r3.hours, f3 = r3.minutes, u4 = r3.seconds, h4 = r3.milliseconds, d2 = r3.zone, l = new Date, m = s2 || (i4 || o2 ? 1 : l.getDate()), M = i4 || l.getFullYear(), Y = 0;
                         i4 && !o2 || (Y = o2 > 0 ? o2 - 1 : l.getMonth());
-                        var v = a2 || 0, p = f3 || 0, D = h4 || 0, g = u3 || 0;
-                        return c1 ? new Date(Date.UTC(M, Y, m, v, p, D, g + 60 * c1.offset * 1000)) : n2 ? new Date(Date.UTC(M, Y, m, v, p, D, g)) : new Date(M, Y, m, v, p, D, g);
+                        var p = a2 || 0, v = f3 || 0, D = u4 || 0, g = h4 || 0;
+                        return d2 ? new Date(Date.UTC(M, Y, m, p, v, D, g + 60 * d2.offset * 1000)) : n2 ? new Date(Date.UTC(M, Y, m, p, v, D, g)) : new Date(M, Y, m, p, v, D, g);
                     } catch (t4) {
                         return new Date("");
                     }
-                })(e2, a1, r2), this.init(), c && true !== c && (this.$L = this.locale(c).$L), u2 && e2 !== this.format(a1) && (this.$d = new Date("")), o = {
+                })(e2, a1, r2), this.init(), d1 && true !== d1 && (this.$L = this.locale(d1).$L), h3 && e2 !== this.format(a1) && (this.$d = new Date("")), o = {
                 };
             } else if (a1 instanceof Array) for(var l = a1.length, m = 1; m <= l; m += 1){
                 s1[1] = a1[m - 1];
@@ -68280,12 +68286,11 @@ _c2 = TimePicker;
 const DateTimePicker = (_ref4)=>{
     let { value , defaultValue , onChange , datePicker , timePicker , icon  } = _ref4;
     const handleChange = (val)=>{
-        // onChange(val.format('YYYY-MM-DDTHH:mm'));
         onChange(val.format('MM-DD-YYYY H:mm'));
         setShow(false);
     };
     const initialDate = defaultValue || _dayjs.default().add(1, 'days').set('hour', 12).set('minute', 0).set('second', 0);
-    const date = value ? _dayjs.default(value) : initialDate;
+    const date = value ? _dayjs.default(value, "MM-DD-YYYY H:mm") : initialDate;
     const [show, setShow] = _react.useState(!value);
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "input animate-item"
@@ -71941,6 +71946,7 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _Icon = _interopRequireDefault(require("../../components/Icon"));
 var _animejs = _interopRequireDefault(require("animejs"));
+var _react2 = require("@use-gesture/react");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -71973,6 +71979,16 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
 const KeySpec = (_ref)=>{
     let { icon , text  } = _ref;
     return(/*#__PURE__*/ _react.default.createElement("div", {
@@ -71996,6 +72012,17 @@ const scrollToSelected = (slider, index)=>{
 };
 const VehiclePicker = (_ref2)=>{
     let { vehicles , onChange , selected , copy  } = _ref2;
+    const bindDrag = _react2.useDrag((_ref3)=>{
+        let { swipe: [x]  } = _ref3;
+        if (!x) return;
+        const index = vehicles.findIndex((v)=>v._id === selected._id
+        ) + -1 * x;
+        if (index < 0 || index !== index) return;
+        onChange(vehicles[index]);
+    }, {
+        filterTaps: true,
+        axis: 'x'
+    });
     const slider = _react.useRef(); // Scroll To Slide
     _react.useEffect(()=>{
         const selectedIndex = selected ? vehicles.findIndex((v)=>v._id === selected._id
@@ -72016,9 +72043,9 @@ const VehiclePicker = (_ref2)=>{
             ]),
             onClick: ()=>onChange(vehicle)
         }, /*#__PURE__*/ _react.default.createElement("h6", null, vehicle.size))
-    )), /*#__PURE__*/ _react.default.createElement("div", {
+    )), /*#__PURE__*/ _react.default.createElement("div", _extends({
         className: "vehicle-picker__slider-container"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
+    }, bindDrag()), /*#__PURE__*/ _react.default.createElement("div", {
         className: "vehicle-picker__slider",
         ref: slider
     }, vehicles.map((vehicle)=>{
@@ -72062,7 +72089,1923 @@ $RefreshReg$(_c1, "VehiclePicker");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../components/Icon":"4VYCM","animejs":"1GvRs","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6HAeI":[function(require,module,exports) {
+},{"react":"3qVBT","../../components/Icon":"4VYCM","animejs":"1GvRs","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@use-gesture/react":"3FqPS"}],"3FqPS":[function(require,module,exports) {
+'use strict';
+module.exports = require("./use-gesture-react.cjs.dev.js");
+
+},{"./use-gesture-react.cjs.dev.js":"2hiDm"}],"2hiDm":[function(require,module,exports) {
+'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var actions = require('@use-gesture/core/actions');
+var React = require('react');
+var core = require('@use-gesture/core');
+var utils = require('@use-gesture/core/utils');
+var types = require('@use-gesture/core/types');
+function _interopDefault(e) {
+    return e && e.__esModule ? e : {
+        'default': e
+    };
+}
+var React__default = /*#__PURE__*/ _interopDefault(React);
+function useRecognizers(handlers, config = {
+}, gestureKey, nativeHandlers) {
+    const ctrl = React__default['default'].useMemo(()=>new core.Controller(handlers)
+    , []);
+    ctrl.applyHandlers(handlers, nativeHandlers);
+    ctrl.applyConfig(config, gestureKey);
+    React__default['default'].useEffect(ctrl.effect.bind(ctrl));
+    React__default['default'].useEffect(()=>{
+        return ctrl.clean.bind(ctrl);
+    }, []);
+    if (config.target === undefined) return ctrl.bind.bind(ctrl);
+    return undefined;
+}
+function useDrag(handler, config = {
+}) {
+    actions.registerAction(actions.dragAction);
+    return useRecognizers({
+        drag: handler
+    }, config, 'drag');
+}
+function usePinch(handler, config = {
+}) {
+    actions.registerAction(actions.pinchAction);
+    return useRecognizers({
+        pinch: handler
+    }, config, 'pinch');
+}
+function useWheel(handler, config = {
+}) {
+    actions.registerAction(actions.wheelAction);
+    return useRecognizers({
+        wheel: handler
+    }, config, 'wheel');
+}
+function useScroll(handler, config = {
+}) {
+    actions.registerAction(actions.scrollAction);
+    return useRecognizers({
+        scroll: handler
+    }, config, 'scroll');
+}
+function useMove(handler, config = {
+}) {
+    actions.registerAction(actions.moveAction);
+    return useRecognizers({
+        move: handler
+    }, config, 'move');
+}
+function useHover(handler, config = {
+}) {
+    actions.registerAction(actions.hoverAction);
+    return useRecognizers({
+        hover: handler
+    }, config, 'hover');
+}
+function createUseGesture(actions$1) {
+    actions$1.forEach(actions.registerAction);
+    return function useGesture(_handlers, _config = {
+    }) {
+        const { handlers , nativeHandlers , config  } = core.parseMergedHandlers(_handlers, _config);
+        return useRecognizers(handlers, config, undefined, nativeHandlers);
+    };
+}
+function useGesture(handlers, config = {
+}) {
+    const hook = createUseGesture([
+        actions.dragAction,
+        actions.pinchAction,
+        actions.scrollAction,
+        actions.wheelAction,
+        actions.moveAction,
+        actions.hoverAction
+    ]);
+    return hook(handlers, config);
+}
+exports.createUseGesture = createUseGesture;
+exports.useDrag = useDrag;
+exports.useGesture = useGesture;
+exports.useHover = useHover;
+exports.useMove = useMove;
+exports.usePinch = usePinch;
+exports.useScroll = useScroll;
+exports.useWheel = useWheel;
+Object.keys(actions).forEach(function(k) {
+    if (k !== 'default' && !exports.hasOwnProperty(k)) Object.defineProperty(exports, k, {
+        enumerable: true,
+        get: function() {
+            return actions[k];
+        }
+    });
+});
+Object.keys(utils).forEach(function(k) {
+    if (k !== 'default' && !exports.hasOwnProperty(k)) Object.defineProperty(exports, k, {
+        enumerable: true,
+        get: function() {
+            return utils[k];
+        }
+    });
+});
+Object.keys(types).forEach(function(k) {
+    if (k !== 'default' && !exports.hasOwnProperty(k)) Object.defineProperty(exports, k, {
+        enumerable: true,
+        get: function() {
+            return types[k];
+        }
+    });
+});
+
+},{"@use-gesture/core/actions":"4eLyo","react":"3qVBT","@use-gesture/core":"4SxWD","@use-gesture/core/utils":"3voox","@use-gesture/core/types":"1U0rU"}],"4eLyo":[function(require,module,exports) {
+'use strict';
+module.exports = require("./use-gesture-core-actions.cjs.dev.js");
+
+},{"./use-gesture-core-actions.cjs.dev.js":"1wIFE"}],"1wIFE":[function(require,module,exports) {
+'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var actions_dist_useGestureCoreActions = require('../../dist/actions-59bdceda.cjs.dev.js');
+require('../../dist/maths-125ca19a.cjs.dev.js');
+exports.ConfigResolverMap = actions_dist_useGestureCoreActions.ConfigResolverMap;
+exports.EngineMap = actions_dist_useGestureCoreActions.EngineMap;
+exports.dragAction = actions_dist_useGestureCoreActions.dragAction;
+exports.hoverAction = actions_dist_useGestureCoreActions.hoverAction;
+exports.moveAction = actions_dist_useGestureCoreActions.moveAction;
+exports.pinchAction = actions_dist_useGestureCoreActions.pinchAction;
+exports.registerAction = actions_dist_useGestureCoreActions.registerAction;
+exports.scrollAction = actions_dist_useGestureCoreActions.scrollAction;
+exports.wheelAction = actions_dist_useGestureCoreActions.wheelAction;
+
+},{"../../dist/actions-59bdceda.cjs.dev.js":"6PUxU","../../dist/maths-125ca19a.cjs.dev.js":"2wuI2"}],"6PUxU":[function(require,module,exports) {
+'use strict';
+var maths = require('./maths-125ca19a.cjs.dev.js');
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread2(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+const EVENT_TYPE_MAP = {
+    pointer: {
+        start: 'down',
+        change: 'move',
+        end: 'up'
+    },
+    mouse: {
+        start: 'down',
+        change: 'move',
+        end: 'up'
+    },
+    touch: {
+        start: 'start',
+        change: 'move',
+        end: 'end'
+    },
+    gesture: {
+        start: 'start',
+        change: 'change',
+        end: 'end'
+    }
+};
+function capitalize(string) {
+    if (!string) return '';
+    return string[0].toUpperCase() + string.slice(1);
+}
+function toHandlerProp(device, action = '', capture = false) {
+    const deviceProps = EVENT_TYPE_MAP[device];
+    const actionKey = deviceProps ? deviceProps[action] || action : action;
+    return 'on' + capitalize(device) + capitalize(actionKey) + (capture ? 'Capture' : '');
+}
+function toDomEventType(device, action = '') {
+    const deviceProps = EVENT_TYPE_MAP[device];
+    const actionKey = deviceProps ? deviceProps[action] || action : action;
+    return device + actionKey;
+}
+function isTouch(event) {
+    return 'touches' in event;
+}
+function getCurrentTargetTouchList(event) {
+    return Array.from(event.touches).filter((e)=>{
+        var _event$currentTarget, _event$currentTarget$;
+        return e.target === event.currentTarget || ((_event$currentTarget = event.currentTarget) === null || _event$currentTarget === void 0 ? void 0 : (_event$currentTarget$ = _event$currentTarget.contains) === null || _event$currentTarget$ === void 0 ? void 0 : _event$currentTarget$.call(_event$currentTarget, e.target));
+    });
+}
+function getTouchList(event) {
+    return event.type === 'touchend' ? event.changedTouches : event.targetTouches;
+}
+function getValueEvent(event) {
+    return isTouch(event) ? getTouchList(event)[0] : event;
+}
+function distanceAngle(P1, P2) {
+    const dx = P2.clientX - P1.clientX;
+    const dy = P2.clientY - P1.clientY;
+    const cx = (P2.clientX + P1.clientX) / 2;
+    const cy = (P2.clientY + P1.clientY) / 2;
+    const distance = Math.hypot(dx, dy);
+    const angle = -(Math.atan2(dx, dy) * 180) / Math.PI;
+    const origin = [
+        cx,
+        cy
+    ];
+    return {
+        angle,
+        distance,
+        origin
+    };
+}
+function touchIds(event) {
+    return getCurrentTargetTouchList(event).map((touch)=>touch.identifier
+    );
+}
+function touchDistanceAngle(event, ids) {
+    const [P1, P2] = Array.from(event.touches).filter((touch)=>ids.includes(touch.identifier)
+    );
+    return distanceAngle(P1, P2);
+}
+function pointerId(event) {
+    const valueEvent = getValueEvent(event);
+    return isTouch(event) ? valueEvent.identifier : valueEvent.pointerId;
+}
+function pointerValues(event) {
+    const valueEvent = getValueEvent(event);
+    return [
+        valueEvent.clientX,
+        valueEvent.clientY
+    ];
+}
+const LINE_HEIGHT = 40;
+const PAGE_HEIGHT = 800;
+function wheelValues(event) {
+    let { deltaX , deltaY , deltaMode  } = event;
+    if (deltaMode === 1) {
+        deltaX *= LINE_HEIGHT;
+        deltaY *= LINE_HEIGHT;
+    } else if (deltaMode === 2) {
+        deltaX *= PAGE_HEIGHT;
+        deltaY *= PAGE_HEIGHT;
+    }
+    return [
+        deltaX,
+        deltaY
+    ];
+}
+function scrollValues(event) {
+    var _ref, _ref2;
+    const { scrollX , scrollY , scrollLeft , scrollTop  } = event.currentTarget;
+    return [
+        (_ref = scrollX !== null && scrollX !== void 0 ? scrollX : scrollLeft) !== null && _ref !== void 0 ? _ref : 0,
+        (_ref2 = scrollY !== null && scrollY !== void 0 ? scrollY : scrollTop) !== null && _ref2 !== void 0 ? _ref2 : 0
+    ];
+}
+function getEventDetails(event) {
+    const payload = {
+    };
+    if ('buttons' in event) payload.buttons = event.buttons;
+    if ('shiftKey' in event) {
+        const { shiftKey , altKey , metaKey , ctrlKey  } = event;
+        Object.assign(payload, {
+            shiftKey,
+            altKey,
+            metaKey,
+            ctrlKey
+        });
+    }
+    return payload;
+}
+function call(v, ...args) {
+    if (typeof v === 'function') return v(...args);
+    else return v;
+}
+function noop() {
+}
+function chain(...fns) {
+    if (fns.length === 0) return noop;
+    if (fns.length === 1) return fns[0];
+    return function() {
+        let result;
+        for (const fn of fns)result = fn.apply(this, arguments) || result;
+        return result;
+    };
+}
+function assignDefault(value, fallback) {
+    return Object.assign({
+    }, fallback, value || {
+    });
+}
+class Engine {
+    constructor(ctrl, args, key){
+        this.ctrl = ctrl;
+        this.args = args;
+        this.key = key;
+        if (!this.state) {
+            this.state = {
+                values: [
+                    0,
+                    0
+                ],
+                initial: [
+                    0,
+                    0
+                ]
+            };
+            if (this.init) this.init();
+            this.reset();
+        }
+    }
+    get state() {
+        return this.ctrl.state[this.key];
+    }
+    set state(state) {
+        this.ctrl.state[this.key] = state;
+    }
+    get shared() {
+        return this.ctrl.state.shared;
+    }
+    get eventStore() {
+        return this.ctrl.gestureEventStores[this.key];
+    }
+    get timeoutStore() {
+        return this.ctrl.gestureTimeoutStores[this.key];
+    }
+    get config() {
+        return this.ctrl.config[this.key];
+    }
+    get sharedConfig() {
+        return this.ctrl.config.shared;
+    }
+    get handler() {
+        return this.ctrl.handlers[this.key];
+    }
+    reset() {
+        const { state , shared , config , ingKey , args: args1  } = this;
+        const { transform , threshold =[
+            0,
+            0
+        ]  } = config;
+        shared[ingKey] = state._active = state.active = state._blocked = state._force = false;
+        state._step = [
+            false,
+            false
+        ];
+        state.intentional = false;
+        state._movement = [
+            0,
+            0
+        ];
+        state._distance = [
+            0,
+            0
+        ];
+        state._delta = [
+            0,
+            0
+        ];
+        state._threshold = maths.V.sub(transform(threshold), transform([
+            0,
+            0
+        ])).map(Math.abs);
+        state._bounds = [
+            [-Infinity, Infinity
+            ],
+            [-Infinity, Infinity
+            ]
+        ];
+        state.args = args1;
+        state.axis = undefined;
+        state.memo = undefined;
+        state.elapsedTime = 0;
+        state.direction = [
+            0,
+            0
+        ];
+        state.distance = [
+            0,
+            0
+        ];
+        state.velocity = [
+            0,
+            0
+        ];
+        state.movement = [
+            0,
+            0
+        ];
+        state.delta = [
+            0,
+            0
+        ];
+        state.timeStamp = 0;
+    }
+    start(event) {
+        const state = this.state;
+        const config = this.config;
+        if (!state._active) {
+            this.reset();
+            state._active = true;
+            state.target = event.target;
+            state.currentTarget = event.currentTarget;
+            state.initial = state.values;
+            state.lastOffset = config.from ? call(config.from, state) : state.offset;
+            state.offset = state.lastOffset;
+        }
+        state.startTime = state.timeStamp = event.timeStamp;
+    }
+    compute(event) {
+        const { state , config , shared  } = this;
+        state.args = this.args;
+        let dt = 0;
+        if (event) {
+            state.event = event;
+            state.type = event.type;
+            shared.touches = this.ctrl.pointerIds.size || this.ctrl.touchIds.size;
+            shared.locked = !!document.pointerLockElement;
+            Object.assign(shared, getEventDetails(event));
+            shared.down = shared.pressed = shared.buttons % 2 === 1 || shared.touches > 0;
+            dt = event.timeStamp - state.timeStamp;
+            state.timeStamp = event.timeStamp;
+            state.elapsedTime = state.timeStamp - state.startTime;
+        }
+        if (state._active) {
+            const _absoluteDelta = state._delta.map(Math.abs);
+            maths.V.addTo(state._distance, _absoluteDelta);
+        }
+        const [_m0, _m1] = config.transform(state._movement);
+        const [_t0, _t1] = state._threshold;
+        let [_s0, _s1] = state._step;
+        if (_s0 === false) _s0 = Math.abs(_m0) >= _t0 && Math.sign(_m0) * _t0;
+        if (_s1 === false) _s1 = Math.abs(_m1) >= _t1 && Math.sign(_m1) * _t1;
+        state.intentional = _s0 !== false || _s1 !== false;
+        if (!state.intentional) return;
+        state._step = [
+            _s0,
+            _s1
+        ];
+        const movement = [
+            0,
+            0
+        ];
+        movement[0] = _s0 !== false ? _m0 - _s0 : 0;
+        movement[1] = _s1 !== false ? _m1 - _s1 : 0;
+        if (this.intent) this.intent(movement);
+        if (state._active && !state._blocked || state.active) {
+            state.first = state._active && !state.active;
+            state.last = !state._active && state.active;
+            state.active = shared[this.ingKey] = state._active;
+            if (event) {
+                if (state.first) {
+                    if ('bounds' in config) state._bounds = call(config.bounds, state);
+                    if (this.setup) this.setup();
+                }
+                const previousMovement = state.movement;
+                state.movement = movement;
+                this.computeOffset();
+                if (!state.last) {
+                    state.delta = maths.V.sub(movement, previousMovement);
+                    const absoluteDelta = state.delta.map(Math.abs);
+                    maths.V.addTo(state.distance, absoluteDelta);
+                    state.direction = state.delta.map(Math.sign);
+                    if (!state.first && dt > 0) state.velocity = [
+                        absoluteDelta[0] / dt,
+                        absoluteDelta[1] / dt
+                    ];
+                }
+            }
+        }
+        const rubberband = state._active ? config.rubberband || [
+            0,
+            0
+        ] : [
+            0,
+            0
+        ];
+        state.offset = maths.computeRubberband(state._bounds, state.offset, rubberband);
+        this.computeMovement();
+    }
+    emit() {
+        const state = this.state;
+        const shared = this.shared;
+        const config = this.config;
+        if (!state._active) this.clean();
+        if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return;
+        const memo = this.handler(_objectSpread2(_objectSpread2(_objectSpread2({
+        }, shared), state), {
+        }, {
+            [this.aliasKey]: state.values
+        }));
+        if (memo !== undefined) state.memo = memo;
+    }
+    clean() {
+        this.eventStore.clean();
+        this.timeoutStore.clean();
+    }
+}
+function selectAxis([dx, dy]) {
+    const d = Math.abs(dx) - Math.abs(dy);
+    if (d > 0) return 'x';
+    if (d < 0) return 'y';
+    return undefined;
+}
+function restrictVectorToAxis(v, axis) {
+    switch(axis){
+        case 'x':
+            v[1] = 0;
+            break;
+        case 'y':
+            v[0] = 0;
+            break;
+    }
+}
+class CoordinatesEngine extends Engine {
+    constructor(...args1){
+        super(...args1);
+        _defineProperty(this, "aliasKey", 'xy');
+    }
+    reset() {
+        super.reset();
+        this.state.axis = undefined;
+    }
+    init() {
+        this.state.offset = [
+            0,
+            0
+        ];
+        this.state.lastOffset = [
+            0,
+            0
+        ];
+    }
+    computeOffset() {
+        this.state.offset = maths.V.add(this.state.lastOffset, this.state.movement);
+    }
+    computeMovement() {
+        this.state.movement = maths.V.sub(this.state.offset, this.state.lastOffset);
+    }
+    intent(v) {
+        this.state.axis = this.state.axis || selectAxis(v);
+        this.state._blocked = (this.config.lockDirection || !!this.config.axis) && !this.state.axis || !!this.config.axis && this.config.axis !== this.state.axis;
+        if (this.state._blocked) return;
+        if (this.config.axis || this.config.lockDirection) restrictVectorToAxis(v, this.state.axis);
+    }
+}
+const DEFAULT_RUBBERBAND = 0.15;
+const commonConfigResolver = {
+    enabled (value = true) {
+        return value;
+    },
+    triggerAllEvents (value = false) {
+        return value;
+    },
+    rubberband (value = 0) {
+        switch(value){
+            case true:
+                return [
+                    DEFAULT_RUBBERBAND,
+                    DEFAULT_RUBBERBAND
+                ];
+            case false:
+                return [
+                    0,
+                    0
+                ];
+            default:
+                return maths.V.toVector(value);
+        }
+    },
+    from (value) {
+        if (typeof value === 'function') return value;
+        if (value != null) return maths.V.toVector(value);
+    },
+    transform (value, _k, config) {
+        return value || config.shared.transform;
+    }
+};
+Object.assign(commonConfigResolver, {
+    domTarget (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`);
+    },
+    lockDirection (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`lockDirection\` option has been merged with \`axis\`. Use it as in \`{ axis: 'lock' }\``);
+    },
+    initial (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`initial\` option has been renamed to \`from\`.`);
+    }
+});
+const coordinatesConfigResolver = _objectSpread2(_objectSpread2({
+}, commonConfigResolver), {
+}, {
+    axis (_v, _k, { axis  }) {
+        this.lockDirection = axis === 'lock';
+        if (!this.lockDirection) return axis;
+    },
+    bounds (value = {
+    }) {
+        if (typeof value === 'function') return (state)=>coordinatesConfigResolver.bounds(value(state))
+        ;
+        if ('current' in value) return ()=>value.current
+        ;
+        if (typeof HTMLElement === 'function' && value instanceof HTMLElement) return value;
+        const { left =-Infinity , right =Infinity , top =-Infinity , bottom =Infinity  } = value;
+        return [
+            [
+                left,
+                right
+            ],
+            [
+                top,
+                bottom
+            ]
+        ];
+    }
+});
+const DISPLACEMENT = 10;
+const KEYS_DELTA_MAP = {
+    ArrowRight: (factor = 1)=>[
+            DISPLACEMENT * factor,
+            0
+        ]
+    ,
+    ArrowLeft: (factor = 1)=>[
+            -DISPLACEMENT * factor,
+            0
+        ]
+    ,
+    ArrowUp: (factor = 1)=>[
+            0,
+            -DISPLACEMENT * factor
+        ]
+    ,
+    ArrowDown: (factor = 1)=>[
+            0,
+            DISPLACEMENT * factor
+        ]
+};
+class DragEngine extends CoordinatesEngine {
+    constructor(...args2){
+        super(...args2);
+        _defineProperty(this, "ingKey", 'dragging');
+    }
+    reset() {
+        super.reset();
+        const state = this.state;
+        state._pointerId = undefined;
+        state._pointerActive = false;
+        state._keyboardActive = false;
+        state._preventScroll = false;
+        state._delayed = false;
+        state.swipe = [
+            0,
+            0
+        ];
+        state.tap = false;
+        state.canceled = false;
+        state.cancel = this.cancel.bind(this);
+    }
+    setup() {
+        const state = this.state;
+        if (state._bounds instanceof HTMLElement) {
+            const boundRect = state._bounds.getBoundingClientRect();
+            const targetRect = state.currentTarget.getBoundingClientRect();
+            const _bounds = {
+                left: boundRect.left - targetRect.left + state.offset[0],
+                right: boundRect.right - targetRect.right + state.offset[0],
+                top: boundRect.top - targetRect.top + state.offset[1],
+                bottom: boundRect.bottom - targetRect.bottom + state.offset[1]
+            };
+            state._bounds = coordinatesConfigResolver.bounds(_bounds);
+        }
+    }
+    cancel() {
+        const state = this.state;
+        if (state.canceled) return;
+        setTimeout(()=>{
+            state.canceled = true;
+            state._active = false;
+            this.compute();
+            this.emit();
+        }, 0);
+    }
+    setActive() {
+        this.state._active = this.state._pointerActive || this.state._keyboardActive;
+    }
+    clean() {
+        this.pointerClean();
+        this.state._pointerActive = false;
+        this.state._keyboardActive = false;
+        super.clean();
+    }
+    pointerDown(event) {
+        if (event.buttons != null && event.buttons % 2 !== 1) return;
+        this.ctrl.setEventIds(event);
+        if (this.config.pointerCapture) event.target.setPointerCapture(event.pointerId);
+        const state = this.state;
+        const config = this.config;
+        if (state._pointerActive) return;
+        this.start(event);
+        this.setupPointer(event);
+        state._pointerId = pointerId(event);
+        state._pointerActive = true;
+        state.values = pointerValues(event);
+        state.initial = state.values;
+        if (config.preventScroll) this.setupScrollPrevention(event);
+        else if (config.delay > 0) this.setupDelayTrigger(event);
+        else this.startPointerDrag(event);
+    }
+    startPointerDrag(event) {
+        const state = this.state;
+        state._active = true;
+        state._preventScroll = true;
+        state._delayed = false;
+        this.compute(event);
+        this.emit();
+    }
+    pointerMove(event) {
+        const state = this.state;
+        const config = this.config;
+        if (!state._pointerActive) return;
+        if (state.type === event.type && event.timeStamp === state.timeStamp) return;
+        const id = pointerId(event);
+        if (state._pointerId && id !== state._pointerId) return;
+        const values = pointerValues(event);
+        if (document.pointerLockElement === event.target) state._delta = [
+            event.movementX,
+            event.movementY
+        ];
+        else {
+            state._delta = maths.V.sub(values, state.values);
+            state.values = values;
+        }
+        maths.V.addTo(state._movement, state._delta);
+        this.compute(event);
+        if (state._delayed) {
+            this.timeoutStore.remove('dragDelay');
+            this.startPointerDrag(event);
+            return;
+        }
+        if (config.preventScroll && !state._preventScroll) {
+            if (state.axis) {
+                if (state.axis === config.preventScrollAxis || config.preventScrollAxis === 'xy') {
+                    state._active = false;
+                    this.clean();
+                    return;
+                } else {
+                    this.timeoutStore.remove('startPointerDrag');
+                    this.startPointerDrag(event);
+                    return;
+                }
+            } else return;
+        }
+        this.emit();
+    }
+    pointerUp(event) {
+        this.ctrl.setEventIds(event);
+        try {
+            if (this.config.pointerCapture && event.target.hasPointerCapture(event.pointerId)) event.target.releasePointerCapture(event.pointerId);
+        } catch (_unused) {
+            console.warn(`[@use-gesture]: If you see this message, it's likely that you're using an outdated version of \`@react-three/fiber\`. \n\nPlease upgrade to the latest version.`);
+        }
+        const state = this.state;
+        const config = this.config;
+        if (!state._pointerActive) return;
+        const id = pointerId(event);
+        if (state._pointerId && id !== state._pointerId) return;
+        this.state._pointerActive = false;
+        this.setActive();
+        this.compute(event);
+        const [dx, dy] = state._distance;
+        state.tap = dx <= 3 && dy <= 3;
+        if (state.tap && config.filterTaps) state._force = true;
+        else {
+            const [dirx, diry] = state.direction;
+            const [vx, vy] = state.velocity;
+            const [mx, my] = state.movement;
+            const [svx, svy] = config.swipe.velocity;
+            const [sx, sy] = config.swipe.distance;
+            const sdt = config.swipe.duration;
+            if (state.elapsedTime < sdt) {
+                if (Math.abs(vx) > svx && Math.abs(mx) > sx) state.swipe[0] = dirx;
+                if (Math.abs(vy) > svy && Math.abs(my) > sy) state.swipe[1] = diry;
+            }
+        }
+        this.emit();
+    }
+    pointerClick(event) {
+        if (!this.state.tap) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    }
+    setupPointer(event) {
+        const config = this.config;
+        let device = config.device;
+        try {
+            if (device === 'pointer') {
+                const currentTarget = 'uv' in event ? event.sourceEvent.currentTarget : event.currentTarget;
+                const style = window.getComputedStyle(currentTarget);
+                if (style.touchAction === 'auto') console.warn(`[@use-gesture]: The drag target has its \`touch-action\` style property set to \`auto\`. It is recommended to add \`touch-action: 'none'\` so that the drag gesture behaves correctly on touch-enabled devices. For more information read this: https://use-gesture.netlify.app/docs/extras/#touch-action.\n\nThis message will only show in development mode. It won't appear in production. If this is intended, you can ignore it.`, currentTarget);
+            }
+        } catch (_unused2) {
+        }
+        if (config.pointerLock) event.currentTarget.requestPointerLock();
+        if (!config.pointerCapture) {
+            this.eventStore.add(this.sharedConfig.window, device, 'change', this.pointerMove.bind(this));
+            this.eventStore.add(this.sharedConfig.window, device, 'end', this.pointerUp.bind(this));
+        }
+    }
+    pointerClean() {
+        if (this.config.pointerLock && document.pointerLockElement === this.state.currentTarget) document.exitPointerLock();
+    }
+    preventScroll(event) {
+        if (this.state._preventScroll && event.cancelable) event.preventDefault();
+    }
+    setupScrollPrevention(event) {
+        persistEvent(event);
+        this.eventStore.add(this.sharedConfig.window, 'touch', 'change', this.preventScroll.bind(this), {
+            passive: false
+        });
+        this.eventStore.add(this.sharedConfig.window, 'touch', 'end', this.clean.bind(this), {
+            passive: false
+        });
+        this.eventStore.add(this.sharedConfig.window, 'touch', 'cancel', this.clean.bind(this), {
+            passive: false
+        });
+        this.timeoutStore.add('startPointerDrag', this.startPointerDrag.bind(this), this.config.preventScroll, event);
+    }
+    setupDelayTrigger(event) {
+        this.state._delayed = true;
+        this.timeoutStore.add('dragDelay', this.startPointerDrag.bind(this), this.config.delay, event);
+    }
+    keyDown(event) {
+        const deltaFn = KEYS_DELTA_MAP[event.key];
+        const state = this.state;
+        if (deltaFn) {
+            const factor = event.shiftKey ? 10 : event.altKey ? 0.1 : 1;
+            state._delta = deltaFn(factor);
+            this.start(event);
+            state._keyboardActive = true;
+            maths.V.addTo(state._movement, state._delta);
+            this.compute(event);
+            this.emit();
+        }
+    }
+    keyUp(event) {
+        if (!(event.key in KEYS_DELTA_MAP)) return;
+        this.state._keyboardActive = false;
+        this.setActive();
+        this.compute(event);
+        this.emit();
+    }
+    bind(bindFunction) {
+        const device = this.config.device;
+        bindFunction(device, 'start', this.pointerDown.bind(this));
+        if (this.config.pointerCapture) {
+            bindFunction(device, 'change', this.pointerMove.bind(this));
+            bindFunction(device, 'end', this.pointerUp.bind(this));
+            bindFunction(device, 'cancel', this.pointerUp.bind(this));
+        }
+        bindFunction('key', 'down', this.keyDown.bind(this));
+        bindFunction('key', 'up', this.keyUp.bind(this));
+        if (this.config.filterTaps) bindFunction('click', '', this.pointerClick.bind(this), {
+            capture: true
+        });
+    }
+}
+function persistEvent(event) {
+    'persist' in event && typeof event.persist === 'function' && event.persist();
+}
+const isBrowser = typeof window !== 'undefined' && window.document && window.document.createElement;
+function supportsTouchEvents() {
+    return isBrowser && 'ontouchstart' in window;
+}
+function isTouchScreen() {
+    return supportsTouchEvents() || isBrowser && navigator.maxTouchPoints > 1;
+}
+function supportsPointerEvents() {
+    return isBrowser && 'onpointerdown' in window;
+}
+function supportsPointerLock() {
+    return isBrowser && 'exitPointerLock' in window.document;
+}
+function supportsGestureEvents() {
+    try {
+        return 'constructor' in GestureEvent;
+    } catch (e) {
+        return false;
+    }
+}
+const SUPPORT = {
+    isBrowser,
+    gesture: supportsGestureEvents(),
+    touch: supportsTouchEvents(),
+    touchscreen: isTouchScreen(),
+    pointer: supportsPointerEvents(),
+    pointerLock: supportsPointerLock()
+};
+const DEFAULT_PREVENT_SCROLL_DELAY = 250;
+const DEFAULT_DRAG_DELAY = 180;
+const DEFAULT_SWIPE_VELOCITY = 0.5;
+const DEFAULT_SWIPE_DISTANCE = 50;
+const DEFAULT_SWIPE_DURATION = 250;
+const dragConfigResolver = _objectSpread2(_objectSpread2({
+}, coordinatesConfigResolver), {
+}, {
+    pointerLock (_v, _k, { pointer: { lock =false , touch =false  } = {
+    }  }) {
+        this.useTouch = SUPPORT.touch && touch;
+        return SUPPORT.pointerLock && lock;
+    },
+    device (_v, _k) {
+        if (this.useTouch) return 'touch';
+        if (this.pointerLock) return 'mouse';
+        if (SUPPORT.pointer) return 'pointer';
+        if (SUPPORT.touch) return 'touch';
+        return 'mouse';
+    },
+    preventScroll (value = false, _k, { preventScrollAxis ='y'  }) {
+        if (preventScrollAxis) this.preventScrollAxis = preventScrollAxis;
+        if (!SUPPORT.touchscreen) return false;
+        if (typeof value === 'number') return value;
+        return value ? DEFAULT_PREVENT_SCROLL_DELAY : false;
+    },
+    pointerCapture (_v, _k, { pointer: { capture =true  } = {
+    }  }) {
+        return !this.pointerLock && this.device === 'pointer' && capture;
+    },
+    threshold (value, _k, { filterTaps =false , axis  }) {
+        const threshold = maths.V.toVector(value, filterTaps ? 3 : axis ? 1 : 0);
+        this.filterTaps = filterTaps;
+        return threshold;
+    },
+    swipe ({ velocity =DEFAULT_SWIPE_VELOCITY , distance =DEFAULT_SWIPE_DISTANCE , duration =DEFAULT_SWIPE_DURATION  } = {
+    }) {
+        return {
+            velocity: this.transform(maths.V.toVector(velocity)),
+            distance: this.transform(maths.V.toVector(distance)),
+            duration
+        };
+    },
+    delay (value = 0) {
+        switch(value){
+            case true:
+                return DEFAULT_DRAG_DELAY;
+            case false:
+                return 0;
+            default:
+                return value;
+        }
+    }
+});
+Object.assign(dragConfigResolver, {
+    useTouch (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`useTouch\` option has been renamed to \`pointer.touch\`. Use it as in \`{ pointer: { touch: true } }\`.`);
+    },
+    experimental_preventWindowScrollY (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`experimental_preventWindowScrollY\` option has been renamed to \`preventScroll\`.`);
+    },
+    swipeVelocity (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`swipeVelocity\` option has been renamed to \`swipe.velocity\`. Use it as in \`{ swipe: { velocity: 0.5 } }\`.`);
+    },
+    swipeDistance (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`swipeDistance\` option has been renamed to \`swipe.distance\`. Use it as in \`{ swipe: { distance: 50 } }\`.`);
+    },
+    swipeDuration (value) {
+        if (value !== undefined) throw Error(`[@use-gesture]: \`swipeDuration\` option has been renamed to \`swipe.duration\`. Use it as in \`{ swipe: { duration: 250 } }\`.`);
+    }
+});
+const SCALE_ANGLE_RATIO_INTENT_DEG = 30;
+const PINCH_WHEEL_RATIO = 60;
+class PinchEngine extends Engine {
+    constructor(...args3){
+        super(...args3);
+        _defineProperty(this, "ingKey", 'pinching');
+        _defineProperty(this, "aliasKey", 'da');
+    }
+    init() {
+        this.state.offset = [
+            1,
+            0
+        ];
+        this.state.lastOffset = [
+            1,
+            0
+        ];
+        this.state._pointerEvents = new Map();
+    }
+    reset() {
+        super.reset();
+        const state = this.state;
+        state._touchIds = [];
+        state.canceled = false;
+        state.cancel = this.cancel.bind(this);
+        state.turns = 0;
+    }
+    computeOffset() {
+        const { movement , lastOffset  } = this.state;
+        this.state.offset = [
+            (1 + movement[0]) * lastOffset[0],
+            movement[1] + lastOffset[1]
+        ];
+    }
+    computeMovement() {
+        const { offset , lastOffset  } = this.state;
+        this.state.movement = [
+            offset[0] / lastOffset[0] - 1,
+            offset[1] - lastOffset[1]
+        ];
+    }
+    intent(v) {
+        const state = this.state;
+        if (!state.axis) {
+            const axisMovementDifference = Math.abs(v[0]) * SCALE_ANGLE_RATIO_INTENT_DEG - Math.abs(v[1]);
+            if (axisMovementDifference < 0) state.axis = 'angle';
+            else if (axisMovementDifference > 0) state.axis = 'scale';
+        }
+        if (this.config.lockDirection) {
+            if (state.axis === 'scale') v[1] = 0;
+            else if (state.axis === 'angle') v[0] = 0;
+        }
+    }
+    cancel() {
+        const state = this.state;
+        if (state.canceled) return;
+        setTimeout(()=>{
+            state.canceled = true;
+            state._active = false;
+            this.compute();
+            this.emit();
+        }, 0);
+    }
+    touchStart(event) {
+        this.ctrl.setEventIds(event);
+        const state = this.state;
+        const ctrlTouchIds = this.ctrl.touchIds;
+        if (state._active) {
+            if (state._touchIds.every((id)=>ctrlTouchIds.has(id)
+            )) return;
+        }
+        if (ctrlTouchIds.size < 2) return;
+        this.start(event);
+        state._touchIds = Array.from(ctrlTouchIds).slice(0, 2);
+        const payload = touchDistanceAngle(event, state._touchIds);
+        this.pinchStart(event, payload);
+    }
+    pointerStart(event) {
+        if (event.buttons != null && event.buttons % 2 !== 1) return;
+        this.ctrl.setEventIds(event);
+        event.target.setPointerCapture(event.pointerId);
+        const state = this.state;
+        const _pointerEvents = state._pointerEvents;
+        const ctrlPointerIds = this.ctrl.pointerIds;
+        if (state._active) {
+            if (Array.from(_pointerEvents.keys()).every((id)=>ctrlPointerIds.has(id)
+            )) return;
+        }
+        if (_pointerEvents.size < 2) _pointerEvents.set(event.pointerId, event);
+        if (state._pointerEvents.size < 2) return;
+        this.start(event);
+        const payload = distanceAngle(...Array.from(_pointerEvents.values()));
+        this.pinchStart(event, payload);
+    }
+    pinchStart(event, payload) {
+        const state = this.state;
+        state.origin = payload.origin;
+        state.values = [
+            payload.distance,
+            payload.angle
+        ];
+        state.initial = state.values;
+        this.compute(event);
+        this.emit();
+    }
+    touchMove(event) {
+        if (!this.state._active) return;
+        const payload = touchDistanceAngle(event, this.state._touchIds);
+        this.pinchMove(event, payload);
+    }
+    pointerMove(event) {
+        const _pointerEvents = this.state._pointerEvents;
+        if (_pointerEvents.has(event.pointerId)) _pointerEvents.set(event.pointerId, event);
+        if (!this.state._active) return;
+        const payload = distanceAngle(...Array.from(_pointerEvents.values()));
+        this.pinchMove(event, payload);
+    }
+    pinchMove(event, payload) {
+        const state = this.state;
+        const prev_a = state.values[1];
+        const delta_a = payload.angle - prev_a;
+        let delta_turns = 0;
+        if (Math.abs(delta_a) > 270) delta_turns += Math.sign(delta_a);
+        state.values = [
+            payload.distance,
+            payload.angle - 360 * delta_turns
+        ];
+        state.origin = payload.origin;
+        state.turns = delta_turns;
+        state._movement = [
+            state.values[0] / state.initial[0] - 1,
+            state.values[1] - state.initial[1]
+        ];
+        this.compute(event);
+        this.emit();
+    }
+    touchEnd(event) {
+        this.ctrl.setEventIds(event);
+        if (!this.state._active) return;
+        if (this.state._touchIds.some((id)=>!this.ctrl.touchIds.has(id)
+        )) {
+            this.state._active = false;
+            this.compute(event);
+            this.emit();
+        }
+    }
+    pointerEnd(event) {
+        const state = this.state;
+        this.ctrl.setEventIds(event);
+        try {
+            event.target.releasePointerCapture(event.pointerId);
+        } catch (_unused) {
+        }
+        if (state._pointerEvents.has(event.pointerId)) state._pointerEvents.delete(event.pointerId);
+        if (!state._active) return;
+        if (state._pointerEvents.size < 2) {
+            state._active = false;
+            this.compute(event);
+            this.emit();
+        }
+    }
+    gestureStart(event) {
+        if (event.cancelable) event.preventDefault();
+        const state = this.state;
+        if (state._active) return;
+        this.start(event);
+        state.values = [
+            event.scale,
+            event.rotation
+        ];
+        state.origin = [
+            event.clientX,
+            event.clientY
+        ];
+        this.compute(event);
+        this.emit();
+    }
+    gestureMove(event) {
+        if (event.cancelable) event.preventDefault();
+        if (!this.state._active) return;
+        const state = this.state;
+        state.values = [
+            event.scale,
+            event.rotation
+        ];
+        state.origin = [
+            event.clientX,
+            event.clientY
+        ];
+        const _previousMovement = state._movement;
+        state._movement = [
+            event.scale - 1,
+            event.rotation
+        ];
+        state._delta = maths.V.sub(state._movement, _previousMovement);
+        this.compute(event);
+        this.emit();
+    }
+    gestureEnd(event) {
+        if (!this.state._active) return;
+        this.state._active = false;
+        this.compute(event);
+        this.emit();
+    }
+    wheel(event) {
+        if (!event.ctrlKey) return;
+        if (!this.state._active) this.wheelStart(event);
+        else this.wheelChange(event);
+        this.timeoutStore.add('wheelEnd', this.wheelEnd.bind(this));
+    }
+    wheelStart(event) {
+        this.start(event);
+        this.wheelChange(event);
+    }
+    wheelChange(event) {
+        const isR3f = 'uv' in event;
+        if (!isR3f) {
+            if (event.cancelable) event.preventDefault();
+            if (!event.defaultPrevented) console.warn(`[@use-gesture]: To properly support zoom on trackpads, try using the \`target\` option.\n\nThis message will only appear in development mode.`);
+        }
+        const state = this.state;
+        state._delta = [
+            -wheelValues(event)[1] / PINCH_WHEEL_RATIO,
+            0
+        ];
+        maths.V.addTo(state._movement, state._delta);
+        this.state.origin = [
+            event.clientX,
+            event.clientY
+        ];
+        this.compute(event);
+        this.emit();
+    }
+    wheelEnd() {
+        if (!this.state._active) return;
+        this.state._active = false;
+        this.compute();
+        this.emit();
+    }
+    bind(bindFunction) {
+        const device = this.config.device;
+        if (!!device) {
+            bindFunction(device, 'start', this[device + 'Start'].bind(this));
+            bindFunction(device, 'change', this[device + 'Move'].bind(this));
+            bindFunction(device, 'end', this[device + 'End'].bind(this));
+            bindFunction(device, 'cancel', this[device + 'End'].bind(this));
+        } else bindFunction('wheel', '', this.wheel.bind(this), {
+            passive: false
+        });
+    }
+}
+const pinchConfigResolver = _objectSpread2(_objectSpread2({
+}, commonConfigResolver), {
+}, {
+    useTouch (_v, _k, { pointer: { touch =false  } = {
+    }  }) {
+        return SUPPORT.touch && touch;
+    },
+    device (_v, _k, config) {
+        const sharedConfig = config.shared;
+        if (sharedConfig.target && !SUPPORT.touch && SUPPORT.gesture) return 'gesture';
+        if (this.useTouch) return 'touch';
+        if (SUPPORT.touchscreen) {
+            if (SUPPORT.pointer) return 'pointer';
+            if (SUPPORT.touch) return 'touch';
+        }
+    },
+    bounds (_v, _k, { scaleBounds ={
+    } , angleBounds ={
+    }  }) {
+        const _scaleBounds = (state)=>{
+            const D = assignDefault(call(scaleBounds, state), {
+                min: -Infinity,
+                max: Infinity
+            });
+            return [
+                D.min,
+                D.max
+            ];
+        };
+        const _angleBounds = (state)=>{
+            const A = assignDefault(call(angleBounds, state), {
+                min: -Infinity,
+                max: Infinity
+            });
+            return [
+                A.min,
+                A.max
+            ];
+        };
+        if (typeof scaleBounds !== 'function' && typeof angleBounds !== 'function') return [
+            _scaleBounds(),
+            _angleBounds()
+        ];
+        return (state)=>[
+                _scaleBounds(state),
+                _angleBounds(state)
+            ]
+        ;
+    },
+    threshold (value, _k, config) {
+        this.lockDirection = config.axis === 'lock';
+        const threshold = maths.V.toVector(value, this.lockDirection ? [
+            0.1,
+            3
+        ] : 0);
+        return threshold;
+    }
+});
+class MoveEngine extends CoordinatesEngine {
+    constructor(...args4){
+        super(...args4);
+        _defineProperty(this, "ingKey", 'moving');
+    }
+    move(event) {
+        if (this.config.mouseOnly && event.pointerType !== 'mouse') return;
+        if (!this.state._active) this.moveStart(event);
+        else this.moveChange(event);
+        this.timeoutStore.add('moveEnd', this.moveEnd.bind(this));
+    }
+    moveStart(event) {
+        this.start(event);
+        const state = this.state;
+        state.values = pointerValues(event);
+        this.compute(event);
+        state.initial = state.values;
+        this.emit();
+    }
+    moveChange(event) {
+        if (!this.state._active) return;
+        const values = pointerValues(event);
+        const state = this.state;
+        state._delta = maths.V.sub(values, state.values);
+        maths.V.addTo(state._movement, state._delta);
+        state.values = values;
+        this.compute(event);
+        this.emit();
+    }
+    moveEnd(event) {
+        if (!this.state._active) return;
+        this.state._active = false;
+        this.compute(event);
+        this.emit();
+    }
+    bind(bindFunction) {
+        bindFunction('pointer', 'change', this.move.bind(this));
+        bindFunction('pointer', 'leave', this.moveEnd.bind(this));
+    }
+}
+const moveConfigResolver = _objectSpread2(_objectSpread2({
+}, coordinatesConfigResolver), {
+}, {
+    mouseOnly: (value = true)=>value
+});
+class ScrollEngine extends CoordinatesEngine {
+    constructor(...args5){
+        super(...args5);
+        _defineProperty(this, "ingKey", 'scrolling');
+    }
+    scroll(event) {
+        if (!this.state._active) this.start(event);
+        this.scrollChange(event);
+        this.timeoutStore.add('scrollEnd', this.scrollEnd.bind(this));
+    }
+    scrollChange(event) {
+        if (event.cancelable) event.preventDefault();
+        const state = this.state;
+        const values = scrollValues(event);
+        state._delta = maths.V.sub(values, state.values);
+        maths.V.addTo(state._movement, state._delta);
+        state.values = values;
+        this.compute(event);
+        this.emit();
+    }
+    scrollEnd() {
+        if (!this.state._active) return;
+        this.state._active = false;
+        this.compute();
+        this.emit();
+    }
+    bind(bindFunction) {
+        bindFunction('scroll', '', this.scroll.bind(this));
+    }
+}
+const scrollConfigResolver = coordinatesConfigResolver;
+class WheelEngine extends CoordinatesEngine {
+    constructor(...args6){
+        super(...args6);
+        _defineProperty(this, "ingKey", 'wheeling');
+    }
+    wheel(event) {
+        if (!this.state._active) this.start(event);
+        this.wheelChange(event);
+        this.timeoutStore.add('wheelEnd', this.wheelEnd.bind(this));
+    }
+    wheelChange(event) {
+        const state = this.state;
+        state._delta = wheelValues(event);
+        maths.V.addTo(this.state._movement, state._delta);
+        this.compute(event);
+        this.emit();
+    }
+    wheelEnd() {
+        if (!this.state._active) return;
+        this.state._active = false;
+        this.compute();
+        this.emit();
+    }
+    bind(bindFunction) {
+        bindFunction('wheel', '', this.wheel.bind(this));
+    }
+}
+const wheelConfigResolver = coordinatesConfigResolver;
+class HoverEngine extends CoordinatesEngine {
+    constructor(...args7){
+        super(...args7);
+        _defineProperty(this, "ingKey", 'hovering');
+    }
+    enter(event) {
+        if (this.config.mouseOnly && event.pointerType !== 'mouse') return;
+        this.start(event);
+        this.state.values = pointerValues(event);
+        this.compute(event);
+        this.emit();
+    }
+    leave(event) {
+        if (this.config.mouseOnly && event.pointerType !== 'mouse') return;
+        const state = this.state;
+        if (!state._active) return;
+        state._active = false;
+        const values = pointerValues(event);
+        state._movement = state._delta = maths.V.sub(values, state.values);
+        state.values = values;
+        this.compute(event);
+        state.delta = state.movement;
+        this.emit();
+    }
+    bind(bindFunction) {
+        bindFunction('pointer', 'enter', this.enter.bind(this));
+        bindFunction('pointer', 'leave', this.leave.bind(this));
+    }
+}
+const hoverConfigResolver = _objectSpread2(_objectSpread2({
+}, coordinatesConfigResolver), {
+}, {
+    mouseOnly: (value = true)=>value
+});
+const EngineMap = new Map();
+const ConfigResolverMap = new Map();
+function registerAction(action) {
+    EngineMap.set(action.key, action.engine);
+    ConfigResolverMap.set(action.key, action.resolver);
+}
+const dragAction = {
+    key: 'drag',
+    engine: DragEngine,
+    resolver: dragConfigResolver
+};
+const hoverAction = {
+    key: 'hover',
+    engine: HoverEngine,
+    resolver: hoverConfigResolver
+};
+const moveAction = {
+    key: 'move',
+    engine: MoveEngine,
+    resolver: moveConfigResolver
+};
+const pinchAction = {
+    key: 'pinch',
+    engine: PinchEngine,
+    resolver: pinchConfigResolver
+};
+const scrollAction = {
+    key: 'scroll',
+    engine: ScrollEngine,
+    resolver: scrollConfigResolver
+};
+const wheelAction = {
+    key: 'wheel',
+    engine: WheelEngine,
+    resolver: wheelConfigResolver
+};
+exports.ConfigResolverMap = ConfigResolverMap;
+exports.EngineMap = EngineMap;
+exports.SUPPORT = SUPPORT;
+exports._defineProperty = _defineProperty;
+exports._objectSpread2 = _objectSpread2;
+exports.chain = chain;
+exports.dragAction = dragAction;
+exports.hoverAction = hoverAction;
+exports.isTouch = isTouch;
+exports.moveAction = moveAction;
+exports.pinchAction = pinchAction;
+exports.registerAction = registerAction;
+exports.scrollAction = scrollAction;
+exports.toDomEventType = toDomEventType;
+exports.toHandlerProp = toHandlerProp;
+exports.touchIds = touchIds;
+exports.wheelAction = wheelAction;
+
+},{"./maths-125ca19a.cjs.dev.js":"2wuI2"}],"2wuI2":[function(require,module,exports) {
+'use strict';
+function clamp(v, min, max) {
+    return Math.max(min, Math.min(v, max));
+}
+const V = {
+    toVector (v, fallback) {
+        if (v === undefined) v = fallback;
+        return Array.isArray(v) ? v : [
+            v,
+            v
+        ];
+    },
+    add (v1, v2) {
+        return [
+            v1[0] + v2[0],
+            v1[1] + v2[1]
+        ];
+    },
+    sub (v1, v2) {
+        return [
+            v1[0] - v2[0],
+            v1[1] - v2[1]
+        ];
+    },
+    addTo (v1, v2) {
+        v1[0] += v2[0];
+        v1[1] += v2[1];
+    },
+    subTo (v1, v2) {
+        v1[0] -= v2[0];
+        v1[1] -= v2[1];
+    }
+};
+function rubberband(distance, dimension, constant) {
+    if (dimension === 0 || Math.abs(dimension) === Infinity) return Math.pow(distance, constant * 5);
+    return distance * dimension * constant / (dimension + constant * distance);
+}
+function rubberbandIfOutOfBounds(position, min, max, constant = 0.15) {
+    if (constant === 0) return clamp(position, min, max);
+    if (position < min) return -rubberband(min - position, max - min, constant) + min;
+    if (position > max) return +rubberband(position - max, max - min, constant) + max;
+    return position;
+}
+function computeRubberband(bounds, [Vx, Vy], [Rx, Ry]) {
+    const [[X0, X1], [Y0, Y1]] = bounds;
+    return [
+        rubberbandIfOutOfBounds(Vx, X0, X1, Rx),
+        rubberbandIfOutOfBounds(Vy, Y0, Y1, Ry)
+    ];
+}
+exports.V = V;
+exports.computeRubberband = computeRubberband;
+exports.rubberbandIfOutOfBounds = rubberbandIfOutOfBounds;
+
+},{}],"4SxWD":[function(require,module,exports) {
+'use strict';
+module.exports = require("./use-gesture-core.cjs.dev.js");
+
+},{"./use-gesture-core.cjs.dev.js":"1gSxz"}],"1gSxz":[function(require,module,exports) {
+'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var actions_dist_useGestureCoreActions = require('./actions-59bdceda.cjs.dev.js');
+require('./maths-125ca19a.cjs.dev.js');
+function _objectWithoutPropertiesLoose(source, excluded) {
+    if (source == null) return {
+    };
+    var target = {
+    };
+    var sourceKeys = Object.keys(source);
+    var key, i;
+    for(i = 0; i < sourceKeys.length; i++){
+        key = sourceKeys[i];
+        if (excluded.indexOf(key) >= 0) continue;
+        target[key] = source[key];
+    }
+    return target;
+}
+function _objectWithoutProperties(source, excluded) {
+    if (source == null) return {
+    };
+    var target = _objectWithoutPropertiesLoose(source, excluded);
+    var key, i;
+    if (Object.getOwnPropertySymbols) {
+        var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
+        for(i = 0; i < sourceSymbolKeys.length; i++){
+            key = sourceSymbolKeys[i];
+            if (excluded.indexOf(key) >= 0) continue;
+            if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
+            target[key] = source[key];
+        }
+    }
+    return target;
+}
+const identity = (v)=>v
+;
+const sharedConfigResolver = {
+    target (value) {
+        if (value) return ()=>'current' in value ? value.current : value
+        ;
+        return undefined;
+    },
+    enabled (value = true) {
+        return value;
+    },
+    window (value = actions_dist_useGestureCoreActions.SUPPORT.isBrowser ? window : undefined) {
+        return value;
+    },
+    eventOptions ({ passive =true , capture =false  } = {
+    }) {
+        return {
+            passive,
+            capture
+        };
+    },
+    transform (value = identity) {
+        return value;
+    }
+};
+const _excluded = [
+    "target",
+    "eventOptions",
+    "window",
+    "enabled",
+    "transform"
+];
+function resolveWith(config = {
+}, resolvers) {
+    const result = {
+    };
+    for (const [key, resolver] of Object.entries(resolvers))switch(typeof resolver){
+        case 'function':
+            result[key] = resolver.call(result, config[key], key, config);
+            break;
+        case 'object':
+            result[key] = resolveWith(config[key], resolver);
+            break;
+        case 'boolean':
+            if (resolver) result[key] = config[key];
+            break;
+    }
+    return result;
+}
+function parse(config, gestureKey) {
+    const _ref = config, { target , eventOptions , window , enabled , transform  } = _ref, rest = _objectWithoutProperties(_ref, _excluded);
+    const _config = {
+        shared: resolveWith({
+            target,
+            eventOptions,
+            window,
+            enabled
+        }, sharedConfigResolver)
+    };
+    if (gestureKey) {
+        const resolver = actions_dist_useGestureCoreActions.ConfigResolverMap.get(gestureKey);
+        _config[gestureKey] = resolveWith(actions_dist_useGestureCoreActions._objectSpread2({
+            shared: _config.shared
+        }, rest), resolver);
+    } else for(const key in rest){
+        const resolver = actions_dist_useGestureCoreActions.ConfigResolverMap.get(key);
+        if (resolver) _config[key] = resolveWith(actions_dist_useGestureCoreActions._objectSpread2({
+            shared: _config.shared
+        }, rest[key]), resolver);
+        else if (![
+            'drag',
+            'pinch',
+            'scroll',
+            'wheel',
+            'move',
+            'hover'
+        ].includes(key)) {
+            if (key === 'domTarget') throw Error(`[@use-gesture]: \`domTarget\` option has been renamed to \`target\`.`);
+            console.warn(`[@use-gesture]: Unknown config key \`${key}\` was used. Please read the documentation for further information.`);
+        }
+    }
+    return _config;
+}
+class EventStore {
+    constructor(ctrl){
+        actions_dist_useGestureCoreActions._defineProperty(this, "_listeners", []);
+        this._ctrl = ctrl;
+    }
+    add(element, device, action, handler, options) {
+        const type = actions_dist_useGestureCoreActions.toDomEventType(device, action);
+        const eventOptions = actions_dist_useGestureCoreActions._objectSpread2(actions_dist_useGestureCoreActions._objectSpread2({
+        }, this._ctrl.config.shared.eventOptions), options);
+        element.addEventListener(type, handler, eventOptions);
+        this._listeners.push(()=>element.removeEventListener(type, handler, eventOptions)
+        );
+    }
+    clean() {
+        this._listeners.forEach((remove)=>remove()
+        );
+        this._listeners = [];
+    }
+}
+class TimeoutStore {
+    constructor(){
+        actions_dist_useGestureCoreActions._defineProperty(this, "_timeouts", new Map());
+    }
+    add(key, callback, ms = 140, ...args) {
+        this.remove(key);
+        this._timeouts.set(key, window.setTimeout(callback, ms, ...args));
+    }
+    remove(key) {
+        const timeout = this._timeouts.get(key);
+        if (timeout) window.clearTimeout(timeout);
+    }
+    clean() {
+        this._timeouts.forEach((timeout)=>void window.clearTimeout(timeout)
+        );
+        this._timeouts.clear();
+    }
+}
+class Controller {
+    constructor(handlers1){
+        actions_dist_useGestureCoreActions._defineProperty(this, "gestures", new Set());
+        actions_dist_useGestureCoreActions._defineProperty(this, "_targetEventStore", new EventStore(this));
+        actions_dist_useGestureCoreActions._defineProperty(this, "gestureEventStores", {
+        });
+        actions_dist_useGestureCoreActions._defineProperty(this, "gestureTimeoutStores", {
+        });
+        actions_dist_useGestureCoreActions._defineProperty(this, "handlers", {
+        });
+        actions_dist_useGestureCoreActions._defineProperty(this, "config", {
+        });
+        actions_dist_useGestureCoreActions._defineProperty(this, "pointerIds", new Set());
+        actions_dist_useGestureCoreActions._defineProperty(this, "touchIds", new Set());
+        actions_dist_useGestureCoreActions._defineProperty(this, "state", {
+            shared: {
+                shiftKey: false,
+                metaKey: false,
+                ctrlKey: false,
+                altKey: false
+            }
+        });
+        resolveGestures(this, handlers1);
+    }
+    setEventIds(event) {
+        if (actions_dist_useGestureCoreActions.isTouch(event)) this.touchIds = new Set(actions_dist_useGestureCoreActions.touchIds(event));
+        else if ('pointerId' in event) {
+            if (event.type === 'pointerup') this.pointerIds.delete(event.pointerId);
+            else this.pointerIds.add(event.pointerId);
+        }
+    }
+    applyHandlers(handlers, nativeHandlers) {
+        this.handlers = handlers;
+        this.nativeHandlers = nativeHandlers;
+    }
+    applyConfig(config, gestureKey) {
+        this.config = parse(config, gestureKey);
+    }
+    clean() {
+        this._targetEventStore.clean();
+        for (const key of this.gestures){
+            this.gestureEventStores[key].clean();
+            this.gestureTimeoutStores[key].clean();
+        }
+    }
+    effect() {
+        if (this.config.shared.target) this.bind();
+        return ()=>this._targetEventStore.clean()
+        ;
+    }
+    bind(...args) {
+        const sharedConfig = this.config.shared;
+        const eventOptions = sharedConfig.eventOptions;
+        const props = {
+        };
+        let target;
+        if (sharedConfig.target) {
+            target = sharedConfig.target();
+            if (!target) return;
+        }
+        const bindFunction = bindToProps(props, eventOptions, !!target);
+        if (sharedConfig.enabled) {
+            for (const gestureKey of this.gestures)if (this.config[gestureKey].enabled) {
+                const Engine = actions_dist_useGestureCoreActions.EngineMap.get(gestureKey);
+                new Engine(this, args, gestureKey).bind(bindFunction);
+            }
+            for(const eventKey in this.nativeHandlers)bindFunction(eventKey, '', (event)=>this.nativeHandlers[eventKey](actions_dist_useGestureCoreActions._objectSpread2(actions_dist_useGestureCoreActions._objectSpread2({
+                }, this.state.shared), {
+                }, {
+                    event,
+                    args
+                }))
+            , undefined, true);
+        }
+        for(const handlerProp in props)props[handlerProp] = actions_dist_useGestureCoreActions.chain(...props[handlerProp]);
+        if (!target) return props;
+        for(const handlerProp1 in props){
+            let eventKey = handlerProp1.substr(2).toLowerCase();
+            const capture = !!~eventKey.indexOf('capture');
+            const passive = !!~eventKey.indexOf('passive');
+            if (capture || passive) eventKey = eventKey.replace(/capture|passive/g, '');
+            this._targetEventStore.add(target, eventKey, '', props[handlerProp1], {
+                capture,
+                passive
+            });
+        }
+    }
+}
+function setupGesture(ctrl1, gestureKey) {
+    ctrl1.gestures.add(gestureKey);
+    ctrl1.gestureEventStores[gestureKey] = new EventStore(ctrl1);
+    ctrl1.gestureTimeoutStores[gestureKey] = new TimeoutStore();
+}
+function resolveGestures(ctrl1, internalHandlers) {
+    if (internalHandlers.drag) setupGesture(ctrl1, 'drag');
+    if (internalHandlers.wheel) setupGesture(ctrl1, 'wheel');
+    if (internalHandlers.scroll) setupGesture(ctrl1, 'scroll');
+    if (internalHandlers.move) setupGesture(ctrl1, 'move');
+    if (internalHandlers.pinch) setupGesture(ctrl1, 'pinch');
+    if (internalHandlers.hover) setupGesture(ctrl1, 'hover');
+}
+const bindToProps = (props, eventOptions, withPassiveOption)=>(device, action, handler, options = {
+    }, isNative = false)=>{
+        var _options$capture, _options$passive;
+        const capture = (_options$capture = options.capture) !== null && _options$capture !== void 0 ? _options$capture : eventOptions.capture;
+        const passive = (_options$passive = options.passive) !== null && _options$passive !== void 0 ? _options$passive : eventOptions.passive;
+        let handlerProp = isNative ? device : actions_dist_useGestureCoreActions.toHandlerProp(device, action, capture);
+        if (withPassiveOption && passive) handlerProp += 'Passive';
+        props[handlerProp] = props[handlerProp] || [];
+        props[handlerProp].push(handler);
+    }
+;
+const RE_NOT_NATIVE = /^on(Drag|Wheel|Scroll|Move|Pinch|Hover)/;
+function sortHandlers(_handlers) {
+    const native = {
+    };
+    const handlers2 = {
+    };
+    const actions = new Set();
+    for(let key in _handlers)if (RE_NOT_NATIVE.test(key)) {
+        actions.add(RegExp.lastMatch);
+        handlers2[key] = _handlers[key];
+    } else native[key] = _handlers[key];
+    return [
+        handlers2,
+        native,
+        actions
+    ];
+}
+function registerGesture(actions, handlers2, handlerKey, key, internalHandlers, config) {
+    if (!actions.has(handlerKey)) return;
+    if (!actions_dist_useGestureCoreActions.EngineMap.has(key)) {
+        console.warn(`[@use-gesture]: You've created a custom handler that that uses the \`${key}\` gesture but isn't properly configured.\n\nPlease add \`${key}Action\` when creating your handler.`);
+        return;
+    }
+    const startKey = handlerKey + 'Start';
+    const endKey = handlerKey + 'End';
+    const fn = (state)=>{
+        let memo = undefined;
+        if (state.first && startKey in handlers2) handlers2[startKey](state);
+        if (handlerKey in handlers2) memo = handlers2[handlerKey](state);
+        if (state.last && endKey in handlers2) handlers2[endKey](state);
+        return memo;
+    };
+    internalHandlers[key] = fn;
+    config[key] = config[key] || {
+    };
+}
+function parseMergedHandlers(mergedHandlers, mergedConfig) {
+    const [handlers2, nativeHandlers, actions] = sortHandlers(mergedHandlers);
+    const internalHandlers = {
+    };
+    registerGesture(actions, handlers2, 'onDrag', 'drag', internalHandlers, mergedConfig);
+    registerGesture(actions, handlers2, 'onWheel', 'wheel', internalHandlers, mergedConfig);
+    registerGesture(actions, handlers2, 'onScroll', 'scroll', internalHandlers, mergedConfig);
+    registerGesture(actions, handlers2, 'onPinch', 'pinch', internalHandlers, mergedConfig);
+    registerGesture(actions, handlers2, 'onMove', 'move', internalHandlers, mergedConfig);
+    registerGesture(actions, handlers2, 'onHover', 'hover', internalHandlers, mergedConfig);
+    return {
+        handlers: internalHandlers,
+        config: mergedConfig,
+        nativeHandlers
+    };
+}
+exports.Controller = Controller;
+exports.parseMergedHandlers = parseMergedHandlers;
+
+},{"./actions-59bdceda.cjs.dev.js":"6PUxU","./maths-125ca19a.cjs.dev.js":"2wuI2"}],"3voox":[function(require,module,exports) {
+'use strict';
+module.exports = require("./use-gesture-core-utils.cjs.dev.js");
+
+},{"./use-gesture-core-utils.cjs.dev.js":"4KlZd"}],"4KlZd":[function(require,module,exports) {
+'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var maths = require('../../dist/maths-125ca19a.cjs.dev.js');
+exports.rubberbandIfOutOfBounds = maths.rubberbandIfOutOfBounds;
+
+},{"../../dist/maths-125ca19a.cjs.dev.js":"2wuI2"}],"1U0rU":[function(require,module,exports) {
+'use strict';
+module.exports = require("./use-gesture-core-types.cjs.dev.js");
+
+},{"./use-gesture-core-types.cjs.dev.js":"5Ir77"}],"5Ir77":[function(require,module,exports) {
+'use strict';
+
+},{}],"6HAeI":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -72729,10 +74672,9 @@ const BookingPage = (_ref)=>{
     }, [
         showLoader
     ]);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
+    return showLoader ? /*#__PURE__*/ _react.default.createElement(_BookingLoader.default, null) : /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__container",
         ref: element
-    }, showLoader ? /*#__PURE__*/ _react.default.createElement(_BookingLoader.default, null) : /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking__container"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view"
     }, /*#__PURE__*/ _react.default.createElement("div", {
@@ -72745,7 +74687,7 @@ const BookingPage = (_ref)=>{
         text: nextText || copy.next,
         onClick: typeof next === 'string' ? ()=>transition.to(next)
          : next
-    }))))));
+    }))));
 };
 _c = BookingPage;
 var _default = BookingPage;
@@ -73093,7 +75035,11 @@ const Hello = (_ref)=>{
     const typeRef = _react.useRef();
     const mainRef = _react.useRef();
     const typewriter = _react.useRef(); // Enable Third Party Login
-    const { loaded , useAuthProvider  } = _useOAuth.default(authenticate); // Use State
+    const { loaded , useAuthProvider  } = _useOAuth.default(async (endpoint, data)=>{
+        const user = await authenticate(endpoint, data);
+        update('user')(user);
+        transition.to("greeting");
+    }); // Use State
     const [isFetching, setIsFetching] = _react.useState(false); // Check Email
     const errors = validator.checkEmail(state.email); // Enable Typewriter Effect
     _react.useEffect(()=>{
@@ -74454,7 +76400,7 @@ const Greeting = (_ref)=>{
     }, /*#__PURE__*/ _react.default.createElement("h1", {
         className: "light",
         ref: mainRef
-    }, copy.titles[state.loginType], " ", /*#__PURE__*/ _react.default.createElement("span", null, state.user.preferredName)))));
+    }, copy.titles[state.loginType] || copy.titles.default, " ", /*#__PURE__*/ _react.default.createElement("span", null, state.user.preferredName)))));
 };
 _c = Greeting;
 var _default = Greeting;

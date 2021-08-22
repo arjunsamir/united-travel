@@ -13,6 +13,8 @@
     display: flex;
     flex-direction: column;
 
+    min-height: 60rem;
+
     &__slider {
         position: absolute;
         z-index: 10;
@@ -26,7 +28,8 @@
 
         &-container {
             flex-grow: 10;
-            position: relative
+            position: relative;
+            touch-action: none;
         }
     }
 

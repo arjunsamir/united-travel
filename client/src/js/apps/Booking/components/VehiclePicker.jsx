@@ -3,6 +3,7 @@ import React, { useRef, useEffect } from 'react';
 import Icon from '../../components/Icon';
 
 import anime from 'animejs';
+import { useDrag } from '@use-gesture/react';
 
 const KeySpec = ({ icon, text }) => {
 
@@ -38,7 +39,18 @@ const scrollToSelected = (slider, index) => {
 
 const VehiclePicker = ({ vehicles, onChange, selected, copy }) => {
 
-    
+    const bindDrag = useDrag(({ swipe: [x] }) => {
+        if (!x) return;
+        const index = vehicles.findIndex(v => v._id === selected._id) + (-1 * x);
+
+        if (index < 0 || index !== index) return;
+
+        onChange(vehicles[index]);
+
+    }, {
+        filterTaps: true,
+        axis: 'x'
+    });
     const slider = useRef();
 
     // Scroll To Slide
@@ -62,7 +74,7 @@ const VehiclePicker = ({ vehicles, onChange, selected, copy }) => {
                 ))}
             </div>
 
-            <div className="vehicle-picker__slider-container">
+            <div className="vehicle-picker__slider-container" {...bindDrag()}>
                 <div className="vehicle-picker__slider" ref={slider}>
                     {vehicles.map(vehicle => {
 

@@ -4,7 +4,17 @@
 
 .booking {
 
+   // Declare Custom Properties
+   --card-gap: 3.2rem;
+   --card-nav-height: 7.6rem;
+   --card-width: 44rem;
+   --card-body-min-height: 72rem;
+   --card-body-padding-x: 3.6rem;
+   --card-body-padding-y: 4.8rem;
+
     min-height: 100vh;
+
+    overflow: hidden;
 
     &__map {
         position: fixed;
@@ -14,10 +24,14 @@
         height: 100vh;
         width: 100vw;
 
-        transition: width 0.4s ease-in-out;
+        transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
 
         &.min {
             width: 50vw;
+            @include ipadPro {
+                width: 100vw;
+                height: 65vh;
+            }
         }
 
         #google-map {
@@ -25,6 +39,15 @@
             width: 100%;
 
             background-color: var(--black);
+        }
+
+
+        @include respond-y(56.25em) {
+            width: calc(100vw - var(--card-width));
+        }
+
+        @include ipadPro {
+            width: 100vw;
         }
     }
 
@@ -41,20 +64,24 @@
 
     &__card {
         position: relative;
-        min-height: 100vh;
+        // min-height: 100vh;
         width: max-content;
 
         display: flex;
         flex-direction: column;
-        justify-content: center;
-        padding: 4.8rem;
+        margin: var(--nav-min-top) var(--nav-min-right);
 
 
         @include respond-y(56.25em) {
             padding: 0;
         }
 
-        // overflow-y: hidden;
+        @include phone {
+            margin: 75vh 0 0;
+            width: 100%;
+        }
+
+
     }
 
     &__container {
@@ -64,19 +91,29 @@
 
         @include flexCenter;
         padding: var(--x-pad);
+
+        @include ipadPro {
+            margin-top: 40vh;
+            justify-content: flex-start;
+            width: 100%;
+            background-color: var(--white);
+            border-top-left-radius: 3.6rem;
+            border-top-right-radius: 3.6rem;
+            padding: var(--y-pad) var(--x-pad);
+
+            box-shadow: $soft-shadow;
+        }
+
+        @include phone {
+            padding: 6.4rem 3.2rem 12rem;
+            min-height: unset;
+        }
         
     }
 
 }
 
 .booking-card {
-
-    // Declare Custom Properties
-    --card-gap: 3.2rem;
-    --card-nav-height: 7.6rem;
-    --card-width: 44rem;
-    --card-body-padding-x: 3.6rem;
-    --card-body-padding-y: 4.8rem;
 
     flex-grow: 10;
     display: flex;
@@ -90,8 +127,19 @@
     border-radius: 2rem;
 
 
+    // Set bounds
+    min-height: 85rem;
+
     @include respond-y(56.25em) {
         border-radius: 0;
+    }
+
+    @include phone {
+        min-height: 60rem;
+        width: 100%;
+        border-top-right-radius: 2rem;
+        border-top-left-radius: 2rem;
+        min-height: 75vh;
     }
 
 
@@ -245,6 +293,10 @@
         h6 {
             margin-bottom: 0.8rem;
         }
+
+        p {
+            line-height: 1.7;
+        }
     }
 
 
@@ -268,15 +320,19 @@
            color: var(--slate); 
         }
     }
+
+    &__next {
+        padding-top: 4.8rem;
+
+        @include phone {
+            padding-bottom: 9.6rem;
+        }
+    }
 }
 
 .booking-view {
 
-    // Set Custom Properties
-    --view-width: 44rem;
-    // --card-gap: 3.2rem;
-    // --card-body-padding-x: 3.6rem;
-    // --card-body-padding-y: 4.8rem;
+    --view-width: var(--card-width);
 
     position: relative;
 

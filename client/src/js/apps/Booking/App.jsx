@@ -1,5 +1,5 @@
 // Import React Defaults
-import React, { useReducer, useRef } from "react";
+import React, { useReducer } from "react";
 
 // Import Contexts
 import AppContext from "./store/context";

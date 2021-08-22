@@ -34,31 +34,27 @@ const BookingPage = ({ children, showLoader, back, next, backText, nextText }) =
 
     }, [showLoader]);
 
-    return (
-        <div ref={element}>
-            {showLoader ? <BookingLoader /> : (
-                <div className="booking__container">
+    return showLoader ? <BookingLoader /> : (
+        <div className="booking__container" ref={element}>
 
-                    <div className="booking-view">
+            <div className="booking-view">
 
-                        <div className="booking-view__content">
-                            {back && (<BackButton
-                                text={backText || copy.back}
-                                onClick={typeof back === 'string' ? (() => transition.to(back)) : back}
-                            />)}
+                <div className="booking-view__content">
+                    {back && (<BackButton
+                        text={backText || copy.back}
+                        onClick={typeof back === 'string' ? (() => transition.to(back)) : back}
+                    />)}
 
-                            {children}
+                    {children}
 
-                            {next && (<Button
-                                text={nextText || copy.next}
-                                onClick={typeof next === 'string' ? (() => transition.to(next)) : next}
-                            />)}
-                        </div>  
+                    {next && (<Button
+                        text={nextText || copy.next}
+                        onClick={typeof next === 'string' ? (() => transition.to(next)) : next}
+                    />)}
+                </div>  
 
-                    </div>
+            </div>
 
-                </div>
-            )}
         </div>
     )
         

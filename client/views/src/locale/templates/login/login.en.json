@@ -88,7 +88,8 @@
     "greeting": {
         "titles": {
             "login": "Welcome back",
-            "signup": "Nice to meet you"
+            "signup": "Nice to meet you",
+            "default": "Hello"
         },
         "inputs": {}
     },

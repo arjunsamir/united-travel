@@ -664,13 +664,13 @@ html.has-scroll-dragging {
 main {
   overflow-x: hidden;
 }
-.navbar, .nav-menu {
+.navbar, .nav-menu, .booking {
   --nav-min-top: 3.2rem;
   --nav-min-right: 4.8rem;
   --nav-min-size: 6rem;
 }
 @media (max-width: 37.5em) {
-  .navbar, .nav-menu {
+  .navbar, .nav-menu, .booking {
     --nav-min-top: 2.4rem;
     --nav-min-right: 2.4rem;
   }
@@ -2087,6 +2087,7 @@ svg.placeholder, .icon.placeholder {
   flex-grow: 10;
   display: flex;
   flex-direction: column;
+  min-height: 60rem;
 }
 .vehicle-picker__slider {
   position: absolute;
@@ -2103,6 +2104,7 @@ svg.placeholder, .icon.placeholder {
 .vehicle-picker__slider-container {
   flex-grow: 10;
   position: relative;
+  touch-action: none;
 }
 .vehicle-picker__dots {
   display: flex;
@@ -3264,7 +3266,14 @@ svg.placeholder, .icon.placeholder {
   overflow-y: hidden;
 }
 .booking {
+  --card-gap: 3.2rem;
+  --card-nav-height: 7.6rem;
+  --card-width: 44rem;
+  --card-body-min-height: 72rem;
+  --card-body-padding-x: 3.6rem;
+  --card-body-padding-y: 4.8rem;
   min-height: 100vh;
+  overflow: hidden;
 }
 .booking__map {
   position: fixed;
@@ -3272,15 +3281,31 @@ svg.placeholder, .icon.placeholder {
   right: 0;
   height: 100vh;
   width: 100vw;
-  transition: width 0.4s ease-in-out;
+  transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
 }
 .booking__map.min {
   width: 50vw;
+}
+@media (max-width: 75em) {
+  .booking__map.min {
+    width: 100vw;
+    height: 65vh;
+  }
 }
 .booking__map #google-map {
   height: 100%;
   width: 100%;
   background-color: var(--black);
+}
+@media (max-height: 56.25em) {
+  .booking__map {
+    width: calc(100vw - var(--card-width));
+  }
+}
+@media (max-width: 75em) {
+  .booking__map {
+    width: 100vw;
+  }
 }
 .booking__loader {
   position: relative;
@@ -3296,18 +3321,22 @@ svg.placeholder, .icon.placeholder {
 }
 .booking__card {
   position: relative;
-  min-height: 100vh;
   width: -webkit-max-content;
   width: -moz-max-content;
   width: max-content;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 4.8rem;
+  margin: var(--nav-min-top) var(--nav-min-right);
 }
 @media (max-height: 56.25em) {
   .booking__card {
     padding: 0;
+  }
+}
+@media (max-width: 37.5em) {
+  .booking__card {
+    margin: 75vh 0 0;
+    width: 100%;
   }
 }
 .booking__container {
@@ -3320,12 +3349,25 @@ svg.placeholder, .icon.placeholder {
   align-items: center;
   padding: var(--x-pad);
 }
+@media (max-width: 75em) {
+  .booking__container {
+    margin-top: 40vh;
+    justify-content: flex-start;
+    width: 100%;
+    background-color: var(--white);
+    border-top-left-radius: 3.6rem;
+    border-top-right-radius: 3.6rem;
+    padding: var(--y-pad) var(--x-pad);
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
+  }
+}
+@media (max-width: 37.5em) {
+  .booking__container {
+    padding: 6.4rem 3.2rem 12rem;
+    min-height: unset;
+  }
+}
 .booking-card {
-  --card-gap: 3.2rem;
-  --card-nav-height: 7.6rem;
-  --card-width: 44rem;
-  --card-body-padding-x: 3.6rem;
-  --card-body-padding-y: 4.8rem;
   flex-grow: 10;
   display: flex;
   flex-direction: column;
@@ -3334,10 +3376,20 @@ svg.placeholder, .icon.placeholder {
   box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
   background-color: var(--black);
   border-radius: 2rem;
+  min-height: 85rem;
 }
 @media (max-height: 56.25em) {
   .booking-card {
     border-radius: 0;
+  }
+}
+@media (max-width: 37.5em) {
+  .booking-card {
+    min-height: 60rem;
+    width: 100%;
+    border-top-right-radius: 2rem;
+    border-top-left-radius: 2rem;
+    min-height: 75vh;
   }
 }
 .booking-card__loader {
@@ -3479,6 +3531,9 @@ svg.placeholder, .icon.placeholder {
 .booking-card__footer h6 {
   margin-bottom: 0.8rem;
 }
+.booking-card__footer p {
+  line-height: 1.7;
+}
 .booking-card__route {
   display: flex;
   align-items: center;
@@ -3497,8 +3552,16 @@ svg.placeholder, .icon.placeholder {
 .booking-card__route p {
   color: var(--slate);
 }
+.booking-card__next {
+  padding-top: 4.8rem;
+}
+@media (max-width: 37.5em) {
+  .booking-card__next {
+    padding-bottom: 9.6rem;
+  }
+}
 .booking-view {
-  --view-width: 44rem;
+  --view-width: var(--card-width);
   position: relative;
   width: 100%;
   max-width: var(--view-width);

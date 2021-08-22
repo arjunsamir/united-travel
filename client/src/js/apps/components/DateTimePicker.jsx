@@ -54,14 +54,12 @@ const TimePicker = ({ time, label, placeholder, onChange, customProps, showPlace
 const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker, icon }) => {
 
     const handleChange = (val) => {
-        // onChange(val.format('YYYY-MM-DDTHH:mm'));
         onChange(val.format('MM-DD-YYYY H:mm'));
         setShow(false);
     }
 
     const initialDate = defaultValue || dayjs().add(1, 'days').set('hour', 12).set('minute', 0).set('second', 0);
-    const date = value ? dayjs(value) : initialDate;
-
+    const date = value ? dayjs(value, "MM-DD-YYYY H:mm") : initialDate;
     const [show, setShow] = useState(!value);
 
     return (

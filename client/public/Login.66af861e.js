@@ -878,14 +878,15 @@ class LoginApp extends _ReactAppWrapper.default {
         const url = new URLSearchParams(window.location.search);
         return url.get('code');
     }
-    async loginCallback() {
-        // Refresh Page Navbar
+    async loginCallback(user) {
+        // Update Window user
+        window.currentUser = user; // Refresh Page Navbar
         await this.page.navbar.refresh(); // Navigate to Home Page
         this.page.barba.go('/');
     }
     async load() {
         const res = {
-            onLogin: ()=>this.loginCallback()
+            onLogin: (user)=>this.loginCallback(user)
         };
         const promises = [
             _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
@@ -2803,7 +2804,11 @@ const Hello = (_ref)=>{
     const typeRef = _react.useRef();
     const mainRef = _react.useRef();
     const typewriter = _react.useRef(); // Enable Third Party Login
-    const { loaded , useAuthProvider  } = _useOAuth.default(authenticate); // Use State
+    const { loaded , useAuthProvider  } = _useOAuth.default(async (endpoint, data)=>{
+        const user = await authenticate(endpoint, data);
+        update('user')(user);
+        transition.to("greeting");
+    }); // Use State
     const [isFetching, setIsFetching] = _react.useState(false); // Check Email
     const errors = validator.checkEmail(state.email); // Enable Typewriter Effect
     _react.useEffect(()=>{
@@ -4699,7 +4704,7 @@ const Greeting = (_ref)=>{
     }, /*#__PURE__*/ _react.default.createElement("h1", {
         className: "light",
         ref: mainRef
-    }, copy.titles[state.loginType], " ", /*#__PURE__*/ _react.default.createElement("span", null, state.user.preferredName)))));
+    }, copy.titles[state.loginType] || copy.titles.default, " ", /*#__PURE__*/ _react.default.createElement("span", null, state.user.preferredName)))));
 };
 _c = Greeting;
 var _default = Greeting;

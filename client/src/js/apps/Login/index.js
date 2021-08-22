@@ -17,7 +17,10 @@ export default class LoginApp extends ReactAppWrapper {
         return url.get('code')
     }
 
-    async loginCallback() {
+    async loginCallback(user) {
+
+        // Update Window user
+        window.currentUser = user;
 
         // Refresh Page Navbar
         await this.page.navbar.refresh();
@@ -30,7 +33,7 @@ export default class LoginApp extends ReactAppWrapper {
     async load() {
 
         const res = {
-            onLogin: () => this.loginCallback()
+            onLogin: (user) => this.loginCallback(user)
         };
 
         const promises = [
