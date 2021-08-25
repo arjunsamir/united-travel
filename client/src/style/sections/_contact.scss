@@ -1,0 +1,73 @@
+.contact {
+
+    position: relative;
+    padding: var(--y-pad) var(--x-pad);
+
+    display: flex;
+    justify-content: flex-end;
+
+    @include phone {
+        padding: 0;
+        flex-direction: column;
+    }
+
+    &__image {
+        position: absolute;
+        top: 0;
+        left: 0;
+
+        height: calc(100% - var(--y-pad) * 1.5);
+
+        img {
+            height: 100%;
+        }
+
+        @include phone {
+            position: relative;
+
+            img {
+                height: auto;
+                width: 100%;
+            }
+        }
+    }
+
+    &__card {
+        position: relative;
+        border-radius: 2rem;
+        box-shadow: $soft-shadow;
+        padding: var(--x-pad);
+
+        background-color: var(--white);
+
+        @include phone {
+            box-shadow: none;
+            padding: 6.4rem var(--x-pad) var(--y-pad);
+
+            top: -2rem;
+
+            h2 {
+                font-size: $h3;
+            }
+        }
+    }
+
+    &__method {
+        display: flex;
+        align-items: center;
+
+        @include link {
+            color: var(--slate);
+        }
+
+        h5 {
+            color: currentColor;
+        }
+
+        svg {
+            height: 3.6rem;
+            width: 3.6rem;
+            margin-right: 1.6rem;
+        }
+    }
+}

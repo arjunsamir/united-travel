@@ -1,0 +1,19 @@
+.oopsie {
+    min-height: 100vh;
+
+    @include flexCenter;
+    padding: var(--y-pad) var(--x-pad);
+
+    img {
+        height: 30rem;
+        margin-bottom: 4.8rem;
+    }
+
+    h3 {
+        max-width: calc(var(--max-content-width) * 1.5);
+        line-height: 1.5;
+        color: var(--text);
+        font-weight: 300;
+        text-align: center;
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "links": {
+        "home": "Home",
+        "about": "About",
+        "contact": "Contact",
+        "fleet": "Fleet"
+    },
+    "cta": "Book Now",
+    "account": {
+        "login": "Login",
+        "logout": "Log out",
+        "register": "Create account",
+        "account": "My account"
+    },
+    "hello": "Hello",
+    "block": {
+        "title": "Ready to book?",
+        "copy": "Ready to book a ride for your next trip to Orlando? You can book your ride online using our online booking system."
+    },
+    "welcome": "Welcome Traveller"
+}

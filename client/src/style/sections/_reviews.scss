@@ -1,0 +1,128 @@
+.reviews {
+
+    padding: var(--y-pad) var(--x-pad);
+    min-height: 100vh;
+    @include flexCenter;
+
+    &.fallback {
+        min-height: unset;
+    }
+    
+    h2 {
+        max-width: var(--track-width);
+        margin: 0 auto 6.4rem;
+    }
+
+    &__container {
+        max-width: var(--track-width);
+        width: 100%;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 46rem 1fr;
+        grid-gap: 8rem;
+    }
+
+    &__reviewers {
+        
+        .reviewer:not(:last-child) {
+            margin-bottom: 3.6rem;
+        }
+
+    }
+
+    &__fallback {
+
+        flex-grow: 10;
+        align-self: stretch;
+        position: relative;
+        @include flexCenter;
+        overflow: hidden;
+        border-radius: 2.4rem;
+        box-shadow: $soft-shadow;
+
+        padding: 20rem 4.8rem;
+
+        @include phone {
+            padding: 18rem 3.2rem;
+        }
+
+        &-img {
+            @include overlay;
+            background-color: #000;
+        }
+
+        img {
+            width: 100%;
+            opacity: .5;
+
+            @include ipad {
+                @include cover;
+            }
+        }
+
+        h2 {
+            position: relative;
+            text-align: center;
+            color: var(--white);
+            font-weight: 300;
+            max-width: 96rem;
+            line-height: 1.4;
+            margin: 0;
+            @include flexCenter;
+
+            @include phone {
+                font-size: $h3;
+            }
+        }
+
+    }
+    
+}
+
+.reviewer {
+    display: flex;
+    align-items: center;
+
+    padding: 1.2rem;
+    border-radius: 10rem;
+
+    cursor: pointer;
+    
+    &.selected {
+        box-shadow: $soft-shadow;
+    }
+
+    &__image {
+        height: 10rem;
+        width: 10rem;
+        border-radius: 50%;
+        overflow: hidden;
+
+        margin-right: 3.6rem;
+
+        img {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.review {
+
+    &__stars {
+        display: flex;
+        color: var(--primary);
+        margin: 2.4rem 0;
+
+        svg {
+            height: 2rem;
+            width: 2rem;
+
+            &:not(:last-child) {
+                margin-right: 0.8rem;
+            }
+        }
+    }
+
+}

@@ -1,0 +1,80 @@
+.hero {
+    height: 100vh;
+    width: 100%;
+
+    position: relative;
+
+    @include flexCenter;
+
+    &.smol {
+        @include ipadPro {
+            height: 50vh;
+        }
+
+        @include phone {
+            height: 100vh;
+        }
+    }
+
+    &__background {
+        @include overlay;
+
+        img {
+            @include cover;
+
+            @include phone {
+                object-position: right;
+            }
+        }
+    }
+
+    &__content {
+        position: relative;
+        @include flexCenter;
+        @include flexGap(1.2rem, "column");
+
+        @include phone {
+            align-items: flex-start;
+            padding : var(--y-pad) var(--x-pad);
+        }
+        
+        h1, h4 {
+            color: var(--white);
+        }
+
+        h1 {
+            font-weight: 300;
+            span {
+                font-weight: 400;
+                color: var(--primary);
+            }
+
+            @include phone {
+
+                font-size: $h2;
+
+                span:not(:last-child)::before {
+                    content: "\A";
+                    white-space: pre;
+                }
+            }
+
+            
+        }
+
+        h4 {
+            opacity: .85;
+
+            @include phone {
+                opacity: 1;
+                font-size: $h5;
+            }
+        }
+
+        a {
+            margin-top: 2.4rem;
+            display: block;
+            width: max-content;
+        }
+    }
+}

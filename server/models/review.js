@@ -4,8 +4,7 @@ const mongoose = require('mongoose');
 const schema = new mongoose.Schema({
     body: {
         type: String,
-        required: [true, 'A review body is required'],
-        trim: ture
+        required: [true, 'A review body is required']
     },
     rating: {
         type: String,
@@ -13,19 +12,30 @@ const schema = new mongoose.Schema({
         min: [1, 'Rating must be above 1.0'],
         max: [5, 'Ratings cannot be greater than 5.0']
     },
-    createdAt: {
+    author: {
+        type: String,
+        required: [true, 'Review must have an author']
+    },
+    title: {
+        type: String,
+        required: [true, 'Review must have a title'],
+        default: 'Lorem Ipsum Set Dolor'
+    },
+    date: {
         type: Date,
         default: Date.now(),
     },
-    booking: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'Booking',
-        required: [true, 'Review must have an author']
+    photo: {
+        type: String,
+        default: '/img/profile-photos/juan.jpg'
     },
-    author: {
-        type: mongoose.Schema.ObjectId,
-        ref: 'User',
-        required: [true, 'Review must have an author']
+    locale: {
+        type: String,
+        default: 'en'
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 });
 

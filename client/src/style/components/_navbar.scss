@@ -1,0 +1,325 @@
+.navbar, .nav-menu, .booking {
+    --nav-min-top: 3.2rem;
+    --nav-min-right: 4.8rem;
+    --nav-min-size: 6rem;
+
+    @include phone {
+        --nav-min-top: 2.4rem;
+        --nav-min-right: 2.4rem;
+    }
+}
+
+.navbar {
+
+    --navbar-width: 96rem;
+    --navbar-z: 100000;
+
+    @include ipadPro {
+        --navbar-width: 90rem;
+    }
+
+    .nb-esc {
+        position: fixed;
+        height: 100vh;
+        width: 100vw;
+        z-index: 100;
+
+        top: 0;
+        left: 0;
+
+        &.no-esc {
+            pointer-events: none;
+        }
+    }
+
+    &__background {
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+
+        height: 100%;
+        width: 100%;
+
+        box-shadow: $soft-shadow;
+        background-color: var(--white);
+        border-radius: 10rem;
+    }
+
+    &.full &__full {
+        display: flex;
+
+        @include ipad {
+            display: none;
+        }
+    }
+
+    &.min &__min {
+        display: flex;
+    }
+
+    &__full {
+        position: fixed;
+        top: 3.2rem;
+        left: calc(50% - (var(--navbar-width) / 2));
+        z-index: var(--navbar-z);
+
+        display: none;
+        
+        justify-content: space-between;
+        align-items: center;
+        width: var(--navbar-width);
+
+        padding: 1.2rem 1.2rem 1.2rem 3.2rem;
+
+    }
+
+    &__min {
+
+        @include flexCenter;
+        display: none;
+
+        position: fixed;
+        top: var(--nav-min-top);
+        right: var(--nav-min-right);
+        z-index: var(--navbar-z);
+
+        height: var(--nav-min-size);
+        width: var(--nav-min-size);
+
+        background-color: var(--white);
+        box-shadow: $soft-shadow;
+        border-radius: 50%;
+
+        cursor: pointer;
+
+        @include ipad {
+            display: flex;
+        }
+    }
+
+    &__menu-icon {
+        position: relative;
+        height: 1.3rem;
+        width: 2.8rem;
+
+        span {
+            position: absolute;
+            display: block;
+
+            height: 3px;
+            width: 100%;
+
+            border-radius: 1rem;
+            background-color: var(--jet);
+
+            &:first-child {
+                top: 0;
+            }
+
+            &:last-child {
+                bottom: 0;
+            }
+        }
+    }
+
+
+    &__brand {
+
+        display: flex;
+        align-items: center;
+        @include flexGap(1.2rem);
+
+        @include link {
+            color: var(--jet);
+        }
+
+        svg {
+            height: 1.6rem;
+            width: 2.9rem;
+        }
+
+        span {
+            font-size: $p-small;
+            font-weight: 400;
+        }
+
+    }
+
+    &__nav {
+
+        display: flex;
+        
+        &-list {
+            display: flex;
+            @include flexGap(2.4rem);
+
+            a {
+                font-size: $p-small;
+                @include link {
+                    font-weight: 700;
+
+                    &:not(.active) {
+                        color: var(--jet);
+                        font-weight: 400;
+                    }
+                }
+            }
+
+        }
+
+    }
+
+    &__cta {
+        display: block;
+        font-size: 1.2rem;
+        line-height: 1;
+        padding: 1.2rem 2.4rem;
+        border-radius: 5rem;
+
+        @include link {
+            color: var(--jet);
+            background-color: var(--primary);
+        }
+        
+    }
+
+    &__actions {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        @include flexGap(2.4rem);
+
+        hr {
+            height: 2.4rem;
+            width: 2px;
+            
+            background-color: rgba($black, 0.1);
+            border-radius: 1rem;
+        }
+    }
+
+    &__lang {
+
+        position: relative;
+
+        &-icon {
+            color: var(--jet);
+            cursor: pointer;
+    
+            svg {
+                height: 2.4rem;
+                width: 2.4rem;
+            }
+        }
+
+        &-menu {
+            position: absolute;
+            top: 200%;
+
+            padding: 1.6rem 4.8rem 1.6rem 2.4rem;
+            background-color: var(--white);
+            box-shadow: $soft-shadow;
+            border-radius: 1.2rem;
+
+            overflow: hidden;
+
+            li {
+                cursor: pointer;
+                transition: filter $dt;
+                color: var(--jet);
+                width: max-content;
+
+                &.active {
+                    color: var(--primary);
+                }
+
+                &:hover {
+                    filter: opacity(75%);
+                }
+            }
+
+            &.hidden {
+                height: 1px;
+                width: 1px;
+                pointer-events: none;
+            }
+
+            opacity: 0;
+        }
+        
+    }
+
+    &__profile {
+        cursor: pointer;
+
+        &-pic {
+
+            height: 3.2rem;
+            width: 3.2rem;
+            overflow: hidden;
+            border-radius: 50%;
+
+            img {
+                height: 100%;
+                width: 100%;
+                object-fit: cover;
+            }
+        }
+        
+        &-icon {
+            height: 3.2rem;
+            width: 3.2rem;
+        }
+
+
+        &-menu {
+            position: absolute;
+            top: 120%;
+
+            padding: 2.4rem 3.6rem;
+            background-color: var(--white);
+            box-shadow: $soft-shadow;
+            border-radius: 1.2rem;
+
+            overflow: hidden;
+
+            &.hidden {
+                height: 1px;
+                width: 1px;
+                pointer-events: none;
+            }
+
+            // Make It Hidden By Default
+            opacity: 0;
+
+            hr {
+                height: 2px;
+                width: 4rem;
+            }
+            
+
+            ul {
+                @include blockGap(1.6rem);
+            }
+
+            li {
+                width: max-content;
+            }
+
+            a {
+
+                font-size: $p-small;
+
+                @include link {
+                    color: var(--jet);
+
+                    &:hover {
+                        color: var(--primary);
+                    }
+                }
+            }
+        }
+    }
+
+}

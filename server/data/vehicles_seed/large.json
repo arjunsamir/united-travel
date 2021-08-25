@@ -1,0 +1,27 @@
+{
+    "make": "Mercedes",
+    "model": "Sprinter",
+    "year": "2014",
+    "seats": 11,
+    "bags": 10,
+    "mpg": 18,
+    "info_en": {
+        "name": "Large",
+        "description": "In our large class of vehicles, we use Mercedes Sprinter vans. This vehicle is both spacious and luxurious. This van can carry up to 11 passengers comfortably, and has plenty of room for luggage.",
+        "features": ["Air Conditioning", "Leather Seats", "Quiet Ride"]
+    },
+    "info_es": {
+        "name": "Grande",
+        "description": "En nuestra gran clase de vehículos, utilizamos furgonetas Mercedes Sprinter. Este vehículo es espacioso y lujoso. Esta camioneta puede transportar cómodamente hasta 11 pasajeros y tiene mucho espacio para equipaje.",
+        "features": ["Aire acondicionado", "Asientos de piel", "Paseo silencioso"]
+    },
+    "thumbnail": "mercedes_sprinter_thumb.png",
+    "size": "l",
+    "image": "mercedes_sprinter.png",
+    "rates": {
+        "fee": 4500,
+        "base": 400,
+        "tourist": 250,
+        "extended": 195
+    }
+}

@@ -1,0 +1,212 @@
+.btn-pill {
+
+    --btn-bg: var(--jet);
+    --btn-border: var(--jet);
+    --btn-text: var(--white);
+
+    font-size: $p-small;
+    padding: 2rem 4.8rem;
+    border-radius: 6rem;
+
+    display: block;
+    width: max-content;
+    user-select: none;
+
+    // Button Theme
+    @include link {
+        color: var(--btn-text);
+        border: 2px solid var(--btn-border);
+        background-color: var(--btn-bg);
+    }
+
+    // Hover Behaviors
+    &.hollow {
+        background-color: transparent;
+
+        @include link {
+            &:hover {
+                opacity: 1;
+                background-color: var(--primary);
+                border-color: var(--primary);
+                color: var(--jet);
+            }
+        }
+    }
+
+    &.filled {
+        background-color: var(--btn-bg);
+        border-color: var(--btn-border);
+        color: var(--btn-text);
+
+        &:hover {
+            opacity: .9;
+        }
+    }
+
+    // Theme Definitions
+    &.white {
+        --btn-bg: var(--white);
+        --btn-border: var(--white);
+        --btn-text: var(--white);
+    }
+
+    &.dark {
+        --btn-bg: var(--jet);
+        --btn-border: var(--jet);
+        --btn-text: var(--jet);
+    }
+
+    &.primary {
+        --btn-bg: var(--primary);
+        --btn-border: var(--primary);
+        --btn-text: var(--jet);
+    }
+
+}
+
+.back-button {
+
+    display: flex;
+    align-items: center;
+    @include flexGap(0.8rem);
+
+    border: none;
+    background: none;
+
+    cursor: pointer;
+    transition: filter $dt;
+    user-select: none;
+
+    &:hover {
+        filter: opacity(75%);
+    }
+
+}
+
+.button {
+
+    --btn-text: var(--white);
+    --btn-color: var(--black);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2.4rem 3.2rem;
+    width: 100%;
+
+    user-select: none;
+
+    position: relative;
+    overflow: hidden;
+
+    @include link {
+        color: var(--btn-text);
+    }
+
+    border: none;
+    background-color: var(--btn-color);
+    border-radius: 0.8rem;
+
+    cursor: pointer;
+    transition: filter $dt;
+
+    p {
+        font-size: 1.6rem;
+        line-height: 1;
+    }
+
+    hr {
+        height: 2.4rem;
+        width: 2px;
+        background-color: var(--btn-text);
+        opacity: 0.25;
+    }
+
+    &.with-icon {
+        justify-content: flex-start;
+        padding: 1.6rem 2.4rem;
+        @include flexGap(1.2rem);
+    }
+
+    &__loader {
+
+        @include overlay;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        @include flexGap(1.2rem);
+        background-color: var(--btn-color);
+
+        span {
+            display: block;
+            height: 1.2rem;
+            width: 1.2rem;
+            background-color: var(--btn-text);
+            border-radius: 50%;
+            animation: dotFlashing 0.8s infinite alternate;
+
+            &:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+        }
+    }
+
+    &:hover {
+        filter: opacity(75%);
+    }
+
+    &.google {
+        --btn-color: var(--google);
+    }
+
+    &.facebook {
+        --btn-color: var(--facebook);
+    }
+
+    &.primary {
+        --btn-color: var(--primary);
+        --btn-text: var(--jet);
+    }
+
+    &.disabled {
+        pointer-events: none;
+
+        filter: opacity(15%);
+    }
+}
+
+
+.link-button {
+    @include link {
+        color: var(--google);
+
+        transition: filter $dt;
+
+        &:hover {
+            filter: opacity(75%);
+            opacity: 1;
+        }
+    }
+
+    &.disabled {
+        @include link {
+            filter: opacity(15%);
+        }
+    }
+}
+
+
+.icon-button {
+    border: none;
+    background: none;
+    cursor: pointer;
+
+    &.disabled {
+        pointer-events: none;
+        filter: opacity(0%);
+    }
+}

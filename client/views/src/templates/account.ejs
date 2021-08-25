@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="booking-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="account">
+
+        <!-- Fleet React App -->
+        <div id="account-react-app"></div>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html

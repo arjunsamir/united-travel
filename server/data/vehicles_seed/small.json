@@ -1,0 +1,25 @@
+{
+    "make": "Mercedes",
+    "model": "E350",
+    "year": "2013",
+    "seats": 3,
+    "mpg": 25,
+    "info_en": {
+        "name": "Small",
+        "description": "This is our smallest vehicle size. It is exceptionally luxurious and thoughtfully comfortable.",
+        "features": ["Air Conditioning", "Leather Seats", "Quiet Ride"]
+    },
+    "info_es": {
+        "name": "Pequeño",
+        "description": "Este es nuestro tamaño de vehículo más pequeño. Es excepcionalmente lujoso y confortable.",
+        "features": ["Aire acondicionado", "Asientos de piel", "Paseo silencioso"]
+    },
+    "thumbnail": "mercedes_e350_thumb.png",
+    "size": "s",
+    "image": "mercedes_e350.png",
+    "rates": {
+        "fee": 1500,
+        "base": 400,
+        "extended": 225
+    }
+}

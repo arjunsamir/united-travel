@@ -1,0 +1,126 @@
+{
+    "title": "Acceso - United Travel LLC",
+    "hello": {
+        "title": "Hola ",
+        "words": ["Viajero", "Aventurero", "Amigo"],
+        "continueWith": "Continua Con",
+        "alt": "O continuar con el correo electrónico",
+        "button": "Continuar con el correo electrónico",
+        "back": "Atrás",
+        "inputs": {}
+    },
+    "signup": {
+        "title": "Crear inicio de sesión",
+        "inputs": {
+            "password": {
+                "label": "Crear Contraseña",
+                "placeholder": "••••••••"
+            }
+        },
+        "button": "Crear inicio de sesión",
+        "back": "Atrás"
+    },
+    "registration": {
+        "title": "Presentarte",
+        "inputs": {
+            "fullName": {
+                "label": "Nombre Completo",
+                "placeholder": "Juan Mendez"
+            },
+            "preferredName": {
+                "label": "Nombre Preferido",
+                "placeholder": "Juan"
+            },
+            "profilePhoto": {
+                "label": "Foto de perfil (opcional)",
+                "placeholder": "Haga clic para subir una foto",
+                "success": "¡Subida exitosa!",
+                "error": "Algo salió mal..."
+            }
+        },
+        "button": "Registro Completo",
+        "back": "Atrás"
+    },
+    "login": {
+        "title": "Bienvenido de Nuevo",
+        "inputs": {
+            "password": {
+                "label": "Clave",
+                "placeholder": "••••••••"
+            }
+        },
+        "button": "Acceso",
+        "forgot": "¿Olvidaste tu contraseña?",
+        "back": "Atrás"
+    },
+    "requestReset": {
+        "title": "Restablecer la Contraseña",
+        "copy": "Ingrese su dirección de correo electrónico y le enviaremos un enlace de restablecimiento de contraseña para que pueda crear una nueva contraseña.",
+        "button": "Obtener Código de Reinicio",
+        "back": "Atrás",
+        "inputs": {}
+    },
+    "resetCode": {
+        "title": "Consultar su correo electrónico",
+        "copy": "Se envió un correo electrónico con su código de restablecimiento a {email}. El código puede tardar hasta 10 minutos en llegar.",
+        "button": "Código de verificación",
+        "back": "Atrás",
+        "resend": ["¿No recibiste el correo electrónico?", "Reenviar codigo."],
+        "sent": "Tu código ha sido enviado con éxito.",
+        "invalid": "Tu código de reinicio no es válido.",
+        "inputs": {
+            "code": {
+                "label": "Restablecer Código",
+                "placeholder": "••••••••"
+            }
+        }
+    },
+    "reset": {
+        "title": "Crear Nueva Contraseña",
+        "copy": "Elija una nueva contraseña para su cuenta. Su contraseña debe tener al menos 8 caracteres, ¡pero cuanto más larga, mejor!",
+        "inputs": {
+            "password": {
+                "label": "Nueva Contraseña",
+                "placeholder": "••••••••"
+            }
+        },
+        "button": "Actualiza Contraseña",
+        "back": "Atrás"
+    },
+    "greeting": {
+        "titles": {
+            "login": "Bienvenido de nuevo,",
+            "signup": "Encantado de conocerte",
+            "default": "Hola"
+        },
+        "inputs": {}
+    },
+    "common": {
+        "email": {
+            "label": "Correo Electrónico",
+            "placeholder": "hola@unitedtravel.llc"
+        }
+    },
+    "errors": {
+        "email": {
+            "required": "Se requiere Dirección de correo electrónico",
+            "invalid": "La dirección de correo electrónico no es válida"
+        },
+        "password": {
+            "required": "Se requiere contraseña",
+            "invalid": "La contraseña no es válida",
+            "short": "La contraseña debe tener al menos 8 caracteres"
+        },
+        "name": {
+            "required": "Se requiere el nombre completo",
+            "invalid": "El nombre no puede contener números ni caracteres especiales"
+        },
+        "fails": {
+            "password": "Tu contraseña es incorrecta."
+        }
+    },
+    "referral": {
+        "title": "{name} te Invitó",
+        "subtitle": "Regístrate y ahorra ${amount} en tu primer viaje."
+    }
+}

@@ -1,15 +1,61 @@
-const send = require('../utils/sendResponse');
 
-exports.lostPage = (req, res) => send(res, '404.html', 404);
-exports.loginPage = (req, res) => send(res, 'login.html');
-exports.signupPage = (req, res) => send(res, 'signup.html');
-exports.resetPassword = (req, res) => send(res, 'reset-password.html');
-exports.writeReview = (req, res) => send(res, 'review.html');
-exports.bookingPage = (req, res) => send(res, 'booking.html');
-exports.myAccount = (req, res) => send(res, 'my-account.html');
+class Views {
 
-exports.homePage = (req, res) => send(res, 'index.html');
-exports.aboutPage = (req, res) => send(res, 'about.html');
-exports.servicesPage = (req, res) => send(res, 'services.html');
-exports.fleetPage = (req, res) => send(res, 'fleet.html');
-exports.reviewsPage = (req, res) => send(res, 'reviews.html');
+    constructor(lang) {
+        this.lang = lang || 'en';
+    }
+
+    home(req, res) {
+        this.render(res, 'home');
+    }
+
+    about(req, res) {
+        this.render(res, 'about');
+    }
+
+    services(req, res) {
+        this.render(res, 'services');
+    }
+
+    fleet(req, res) {
+        this.render(res, 'fleet');
+    }
+
+    book(req, res) {
+        this.render(res, 'book');
+    }
+
+    login(req, res) {
+        this.render(res, 'login');
+    }
+
+    account(req, res) {
+        this.render(res, 'account');
+    }
+
+    privacy(req, res) {
+        this.render(res, 'privacy');
+    }
+
+    terms(req, res) {
+        this.render(res, 'terms');
+    }
+
+    navbar(req, res) {
+        this.render(res, 'navbar');
+    }
+
+    async reservation(req, res) {
+        this.render(res, 'reservation', {
+            test: 'bitch'
+        });
+    }
+
+    async render(res, page, data = {}) {
+        if (!res.locals.user) res.locals.user = {};
+        res.render(`${this.lang}/${page}`, { ...data })
+    }
+
+}
+
+module.exports = Views;

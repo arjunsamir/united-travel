@@ -1,0 +1,128 @@
+.location-search {
+
+    position: relative;
+    background-color: var(--slate-light);
+    // box-shadow: $soft-shadow;
+    border-radius: 1.2rem;
+    padding: 1.2rem 0;
+
+    --input-gap: 4.8rem;
+    --input-padding: 2.4rem;
+
+    &__icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        position: absolute;
+        top: 0;
+        padding: 2.4rem 0 6rem;
+        justify-content: space-between;
+
+        width: var(--input-gap);
+        height: 100%;
+
+        span {
+            height: 1.2rem;
+            width: 1.2rem;
+            border-radius: 50%;
+            display: block;
+
+            &:first-child {
+                background-color: var(--slate);
+            }
+
+            &:last-child {
+                border: 2px solid var(--slate);
+                background-color: var(--slate-light);
+            }
+        }
+
+        hr {
+            flex-grow: 10;
+            width: 2px;
+            background-color: var(--slate);
+        }
+    }
+
+    &__main {
+
+        hr {
+            display: block;
+            height: 2px;
+            background-color: #DBDFE8;
+            border-radius: 5px;
+            margin: 0 var(--input-padding) 0 var(--input-gap);
+        }
+
+    }
+
+    &__field {
+
+        position: relative;
+        padding: 1.2rem var(--input-padding) 1.2rem var(--input-gap);
+
+        label {
+            display: block;
+            font-size: $p-small;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            color: var(--slate);
+            user-select: none;
+        }
+
+        input {
+            display: block;
+            font-size: $p;
+            line-height: 1.7;
+            margin: 0;
+            padding: 0;
+            border: none;
+            background: none;
+            color: var(--jet);
+            width: 100%;
+
+            &:focus {
+                outline: none;
+            }
+        }
+
+        &.static {
+            opacity: .5;
+
+            div {
+                height: calc(#{$p} * 1.7);
+                position: relative;
+            }
+
+            p {
+                @include overlay;
+                font-size: $p;
+                line-height: 1.7;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+        }
+
+    }
+
+}
+
+.autocomplete-item {
+    display: flex;
+    @include flexGap(1.2rem);
+
+    padding: 0.8rem 0;
+
+    h6 {
+        margin-bottom: 0.4rem;
+    }
+
+    p {
+        font-size: $p-small;
+        color: var(--text);
+        line-height: 1.5;
+    }
+}

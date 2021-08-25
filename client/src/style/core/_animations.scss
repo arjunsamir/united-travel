@@ -1,0 +1,36 @@
+@keyframes blink {
+    from, to {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+
+@keyframes preloadSpin {
+    
+    from {
+        transform: rotate(0);
+    }
+    
+    to {
+        transform: rotate(359deg);
+    }
+    
+}
+
+
+@keyframes dotFlashing {
+    0% {
+        opacity: 1;
+    }
+    50%,
+    100% {
+        opacity: 0.15;
+    }
+}
+
+.blink {
+    animation: 1s blink step-end infinite;
+}

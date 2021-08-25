@@ -1,0 +1,34 @@
+{
+    "charter": {
+        "rate": 75,
+        "minHours": 3
+    },
+    "mpg": {
+        "base": 25,
+        "upsize_md": 20,
+        "upsize_lg": 18,
+        "upsize_xl": 16 
+    },
+    "fees": {
+        "base": 15,
+        "upsize_md": 15,
+        "upsize_lg": 45,
+        "upsize_xl": 75
+    },
+    "rates": {
+        "base": 4,
+        "discounts": {
+            "tourist": 1.5,
+            "extended": {
+                "base": 2.25,
+                "upsize_md": 2.175,
+                "upsize_lg": 2.0875,
+                "upsize_xl": 2
+            }
+        }
+    },
+    "thresholds": {
+        "extended": 100,
+        "tourist": 50
+    }
+}

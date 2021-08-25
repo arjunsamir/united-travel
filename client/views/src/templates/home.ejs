@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="home-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="home">
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+
+            <!-- Background Video -->
+            <div class="hero__background">
+                <div class="bg-video">
+                    <div class="bg-video__overlay"></div>
+                    <div class="bg-video__fallback loading"></div>
+                    <video class="bg-video__player" autoplay muted loop playsinline>
+                        <!-- <source src="https://storage.googleapis.com/utravel-site-content/video/hero-bg.webm" type="video/webm"> -->
+                        <source src="https://storage.googleapis.com/utravel-site-content/video/hero-bg.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="hero__content">
+
+                <h1><%= copy.hero.title %><span id="typewrite" data-period="2500" data-words="<%- copy.hero.words %>"></span><span class="blink">|</span></h1>
+                <h4><%= copy.hero.subtitle %></h4>
+                <a href="<%= path %>/book" class="btn-pill hollow white"><%= copy.hero.cta %> </a>
+                
+            </div>
+
+        </section>
+
+        <!-- Beyond -->
+        <section class="section">
+
+            <!-- Section Grid -->
+            <div class="section__grid collapse-cards">
+
+                <!-- Content Block -->
+                <div class="content" >
+                    <h2><%- copy.beyond.title %></h2>
+                    <p><%- copy.beyond.copy %></p>
+                    <a href="<%= path %>/book" class="btn-pill hollow dark"><%= copy.beyond.cta %></a>
+                </div>
+
+                <!-- Image -->
+                <div class="section__image">
+                    <picture>
+                        <source srcset="https://storage.googleapis.com/utravel-site-content/img/city-car.webp" type="image/webp">
+                        <source srcset="https://storage.googleapis.com/utravel-site-content/img/city-car.png" type="image/png">
+                        <img src="https://storage.googleapis.com/utravel-site-content/img/city-car.png" alt="Car in city">
+                    </picture>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Airport Service -->
+        <section class="fsi" id="airport-service">
+
+            <!-- Background Image -->
+            <div class="fsi__background">
+                <picture>
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/airport.webp" type="image/webp">
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/airport.jpg" type="image/jpeg">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/airport.jpg" alt="Airport Waiting">
+                </picture>
+            </div>
+
+            <!-- Gradient Overlay -->
+            <div class="fsi__overlay" style="--bg-gradient-desktop: linear-gradient(90.2deg, #000000 30.31%, rgba(0, 0, 0, 0.25) 99.86%)"></div>
+
+            <!-- Section Content -->
+            <div class="fsi__content">
+                <div class="content" data-scroll data-scroll-speed="2">
+                    <h2 class="white"><%- copy.airport.title %></h2>
+                    <p><%- copy.airport.copy %></p>
+                    <a href="<%= path %>/book" class="btn-pill hollow white"><%= copy.airport.cta %> </a>
+                </div>
+            </div>
+
+        </section>
+        
+        <!-- Cruise Service -->
+        <section class="fsi" id="cruise-service">
+
+            <!-- Background Image -->
+            <div class="fsi__background">
+                <picture>
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/cruise.webp" type="image/webp">
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/cruise.jpg" type="image/jpeg">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/cruise.jpg" alt="Cruise Ship">
+                </picture>
+            </div>
+
+            <!-- Gradient Overlay -->
+            <div class="fsi__overlay cruise" style="--bg-gradient-desktop: transparent"></div>
+
+            <!-- Section Content -->
+            <div class="fsi__content align-right">
+                <div class="content" data-scroll data-scroll-speed="2">
+                    <h2 class="white"><%- copy.cruise.title %></h2>
+                    <p><%- copy.cruise.copy %></p>
+                    <a href="<%= path %>/book" class="btn-pill hollow white"><%= copy.cruise.cta %> </a>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Charter Services -->
+        <section class="section">
+
+            <!-- Section Grid -->
+            <div class="section__grid collapse-cards">
+
+                <!-- Content Block -->
+                <div class="content">
+                    <h2><%- copy.charter.title %></h2>
+                    <p><%- copy.charter.copy %></p>
+                    <a href="#content" class="btn-pill hollow dark"><%= copy.charter.cta %> </a>
+                </div>
+
+                <!-- Image -->
+                <div class="section__image">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/time.jpg" alt="hand holding a clock">
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Long Distance Rides -->
+        <section class="long-distance">
+            <div class="long-distance__map">
+                <picture>
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/map.webp" type="image/webp">
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/map.png" type="image/png">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/map.png" alt="Map of Florida">
+                </picture>
+            </div>
+
+            <div class="long-distance__content" data-scroll data-scroll-speed="1">
+                <div class="content">
+                    <h2 class="white"><%- copy.long.title %></h2>
+                    <p><%- copy.long.copy %></p>
+                    <a href="#content" class="btn-pill hollow white"><%= copy.long.cta %></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Safety Section -->
+        <section class="section bg-alt">
+            <div class="section__grid flex-start">
+
+                <div class="content">
+                    <h2><%- copy.safety.children.title %></h2>
+                    <p><%- copy.safety.children.copy %></p>
+                </div>
+
+                <div class="content">
+                    <h2><%- copy.safety.covid.title %></h2>
+                    <p><%- copy.safety.covid.copy %></p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Reviews  -->
+        <%- include('../components/reviews', { path, lang }) %>
+
+        <!-- Call To Action -->
+        <%- include('../components/cta', { path, lang, ...components.cta }) %>
+
+        <!-- Our Fleet -->
+        <%- include('../components/fleet', { path, lang, ...components.fleet }) %>
+
+        <!-- Contact Us -->
+        <%- include('../components/contact', { path, lang, ...components.contact }) %>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+.fleet {
+
+    min-height: 100vh;
+    width: 100%;
+
+    background-color: var(--light-gray);
+
+    padding:var(--x-pad);
+
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr max-content;
+
+    @include ipad {
+        padding: var(--y-pad) var(--x-pad);
+    }
+
+    &__vehicle {
+        flex-grow: 1;
+        width: 100%;
+        @include flexCenter;
+    }
+
+    &__picker {
+
+        display: flex;
+        justify-content: center;
+        @include flexGap(3.6rem);
+
+        @include ipad {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 2.4rem;
+            @include flexGap(0);
+        }
+
+        @include phone {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        &-item {
+            background-color: var(--white);
+            box-shadow: $soft-shadow;
+            border-radius: 1.2rem;
+            padding: 1.6rem;
+
+            cursor: pointer;
+
+            transition: opacity $dt;
+
+            div {
+                position: relative;
+                height: 5rem;
+                width: 16rem;
+            }
+
+            img {
+                height: 200%;
+                position: absolute;
+                bottom: 0;
+            }
+
+            p {
+                text-align: center;
+                color: var(--jet);
+            }
+
+            &.selected {
+                background-color: var(--black);
+                p {
+                    color: var(--white);
+                }
+            }
+
+            &:hover {
+                opacity: .8;
+            }
+
+            @include ipad {
+                div {
+                    display: none;
+                }
+            }
+        }
+    }
+
+}
+
+.vehicle {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    align-items: center;
+
+    width: 100%;
+
+    @include ipad {
+        flex-grow: 10;
+        display: flex;
+        flex-direction: column-reverse;
+        justify-content: center;
+        padding-bottom: 6.4rem;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        @include flexGap(2.4rem, "column");
+        width: 100%;
+        max-width: var(--max-content-width);
+
+        @include ipadPro {
+
+            max-width: calc(var(--max-content-width) * .75);
+
+            p {
+                font-size: $p-small;
+            }
+
+            h2 {
+                font-size: $h3;
+            }
+        }
+    }
+
+    &__key-specs {
+        display: flex;
+        @include flexGap(2.4rem);
+    }
+
+    &__key-spec {
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @include flexGap(0.8rem, "column");
+
+        & > span {
+            display: block;
+            border: 2px solid var(--jet);
+            border-radius: 50%;
+            padding: 1.6rem;
+            color: var(--jet);
+        }
+
+        svg {
+            height: 2rem;
+            width: 2rem;
+            margin: 0;
+        }
+
+        p {
+            color: var(--jet);
+        }
+    }
+
+    &__image {
+
+        @include flexCenter;
+
+        @include ipad {
+            padding-bottom: 6rem;
+        }
+
+        img {
+            max-width: 100%;
+            max-height: 50vh;
+
+            @include ipad {
+                max-height: 30vh;
+            }
+        }
+    }
+} 

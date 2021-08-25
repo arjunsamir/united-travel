@@ -3,3 +3,6 @@ node_modules/
 .cache/
 *.code-workspace
 dist/
+.parcel-cache
+
+cloud_keys.json

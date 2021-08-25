@@ -1,0 +1,210 @@
+<!--NBCTN-->
+<div class="navbar full" id="navbar">
+
+    <div class="nb-esc no-esc"></div>
+
+    <!-- Desktop Navbar -->
+    <div class="navbar__full">
+
+        <div class="navbar__background"></div>
+
+        <a class="navbar__brand" href="<%= path %>/">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <span>United Travel</span>
+        </a>
+
+        <nav class="navbar__nav" aria-label="desktop">
+            <%- include('navlist', { path, lang, links, cta: false, className: 'navbar__nav-list' }) %>
+        </nav>
+
+        <div class="navbar__actions">
+            <!-- Language -->
+            <div class="navbar__lang">
+                <div class="navbar__lang-icon nb-lng">
+                    <svg><use href="/img/icons.svg#language"></use></svg>
+                </div>
+                
+                <div class="navbar__lang-menu hidden">
+                    <ul>
+                        <li data-nav-lang="en" class="<%- lang === 'en' ? 'active' : '' %>"><p class="small">English</p></li>
+                        <li data-nav-lang="es" class="<%- lang === 'es' ? 'active' : '' %>"><p class="small">Español</p></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr>
+
+            <!-- Profile Logged In -->
+            {% if (user._id) { %}
+                <div class="navbar__profile">
+
+                    <!-- Logged In Icon -->
+                    <div class="navbar__profile-pic nb-clt">
+                        <img src="{{ user.photo }}" alt="Profile Photo">
+                    </div>
+
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><p class="small"><%= hello %> {{ user.preferredName }}</p></li>
+                            <hr>
+                            <li><a href="<%= path %>/account"><span><%= account.account %></span></a></li>
+                            <li><a class="app-logout" href="#" id="nb-logout"><span><%= account.logout %></span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            {% } else { %}
+                <div class="navbar__profile">
+
+                    <!-- Logged Out Icon -->
+                    <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                    
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><a href="<%= path %>/login"><span><%= account.register %></span></a></li>
+                            <li><a href="<%= path %>/login"><span><%= account.login %></span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            {% } %}
+
+            <!-- Call To Action -->
+            <a href="<%= path %>/book" class="navbar__cta"><%= cta %></a>
+        </div>
+
+    </div>
+
+    <!-- Hamburger Menu Only -->
+    <div class="navbar__min">
+        <div class="navbar__menu-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+</div>
+
+<div class="nav-menu hidden" id="nav-menu">
+
+    <!-- Menu Background -->
+    <div class="nav-menu__bg"></div>
+
+    <!-- Desktop Menu Layout -->
+    <div class="nav-menu__desktop">
+
+        <div class="nav-menu__visual">
+
+            <!-- Absolutely Positioned Nav menu -->
+            <div class="nav-menu__image">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/menu-visual.png" alt="Mercedes driving in fog">
+            </div>
+
+            <!-- Branding -->
+            <a href="<%= path %>/" class="nav-menu__brand">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+                <span class="h5">United Travel</span>
+            </a>
+
+            <!-- Log In Card -->
+            <div class="user-acct">
+
+                <!-- Backgronud -->
+                <div class="user-acct__bg"></div>
+
+                {% if (user._id) { %}
+                    <div class="user-acct__photo">
+                        <img src="{{ user.photo }}" alt="profile photo" />
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Hello {{ user.preferredName }}</h6>
+                        <div>
+                            <a href="<%= path %>/account"><%= account.account %></a>
+                            <hr>
+                            <a href="#" class="app-logout"><%= account.logout %></a>
+                        </div>
+                    </div>
+                {% } else { %}
+                    <div class="user-acct__icon">
+                        <svg class="icon-xl"><use href="/img/icons.svg#person-circle"></use></svg>
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold"><%= welcome %></h6>
+                        <div>
+                            <a href="<%= path %>/login"><%= account.register %></a>
+                            <hr>
+                            <a href="<%= path %>/login"><%= account.login %></a>
+                        </div>
+                    </div>
+                {% } %}
+
+            </div>
+
+        </div>
+        
+        <div class="nav-menu__content">
+
+            <nav aria-label="desktop hamburger">
+                <%- include('navlist', { path, lang, links, cta: false, className: 'nav-menu__list' }) %>
+            </nav>
+
+            <div class="nav-menu__cta">
+                <div class="content">
+                    <h4 class="white animate-item"><%= block.title %></h4>
+                    <p class="small animate-item"><%= block.copy %></p>
+                    <a href="<%= path %>/book" class="btn-pill filled primary animate-item"><%= cta %> </a>
+                </div>
+            </div>
+
+            <div class="nav-menu__lang">
+                <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
+                <ul>
+                    <li data-nav-lang="en" class="animate-item <%- lang === 'en' ? ' active' : '' %>"><h5>English</h5></li>
+                    <li data-nav-lang="es" class="animate-item <%- lang === 'es' ? ' active' : '' %>"><h5>Español</h5></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-menu__mobile">
+
+        <div class="nav-menu__content">
+            <a href="<%= path %>/" class="nav-menu__brand animate-item">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+            </a>
+    
+            <nav aria-label="mobile">
+                <%- include('navlist', { path, lang, links, cta, className: 'nav-menu__list' }) %>
+            </nav>
+    
+            <div class="nav-menu__account">
+                {% if (user._id) { %}
+                    <h5 class="white animate-item">Hello {{ user.preferredName }}</h5>
+                    <div>
+                        <a class="animate-item" href="<%= path %>/account"><%= account.account %></a>
+                        <a class="animate-item app-logout" href="#"><%= account.logout %></a>
+                    </div>
+                {% } else { %}
+                    <h5 class="white animate-item"><%= welcome %></h5>
+                    <div>
+                        <a class="animate-item" href="<%= path %>/login"><%= account.register %></a>
+                        <a class="animate-item" href="<%= path %>/login"><%= account.login %></a>
+                    </div>
+                {% } %}
+            </div>
+    
+            <ul class="nav-menu__lang">
+                <li data-nav-lang="en" class="animate-item<%- lang === 'en' ? ' active' : '' %>"><h5>English</h5></li>
+                <li data-nav-lang="es" class="animate-item<%- lang === 'es' ? ' active' : '' %>"><h5>Español</h5></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<!--NBCTN-->

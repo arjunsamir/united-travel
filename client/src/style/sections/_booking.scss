@@ -1,0 +1,483 @@
+#booking-react-app {
+    overflow-y: hidden;
+}
+
+.booking {
+
+   // Declare Custom Properties
+   --card-gap: 3.2rem;
+   --card-nav-height: 7.6rem;
+   --card-width: 44rem;
+   --card-body-min-height: 72rem;
+   --card-body-padding-x: 3.6rem;
+   --card-body-padding-y: 4.8rem;
+
+    min-height: 100vh;
+
+    overflow: hidden;
+
+    &__map {
+        position: fixed;
+        top: 0;
+        right: 0;
+
+        height: 100vh;
+        width: 100vw;
+
+        transition: width 0.4s ease-in-out, height 0.4s ease-in-out;
+
+        &.min {
+            width: 50vw;
+            @include ipadPro {
+                width: 100vw;
+                height: 65vh;
+            }
+        }
+
+        #google-map {
+            height: 100%;
+            width: 100%;
+
+            background-color: var(--black);
+        }
+
+
+        @include respond-y(56.25em) {
+            width: calc(100vw - var(--card-width));
+        }
+
+        @include ipadPro {
+            width: 100vw;
+        }
+    }
+
+    &__loader {
+        position: relative;
+        height: 100vh;
+        width: 100%;
+        @include flexCenter;
+    }
+
+    &__app {
+        position: relative;
+    }
+
+    &__card {
+        position: relative;
+        // min-height: 100vh;
+        width: max-content;
+
+        display: flex;
+        flex-direction: column;
+        margin: var(--nav-min-top) var(--nav-min-right);
+
+
+        @include respond-y(56.25em) {
+            padding: 0;
+        }
+
+        @include phone {
+            margin: 75vh 0 0;
+            width: 100%;
+        }
+
+
+    }
+
+    &__container {
+        position: relative;
+        width: 50vw;
+        min-height: 100vh;
+
+        @include flexCenter;
+        padding: var(--x-pad);
+
+        @include ipadPro {
+            margin-top: 40vh;
+            justify-content: flex-start;
+            width: 100%;
+            background-color: var(--white);
+            border-top-left-radius: 3.6rem;
+            border-top-right-radius: 3.6rem;
+            padding: var(--y-pad) var(--x-pad);
+
+            box-shadow: $soft-shadow;
+        }
+
+        @include phone {
+            padding: 6.4rem 3.2rem 12rem;
+            min-height: unset;
+        }
+        
+    }
+
+}
+
+.booking-card {
+
+    flex-grow: 10;
+    display: flex;
+    flex-direction: column;
+
+    position: relative;
+    width: var(--card-width);
+
+    box-shadow: $soft-shadow;
+    background-color: var(--black);
+    border-radius: 2rem;
+
+
+    // Set bounds
+    min-height: 85rem;
+
+    @include respond-y(56.25em) {
+        border-radius: 0;
+    }
+
+    @include phone {
+        min-height: 60rem;
+        width: 100%;
+        border-top-right-radius: 2rem;
+        border-top-left-radius: 2rem;
+        min-height: 75vh;
+    }
+
+
+    &__loader {
+        flex-grow: 10;
+        @include flexCenter;
+    }
+
+    &__nav {
+        position: relative;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: var(--card-nav-height);
+        padding: 0 3.6rem;
+
+        h6 {
+            cursor: pointer;
+            user-select: none;
+        }
+    }
+
+    &__menu {
+        padding: 0 3.6rem;
+        user-select: none;
+
+        position: absolute;
+        left: 0;
+        top: var(--card-nav-height);
+        width: 100%;
+
+        hr {
+            height: 3px;
+            width:40%;
+            background-color: var(--slate-dark);
+            border-radius: 1rem;
+            margin: 0 auto var(--card-gap);
+        }
+
+        &.disabled {
+            pointer-events: none
+        }
+    }
+
+
+    &__steps {
+        @include blockGap(1.2rem);
+        padding-bottom: var(--card-gap);
+    }
+
+    &__step {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        color: var(--slate-dark);
+        padding: 1.2rem 1.6rem;
+        border-radius: 0.8rem;
+        font-size: 1.6rem;
+
+        color: var(--white);
+
+        cursor: pointer;
+
+        &.active {
+            background-color: var(--white);
+            color: var(--black);
+        }
+
+        &.disabled {
+            color: var(--slate-dark);
+            cursor: default;
+            svg {
+                display: none;
+            }
+        }
+    }
+
+    &__header {
+        @include blockGap(1.6rem);
+        user-select: none;
+
+        a {
+            @include link {
+                color: var(--google);
+            }
+        }
+    }
+
+    &__body {
+        position: relative;
+
+        flex-grow: 10;
+        display: flex;
+        flex-direction: column;
+
+        background-color: var(--white);
+        padding: var(--card-body-padding-y) var(--card-body-padding-x);
+        border-radius: 2rem;
+
+        @include respond-y(56.25em) {
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        &-esc {
+            position: absolute;
+            top: 0;
+            left: 0;
+
+            height: 100%;
+            width: 100%;
+
+            z-index: -1;
+            pointer-events: none;
+
+            &.listening {
+                z-index: 5;
+                pointer-events: all;
+            }
+        }
+
+    }
+
+    &__content {
+        flex-grow: 10;
+        @include blockGap(var(--card-gap));
+
+        fieldset {
+            outline: none;
+            border: none;
+            display: block;
+            @include blockGap(1.6rem);
+        }
+
+        &.flex-col {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
+    }
+
+    &__footer {
+        hr {
+            height: 2px;
+            width: 100%;
+            background-color: var(--slate-light);
+            margin-bottom: var(--card-gap);
+        }
+
+        h6 {
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            line-height: 1.7;
+        }
+    }
+
+
+    &__route {
+        display: flex;
+        align-items: center;
+
+        @include flexGap(3.2rem);
+
+        div {
+            display: flex;
+            align-items: center;
+        }
+
+        svg {
+            color: var(--slate-dark);
+            margin-right: 0.8rem;
+        }
+
+        p {
+           color: var(--slate); 
+        }
+    }
+
+    &__next {
+        padding-top: 4.8rem;
+
+        @include phone {
+            padding-bottom: 9.6rem;
+        }
+    }
+}
+
+.booking-view {
+
+    --view-width: var(--card-width);
+
+    position: relative;
+
+    width: 100%;
+    max-width: var(--view-width);
+
+    &__content {
+        @include blockGap(3.6rem);
+    }
+
+    &__section {
+        @include blockGap(2.4rem);
+    }
+
+    &__header {
+        @include blockGap(3.2rem);
+
+        h5 {
+            color: var(--success);
+            span {
+                color: var(--placeholder);
+                text-decoration: line-through;
+            }
+
+            margin-bottom: 0.8rem;
+        }
+
+        p {
+            color: var(--slate);
+        }
+    }
+
+    &__res-total {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__route {
+
+        --route-font-size: 1.6rem;
+
+        p {
+            font-size: var(--route-font-size);
+            color: var(--slate);
+        }
+        
+        &-container {
+            display: flex;
+            margin-top: 1.2rem;
+        }
+
+        &-icon {
+
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+
+            margin-right: 1.6rem;
+
+            padding: calc((var(--route-font-size) - 1.2rem) / 2) 0;
+
+            span {
+                display: block;
+                height: 1.2rem;
+                width: 1.2rem;
+
+                border-radius: 50%;
+
+                &:first-child {
+                    background-color: var(--google);
+                }
+
+                &:last-child {
+                    border: 2px solid var(--google);
+                }
+            }
+
+            hr {
+                width: 2px;
+                background-color: var(--google);
+                flex-grow: 10;
+            }
+        }
+
+        &-details {
+            p {
+                line-height: 1;
+
+                &:first-child {
+                    margin-bottom: 1.6rem;
+                }
+            }
+        }
+    }
+
+    &__divider {
+        height: 3px;
+        width: 9.6rem;
+        border-radius: 1rem;
+        background-color: var(--slate-light);
+    }
+
+    &__block {
+        h6 {
+            font-weight: 700;
+            margin-bottom: 0.4rem;
+        }
+
+        p {
+            font-size: $p-small;
+        }
+    }
+
+    &__vehicle {
+
+        background-color: var(--slate-light);
+        padding: 0.8rem 2.4rem;
+        border-radius: 0.8rem;
+
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        align-items: center;
+
+        &-image {
+            img {
+                width: 100%;
+            }
+        }
+
+        h6 {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: var(--slate-dark);
+        }
+
+        p {
+            font-size: $p-small;
+            line-height: 1.4;
+            color: var(--slate);
+        }
+
+    }
+
+    &__form {
+        @include blockGap(1.6rem);
+    }
+
+}

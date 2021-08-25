@@ -34,6 +34,8 @@ const schema = new mongoose.Schema({
     oAuth: [String],
     googleID: String,
     facebookID: String,
+    stripeID: String,
+    defaultPaymentMethod: String,
     role: {
         type: String,
         enum: ['admin', 'driver', 'user'],
@@ -47,10 +49,15 @@ const schema = new mongoose.Schema({
     photos: [String],
     photo: {
         type: String,
-        default: 'default.jpg'
+        default: '/img/profile-photos/default.png'
     },
     referralCode: String,
     referredBy: String,
+    preferredLocale: {
+        type: String,
+        default: 'en',
+        enum: ['en', 'es', 'fr', 'de', 'it', 'pt', 'ru', 'zh']
+    },
     credits: [
         {
             type: mongoose.Schema.ObjectId,
@@ -92,6 +99,15 @@ schema.methods.changedPasswordAfter = function(jwtTimestamp) {
 
 };
 
+
+schema.methods.createPasswordResetCode = function() {
+
+    const token = crypto.randomBytes(6).toString('hex').substring(0, 6).replaceAll('0', 'x').toLowerCase();
+    this.resetToken = token;
+    this.tokenExpiration = Date.now() + 15 * 60 * 1000;
+    return token;
+
+}
 
 schema.methods.createPasswordResetToken = function() {
 

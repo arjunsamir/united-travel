@@ -1,0 +1,14 @@
+{
+    "agency": "Diseñado por Day FiftyFive",
+    "contact": {
+        "title": "Contacta con nosotros",
+        "email": "hello@unitedtravel.llc",
+        "phone": "(123) 456-7890"
+    },
+    "links": {
+        "account": "Mi Cuenta",
+        "privacy": "Política de Privacidad",
+        "terms": "Términos de Servicio"
+    },
+    "copyright": "Reservados todos los derechos."
+}

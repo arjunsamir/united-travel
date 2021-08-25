@@ -1,0 +1,41 @@
+// Color Variables
+$primary: #FDB849;
+$jet: #333333;
+$white: #FFFFFF;
+$black: #121212;
+$light-gray: #F9F9F9;
+
+$text: #999999;
+$placeholder: #C6CAD2;
+
+$error: #D45555;
+$success: #80CF9B;
+
+$slate: #969DAC;
+$slate-dark: #626771;
+$slate-light: #F2F4F8;
+
+$google: #4285F4;
+$facebook: #1978F2;
+
+
+:root {
+    --primary: #{$primary};
+    --jet: #{$jet};
+    --white: #{$white};
+    --black: #{$black};
+    --light-gray: #{$light-gray};
+
+    --text: #{$text};
+    --placeholder: #{$placeholder};
+
+    --error: #{$error};
+    --success: #{$success};
+
+    --slate: #{$slate};
+    --slate-dark: #{$slate-dark};
+    --slate-light: #{$slate-light};
+
+    --google: #{$google};
+    --facebook: #{$facebook};
+}
