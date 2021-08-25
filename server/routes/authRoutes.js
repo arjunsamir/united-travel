@@ -16,6 +16,7 @@ router.post('/google', auth.continueWithGoogle);
 router.post('/facebook', auth.continueWithFacebook);
 router.get('/revoke-session', auth.logout);
 router.post('/request-reset-token', auth.forgotPassword);
+router.post('/validate-reset-code', auth.validateResetCode);
 router.post('/reset-password', auth.resetPassword);
 
 

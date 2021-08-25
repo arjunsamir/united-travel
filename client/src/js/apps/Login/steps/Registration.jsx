@@ -51,7 +51,8 @@ const Registration = ({ copy, authenticate, transition, update, state, validator
                         password: state.password,
                         email: state.email,
                         photo: state.profilePhoto,
-                        referredBy: referral?.code
+                        referredBy: referral?.code,
+                        preferredLocale: window.locale
                     });
 
                     // Wait For Timer To Expire

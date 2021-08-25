@@ -8,6 +8,7 @@ export const initialState = {
     profilePhoto: '',
     code: '',
     loginType: '',
+    token: '',
     user: {}
 }
 
@@ -48,6 +49,9 @@ export const reducer = (state = initialState, action) => {
 
         case 'SET_LOGIN_TYPE':
             return merge('loginType');
+
+        case 'SET_TOKEN':
+            return merge('token');
         
         default:
             return state;

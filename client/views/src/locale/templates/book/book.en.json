@@ -173,6 +173,7 @@
             "method": "Payment Method",
             "back": "Back",
             "next": "Confirm & Pay ${total}",
+            "credit": "Credit Applied",
             "errors": {
                 "invalid_number": "This card number is invalid.",
                 "incomplete_number": "Card number is incomplete. Most cards have 16 digits.",
@@ -208,6 +209,12 @@
                     }
                 }
             }
+        },
+        "Confirmation": {
+            "title": "You're all set!",
+            "code": "Confirmation Code:",
+            "email": "A confirmation email has been sent to",
+            "thanks": "Thank you for booking with us! We look forward to making your journey a great one."
         }
     },
     "common": {

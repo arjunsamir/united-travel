@@ -9,61 +9,27 @@ const devcert = require('devcert');
 
 
 
-
-
-
 // 2. IMPORT ENVIORNMENT & START SERVER
 
 
 // Initialize Enviornment Variables
 dotenv.config({ path: './config.env' });
 
+
 // Import Express
 const app = require('./app');
 
 
+// Determine App Port
 const port = process.env.PORT || 3000;
-
-let server;
 
 
 // Initialize Server
-const initDev = async () => {
+const server = app.listen( port, () => {
 
-    console.log('Starting development server');
-    
-    // const ssl = await devcert.certificateFor('my-app.test');
-    // server = https.createServer(ssl, app).listen(port, () => {
-    //     console.log(`✊🏾App running on port ${port}`);
-    // });
+    console.log(`✊🏾App running on port ${port}`);
 
-    server = app.listen( port, () => {
-
-        console.log(`✊🏾App running on port ${port}`);
-    
-    });
-
-    
-
-}
-
-
-const initProd = () => {
-
-    console.log('starting production server');
-
-    server = app.listen( port, () => {
-
-        console.log(`✊🏾App running on port ${port}`);
-    
-    });
-
-}
-
-
-if (process.env.NODE_ENV === 'production') initProd();
-else initDev();
-
+});
 
 
 // 3. INITIALIZE DATABASE CONNECTION

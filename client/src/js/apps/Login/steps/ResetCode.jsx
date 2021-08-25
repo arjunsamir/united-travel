@@ -16,17 +16,27 @@ const ResetCode = ({ copy, transition, update, state, validator, referral }) => 
 
     // Create Local State
     const [isFetching, setIsFetching] = useState(false);
+    const [enableResend, setEnableResend] = useState(true);
+    const [codeErrors, setCodeErrors] = useState([])
 
     // Create Refs
     const mainRef = useRef();
-
-    // Check Email 
-    const emailErrors = validator.checkEmail(state.email);
 
     // Enable Typewriter Effect
     useEffect(() => {
         transition.set(mainRef.current).in();
     }, []);
+
+    // Disable Resend Button
+    useEffect(() => {
+
+        if (enableResend) return;
+
+        const timeout = setTimeout(() => setEnableResend(true), 25000)
+
+        return () => clearTimeout(timeout);
+
+    }, [enableResend]);
 
     // Return Component
     return (
@@ -48,14 +58,27 @@ const ResetCode = ({ copy, transition, update, state, validator, referral }) => 
                     const timer = $.timer(1000).start();
 
                     // Validate API Errors
+                    const res = await axios.post('/auth/validate-reset-code', {
+                        email: state.email,
+                        code: state.code
+                    });
 
                     // Await Timer
                     await timer.hold();
+
+                    // Apply Errors
+                    if (!res?.data?.status || res.data.status === "fail") {
+                        setCodeErrors([copy.invalid]);
+                        setIsFetching(false);
+                        return;
+                    }
+
+                    // Update State
+                    update("token")(res.data.token)
                     
                     // Transition To Next Page
                     transition.to("reset");
                     
-
                 }}
             >
                 <div className="login__fieldset">
@@ -66,22 +89,32 @@ const ResetCode = ({ copy, transition, update, state, validator, referral }) => 
                         placeholder={copy.inputs.code.placeholder}
                         value={state.code}
                         onChange={update('code')}
-                        errors={emailErrors}
+                        errors={codeErrors}
                     />
                     <Button
                         text={copy.button}
                         type="submit"
-                        disabled={emailErrors.length}
+                        disabled={state.code.length < 6}
                         showLoader={isFetching}
                     />
-                    <p className="animate-item">
-                        {copy.resend[0] + " "}
-                        <LinkButton
-                            text={copy.resend[1]}
-                            onClick={() => transition.to("requestReset")}
-                            animationClass="no-animate"
-                        />
-                    </p>
+                    {enableResend ? (
+                        <p className="animate-item">
+                            {copy.resend[0] + " "}
+                            <LinkButton
+                                text={copy.resend[1]}
+                                onClick={() => {
+                                    if (!enableResend) return;
+                                    axios.post('auth/request-reset-token', {
+                                        email: state.email
+                                    });
+                                    setEnableResend(false);
+                                }}
+                                animationClass="no-animate"
+                            />
+                        </p>
+                    ) : (
+                        <p className="animate-item">{copy.sent}</p>
+                    )}
                     
                 </div>
             </LoginForm>

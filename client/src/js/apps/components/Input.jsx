@@ -73,7 +73,7 @@ const Input = ({ value, placeholder, onChange, onBlur, formatInput, label, type,
             {hasError && (
                 <div className="input__errors">
                     {errors.map((err, i) => (
-                        <div className="input__error" key={i}>
+                        <div className="input__error animate-item" key={i}>
                             <Icon icon="error" size="sm" />
                             <p className="small bold">{err}</p>
                         </div>

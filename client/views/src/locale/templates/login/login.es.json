@@ -66,6 +66,8 @@
         "button": "Código de verificación",
         "back": "Atrás",
         "resend": ["¿No recibiste el correo electrónico?", "Reenviar codigo."],
+        "sent": "Tu código ha sido enviado con éxito.",
+        "invalid": "Tu código de reinicio no es válido.",
         "inputs": {
             "code": {
                 "label": "Restablecer Código",

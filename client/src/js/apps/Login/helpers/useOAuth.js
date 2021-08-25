@@ -28,7 +28,9 @@ class FacebookAuth {
     }
 
     async getUserData() {
-        const user = {};
+        const user = {
+            preferredLocale: window.locale
+        };
     
         await Promise.all([
             new Promise(resolve => {
@@ -108,7 +110,7 @@ class GoogleAuth {
         const token = this.auth.currentUser.get().getAuthResponse().id_token;
         
         // Request JWT from server
-        this.callback(this.endpoint, { token })
+        this.callback(this.endpoint, { token, preferredLocale: window.locale })
 
         // Sign googleuser back out to rely on JWT
         this.auth.signOut();

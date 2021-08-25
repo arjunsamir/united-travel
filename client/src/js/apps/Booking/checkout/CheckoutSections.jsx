@@ -28,7 +28,7 @@ export const ConfirmCheckout = ({ children, cost, credits, paymentRequest, metho
                 {credits.cents ? (
                     <div>
                         <h5><span>${cost.subtotal.dollars}</span> ${cost.total.dollars}</h5>
-                        <p className="small bold">${credits.dollars} Credit Applied</p>
+                        <p className="small bold">${credits.dollars} {copy.credit}</p>
                     </div>
                 ) : (
                     <h5>${cost.subtotal.dollars}</h5>

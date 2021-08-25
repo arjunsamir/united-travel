@@ -66,6 +66,8 @@
         "button": "Verify Code",
         "back": "Back",
         "resend": ["Didn't receive the email?", "Resend code."],
+        "sent": "Your code has been sent successfully.",
+        "invalid": "Your reset code is invalid.",
         "inputs": {
             "code": {
                 "label": "Reset Code",

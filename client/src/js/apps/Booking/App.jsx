@@ -5,7 +5,6 @@ import React, { useReducer } from "react";
 import AppContext from "./store/context";
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
-
 // Import Date Time Libraries
 import DayjsUtils from '@date-io/dayjs'
 import enLocale from 'dayjs/locale/en';
@@ -14,7 +13,6 @@ import esLocale from 'dayjs/locale/es';
 // Import Theming
 import { ThemeProvider } from '@material-ui/styles';
 import theme from '../data/materialTheme';
-
 
 // Import Store
 import initialState from './store/initialState';
@@ -40,7 +38,6 @@ import CheckoutApp from "./checkout/CheckoutApp";
 
 // Import Helpers
 import Transition from './helpers/Transition';
-
 
 // Create Locale
 const locales = {

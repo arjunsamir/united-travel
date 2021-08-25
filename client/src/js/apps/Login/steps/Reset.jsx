@@ -12,20 +12,27 @@ import Input from '../../components/Input';
 // Import Front End Components
 import axios from 'axios';
 
-const RequestReset = ({ copy, transition, update, state, validator, referral }) => {
+const RequestReset = ({ copy, transition, update, state, validator, referral, authenticate }) => {
 
     // Create Local State
     const [isFetching, setIsFetching] = useState(false);
+    const [passwordErrors, setPasswordErrors] = useState([]);
 
     // Create Refs
     const mainRef = useRef();
 
     // Check Email 
-    const errors = validator.checkPassword(state.password);
+    const errors = [ ...(validator.checkPassword(state.password) ?? []), ...passwordErrors ];
 
     // Enable Typewriter Effect
     useEffect(() => {
+
+        // Set Transition Target
         transition.set(mainRef.current).in();
+
+        // Clear Previous Passwords
+        update("password")("");
+
     }, []);
 
     return (
@@ -47,10 +54,23 @@ const RequestReset = ({ copy, transition, update, state, validator, referral }) 
                     const timer = $.timer(1000).start();
 
                     // Validate Reset
-                    
-                    
+                    const user = await authenticate('/auth/reset-password', {
+                        token: state.token,
+                        password: state.password
+                    })
+
                     // Hold For Timer
                     await timer.hold();
+
+                    // Set Errors
+                    if (!user) {
+                        setPasswordErrors([copy.errors.fails.password]);
+                        setIsFetching(false);
+                        return;
+                    }
+
+                    // Update State
+                    update("user")(user)
 
                     // Transition to next view
                     transition.to("greeting");

@@ -3440,7 +3440,7 @@ const Input = (_ref)=>{
     }))), hasError && /*#__PURE__*/ _react.default.createElement("div", {
         className: "input__errors"
     }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
-            className: "input__error",
+            className: "input__error animate-item",
             key: i
         }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
             icon: "error",
@@ -3522,6 +3522,7 @@ class FacebookAuth {
     }
     async getUserData() {
         const user = {
+            preferredLocale: window.locale
         };
         await Promise.all([
             new Promise((resolve)=>{
@@ -3582,7 +3583,8 @@ class GoogleAuth {
         if (!this.allowCallback || !this.auth.isSignedIn.get()) return;
         const token = this.auth.currentUser.get().getAuthResponse().id_token; // Request JWT from server
         this.callback(this.endpoint, {
-            token
+            token,
+            preferredLocale: window.locale
         }); // Sign googleuser back out to rely on JWT
         this.auth.signOut();
     }
@@ -3968,7 +3970,8 @@ const Registration = (_ref)=>{
                 password: state.password,
                 email: state.email,
                 photo: state.profilePhoto,
-                referredBy: referral === null || referral === void 0 ? void 0 : referral.code
+                referredBy: referral === null || referral === void 0 ? void 0 : referral.code,
+                preferredLocale: window.locale
             }); // Wait For Timer To Expire
             await timer.hold(); // Update Global State
             update('user')(user); // Transition To Greeting
@@ -4234,7 +4237,10 @@ const RequestReset = (_ref)=>{
             // Set Local State
             setIsFetching(true); // Create Timer
             const timer = $.timer(1000).start(); // Request Reset Code From API
-            // Wait For Timer
+            const res = await _axios.default.post('auth/request-reset-token', {
+                email: state.email
+            });
+            console.log(res); // Wait For Timer
             await timer.hold(); // Transition To Next Screen
             transition.to("resetCode");
         }
@@ -4331,12 +4337,22 @@ function _extends() {
 const ResetCode = (_ref)=>{
     let { copy , transition , update , state , validator , referral  } = _ref;
     // Create Local State
-    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
-    const mainRef = _react.useRef(); // Check Email 
-    const emailErrors = validator.checkEmail(state.email); // Enable Typewriter Effect
+    const [isFetching, setIsFetching] = _react.useState(false);
+    const [enableResend, setEnableResend] = _react.useState(true);
+    const [codeErrors, setCodeErrors] = _react.useState([]); // Create Refs
+    const mainRef = _react.useRef(); // Enable Typewriter Effect
     _react.useEffect(()=>{
         transition.set(mainRef.current).in();
-    }, []); // Return Component
+    }, []); // Disable Resend Button
+    _react.useEffect(()=>{
+        if (enableResend) return;
+        const timeout = setTimeout(()=>setEnableResend(true)
+        , 25000);
+        return ()=>clearTimeout(timeout)
+        ;
+    }, [
+        enableResend
+    ]); // Return Component
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__container",
         ref: mainRef
@@ -4349,11 +4365,23 @@ const ResetCode = (_ref)=>{
         title: copy.title,
         text: copy.copy.replace("{email}", state.email),
         onSubmit: async ()=>{
+            var _res$data;
             // Update State
             setIsFetching(true); // Start Timer
             const timer = $.timer(1000).start(); // Validate API Errors
-            // Await Timer
-            await timer.hold(); // Transition To Next Page
+            const res = await _axios.default.post('/auth/validate-reset-code', {
+                email: state.email,
+                code: state.code
+            }); // Await Timer
+            await timer.hold(); // Apply Errors
+            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.status) || res.data.status === "fail") {
+                setCodeErrors([
+                    copy.invalid
+                ]);
+                setIsFetching(false);
+                return;
+            } // Update State
+            update("token")(res.data.token); // Transition To Next Page
             transition.to("reset");
         }
     }, /*#__PURE__*/ _react.default.createElement("div", {
@@ -4365,20 +4393,27 @@ const ResetCode = (_ref)=>{
         placeholder: copy.inputs.code.placeholder,
         value: state.code,
         onChange: update('code'),
-        errors: emailErrors
+        errors: codeErrors
     }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
         text: copy.button,
         type: "submit",
-        disabled: emailErrors.length,
+        disabled: state.code.length < 6,
         showLoader: isFetching
-    }), /*#__PURE__*/ _react.default.createElement("p", {
+    }), enableResend ? /*#__PURE__*/ _react.default.createElement("p", {
         className: "animate-item"
     }, copy.resend[0] + " ", /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
         text: copy.resend[1],
-        onClick: ()=>transition.to("requestReset")
-        ,
+        onClick: ()=>{
+            if (!enableResend) return;
+            _axios.default.post('auth/request-reset-token', {
+                email: state.email
+            });
+            setEnableResend(false);
+        },
         animationClass: "no-animate"
-    }))))));
+    })) : /*#__PURE__*/ _react.default.createElement("p", {
+        className: "animate-item"
+    }, copy.sent)))));
 };
 _c = ResetCode;
 var _default = ResetCode;
@@ -4453,13 +4488,20 @@ function _extends() {
     return _extends.apply(this, arguments);
 }
 const RequestReset = (_ref)=>{
-    let { copy , transition , update , state , validator , referral  } = _ref;
+    var _validator$checkPassw;
+    let { copy , transition , update , state , validator , referral , authenticate  } = _ref;
     // Create Local State
-    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const [isFetching, setIsFetching] = _react.useState(false);
+    const [passwordErrors, setPasswordErrors] = _react.useState([]); // Create Refs
     const mainRef = _react.useRef(); // Check Email 
-    const errors = validator.checkPassword(state.password); // Enable Typewriter Effect
+    const errors = [
+        ...(_validator$checkPassw = validator.checkPassword(state.password)) !== null && _validator$checkPassw !== void 0 ? _validator$checkPassw : [],
+        ...passwordErrors
+    ]; // Enable Typewriter Effect
     _react.useEffect(()=>{
-        transition.set(mainRef.current).in();
+        // Set Transition Target
+        transition.set(mainRef.current).in(); // Clear Previous Passwords
+        update("password")("");
     }, []);
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__container",
@@ -4476,8 +4518,19 @@ const RequestReset = (_ref)=>{
             // Set Local State
             setIsFetching(true); // Start timer
             const timer = $.timer(1000).start(); // Validate Reset
-            // Hold For Timer
-            await timer.hold(); // Transition to next view
+            const user = await authenticate('/auth/reset-password', {
+                token: state.token,
+                password: state.password
+            }); // Hold For Timer
+            await timer.hold(); // Set Errors
+            if (!user) {
+                setPasswordErrors([
+                    copy.errors.fails.password
+                ]);
+                setIsFetching(false);
+                return;
+            } // Update State
+            update("user")(user); // Transition to next view
             transition.to("greeting");
         }
     }, /*#__PURE__*/ _react.default.createElement("div", {
@@ -5032,6 +5085,7 @@ const initialState = {
     profilePhoto: '',
     code: '',
     loginType: '',
+    token: '',
     user: {
     }
 }; // Create the reducer
@@ -5064,6 +5118,8 @@ const reducer = function reducer1() {
             return merge('user');
         case 'SET_LOGIN_TYPE':
             return merge('loginType');
+        case 'SET_TOKEN':
+            return merge('token');
         default:
             return state;
     }

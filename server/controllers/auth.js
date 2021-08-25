@@ -7,7 +7,7 @@ const capitalize = require('js-capitalize');
 
 const User = require('../models/user');
 const AppError = require('../utils/appError');
-const Email = require('../utils/Email');
+const sendEmail = require('../utils/sendEmail');
 const catchAsync = require('./../utils/catchAsync');
 const credits = require('./creditController');
 const send = require('../utils/sendResponse');
@@ -42,7 +42,7 @@ const sendToken = (user, status, req, res) => {
 const createAccount = async body => {
 
     const data = { ...body };
-    if (data.role )delete data.role;
+    if (data.role) delete data.role;
     data.referralCode = encodeURIComponent(`${data.name.replace(/\s+/g, '-').toLowerCase()}-${uniqid.time()}`);
 
     // Transform data
@@ -54,9 +54,17 @@ const createAccount = async body => {
     
     const user = await User.create(data);
 
-    // new Email(user).use('welcome', {
-    //     book_url: `http://localhost:3000/book-ride`
-    // }).send();
+    // Send Welcome Email
+    sendEmail({
+        to: user.email,
+        template: 'welcome',
+        locale: user.preferredLocale || 'en',
+        data: {
+            name: user.preferredName
+        }
+    });
+
+    console.log('email should have sent');
 
     return user;
 
@@ -117,7 +125,8 @@ exports.continueWithGoogle = catchAsync(async (req, res, next) => {
         photos: [payload.picture],
         photo: payload.picture,
         oAuth: ['google'],
-        googleID: payload.sub
+        googleID: payload.sub,
+        preferredLocale: req.body.preferredLocale
     };
 
     // Add Affiliate Link
@@ -156,7 +165,8 @@ exports.continueWithFacebook = catchAsync(async (req, res, next) => {
         photos: [req.body.photo],
         photo: req.body.photo,
         oAuth: ['facebook'],
-        facebookID: req.body.facebookID
+        facebookID: req.body.facebookID,
+        preferredLocale: req.body.preferredLocale
     };
 
     if (req.body.referredBy) data.referredBy = req.body.referredBy;
@@ -232,75 +242,103 @@ exports.logout = (req, res) => {
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {
 
-    console.log('REQUEST RECIEVED');
-
+    // Get Current User
     const user = await User.findOne({ email: req.body.email });
 
+    // Return Error If User Does Not Exist
     if (!user) return send(res, {
         status: 'fail',
         message: 'There is no account associated with this email address.'
     });
 
-    const token = user.createPasswordResetToken();
+    // Create Reset Code
+    const token = user.createPasswordResetCode();
     await user.save({ validateBeforeSave: false });
 
-    const resetURL = `${req.protocol}://${req.get('host')}/reset-password?token=${token}`;
+    // Send Email To User
+    sendEmail({
+        to: user.email,
+        template: 'reset',
+        locale: user.preferredLocale || 'en',
+        data: {
+            name: user.name,
+            code: token
+        }
+    })
 
-    try {
-
-        new Email(user).use('password-reset', {
-            reset_url: resetURL
-        }).send();
-
-        return send(res, {
-            status: 'success',
-            url: resetURL
-        });
-
-    }
-
-    catch (err) {
-
-        console.log(err);
-
-        user.resetToken = undefined;
-        user.tokenExpiration = undefined;
-        await user.save({ validateBeforeSave: flase });
-
-        return send(res, {
-            status: 'fail',
-            message: 'There was a problem sending your passsord reset email. Please try again later.'
-        });
-
-    }
+    // Send Reset Code
+    send(res, {
+        status: 'success',
+        token
+    });
 
 });
 
 
 exports.resetPassword = catchAsync(async (req, res, next) => {
 
+    // Destructure Params
+    const { password, token } = req.body;
 
-    console.log('REQUEST RECIEVED');
+    // Decrtypt Token
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
 
-    const hashedToken = crypto.createHash('sha256').update(req.body.token).digest('hex');
-
+    // Find User
     const user = await User.findOne({
         resetToken: hashedToken,
         tokenExpiration: { $gt: Date.now() }
     });
 
+    // Return Error
     if (!user) send(res, {
         status: 'fail',
         message: 'The token is invalid or has expired. Please Request a new token.'
     });
 
-    user.password = req.body.password;
+    // Unset Token
+    user.password = password;
     user.resetToken = undefined;
     user.tokenExpiration = undefined;
 
+    // Save User
     await user.save();
 
+    // Send new JWT
     sendToken(user, 200, req, res);
+
+});
+
+
+exports.validateResetCode = catchAsync(async (req, res, next) => {
+
+    // Destructure Params
+    const { email, code } = req.body;
+
+    // Find User
+    const user = await User.findOne({
+        email,
+        resetToken: code.toLowerCase(),
+        tokenExpiration: { $gt: Date.now() }
+    });
+
+    // Return Error
+    if (!user) return send(res, {
+        status: 'fail',
+    });
+
+    // Reset Token Properties
+    user.resetToken = undefined;
+    user.tokenExpiration = undefined;
+
+    // Generate New Token For Browser
+    const token = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    // Send Token
+    return send(res, {
+        status: 'success',
+        token
+    });
 
 });
 

@@ -47,6 +47,11 @@ const RequestReset = ({ copy, transition, update, state, validator, referral }) 
                     const timer = $.timer(1000).start();
 
                     // Request Reset Code From API
+                    const res = await axios.post('auth/request-reset-token', {
+                        email: state.email
+                    });
+
+                    console.log(res);
 
                     // Wait For Timer
                     await timer.hold();
