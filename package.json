@@ -10,7 +10,8 @@
     "watch:static": "node staticGenerator.js",
     "watch": "cd client && npm start",
     "build": "cd client && npm run build",
-    "preinstall": "npx npm-force-resolutions"
+    "preinstall": "npx npm-force-resolutions",
+    "postinstall": "cd client && npm install"
   },
   "author": "Arjun Patel",
   "license": "ISC",
@@ -45,7 +46,7 @@
     "xss-clean": "^0.1.1"
   },
   "engines": {
-    "node": "^12"
+    "node": "^16"
   },
   "devDependencies": {
     "chokidar": "^3.5.2"
