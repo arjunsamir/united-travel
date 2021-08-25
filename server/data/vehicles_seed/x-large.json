@@ -1,0 +1,27 @@
+{
+    "make": "Ford",
+    "model": "Transit",
+    "year": "2016",
+    "seats": 14,
+    "bags": 12,
+    "mpg": 16,
+    "info_en": {
+        "name": "Extra Large",
+        "description": "For our super vehicle class, we use Ford Transit vans. These vans are our largest vehicles and are perfect for larger families or tour groups. It has plenty of space for both passengers and luggage, maxing out at 14 passengers.",
+        "features": ["Air Conditioning", "Leather Seats", "Quiet Ride"]
+    },
+    "info_es": {
+        "name": "Extra Grande",
+        "description": "EPara nuestra clase de súper vehículos, utilizamos camionetas Ford Transit. Estas camionetas son nuestros vehículos más grandes y son perfectas para familias numerosas o grupos de turistas. Tiene mucho espacio para pasajeros y equipaje, con un máximo de 14 pasajeros.",
+        "features": ["Aire acondicionado", "Asientos de piel", "Paseo silencioso"]
+    },
+    "thumbnail": "ford_transit_thumb.png",
+    "size": "xl",
+    "image": "ford_transit.png",
+    "rates": {
+        "fee": 7500,
+        "base": 400,
+        "tourist": 250,
+        "extended": 200
+    }
+}

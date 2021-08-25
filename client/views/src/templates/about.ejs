@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="about-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="about">
+
+        <!-- Hero Section -->
+        <section class="hero smol">
+
+            <!-- Background Video -->
+            <div class="hero__background">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/about-background.jpg" alt="Disney Castle, Universal Studios Sign, and downtown orlando">
+            </div>
+
+            <!-- Content -->
+            <div class="hero__content" data-scroll data-scroll-speed="-2">
+
+                <h1><%- hero.title %></h1>
+                <h4><%= hero.subtitle %></h4>
+                
+            </div>
+
+        </section>
+
+        <!-- Family Section -->
+        <section class="section">
+
+             <!-- Content Block -->
+             <div class="content xl">
+                <h2><%- family.title %></h2>
+                <p><%- family.copy %></p>
+            </div>
+
+        </section>
+
+        <!-- Professional & Friendly Service -->
+        <section class="friendly">
+            <div class="friendly__map">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/friendly.png" alt="Man wearing a hat and smiling in black and white">
+            </div>
+
+            <div class="friendly__content">
+                <div class="content">
+                    <h2 class="white"><%- professional.title %></h2>
+                    <p><%- professional.copy %></p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quality Section -->
+        <section class="section">
+
+            <!-- Content Block -->
+            <div class="content xl">
+               <h2><%- quality.title %></h2>
+               <% quality.copy.forEach(function(c) { %>
+                    <p><%- c %></p>
+                <% }) %>
+           </div>
+
+       </section>
+
+       <!-- Quote Section -->
+       <section class="quote">
+           <div class="quote__background">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/quote.jpg" alt="Car driving at night with blurred lights" data-scroll data-scroll-speed="1.5">
+           </div>
+
+           <div class="quote__content">
+               <h2 class="white"><%- quote.text %></h2>
+               <h3 class="white light">&dash; <%- quote.author %></h3>
+           </div>
+       </section>
+
+        <!-- Reviews  -->
+        <%- include('../components/reviews', { path, lang }) %>
+
+        <!-- Call To Action -->
+        <%- include('../components/cta', { path, lang, ...components.cta }) %>
+
+        <!-- Our Fleet -->
+        <%- include('../components/fleet', { path, lang, ...components.fleet }) %>
+
+        <!-- Contact Us -->
+        <%- include('../components/contact', { path, lang, ...components.contact }) %>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html

@@ -1,0 +1,37 @@
+.payment-method {
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+
+    cursor: pointer;
+
+    &__info {
+        h6, p {
+            color: var(--slate-dark);
+        }
+
+        h6 {
+            margin-bottom: 0.4rem;
+        }
+
+        div {
+            display: flex;
+            @include flexGap(1.2rem);
+            align-items: center;
+        }
+
+        svg.icon-xl {
+            height: 3.9rem;
+            width: 5.4rem;
+        }
+    }
+
+    &__expand {
+
+        color: var(--slate-dark);
+
+    }
+
+}

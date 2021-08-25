@@ -23,6 +23,25 @@ exports.deleteMe = catchAsync(async (req, res, next) => {
     
 });
 
+exports.getUserByCode = catchAsync(async (req, res, next) => {
+    const code = req.params.code;
+
+    const user = await User.findOne({ referralCode: code });
+
+    if (!user) send(res, {
+        user: false
+    });
+
+    else send(res, {
+        user: {
+            name: user.preferredName,
+            photo: user.photo,
+            code
+        }
+    });
+
+});
+
 
 exports.createOne = rest.createOne(User);
 exports.getOne = rest.getOne(User);

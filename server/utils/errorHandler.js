@@ -36,6 +36,7 @@ const developmentError = ( err, req, res ) => {
     if (req.originalUrl.startsWith('/api')) {
 
         console.error('ERROR 🤬', err.name);
+        console.error(err);
 
         res.status(err.statusCode).json({
             status: err.status,

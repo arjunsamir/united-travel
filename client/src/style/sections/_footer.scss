@@ -1,0 +1,135 @@
+.footer {
+
+    display: grid;
+    grid-template-columns: max-content 1fr;
+
+    background-color: var(--jet);
+
+    @include ipad {
+        grid-template-columns: 1fr;
+    }
+
+
+    &__brands {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+
+        @include ipad {
+            grid-row: 2 / 3;
+            flex-direction: row;
+        }
+
+        @include phone {
+            flex-direction: column;
+        }
+    }
+
+    &__brand {
+        flex-grow: 1;
+        @include flexCenter;
+        padding: 2.4rem var(--x-pad);
+        background-color: var(--black);
+
+        &, p {
+            color: var(--white);
+        }
+
+        svg {
+            width: 11.5rem;
+            height: 6.3rem;
+            margin-bottom: 3.6rem;
+
+            @include ipad {
+                width: 7.1rem;
+                height: 3.9rem;
+                margin-bottom: 1.6rem;
+            }
+        }
+
+        @include ipad {
+            padding: 4.8rem var(--x-pad);
+        }
+
+        @include phone {
+            padding: 3.6rem;
+        }
+
+    }
+
+    &__agency {
+        flex-grow: 1;
+        @include flexCenter;
+
+        background-color: var(--slate-light);
+        @include link {
+            color: var(--jet);
+        }
+
+        @include phone {
+            padding: 3.6rem;
+        }
+    }
+
+    &__main {
+        padding: var(--x-pad);
+
+        @include phone {
+            padding: var(--y-pad) var(--x-pad);
+        }
+    }
+
+    &__content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: 4.8rem;
+        margin-bottom: 4.8rem;
+
+        @include ipad {
+            grid-template-columns: 1fr max-content;
+        }
+
+        @include phone {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    &__contact {
+
+        display: grid;
+        grid-row-gap: 1.6rem;
+
+        h5, a {
+            line-height: 1;
+        }
+
+        hr {
+            width: 5.4rem;
+            height: 3px;
+
+            background-color: rgba(#fff, .5);
+            border-radius: 1rem;
+        }
+
+        a {
+            display: block;
+
+            @include link {
+                color: var(--placeholder);
+            }
+        }
+
+    }
+
+    &__links {
+        display: grid;
+        grid-gap: 1.6rem;
+
+        a {
+            @include link {
+                color: var(--white);
+            }
+        }
+    }
+
+}

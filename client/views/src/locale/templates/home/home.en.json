@@ -1,0 +1,46 @@
+{
+    "title": "United Travel LLC",
+    "copy": {
+        "hero": {
+            "title": "ride with ",
+            "words": "[``style``, ``comfort``, ``ease``]",
+            "subtitle": "Orlando-based black car services",
+            "cta": "Book Reservation"
+        },
+        "beyond": {
+            "title": "From point <span>A</span> to <span>Beyond.</span>",
+            "copy": "We provide high quality, safe and reliable transportation services throughout Central Florida. We also offer longer distance rides in and out of Orlando. Get to you next destination with ease, comfort, and peace of mind.",
+            "cta": "Book Now"
+        },
+        "airport": {
+            "title": "Airport Service",
+            "copy": "Need to be picked up or dropped off at the airport? We offer a completely seamless experience. We track the status of your flight so that we can be there early so that you aren’t waiting a minute for your driver to arrive. We’re always on time and always professional.",
+            "cta": "Book Reservation"
+        },
+        "cruise": {
+            "title": "Cruise Service",
+            "copy": "Going on a cruise and need to be dropped off at the cruise terminal? We’ve got you covered with a completely seamless experience. We're always professional and always on time.",
+            "cta": "Book Reservation"
+        },
+        "charter": {
+            "title": "Charter Service",
+            "copy": "Book a driver for the day. This is perfect for special events or a day out visiting Orlando’s world class attractions. We’ll take you anywhere that you need to go, and be right there waiting for you when you’re ready to head to your next destination. Book us for as long as you like with a minimum of three hours. If you would like to book charter service, please contact us for more information.",
+            "cta": "Contact Us"
+        },
+        "long": {
+            "title": "<span>Long distance rides?</span> No problem.",
+            "copy": "Do you to get from Orlando to Miami? That’s not a problem for us as we proudly offer long distance rides. Sit back and relax as we drive you across the state of Florida. Enjoy a comfortable and smooth highway ride with all the comfort you need to make the time fly by.",
+            "cta": "Book Now"
+        },
+        "safety": {
+            "children": {
+                "title": "Accommodating your children.",
+                "copy": "We want to ensure that your children are safe. We offer child car seats in multiple sizes in order to keep them safe. When you book a ride with us, you can request special accomodations and we will provide the car seats for your children."
+            },
+            "covid": {
+                "title": "Prioritizing your safety.",
+                "copy": "We prioritize your safety and comfort. We will go the extra mile to ensure that you have a first class experience and get to your destination in a timely manner. Our fleet of vehicles are cleaned and sanitized before and after each ride so you can have some extra peace of mind. Whether you’re in Florida for vacation, or for business, we are here to offer our class leading services."
+            }
+        }
+    }
+}

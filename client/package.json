@@ -1,0 +1,66 @@
+{
+  "name": "united-travel",
+  "version": "1.0.0",
+  "description": "Website and Application For United Travel LLC",
+  "scripts": {
+    "start": "parcel watch ./src/style/main.scss ./src/js/index.js --dist-dir ./public/",
+    "build": "parcel build ./src/style/main.scss ./src/js/index.js --dist-dir ./public/",
+    "preinstall": "npx npm-force-resolutions"
+  },
+  "author": "Arjun Patel",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/polyfill": "^7.12.1",
+    "@barba/core": "^2.9.7",
+    "@date-io/dayjs": "^1.3.13",
+    "@material-ui/core": "^4.11.4",
+    "@material-ui/lab": "^4.0.0-alpha.58",
+    "@material-ui/pickers": "^3.3.10",
+    "@material-ui/styles": "^4.11.4",
+    "@stripe/react-stripe-js": "^1.4.1",
+    "@stripe/stripe-js": "^1.15.1",
+    "@use-gesture/react": "^10.0.0-beta.22",
+    "animejs": "^3.2.1",
+    "autosuggest-highlight": "^3.1.1",
+    "axios": "^0.21.1",
+    "dayjs": "^1.10.6",
+    "locomotive-scroll": "^4.1.0",
+    "lodash": "^4.17.21",
+    "moment": "^2.29.1",
+    "photoswipe": "^4.1.3",
+    "react": "^17.0.1",
+    "react-dom": "^17.0.1",
+    "regenerator-runtime": "^0.13.7"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.13.8",
+    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-react": "^7.12.13",
+    "@parcel/transformer-sass": "^2.0.0-beta.3.1",
+    "autoprefixer": "^9.8.6",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
+    "cssnano": "^5.0.5",
+    "parcel": "^2.0.0-beta.3.1",
+    "postcss": "^8.3.0",
+    "posthtml-include": "^1.6.0",
+    "sass": "^1.32.8"
+  },
+  "engines": {
+    "node": "^12"
+  },
+  "browserslist": [
+    "since 2017-06"
+  ],
+  "resolutions": {
+    "browserslist": "4.14.2",
+    "caniuse-lite": "1.0.30001129"
+  },
+  "@parcel/bundler-default": {
+    "minBundles": 1,
+    "minBundleSize": 3000,
+    "maxParallelRequests": 20
+  }
+}

@@ -1,18 +1,12 @@
-// Import Runtime & GSAP
-import 'regenerator-runtime/runtime';
-import gsap from 'gsap';
+// Import Modules
+import anime from 'animejs';
+import barba from '@barba/core';
 
 
 // Import Modules
-import { dream } from './vendor/Dreams';
-import barba from '@barba/core';
-import Page from './Page';
-import Preloader from './components/general/Preloader';
-
-
-// Define Global Variables
-window.$ = dream;
-window.gsapDefaults = { defaults: { ease: 'power1.inOut' } };
+import './main/helpers/Dreams';
+import Page from './main/Page';
+import Preloader from './main/Preloader';
 
 
 // Define Module Global Variables
@@ -22,7 +16,7 @@ let slide, page;
 // Insert Slide In Page
 const insertSlide = () => {
     // Create Slide Element
-    slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use xlink:href="img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>');
+    slide = $.html('<div class="page-transition-slide"><div class="preloader__content"><svg><use href="/img/icons.svg#logo"></use></svg><span class="preloader__spinner"></span></div></div>');
 
     // Append Slide Element
     page.elements.body.append(slide);
@@ -42,10 +36,9 @@ const startPage = data => {
     // Start Page Events
     page.start();
 
-
     // Get Video Backgrounds
     const videos = $(data ? data.next.container : 'main').children('.bg-video');
-    
+
 
     // Return if no videos on the page
     if (!videos.length) return;
@@ -59,7 +52,6 @@ const startPage = data => {
     videos.addClass('ready');
 
 }
-
 
 
 // Start Load Page
@@ -82,28 +74,41 @@ window.addEventListener('DOMContentLoaded', () => {
             name: 'default-transition',
 
             // Animate Slide Into Place
-            leave() {
-                return new Promise(resolve => {               
-                    const tl = gsap.timeline(gsapDefaults);
+            async leave() {
 
-                    tl.to(slide.e(), { y: 0, duration: .5 });
-                    tl.eventCallback('onComplete', resolve);
+                const tl = anime.timeline({
+                    easing: 'easeOutQuad',
+                    autoplay: false
+                }).add({
+                    targets: slide.e(),
+                    translateY: ['100vh', '0vh'],
+                    duration: 500
                 })
+
+                await page.navbar.closeMenu();
+
+                tl.play();
+
+                await tl.finished;
             },
 
             // Animate Slide Away to reveal new page
             enter() {
-                return new Promise(resolve => {
 
-                    const tl = gsap.timeline(gsapDefaults);
-
-                    tl.to(slide.children('.preloader__content').e(), { duration: .5, opacity: 0 });
-
-                    tl.to(slide.e(), { duration: .5, y: '-100vh' });
-
-                    tl.eventCallback('onComplete', resolve);
-
+                const tl = anime.timeline({
+                    easing: 'easeOutQuad'
+                }).add({
+                    targets: slide.children('.preloader__content').e(),
+                    opacity: 0,
+                    duration: 500
+                })
+                .add({
+                    targets: slide.e(),
+                    translateY: '-100vh',
+                    duration: 500
                 });
+
+                return tl.finished;
             }
             
         }],
@@ -113,24 +118,15 @@ window.addEventListener('DOMContentLoaded', () => {
             // Home Namespace
             {
                 namespace: 'home',
-                beforeEnter({ next }) {
-                    page.addComponent('Typewriter', 'ContactForm',
-                        {
-                            name: 'DraggableSlider', 
-                            data: {
-                                selector: '.reviews__carousel',
-                                activeClass: 'dragging'
-                            }
-                        }
-                    );
-                }
-            },
-
-            // Services Namespace
-            {
-                namespace: 'services',
                 beforeEnter() {
-                    page.addComponent('ContactForm');
+                    page.addComponent('Typewriter', { name: 'ReviewsApp', data: {
+                        page,
+                        selector: '#reviews-react-app'
+                    }});
+
+                    page.navbar.applyView('full');
+
+                    return page.load();
                 }
             },
 
@@ -138,7 +134,14 @@ window.addEventListener('DOMContentLoaded', () => {
             {
                 namespace: 'about',
                 beforeEnter() {
-                    page.addComponent('ContactForm');
+                    page.addComponent({ name: 'ReviewsApp', data: {
+                        page,
+                        selector: '#reviews-react-app'
+                    }});
+                    
+                    page.navbar.applyView('full');
+
+                    return page.load();
                 }
             },
 
@@ -146,7 +149,14 @@ window.addEventListener('DOMContentLoaded', () => {
             {
                 namespace: 'fleet',
                 beforeEnter() {
-                    page.addComponent('ContactForm');
+                    page.addComponent({ name: 'FleetApp', data: {
+                        page,
+                        selector: '#fleet-react-app'
+                    }});
+
+                    page.navbar.applyView('min');
+
+                    return page.load();
                 }
             },
 
@@ -155,11 +165,14 @@ window.addEventListener('DOMContentLoaded', () => {
                 namespace: 'login',
                 beforeEnter() {
 
-                    // Apply Navbar Theme Changes
-                    page.navbar.applyTheme([{ brand: 'jet' }, { media: 'mobile', brand: 'white' }]).forceLayout('tablet');
+                    page.addComponent({ name: 'LoginApp', data: {
+                        page,
+                        selector: '#login-react-app'
+                    }});
+                    page.options.smooth = false;
+                    page.navbar.applyView('min');
 
-                    // Add Auth Form Component
-                    page.addComponent({ name: 'AuthForm', data: { page, selector: '#login-form' } });
+                    return page.load();
 
                 }
             },
@@ -169,12 +182,32 @@ window.addEventListener('DOMContentLoaded', () => {
                 namespace: 'booking',
                 beforeEnter() {
 
-                    // Apply Navbar Theme Changes
-                    page.navbar.applyTheme([{ brand: 'jet' }]).forceLayout('mobile');
-
                     // Add Booking App Component
-                    page.addComponent({ name: 'BookingApp', data: page });
+                    page.addComponent({ name: 'BookingApp', data: {
+                        page,
+                        selector: '#booking-react-app'
+                    }});
 
+                    page.options.smooth = false;
+                    page.navbar.applyView('min');
+
+                    return page.load();
+
+                }
+            },
+
+            // Account Namespace
+            {
+                namespace: 'account',
+                beforeEnter() {
+                    page.addComponent({ name: 'AccountApp', data: {
+                        page,
+                        selector: '#account-react-app'
+                    }});
+
+                    page.navbar.applyView('min');
+
+                    return page.load();
                 }
             }
         ],
@@ -183,7 +216,10 @@ window.addEventListener('DOMContentLoaded', () => {
         preventRunning: true,
 
         // Prevent Defalut Link Actions
-        prevent: ({ el }) => el.classList && el.classList.contains('prevent')
+        prevent: ({ el }) => el.classList && el.classList.contains('prevent'),
+
+        // Enable Debug Mode
+        debug: true
 
     });
 

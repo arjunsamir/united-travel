@@ -1,0 +1,27 @@
+{
+    "title": "About Us - United Travel LLC",
+    "hero": {
+        "title": "Our heart is in <span>Orlando</span>",
+        "subtitle": "The city beautiful"
+    },
+    "family": {
+        "title": "<span>Family</span> owned &amp; operated.",
+        "copy": "We are a family owned & operated business centered in Orlando, Florida. This company was founded in 2013 by Beatriz Murillo and Juan Lopez, with the core goal of providing first class black car services around the Orlando and Tampa Bay areas. We have since then grew and now offer long distance rides throughout the state of Florida."
+    },
+    "professional": {
+        "title": "Always <span>professional.</span><br>Always <span>friendly.</span>",
+        "copy": "We are always professional and always courteous. When travelling with us, you will never encounter a rude driver or recive subpar service. We take pride in what we do and love meeting new people. The first thing you will see when our driver arrives is a smile on their face, because it truly is our pleasure to serve you."
+    },
+    "quality": {
+        "title": "We’re driven by <span>quality</span>",
+        "copy": [
+            "We believe in going the extra mile for you. When you ride with us, you can expect only the highest caliber of service. We make sure that we arrive to your pick up point early and get you to your destination in a timely manner so you never have to wait a minute.",
+            "Quality means driving safely so that you have the ultimate peace of mind and can relax knowing that you are in good hands. We also have child seats to accommodate your young ones and keep them safe.",
+            "We also take the time to clean our vehicles both before and after every ride so that you can travel in a clean and sanitary enviornment. This is more important than ever due to COVID-19, so you can relax knowing that we are doing our part."
+        ]
+    },
+    "quote": {
+        "text": "Quality means doing it right when no one is looking.",
+        "author": "Henry Ford"
+    }
+}

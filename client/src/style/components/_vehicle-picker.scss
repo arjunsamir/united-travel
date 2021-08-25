@@ -1,0 +1,168 @@
+// For Reference
+// --card-gap: 3.2rem;
+// --card-nav-height: 7.6rem;
+// --card-width: 44rem;
+// --card-body-padding-x: 3.6rem;
+// --card-body-padding-y: 4.8rem;
+
+
+.vehicle-picker {
+    position: relative;
+    flex-grow: 10;
+
+    display: flex;
+    flex-direction: column;
+
+    min-height: 60rem;
+
+    &__slider {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        left: 0;
+
+        height: 100%;
+        padding-bottom: var(--card-body-padding-y);
+        display: flex;
+        @include flexGap(3.6rem);
+
+        &-container {
+            flex-grow: 10;
+            position: relative;
+            touch-action: none;
+        }
+    }
+
+    &__dots {
+        display: flex;
+        @include flexGap(1.6rem);
+        margin-bottom: 3.6rem;
+        user-select: none;
+    }
+
+    &__dot {
+        height: 5.6rem;
+        width: 5.6rem;
+        background-color: var(--slate-light);
+        border-radius: 50%;
+        @include flexCenter;
+
+        cursor: pointer;
+
+        h6 {
+            text-transform: uppercase;
+            font-size: $p-small;
+            font-weight: 700;
+        }
+
+        &.selected {
+            background-color: var(--black);
+            h6 {
+                color: var(--white);
+            }
+        }
+    }
+}
+
+.vehicle-card {
+
+    width: calc(var(--card-width) - var(--card-body-padding-x) * 2);
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+
+    background-color: var(--white);
+    border-radius: 1.2rem;
+    box-shadow: $soft-shadow;
+    overflow: hidden;
+
+    padding: 3.6rem 0;
+    user-select: none;
+    transition: background-color $dt;
+
+    &.selected {
+        background-color: var(--black);
+    }
+
+    &__header {
+        padding: 0 3.2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        h5, h6 {
+            transition: color $dt;
+        }
+
+        h6 {
+            color: var(--text);
+        }
+    }
+
+    &.selected &__header {
+        h5 {
+            color: var(--white);
+        }
+
+        h6 {
+            color: var(--slate);
+        }
+    }
+
+    &__img {
+        width: 100%;
+        position: relative;
+
+        img {
+            position: relative;
+            width: 90%;
+            left: 20%;
+        }
+    }
+
+    &__key-specs {
+        padding: 0 3.2rem;
+        display: flex;
+        @include flexGap(3.6rem);
+    }
+
+    &__key-spec {
+
+        --ks-color: var(--jet);
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        @include flexGap(0.8rem, "column");
+
+        & > span {
+            display: block;
+            border: 2px solid var(--ks-color);
+            border-radius: 50%;
+            padding: 1.2rem;
+            color: var(--ks-color);
+            transition: color $dt;
+        }
+
+        svg {
+            height: 1.6rem;
+            width: 1.6rem;
+            margin: 0;
+        }
+
+        p {
+            font-size: $p-small;
+            font-weight: 700;
+            color: var(--ks-color);
+            transition: color $dt;
+        }
+    }
+
+    &.selected &__key-spec {
+        --ks-color: var(--white);
+    }
+
+}

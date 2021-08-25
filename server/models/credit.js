@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 
 const schema = new mongoose.Schema({
-    expirationDate: {
+    expiration: {
         type: Date,
         required: [true, 'Credits must have an expiration date'],
         default: Date.now() + (1000 * 60 * 60 * 24 * 366)
@@ -11,20 +11,16 @@ const schema = new mongoose.Schema({
         type: Number,
         required: [true, 'A credit value is required']
     },
-    description: {
-        type: String,
-        required: [true, 'A credit must have a description']
-    },
     status: {
         type: String,
         enum: ['pending', 'valid', 'expired', 'redeemed'],
         default: 'valid'
     },
-    creditRef: {
+    sibling: {
         type: mongoose.Schema.ObjectId,
         ref: 'Credit'
     },
-    userRef: {
+    user: {
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     }

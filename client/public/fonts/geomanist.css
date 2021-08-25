@@ -1,0 +1,23 @@
+@font-face {
+    font-family: 'Geomanist';
+    src: url('./geomanist/light/geomanist-light-webfont.woff2') format('woff2'),
+        url('./geomanist/light/geomanist-light-webfont.woff') format('woff');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geomanist';
+    src: url('./geomanist/regular/geomanist-regular-webfont.woff2') format('woff2'),
+        url('./geomanist/regular/geomanist-regular-webfont.woff') format('woff');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Geomanist';
+    src: url('./geomanist/book/geomanist-book-webfont.woff2') format('woff2'),
+        url('./geomanist/book/geomanist-book-webfont.woff') format('woff');
+    font-weight: 700;
+    font-style: normal;
+}

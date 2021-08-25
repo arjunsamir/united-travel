@@ -7,10 +7,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const devcert = require('devcert');
 
-// Import Express
-const app = require('./app');
-
-
 
 
 // 2. IMPORT ENVIORNMENT & START SERVER
@@ -20,42 +16,20 @@ const app = require('./app');
 dotenv.config({ path: './config.env' });
 
 
-const port = process.env.PORT || 3000;
+// Import Express
+const app = require('./app');
 
-let server;
+
+// Determine App Port
+const port = process.env.PORT || 3000;
 
 
 // Initialize Server
-const initDev = async () => {
+const server = app.listen( port, () => {
 
-    console.log('Starting development server');
-    
-    const ssl = await devcert.certificateFor('my-app.test');
-    server = https.createServer(ssl, app).listen(port, () => {
-        console.log(`✊🏾App running on port ${port}`);
-    });
+    console.log(`✊🏾App running on port ${port}`);
 
-    
-
-}
-
-
-const initProd = () => {
-
-    console.log('starting production server');
-
-    server = app.listen( port, () => {
-
-        console.log(`App running on port ${port}...`);
-    
-    });
-
-}
-
-
-if (process.env.NODE_ENV === 'production') initProd();
-else initDev();
-
+});
 
 
 // 3. INITIALIZE DATABASE CONNECTION

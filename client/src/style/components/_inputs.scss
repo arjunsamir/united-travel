@@ -1,0 +1,349 @@
+.input {
+
+    &__input {
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+
+        padding: 1.6rem 2.4rem;
+        background-color: var(--slate-light);
+        border-radius: 0.8rem;
+        border: 3px solid var(--slate-light);
+
+        transition: border $dt;
+
+        &:focus-within, &.focused {
+            border-color: var(--slate);
+        }
+
+        &.has-error {
+            border-color: var(--error);
+        }
+
+        &.file {
+            cursor: pointer;
+
+            label {
+                pointer-events: none;
+                margin-bottom: 1.2rem;
+            }
+
+            p, label {
+                line-height: 1;
+            }
+
+            p {
+                color: var(--placeholder);
+
+                &.success {
+                    color: var(--success);
+                }
+            }
+
+            svg {
+                color: var(--white);
+            }
+        }
+
+    }
+
+    &__main {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        @include flexGap(2.4rem);
+
+        hr {
+            height: 4.8rem;
+            width: 3px;
+            border-radius: 1rem;
+            background-color: var(--placeholder);
+        }
+
+        svg {
+            color: var(--slate-dark);
+        }
+    }
+
+    &__main, &__stripe {
+
+        label {
+            font-size: $p-small;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 4px;
+            color: var(--slate);
+            user-select: none;
+        }
+
+    }
+
+    &__toggle {
+        align-self: stretch;
+        display: flex;
+        align-items: center;
+        padding-left: 1.2rem;
+        cursor: pointer;
+
+        transition: opacity $dt;
+
+        &:hover {
+            opacity: 0.75;
+        }
+    }
+
+    &__field {
+        flex-grow: 1;
+
+        &.clickable {
+            cursor: pointer;
+        }
+    }
+
+    &__stripe {
+        flex-grow: 10;
+
+        &-container {
+            padding: 0.8rem 0;
+        }
+    }
+
+    &__errors {
+        padding-top: 1.2rem;
+    }
+
+    &__error, &__warning {
+        display: flex;
+        align-items: center;
+
+        user-select: none;
+
+        p {
+            line-height: 1.4;
+        }
+
+        svg {
+            margin-right: 1.2rem;
+        }
+    }
+
+    &__error svg {
+        color: var(--error);
+    }
+
+    &__warning svg {
+        color: var(--primary);
+    }
+
+    &__date-time-p {
+        user-select: none;
+        color: var(--jet);
+
+        &.placeholder {
+            color: var(--placeholder);
+        }
+    }
+
+    &__text-input {
+        display: block;
+        font-size: $p;
+        line-height: 1.7;
+        margin: 0;
+        padding: 0;
+        border: none;
+        background: none;
+        color: var(--jet);
+        width: 100%;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    &__icon {
+        height: 4.8rem;
+        width: 4.8rem;
+
+        background-color: var(--slate-dark);
+        border-radius: 50%;
+        @include flexCenter;
+    }
+
+    &__photo {
+        height: 4.8rem;
+        width: 4.8rem;
+        border-radius: 50%;
+        overflow: hidden;
+
+        img {
+            @include cover;
+        }
+    }
+
+    &__file {
+        display: none;
+        pointer-events: none;
+    }
+
+    &__loader {
+        
+        @include overlay;
+        background-color: var(--slate-light);
+        @include flexCenter;
+
+        p {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            @include flexGap(1.2rem);
+        }
+
+        span {
+            display: block;
+            height: 1.2rem;
+            width: 1.2rem;
+            border-radius: 50%;
+            background-color: var(--jet);
+            animation: dotFlashing 0.8s infinite alternate;
+
+            &:nth-child(2) {
+                animation-delay: 0.2s;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 0.4s;
+            }
+        }
+
+    }
+
+}
+
+.quantity-selector {
+    
+
+    &__main {
+        background-color: var(--slate-light);
+        border-radius: 0.8rem;
+        padding: 1.6rem 2.4rem;
+    
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__info {
+        user-select: none;
+        label {
+            font-size: $p;
+            font-weight: 700;
+            color: var(--slate-dark);
+        }
+    }
+
+    &__field {
+        display: flex;
+        align-items: center;
+
+        input {
+            display: block;
+            background: none;
+            border: none;
+            padding: 0;
+            font-size: $h5;
+            font-weight: 300;
+            width: 4.2rem;
+            text-align: center;
+            color: var(--jet);
+        }
+
+        div {
+            cursor: pointer;
+
+            &.disabled {
+                opacity: .25;
+                pointer-events: none;
+            }
+        }
+
+    }
+}
+
+.textarea {
+
+    background-color: var(--slate-light);
+    border-radius: 0.8rem;
+    padding: 1.6rem 2.4rem;
+    border: 3px solid var(--slate-light);
+    transition: border $dt;
+
+    &:focus-within {
+        border-color: var(--slate);
+    }
+
+    label {
+        font-size: $p-small;
+        font-weight: 700;
+        line-height: 1.2;
+        margin-bottom: 4px;
+        color: var(--slate);
+        user-select: none;
+    } 
+    
+    textarea {
+        display: block;
+        background: none;
+        border: none;
+        resize: none;
+        width: 100%;
+        height: 16rem;
+        font-size: $p;
+        line-height: 1.7;
+        color: var(--jet);
+    }
+
+}
+
+
+.checkbox {
+
+    width: 100%;
+    display: flex;
+    align-items: center;
+    user-select: none;
+    cursor: pointer;
+
+    input {
+        display: none;
+    }
+
+    label {
+        color: var(--slate-dark);
+        display: flex;
+        flex-grow: 10;
+        align-self: stretch;
+        align-items: center;
+        cursor: pointer
+    }
+
+    span {
+        @include flexCenter;
+        height: 2.4rem;
+        width: 2.4rem;
+        margin-right: 0.8rem;
+        border-radius: 0.4rem;
+        background-color: var(--slate-light);
+        color: var(--jet);
+        transition: background-color $dt;
+    }
+
+    input:checked + label {
+        span {
+            background-color: var(--black);
+            color: var(--white);
+        }
+    }
+
+}

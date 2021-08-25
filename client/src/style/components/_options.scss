@@ -1,0 +1,42 @@
+.options {
+    display: grid;
+    grid-gap: 1.6rem;
+    user-select: none;
+}
+
+.option {
+    flex-grow: 10;
+    display: flex;
+
+    &:hover label {
+        background-color: darken($slate-light, 5%);
+    }
+
+    label {
+        @include flexCenter;
+        @include flexGap(1.6rem, "column");
+        width: 100%;
+        background-color: var(--slate-light);
+        padding: 2.4rem;
+        border-radius: 1.6rem;
+        cursor: pointer;
+
+        transition: background-color $dt;
+
+        p, svg {
+            transition: color $dt;
+        }
+    }
+
+    &.selected label {
+        background-color: var(--black);
+
+        p, svg {
+            color: var(--white);
+        }
+    }
+    
+    &.selected:hover label {
+        background-color: var(--jet);
+    }
+}

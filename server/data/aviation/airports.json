@@ -1,0 +1,38 @@
+[
+    {
+        "code":"MCO",
+        "name":"Orlando International Airport",
+        "placeId":"ChIJ85K0xidj54gRbeERlDa5Sq0",
+        "address": "1 Jeff Fuqua Blvd, Orlando, FL 32827"
+    },
+    {
+        "code":"SFB",
+        "name":"Orlando Sanford International Airport",
+        "placeId":"ChIJ5d7ffVJr54gRRbL4HmpQb5M",
+        "address": "1200 Red Cleveland Blvd, Sanford, FL 32773"
+    },
+    {
+        "code":"TPA",
+        "name":"Tampa International Airport",
+        "placeId":"ChIJQ0Sek0bCwogRCdUBxgiEW3o",
+        "address": "4100 George J Bean Pkwy, Tampa, FL 33607"
+    },
+    {
+        "code":"MIA",
+        "name":"Miami International Airport",
+        "placeId":"ChIJwUq5Tk232YgR4fiiy-Dan5g",
+        "address": "2100 NW 42nd Ave, Miami, FL 33126"
+    },
+    {
+        "code":"JAX",
+        "name":"Jacksonville International Airport",
+        "placeId":"ChIJE0IKb3-v5YgRZnt9T4YY-Bk",
+        "address": "2400 Yankee Clipper Dr, Jacksonville, FL 32218"
+    },
+    {
+        "code":"DAB",
+        "name":"Daytona Beach International Airport",
+        "placeId":"ChIJb6NBzDvZ5ogRjFlbUUVOkLo",
+        "address": "700 Catalina Dr, Daytona Beach, FL 32114"
+    }
+]

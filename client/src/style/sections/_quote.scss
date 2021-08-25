@@ -1,0 +1,24 @@
+.quote {
+
+    padding: var(--y-pad) var(--x-pad);
+
+    position: relative;
+
+    @include flexCenter;
+
+    &__background {
+        @include overlay;
+
+        img {
+            @include cover;
+        }
+    }
+
+    &__content {
+        position: relative;
+        @include flexCenter;
+        max-width: calc(var(--max-content-width) * 1.5);
+        text-align: center;
+        @include flexGap(2.4rem, "column");
+    }
+}

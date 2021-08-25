@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>United Travel LLC</title>
+
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/style/main.css">
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="/fonts/silka.css">
+
+</head>
+
+<body class="home-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use href="/img/icons.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
+
+    <!-- Navbar -->
+    <!--NBCTN-->
+<div class="navbar full" id="navbar">
+
+    <div class="nb-esc no-esc"></div>
+
+    <!-- Desktop Navbar -->
+    <div class="navbar__full">
+
+        <div class="navbar__background"></div>
+
+        <a class="navbar__brand" href="/es/">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <span>United Travel</span>
+        </a>
+
+        <nav class="navbar__nav" aria-label="desktop">
+            <ul class="navbar__nav-list">
+    <li class="animate-item"><a href="/es/" data-nav-namespace="home">Casa</a></li>
+    <li class="animate-item"><a href="/es/about" data-nav-namespace="about">Acerca de</a></li>
+    <li class="animate-item"><a href="/es/fleet" data-nav-namespace="fleet">Flota</a></li>
+    <li class="animate-item"><a href="/es/contact" data-nav-namespace="contact">Contacto</a></li>
+    
+</ul>
+        </nav>
+
+        <div class="navbar__actions">
+            <!-- Language -->
+            <div class="navbar__lang">
+                <div class="navbar__lang-icon nb-lng">
+                    <svg><use href="/img/icons.svg#language"></use></svg>
+                </div>
+                
+                <div class="navbar__lang-menu hidden">
+                    <ul>
+                        <li data-nav-lang="en" class=""><p class="small">English</p></li>
+                        <li data-nav-lang="es" class="active"><p class="small">Español</p></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr>
+
+            <!-- Profile Logged In -->
+            <% if (user._id) { %>
+                <div class="navbar__profile">
+
+                    <!-- Logged In Icon -->
+                    <div class="navbar__profile-pic nb-clt">
+                        <img src="<%- user.photo %>" alt="Profile Photo">
+                    </div>
+
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><p class="small">Hola <%- user.preferredName %></p></li>
+                            <hr>
+                            <li><a href="/es/account"><span>Mi cuenta</span></a></li>
+                            <li><a class="app-logout" href="#" id="nb-logout"><span>Cerrar sesión</span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            <% } else { %>
+                <div class="navbar__profile">
+
+                    <!-- Logged Out Icon -->
+                    <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                    
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><a href="/es/login"><span>Crear una cuenta</span></a></li>
+                            <li><a href="/es/login"><span>Acceso</span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            <% } %>
+
+            <!-- Call To Action -->
+            <a href="/es/book" class="navbar__cta">Reservar Ahora</a>
+        </div>
+
+    </div>
+
+    <!-- Hamburger Menu Only -->
+    <div class="navbar__min">
+        <div class="navbar__menu-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+</div>
+
+<div class="nav-menu hidden" id="nav-menu">
+
+    <!-- Menu Background -->
+    <div class="nav-menu__bg"></div>
+
+    <!-- Desktop Menu Layout -->
+    <div class="nav-menu__desktop">
+
+        <div class="nav-menu__visual">
+
+            <!-- Absolutely Positioned Nav menu -->
+            <div class="nav-menu__image">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/menu-visual.png" alt="Mercedes driving in fog">
+            </div>
+
+            <!-- Branding -->
+            <a href="/es/" class="nav-menu__brand">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+                <span class="h5">United Travel</span>
+            </a>
+
+            <!-- Log In Card -->
+            <div class="user-acct">
+
+                <!-- Backgronud -->
+                <div class="user-acct__bg"></div>
+
+                <% if (user._id) { %>
+                    <div class="user-acct__photo">
+                        <img src="<%- user.photo %>" alt="profile photo" />
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Hello <%- user.preferredName %></h6>
+                        <div>
+                            <a href="/es/account">Mi cuenta</a>
+                            <hr>
+                            <a href="#" class="app-logout">Cerrar sesión</a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="user-acct__icon">
+                        <svg class="icon-xl"><use href="/img/icons.svg#person-circle"></use></svg>
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Bienvenido Viajero</h6>
+                        <div>
+                            <a href="/es/login">Crear una cuenta</a>
+                            <hr>
+                            <a href="/es/login">Acceso</a>
+                        </div>
+                    </div>
+                <% } %>
+
+            </div>
+
+        </div>
+        
+        <div class="nav-menu__content">
+
+            <nav aria-label="desktop hamburger">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/es/" data-nav-namespace="home">Casa</a></li>
+    <li class="animate-item"><a href="/es/about" data-nav-namespace="about">Acerca de</a></li>
+    <li class="animate-item"><a href="/es/fleet" data-nav-namespace="fleet">Flota</a></li>
+    <li class="animate-item"><a href="/es/contact" data-nav-namespace="contact">Contacto</a></li>
+    
+</ul>
+            </nav>
+
+            <div class="nav-menu__cta">
+                <div class="content">
+                    <h4 class="white animate-item">¿Listo para reservar?</h4>
+                    <p class="small animate-item">¿Está listo para reservar un viaje para su próximo viaje a Orlando? Puede reservar su viaje en línea utilizando nuestro sistema de reservas en línea.</p>
+                    <a href="/es/book" class="btn-pill filled primary animate-item">Reservar Ahora </a>
+                </div>
+            </div>
+
+            <div class="nav-menu__lang">
+                <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
+                <ul>
+                    <li data-nav-lang="en" class="animate-item "><h5>English</h5></li>
+                    <li data-nav-lang="es" class="animate-item  active"><h5>Español</h5></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-menu__mobile">
+
+        <div class="nav-menu__content">
+            <a href="/es/" class="nav-menu__brand animate-item">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+            </a>
+    
+            <nav aria-label="mobile">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/es/" data-nav-namespace="home">Casa</a></li>
+    <li class="animate-item"><a href="/es/about" data-nav-namespace="about">Acerca de</a></li>
+    <li class="animate-item"><a href="/es/fleet" data-nav-namespace="fleet">Flota</a></li>
+    <li class="animate-item"><a href="/es/contact" data-nav-namespace="contact">Contacto</a></li>
+    
+        <li class="animate-item"><a href="/es/book" data-nav-namespace="booking">Reservar Ahora</a></li>
+    
+</ul>
+            </nav>
+    
+            <div class="nav-menu__account">
+                <% if (user._id) { %>
+                    <h5 class="white animate-item">Hello <%- user.preferredName %></h5>
+                    <div>
+                        <a class="animate-item" href="/es/account">Mi cuenta</a>
+                        <a class="animate-item app-logout" href="#">Cerrar sesión</a>
+                    </div>
+                <% } else { %>
+                    <h5 class="white animate-item">Bienvenido Viajero</h5>
+                    <div>
+                        <a class="animate-item" href="/es/login">Crear una cuenta</a>
+                        <a class="animate-item" href="/es/login">Acceso</a>
+                    </div>
+                <% } %>
+            </div>
+    
+            <ul class="nav-menu__lang">
+                <li data-nav-lang="en" class="animate-item"><h5>English</h5></li>
+                <li data-nav-lang="es" class="animate-item active"><h5>Español</h5></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<!--NBCTN-->
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="home">
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero">
+
+            <!-- Background Video -->
+            <div class="hero__background">
+                <div class="bg-video">
+                    <div class="bg-video__overlay"></div>
+                    <div class="bg-video__fallback loading"></div>
+                    <video class="bg-video__player" autoplay muted loop playsinline>
+                        <!-- <source src="https://storage.googleapis.com/utravel-site-content/video/hero-bg.webm" type="video/webm"> -->
+                        <source src="https://storage.googleapis.com/utravel-site-content/video/hero-bg.mp4" type="video/mp4">
+                    </video>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="hero__content">
+
+                <h1>andar con <span id="typewrite" data-period="2500" data-words="[``estilo``, ``comodidad``, ``facilidad``]"></span><span class="blink">|</span></h1>
+                <h4>Servicios de autos negros con sede en Orlando</h4>
+                <a href="/es/book" class="btn-pill hollow white">Hacer Reservacion </a>
+                
+            </div>
+
+        </section>
+
+        <!-- Beyond -->
+        <section class="section">
+
+            <!-- Section Grid -->
+            <div class="section__grid collapse-cards">
+
+                <!-- Content Block -->
+                <div class="content" >
+                    <h2>Desde el punto A hasta el más allá.</h2>
+                    <p>Brindamos servicios de transporte de alta calidad, seguros y confiables en toda la Florida Central. También ofrecemos viajes de mayor distancia dentro y fuera de Orlando. Llegue a su próximo destino con facilidad, comodidad y tranquilidad.</p>
+                    <a href="/es/book" class="btn-pill hollow dark">Reservar Ahora</a>
+                </div>
+
+                <!-- Image -->
+                <div class="section__image">
+                    <picture>
+                        <source srcset="https://storage.googleapis.com/utravel-site-content/img/city-car.webp" type="image/webp">
+                        <source srcset="https://storage.googleapis.com/utravel-site-content/img/city-car.png" type="image/png">
+                        <img src="https://storage.googleapis.com/utravel-site-content/img/city-car.png" alt="Car in city">
+                    </picture>
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Airport Service -->
+        <section class="fsi" id="airport-service">
+
+            <!-- Background Image -->
+            <div class="fsi__background">
+                <picture>
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/airport.webp" type="image/webp">
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/airport.jpg" type="image/jpeg">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/airport.jpg" alt="Airport Waiting">
+                </picture>
+            </div>
+
+            <!-- Gradient Overlay -->
+            <div class="fsi__overlay" style="--bg-gradient-desktop: linear-gradient(90.2deg, #000000 30.31%, rgba(0, 0, 0, 0.25) 99.86%)"></div>
+
+            <!-- Section Content -->
+            <div class="fsi__content">
+                <div class="content" data-scroll data-scroll-speed="2">
+                    <h2 class="white">Servicio de Aeropuerto</h2>
+                    <p>¿Necesita que lo recojan o lo dejen en el aeropuerto? Ofrecemos una experiencia completamente perfecta. Realizamos un seguimiento del estado de su vuelo para que podamos llegar temprano para que no tenga que esperar un minuto a que llegue su conductor. Siempre llegamos a tiempo y siempre somos profesionales.</p>
+                    <a href="/es/book" class="btn-pill hollow white">Hacer Reservacion </a>
+                </div>
+            </div>
+
+        </section>
+        
+        <!-- Cruise Service -->
+        <section class="fsi" id="cruise-service">
+
+            <!-- Background Image -->
+            <div class="fsi__background">
+                <picture>
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/cruise.webp" type="image/webp">
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/cruise.jpg" type="image/jpeg">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/cruise.jpg" alt="Cruise Ship">
+                </picture>
+            </div>
+
+            <!-- Gradient Overlay -->
+            <div class="fsi__overlay cruise" style="--bg-gradient-desktop: transparent"></div>
+
+            <!-- Section Content -->
+            <div class="fsi__content align-right">
+                <div class="content" data-scroll data-scroll-speed="2">
+                    <h2 class="white">Servicio de Crucero</h2>
+                    <p>¿Vas a hacer un crucero y necesitas que te dejen en la terminal de cruceros? Lo cubrimos con una experiencia completamente fluida. Siempre somos profesionales y siempre a tiempo.</p>
+                    <a href="/es/book" class="btn-pill hollow white">Hacer Reservacion </a>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Charter Services -->
+        <section class="section">
+
+            <!-- Section Grid -->
+            <div class="section__grid collapse-cards">
+
+                <!-- Content Block -->
+                <div class="content">
+                    <h2>Servicio Charter</h2>
+                    <p>Reserve un conductor para el día. Esto es perfecto para eventos especiales o para un día visitando las atracciones de clase mundial de Orlando. Lo llevaremos a cualquier lugar al que necesite ir y lo estaremos allí esperándolo cuando esté listo para dirigirse a su próximo destino. Reserve con nosotros todo el tiempo que desee con un mínimo de tres horas. Si desea reservar el servicio chárter, comuníquese con nosotros para obtener más información.</p>
+                    <a href="#content" class="btn-pill hollow dark">Contacta con nosotros </a>
+                </div>
+
+                <!-- Image -->
+                <div class="section__image">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/time.jpg" alt="hand holding a clock">
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Long Distance Rides -->
+        <section class="long-distance">
+            <div class="long-distance__map">
+                <picture>
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/map.webp" type="image/webp">
+                    <source srcset="https://storage.googleapis.com/utravel-site-content/img/map.png" type="image/png">
+                    <img src="https://storage.googleapis.com/utravel-site-content/img/map.png" alt="Map of Florida">
+                </picture>
+            </div>
+
+            <div class="long-distance__content" data-scroll data-scroll-speed="1">
+                <div class="content">
+                    <h2 class="white"><span>¿Paseos de larga distancia?</span> No hay problema.</h2>
+                    <p>¿Se puede llegar de Orlando a Miami? Eso no es un problema para nosotros, ya que estamos orgullosos de ofrecer viajes de larga distancia. Siéntese y relájese mientras lo conducimos por el estado de Florida. Disfruta de un viaje en autopista cómodo y suave con toda la comodidad que necesitas para que el tiempo pase volando.</p>
+                    <a href="#content" class="btn-pill hollow white">Reservar Ahora</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Safety Section -->
+        <section class="section bg-alt">
+            <div class="section__grid flex-start">
+
+                <div class="content">
+                    <h2>Acomodar a sus hijas.</h2>
+                    <p>Queremos asegurarnos de que sus hijos estén seguros. Ofrecemos asientos de seguridad para niños en varios tamaños para mantenerlos seguros. Cuando reserve un viaje con nosotros, puede solicitar un alojamiento especial y le proporcionaremos los asientos de seguridad para sus hijos.</p>
+                </div>
+
+                <div class="content">
+                    <h2>Priorizando tu seguridad.</h2>
+                    <p>Priorizamos tu seguridad y comodidad. Haremos un esfuerzo adicional para asegurarnos de que tenga una experiencia de primera clase y llegue a su destino de manera oportuna. Nuestra flota de vehículos se limpia y desinfecta antes y después de cada viaje para que pueda tener más tranquilidad. Ya sea que se encuentre en Florida por vacaciones o por negocios, estamos aquí para ofrecer nuestros servicios líderes en su clase.</p>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Reviews  -->
+        <div id="reviews-react-app"></div>
+
+        <!-- Call To Action -->
+        <section class="cta">
+    <div class="cta__card">
+        <div class="content">
+            <h2 class="white">Reserve un <span>viaje con nosotros.</span></h2>
+            <p>¿Está listo para reservar un viaje para su próximo viaje a Orlando? Puede reservar su viaje en línea utilizando nuestro sistema de reservas en línea. Podrá completar todo el proceso de reserva en línea para que cuando llegue el momento de su viaje, sea sin esfuerzo.</p>
+            <a href="/es/book" class="btn-pill filled primary">Hacer Reservacion </a>
+        </div>
+    </div>
+</section>
+
+        <!-- Our Fleet -->
+        <section class="section">
+
+    <!-- Section Grid -->
+    <div class="section__grid">
+
+        <!-- Content Block -->
+        <div class="content">
+            <h2>Consulte nuestra <span>flota.</span></h2>
+            <p>Eche un vistazo a nuestra flota de vehículos y vea cuál de nuestros vehículos se adapta mejor a sus necesidades.</p>
+            <a href="/es/fleet" class="btn-pill hollow dark">Ver flota </a>
+        </div>
+
+        <!-- Image -->
+        <div class="section__image">
+            <picture>
+                <source srcset="https://storage.googleapis.com/utravel-site-content/img/fleet.webp" type="image/webp">
+                <source srcset="https://storage.googleapis.com/utravel-site-content/img/fleet.png" type="image/png">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/fleet.png" alt="Mercedes car coming out of a circle">
+            </picture>
+        </div>
+
+    </div>
+
+</section>
+
+        <!-- Contact Us -->
+        <section id="contact" class="contact">
+    <div class="contact__image">
+        <picture>
+            <source srcset="https://storage.googleapis.com/utravel-site-content/img/contact.webp" type="image/webp">
+            <source srcset="https://storage.googleapis.com/utravel-site-content/img/contact.jpg" type="image/jpeg">
+            <img src="https://storage.googleapis.com/utravel-site-content/img/contact.jpg" alt="Mercedes car coming out of a circle">
+        </picture>
+    </div>
+    <div class="contact__card" data-scroll data-scroll-speed="2">
+        <div class="content">
+            <h2>¿Tengo una pregunta? <span>Contáctenos.</span></h2>
+            <p>Estaremos encantados de ayudarte. No dude en llamarnos o enviarnos un correo electrónico y nos comunicaremos con usted lo antes posible.</p>
+            <a class="contact__method" href="m&#97;i&#108;&#116;o&#58;&#104;e&#108;lo&#64;un%&#54;9&#116;ed&#116;&#37;72%&#54;1&#118;e&#108;&#46;llc" >
+                <svg><use href="/img/icons.svg#email"></use></svg>
+                <h5>hello@unitedtravel.llc</h5>
+            </a>
+            <a class="contact__method" href="tel:123-456-7890">
+                <svg><use href="/img/icons.svg#iphone"></use></svg>
+                <h5>(123) 456-7890</h5>
+            </a>
+        </div>
+    </div>
+</section>
+
+        
+        <!-- Footer -->
+        <footer class="footer" id="footer">
+
+    <div class="footer__brands">
+        <div class="footer__brand">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <p>United Travel LLC</p>
+        </div>
+        <a href="https://www.arjunsamir.com" target="_blank" class="footer__agency">Diseñado por Day FiftyFive</a>
+    </div>
+
+    <div class="footer__main">
+        <div class="footer__content">
+            <div class="footer__contact">
+                <h5 class="white">Contacta con nosotros</h5>
+                <hr>
+                <a href="m&#97;i&#108;&#116;o&#58;&#104;e&#108;lo&#64;un%&#54;9&#116;ed&#116;&#37;72%&#54;1&#118;e&#108;&#46;llc">hello@unitedtravel.llc</a>
+                <a href="tel:123-456-7890">(123) 456-7890</a>
+            </div>
+            <ul class="footer__links">
+                <li><a href="/es/account">Mi Cuenta</a></li>
+                <li><a href="/es/privacy">Política de Privacidad</a></li>
+                <li><a href="/es/terms">Términos de Servicio</a></li>
+            </ul>
+        </div>
+        <div class="footer__copyright">
+            <p>&copy; <script>document.write(new Date().getFullYear())</script> United Travel LLC. Reservados todos los derechos.</p>
+        </div>
+    </div>
+
+</footer>
+
+    </main>
+
+    
+    <!-- JavaScript -->
+    <!-- Decalre Global Locale -->
+<script>
+    window.locale = "es";
+    window.currentUser = JSON.parse('<%- JSON.stringify(user) %>');
+</script>
+
+<!-- External JavaScript Links -->
+<script src="/js/index.js"></script> 
+
+</body>
+
+</html>

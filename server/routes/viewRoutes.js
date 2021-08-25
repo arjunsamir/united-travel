@@ -1,26 +1,32 @@
 const express = require('express');
-const control = require('../controllers/viewController');
+const Views = require('../controllers/viewController');
 const auth = require('../controllers/auth');
 
 
-const router = express.Router();
+const render = (views, page) => {
+    return (req, res) => views[page](req, res);
+}
 
-router.get('/', control.homePage);
-router.get('/about', control.aboutPage);
-router.get('/services', control.servicesPage);
-router.get('/fleet', control.fleetPage);
-router.get('/reviews', control.reviewsPage);
 
-// Auth Pages
-router.get('/login', auth.isLoggedIn, control.loginPage);
-router.get('/create-account', auth.isLoggedIn, control.signupPage);
+module.exports = lang => {
 
-// 404 PAGE
-router.get('/lost-traveller', control.lostPage);
-router.get('/reset-password', control.resetPassword);
+    const views = new Views(lang);
+    const router = express.Router();
 
-router.get('/write-review', auth.protect, control.writeReview);
-router.get('/me', auth.protect, control.myAccount);
-router.get('/book', control.bookingPage);
+    router.use(auth.screen);
 
-module.exports = router;
+    router.get('/', render(views, 'home'));
+    router.get('/about', render(views, 'about'));
+    router.get('/services', render(views, 'services'));
+    router.get('/fleet', render(views, 'fleet'));
+    router.get('/book', render(views, 'book'));
+    router.get('/login', auth.isLoggedIn, render(views, 'login'));
+    router.get('/account', auth.protect, render(views, 'account'));
+    router.get('/privacy', render(views, 'privacy'));
+    router.get('/terms', render(views, 'terms'));
+    router.get('/navbar', render(views, 'navbar'));
+    router.get('/reservations/:code', render(views, 'reservation'))
+    
+    return router;
+
+}

@@ -1,0 +1,70 @@
+.long-distance {
+
+    position: relative;
+    padding: var(--y-pad) var(--x-pad);
+    background-color: #313131;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+
+    height: 100vh;
+
+    @include ipad {
+        padding: 0;
+        height: auto;
+    }
+
+    &__map {
+        @include overlay;
+
+        @include ipad {
+            position: relative;
+        }
+
+        img {
+            height:100%;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            @include respond(80em) {
+                right: -10rem;
+            }
+
+            @include ipadPro {
+                right: -12rem;
+                height: 90%;
+            }
+
+            @include ipad {
+                position: relative;
+                width: 100%;
+                right: 0;
+            }
+
+        }
+    }
+
+    &__content {
+        position: relative;
+        width: 100%;
+        max-width: var(--track-width);
+
+        top: calc(-1 * var(--y-pad));
+
+        @include ipad {
+            padding: 0 var(--x-pad);
+            display: flex;
+            justify-content: center;
+        }
+
+        h2 {
+            @include phone {
+                font-size: $h3;
+            }
+        }
+    }
+
+}

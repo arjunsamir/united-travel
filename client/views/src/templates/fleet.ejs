@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="fleet-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="fleet">
+
+        <!-- Fleet React App -->
+        <div id="fleet-react-app"></div>
+
+        <!-- Contact Us -->
+        <%- include('../components/contact', { path, lang, ...components.contact }) %>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html
