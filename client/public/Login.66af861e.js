@@ -4770,7 +4770,7 @@ $RefreshReg$(_c, "Greeting");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","animejs":"1GvRs"}],"3dy7A":[function(require,module,exports) {
+},{"react":"3qVBT","animejs":"1GvRs","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3dy7A":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

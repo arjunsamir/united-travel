@@ -1034,7 +1034,7 @@ $RefreshReg$(_c, "BookingApp");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","./store/context":"2o6qx","@material-ui/pickers":"5p95O","@date-io/dayjs":"2nWYV","./store/initialState":"Ab8BJ","./store/reducer":"8zh0y","./components/Map":"6uBK2","./components/BookingLoader":"5ToZm","./steps/ServiceType":"4rFBN","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","dayjs/locale/en":"28mEA","dayjs/locale/es":"7ypMW","@material-ui/styles":"7rIOn","../data/materialTheme":"2hCIB","./steps/PickupTime":"548FS","./steps/FlightLocation":"xx0VC","./steps/FlightSchedule":"c7OFq","./steps/CruiseLocation":"6KUBA","./steps/CruiseSchedule":"3jK3P","./steps/Route":"1gENS","./steps/Passengers":"6JmLZ","./steps/Vehicle":"6lD6R","./steps/ChildSeats":"6HAeI","./steps/Notes":"6JhA4","./helpers/Transition":"3PuMF","./checkout/CheckoutApp":"1ppUv"}],"3qVBT":[function(require,module,exports) {
+},{"react":"3qVBT","./store/context":"2o6qx","@material-ui/pickers":"5p95O","@date-io/dayjs":"2nWYV","dayjs/locale/en":"28mEA","dayjs/locale/es":"7ypMW","@material-ui/styles":"7rIOn","../data/materialTheme":"2hCIB","./store/initialState":"Ab8BJ","./store/reducer":"8zh0y","./components/Map":"6uBK2","./components/BookingLoader":"5ToZm","./steps/ServiceType":"4rFBN","./steps/PickupTime":"548FS","./steps/FlightLocation":"xx0VC","./steps/FlightSchedule":"c7OFq","./steps/CruiseLocation":"6KUBA","./steps/CruiseSchedule":"3jK3P","./steps/Route":"1gENS","./steps/Passengers":"6JmLZ","./steps/Vehicle":"6lD6R","./steps/ChildSeats":"6HAeI","./steps/Notes":"6JhA4","./checkout/CheckoutApp":"1ppUv","./helpers/Transition":"3PuMF","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3qVBT":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -47133,1682 +47133,7 @@ module.exports = DayjsUtils;
     };
 });
 
-},{}],"Ab8BJ":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-        var symbols = Object.getOwnPropertySymbols(object);
-        if (enumerableOnly) symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-        keys.push.apply(keys, symbols);
-    }
-    return keys;
-}
-function _objectSpread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {
-        };
-        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
-            _defineProperty(target, key, source[key]);
-        });
-        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-        else ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-    }
-    return target;
-}
-function _defineProperty(obj, key, value) {
-    if (key in obj) Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-    });
-    else obj[key] = value;
-    return obj;
-}
-const commonSteps = [
-    'Route',
-    'Passengers',
-    'Vehicle',
-    'ChildSeats',
-    'Notes'
-];
-const state = {
-    reservation: {
-        serviceType: '',
-        flight: {
-            number: '',
-            airline: '',
-            type: '',
-            time: null,
-            buffer: null,
-            airport: {
-            }
-        },
-        cruise: {
-            ship: '',
-            line: '',
-            type: '',
-            time: null,
-            buffer: null,
-            port: {
-            }
-        },
-        origin: {
-            selected: null,
-            placeId: '',
-            name: '',
-            address: ''
-        },
-        destination: {
-            selected: null,
-            placeId: '',
-            name: '',
-            address: ''
-        },
-        schedule: {
-            pickup: null,
-            dropoff: null
-        },
-        route: {
-            distance: null,
-            duration: null,
-            eta: null
-        },
-        passengers: '',
-        childSeats: {
-            rear: 0,
-            front: 0,
-            booster: 0
-        },
-        vehicle: null,
-        payment: {
-            method: '',
-            appliedCredit: '',
-            total: 0
-        },
-        notes: '',
-        quote: '',
-        code: ''
-    },
-    app: {
-        step: 'ServiceType',
-        // step: 'Checkout',
-        // step: 'Confirmation',
-        previousStep: '',
-        steps: {
-            first: [
-                {
-                    name: 'ServiceType',
-                    active: true,
-                    complete: false,
-                    group: 'first',
-                    index: 0
-                }
-            ],
-            dynamic: [],
-            last: commonSteps.map((s, i)=>({
-                    name: s,
-                    active: false,
-                    complete: false,
-                    group: 'last',
-                    index: i
-                })
-            )
-        },
-        airports: null,
-        ports: null,
-        user: window.currentUser ? _objectSpread({
-        }, window.currentUser) : {
-        },
-        isLoggedIn: !!window.currentUser.name,
-        map: null
-    }
-};
-var _default = state;
-exports.default = _default;
-
-},{}],"8zh0y":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _Merger = _interopRequireDefault(require("../helpers/Merger"));
-var _initialState = _interopRequireDefault(require("./initialState"));
-var _dayjs = _interopRequireDefault(require("dayjs"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-        var symbols = Object.getOwnPropertySymbols(object);
-        if (enumerableOnly) symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-        keys.push.apply(keys, symbols);
-    }
-    return keys;
-}
-function _objectSpread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {
-        };
-        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
-            _defineProperty(target, key, source[key]);
-        });
-        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-        else ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-    }
-    return target;
-}
-function _defineProperty(obj, key, value) {
-    if (key in obj) Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-    });
-    else obj[key] = value;
-    return obj;
-}
-// Set Current Steps
-const setSteps = (m)=>{
-    // Switch Merger To Aoo State
-    m.switch().merge({
-        steps: _objectSpread({
-        }, _initialState.default.app.steps)
-    }); // Create Dynamic Steps
-    let dynamicSteps; // Get Dynamic Steps
-    switch(m.state.reservation.serviceType){
-        case 'airport':
-            dynamicSteps = [
-                'FlightLocation',
-                'FlightSchedule'
-            ];
-            break;
-        case 'cruise':
-            dynamicSteps = [
-                'CruiseLocation',
-                'CruiseSchedule'
-            ];
-            break;
-        default:
-            dynamicSteps = [
-                'PickupTime'
-            ];
-    }
-    m.merge({
-        dynamic: dynamicSteps.map((s, i)=>({
-                name: s,
-                active: false,
-                complete: false,
-                group: 'dynamic',
-                index: i
-            })
-        )
-    }, 'steps'); // Finally, Validate and return new state
-    return m.validate('ServiceType');
-}; // Stet Current Port
-const setServicePort = (m, PL, _ref)=>{
-    var _m$state$app$$find;
-    let { portType , service  } = _ref;
-    const port = (_m$state$app$$find = m.state.app["".concat(portType, "s")].find((p)=>p.code === PL
-    )) !== null && _m$state$app$$find !== void 0 ? _m$state$app$$find : m.state.reservation[service][portType]; // Destructure Properties
-    const { placeId , address , name  } = port; // Update Airport
-    m.merge({
-        [portType]: _objectSpread({
-        }, port)
-    }, service); // Update Origin/Destination
-    switch(m.state.reservation[service].type){
-        case 'departing':
-            m.merge({
-                destination: {
-                    placeId,
-                    address,
-                    name
-                }
-            });
-            m.merge({
-                origin: _objectSpread({
-                }, _initialState.default.reservation.origin)
-            });
-            break;
-        default:
-            m.merge({
-                origin: {
-                    placeId,
-                    address,
-                    name
-                }
-            });
-            m.merge({
-                destination: _objectSpread({
-                }, _initialState.default.reservation.destination)
-            });
-    }
-    return m.state;
-};
-const setServiceTime = (m, key)=>{
-    const { reservation  } = m.state;
-    const { type , time , buffer  } = reservation[key];
-    if (type === 'departing') {
-        // Add Buffer
-        if (!buffer) return;
-        reservation.schedule.dropoff = _dayjs.default(time, 'MM-DD-YYYY H:mm').subtract(buffer, 'hours').format('MM-DD-YYYY H:mm');
-        reservation.schedule.pickup = null;
-    } else {
-        reservation.schedule.pickup = time;
-        reservation.schedule.dropoff = null;
-    }
-};
-const setRoute = (m, PL)=>{
-    var _PL$eta;
-    const { pickup , dropoff  } = m.state.reservation.schedule;
-    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule';
-    if (PL !== null && PL !== void 0 && (_PL$eta = PL.eta) !== null && _PL$eta !== void 0 && _PL$eta.value) {
-        if (!pickup) m.merge({
-            pickup: _dayjs.default(dropoff, f).subtract(PL.eta.value, u).format(f)
-        }, k);
-        else m.merge({
-            dropoff: _dayjs.default(pickup, f).add(PL.eta.value, u).format(f)
-        }, k);
-    }
-    return m.merge({
-        route: _objectSpread({
-        }, PL)
-    });
-};
-const reducer = (state, action)=>{
-    const [method, category, type] = action.type.toLowerCase().split('_');
-    if (!state[category]) return state;
-    const m = new _Merger.default(category, _objectSpread({
-    }, state));
-    let PL = action.payload; // Update Reservation State
-    if (method === 'update') switch(type){
-        case 'service-type':
-            m.merge({
-                serviceType: PL
-            });
-            return setSteps(m);
-        case 'flight-number':
-            m.merge({
-                number: PL
-            }, 'flight');
-            return m.validate('FlightLocation');
-        case 'cruise-ship':
-            m.merge({
-                ship: PL
-            }, 'cruise');
-            return m.validate('CruiseLocation');
-        case 'flight-time':
-            m.merge({
-                time: PL
-            }, 'flight');
-            setServiceTime(m, 'flight');
-            return m.validate('FlightSchedule');
-        case 'cruise-time':
-            m.merge({
-                time: PL
-            }, 'cruise');
-            setServiceTime(m, 'cruise');
-            return m.validate('CruiseSchedule');
-        case 'airline':
-            m.merge({
-                airline: PL
-            }, 'flight');
-            return m.validate('FlightLocation');
-        case 'cruise-line':
-            m.merge({
-                line: PL
-            }, 'cruise');
-            return m.validate('CruiseLocation');
-        case 'flight-type':
-            m.merge({
-                type: PL
-            }, 'flight');
-            setServicePort(m, null, {
-                portType: 'airport',
-                service: 'flight'
-            });
-            return m.validate('FlightSchedule');
-        case 'cruise-type':
-            m.merge({
-                type: PL
-            }, 'cruise');
-            setServicePort(m, null, {
-                portType: 'port',
-                service: 'cruise'
-            });
-            return m.validate('CruiseSchedule');
-        case 'flight-buffer':
-            m.merge({
-                buffer: parseFloat(PL)
-            }, 'flight');
-            setServiceTime(m, 'flight');
-            return m.validate('FlightSchedule');
-        case 'cruise-buffer':
-            m.merge({
-                buffer: parseFloat(PL)
-            }, 'cruise');
-            setServiceTime(m, 'cruise');
-            return m.validate('CruiseSchedule');
-        case 'airport':
-            setServicePort(m, PL, {
-                portType: 'airport',
-                service: 'flight'
-            });
-            return m.validate('FlightLocation');
-        case 'cruise-port':
-            setServicePort(m, PL, {
-                portType: 'port',
-                service: 'cruise'
-            });
-            return m.validate('CruiseLocation');
-        case 'origin':
-        case 'destination':
-            m.merge({
-                [type]: PL ? {
-                    selected: _objectSpread({
-                    }, PL),
-                    placeId: PL.place_id,
-                    name: PL.structured_formatting.main_text,
-                    address: PL.description
-                } : {
-                    selected: null,
-                    placeId: '',
-                    name: '',
-                    address: ''
-                }
-            });
-            return m.validate('Route');
-        case 'pickup-time':
-            m.merge({
-                pickup: PL
-            }, 'schedule');
-            return m.validate('PickupTime');
-        case 'dropoff-time':
-            return m.merge({
-                dropoff: PL
-            }, 'schedule');
-        case 'route':
-            return setRoute(m, PL);
-        case 'passengers':
-            m.merge({
-                passengers: PL
-            });
-            return m.validate('Passengers');
-        case 'child-seats':
-            const [key, value] = PL;
-            m.merge({
-                [key]: value
-            }, 'childSeats');
-            return m.validate('ChildSeats');
-        case 'vehicle':
-            m.merge({
-                vehicle: PL
-            });
-            return m.validate('Vehicle');
-        case 'notes':
-            m.merge({
-                notes: PL
-            });
-            return m.validate('Notes');
-        case 'quote':
-            return m.merge({
-                quote: PL
-            });
-        case 'payment':
-            return m.merge({
-                payment: _objectSpread({
-                }, PL)
-            });
-        case 'code':
-            return m.merge({
-                code: PL
-            });
-        default:
-            return state;
-    }
-    else if (method === 'set') switch(type){
-        case 'step':
-            m.merge({
-                previousStep: m.state.app.step
-            });
-            m.merge({
-                step: PL
-            });
-            return m.validate(PL);
-        case 'airports':
-            return m.merge({
-                airports: [
-                    ...PL
-                ]
-            });
-        case 'ports':
-            return m.merge({
-                ports: [
-                    ...PL
-                ]
-            });
-        case 'user':
-            m.merge({
-                isLoggedIn: !!PL
-            });
-            return m.merge({
-                user: _objectSpread({
-                }, PL)
-            });
-        case 'map':
-            return m.merge({
-                map: PL
-            });
-        default:
-            return state;
-    }
-    else return state;
-};
-var _default = reducer;
-exports.default = _default;
-
-},{"../helpers/Merger":"2Z7en","./initialState":"Ab8BJ","dayjs":"2UVMx"}],"2Z7en":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-class Merger {
-    merge(data, key) {
-        if (key) this.state = Object.assign({
-        }, this.state, {
-            [this.category]: Object.assign({
-            }, this.state[this.category], {
-                [key]: Object.assign({
-                }, this.state[this.category][key], data)
-            })
-        });
-        else this.state = Object.assign({
-        }, this.state, {
-            [this.category]: Object.assign({
-            }, this.state[this.category], data)
-        });
-        return this.state;
-    }
-    switch() {
-        const { category: c  } = this;
-        this.category = c === 'app' ? 'reservation' : 'app';
-        return this;
-    }
-    getConditions(step) {
-        var _flight$airport, _cruise$port;
-        // Desctructure Conditions
-        const r = this.state.reservation;
-        const { flight , cruise  } = r;
-        let c;
-        switch(step){
-            case 'ServiceType':
-                return [
-                    r.serviceType
-                ];
-            case 'FlightLocation':
-                return [
-                    flight.airline,
-                    flight.number,
-                    (_flight$airport = flight.airport) === null || _flight$airport === void 0 ? void 0 : _flight$airport.code
-                ];
-            case 'FlightSchedule':
-                c = [
-                    flight.type,
-                    flight.time
-                ];
-                if (flight.type === 'departing') c.push(flight.buffer);
-                return c;
-            case 'CruiseLocation':
-                return [
-                    cruise.line,
-                    cruise.ship,
-                    (_cruise$port = cruise.port) === null || _cruise$port === void 0 ? void 0 : _cruise$port.code
-                ];
-            case 'CruiseSchedule':
-                c = [
-                    cruise.type,
-                    cruise.time
-                ];
-                if (cruise.type === 'departing') c.push(cruise.buffer);
-                return c;
-            case 'Route':
-                return [
-                    r.origin.placeId,
-                    r.destination.placeId
-                ];
-            case 'PickupTime':
-                return [
-                    r.schedule.pickup
-                ];
-            case 'Passengers':
-                return [
-                    r.passengers
-                ];
-            case 'Vehicle':
-                return [
-                    !!r.vehicle
-                ];
-            default:
-                return [];
-        }
-    }
-    checkConditions(step) {
-        // Create Flag Variable
-        let valid = true; // Get Conditions
-        const conditions = this.getConditions(step); // Loop Through and check conditions
-        conditions.forEach((cond)=>{
-            if (!cond) valid = false;
-        });
-        return valid;
-    }
-    validate(step) {
-        // Coerce Boolean Value
-        const isValid = this.checkConditions(step); // Create Shortcut Reference
-        const app = this.state.app; // Destructure and construct array
-        const { first: f , dynamic: d , last: l  } = app.steps;
-        const steps = [
-            ...f,
-            ...d,
-            ...l
-        ]; // Find Match
-        const index = steps.findIndex((s)=>s.name === step
-        ); // Get Match. This should NEVER be null
-        const match = steps[index];
-        if (!match || index < 0) return this.state; // Determine if step is valid
-        app.steps[match.group][match.index].complete = isValid; // Manage Future Steps
-        steps.slice(index + 1).forEach((s, i)=>{
-            // Activate or Deactivate the next step
-            if (!i) app.steps[s.group][s.index].active = isValid; // If invalid deactivate all other steps
-            else if (!isValid) app.steps[s.group][s.index].active = false;
-        }); // Never Forget To Return State
-        return this.state;
-    }
-    constructor(category, state){
-        this.category = category;
-        this.state = state;
-    }
-}
-exports.default = Merger;
-
-},{}],"6uBK2":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _useGoogleMaps = _interopRequireDefault(require("../helpers/useGoogleMaps"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Import Default React Stuff
-// Import Google Maps
-// Cteate Map Component
-const Map1 = ()=>{
-    // Enable Google Maps
-    const [mapElement, mapClass] = _useGoogleMaps.default(); // Create Map
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("booking__map", [
-            mapClass
-        ])
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        id: "google-map",
-        ref: mapElement
-    })));
-};
-_c = Map1;
-var _default = Map1;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Map");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../helpers/useGoogleMaps":"6JPFT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6JPFT":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = require("react");
-var _config = _interopRequireDefault(require("../../data/config"));
-var _context = _interopRequireDefault(require("../store/context"));
-var _axios = _interopRequireDefault(require("axios"));
-var _dayjs = _interopRequireDefault(require("dayjs"));
-var _animejs = _interopRequireDefault(require("animejs"));
-var _utils = require("../../helpers/utils");
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Import Config
-// Import Context
-// Import Helpers
-// Create Class To Handle Map Changes
-class AppMap {
-    async placeMarker(origin, destination) {
-        // Create Key Value Pair
-        const key = origin ? "origin" : "destination";
-        const placeId = origin || destination;
-        let place = this.places[key];
-        if (place.place_id != placeId || !place.geometry) await new Promise((resolve)=>{
-            this.geocoder.geocode({
-                placeId
-            }, (res)=>{
-                place = this.places[key] = res.length ? res[0] : {
-                };
-                resolve();
-            });
-        });
-         // Return if no location found
-        if (!place.geometry) return; // Push Markers
-        this.markers.push(new google.maps.Marker({
-            title: key,
-            position: place.geometry.location,
-            animation: google.maps.Animation.DROP,
-            map: this.map
-        })); // Create Bounds
-        if (place.geometry.viewport) this.bounds.union(place.geometry.viewport);
-        else this.bounds.extend(place.geometry.location); // Apply bounds
-        this.map.fitBounds(this.bounds);
-    }
-    getRoute(origin, destination, _ref) {
-        let { pickup , dropoff  } = _ref;
-        // Set Map
-        this.renderer.setMap(this.map); // Get Departure Time
-        const departureTime = _dayjs.default("".concat(pickup || dropoff, " -04:00"), 'MM-DD-YYYY H:mm Z').toDate();
-        this.directions.route({
-            origin,
-            destination,
-            travelMode: "DRIVING",
-            drivingOptions: {
-                departureTime,
-                trafficModel: "pessimistic"
-            }
-        }, (r, s)=>this.renderRoute(r, s)
-        );
-    }
-    renderRoute(res, status) {
-        var _res$routes$0$legs$, _res$routes$;
-        // Check if response is valid
-        if (status !== 'OK' || !res) return; // Render Rout To map
-        this.renderer.setDirections(res); // Get Route Information
-        const info = (_res$routes$0$legs$ = res === null || res === void 0 ? void 0 : (_res$routes$ = res.routes[0]) === null || _res$routes$ === void 0 ? void 0 : _res$routes$.legs[0]) !== null && _res$routes$0$legs$ !== void 0 ? _res$routes$0$legs$ : {
-        };
-        const { distance , duration , duration_in_traffic: eta  } = info; // Update App State
-        this.dispatcher("ROUTE", {
-            distance,
-            duration,
-            eta
-        });
-    }
-    reset() {
-        // Get Original Map Options
-        const { zoom , center  } = this.data.options; // Reset Map
-        this.map.setZoom(zoom);
-        this.map.setCenter(center);
-    }
-    clear(route) {
-        // Define New Bounds
-        this.bounds = new google.maps.LatLngBounds(); // Clear Markers
-        this.markers.forEach((marker)=>marker.setMap(null)
-        );
-        this.markers = []; // Unset Map
-        this.renderer.setMap(null);
-        this.directions = null; // Initiaize New Directions Service
-        this.directions = new google.maps.DirectionsService(); // Update App State
-        if (route.eta) this.dispatcher("ROUTE", {
-            distance: null,
-            duration: null,
-            eta: null
-        });
-    }
-    update(origin, destination, route, schedule) {
-        // Clear The Map
-        this.clear(route); // Reset Map if No Locations Set
-        if (!origin && !destination) this.reset(); // Render Route if Both Set
-        else if (origin && destination) this.getRoute({
-            placeId: origin
-        }, {
-            placeId: destination
-        }, schedule); // Render Single Marker
-        else this.placeMarker(origin, destination);
-    }
-    hide() {
-        if (this.isHidden) return;
-        _animejs.default({
-            targets: this.element,
-            opacity: 0,
-            duration: 500,
-            easing: 'easeOutExpo',
-            complete: ()=>{
-                this.isHidden = true;
-            }
-        });
-    }
-    show() {
-        if (!this.isHidden) return;
-        _animejs.default({
-            targets: this.element,
-            opacity: 1,
-            duration: 500,
-            easing: 'easeOutExpo',
-            complete: ()=>{
-                this.isHidden = false;
-            }
-        });
-    }
-    setClass(className) {
-        // Prevent Duplicate Class
-        if (className === this.className) return; // Set Class
-        this.className = className;
-        this.classUpdater(this.className);
-    }
-    // Initialize Map
-    constructor(data, element, dispatcher, classUpdater){
-        // Destructure Things
-        const { options , polylineOptions  } = data; // Google Mpas Services
-        this.map = new google.maps.Map(element, options);
-        this.geocoder = new google.maps.Geocoder();
-        this.directions = new google.maps.DirectionsService();
-        this.renderer = new google.maps.DirectionsRenderer({
-            polylineOptions: new google.maps.Polyline(polylineOptions)
-        });
-        this.autoComplete = new google.maps.places.AutocompleteService(); // Class Used Properties
-        this.dispatcher = dispatcher;
-        this.classUpdater = classUpdater;
-        this.element = element;
-        this.bounds = null;
-        this.markers = [];
-        this.data = data;
-        this.isHidden = false;
-        this.places = {
-            origin: {
-            },
-            destination: {
-            }
-        };
-        this.className = null;
-    }
-} // Create Custom Hook
-const useGoogleMaps = ()=>{
-    // Destructure State
-    const { state: { app: { map  } , reservation: { origin , destination , route , schedule  }  } , update , updateApp  } = _react.useContext(_context.default); // Create Reference
-    const e = _react.useRef(); // Create Class Reference
-    const [mapClass, setMapClass] = _react.useState(); // Load Map
-    _react.useEffect(()=>{
-        const load = async ()=>{
-            let data1;
-            await Promise.all([
-                _utils.insertScript("https://maps.googleapis.com/maps/api/js?key=".concat(_config.default.maps.api_key, "&libraries=places"), 'google-maps-sdk'),
-                _axios.default('/api/data/map').then((res)=>data1 = res.data
-                )
-            ]);
-            updateApp("MAP", new AppMap(data1, e.current, update, setMapClass));
-        };
-        load();
-    }, []); // Update Map
-    _react.useEffect(()=>{
-        if (map) map.update(origin.placeId, destination.placeId, route, schedule);
-    }, [
-        map,
-        origin.placeId,
-        destination.placeId
-    ]); // Return Element
-    return [
-        e,
-        mapClass
-    ];
-}; // Export Hook
-var _default = useGoogleMaps;
-exports.default = _default;
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../../data/config":"3Re6c","axios":"5FCRD","../../helpers/utils":"5inPj","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","dayjs":"2UVMx","animejs":"1GvRs"}],"3Re6c":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-const config = {
-    maps: {
-        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
-    },
-    facebook: {
-        appId: '274042323746865',
-        cookie: true,
-        xfbml: true,
-        version: 'v11.0'
-    },
-    google: {
-        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
-        scope: 'https://www.googleapis.com/auth/userinfo.profile',
-        cookiepolicy: 'single_host_origin'
-    },
-    stripe: {
-        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
-    }
-};
-var _default = config;
-exports.default = _default;
-
-},{}],"5inPj":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
-const bemify = (block)=>{
-    return (element)=>element ? "".concat(block, "__").concat(element) : block
-    ;
-};
-exports.bemify = bemify;
-const constructWrappers = function constructWrappers1() {
-    const wrapper = {
-    };
-    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
-    pairs.forEach((_ref)=>{
-        let [Component, steps] = _ref;
-        Object.keys(steps).forEach((key)=>wrapper[key] = Component
-        );
-    });
-    return wrapper;
-};
-exports.constructWrappers = constructWrappers;
-const toUSD = (val)=>{
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2
-    }).format(val);
-};
-exports.toUSD = toUSD;
-const insertScript = (src, id)=>{
-    return new Promise((resolve)=>{
-        const ref = document.querySelector('script');
-        if (document.getElementById(id)) return resolve();
-        const js = document.createElement('script');
-        js.id = id;
-        js.src = src;
-        js.addEventListener('load', resolve);
-        ref.parentNode.insertBefore(js, ref);
-    });
-};
-exports.insertScript = insertScript;
-const validateEmail = (val)=>{
-    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
-};
-exports.validateEmail = validateEmail;
-const validateName = (val)=>{
-    // Allow for apostrophes!!!
-    return val && /^[a-zA-Z]+ [a-zA-Z]+$/.test(val);
-};
-exports.validateName = validateName;
-const validatePassword = (val)=>{
-    return val && val.length >= 8;
-};
-exports.validatePassword = validatePassword;
-const lettersOnly = (val)=>{
-    return val.replace(/[^A-Za-z ]+$/, '');
-};
-exports.lettersOnly = lettersOnly;
-const toHalf = (val)=>{
-    const [integer, decimal] = val.toString().split('.');
-    if (!decimal) return val;
-    else return "".concat(integer, " 1/2");
-};
-exports.toHalf = toHalf;
-
-},{}],"5ToZm":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Loader = _interopRequireDefault(require("../../components/Loader"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Import Components
-// Craete Wrapped Laoder
-const BookingLoader = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking__loader"
-    }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)));
-};
-_c = BookingLoader;
-var _default = BookingLoader;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "BookingLoader");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../../components/Loader":"7GUXD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"7GUXD":[function(require,module,exports) {
-var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Loader = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "loader"
-    }, /*#__PURE__*/ _react.default.createElement("span", null)));
-};
-_c = Loader;
-var _default = Loader;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Loader");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4rFBN":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _context = _interopRequireDefault(require("../store/context"));
-var _BookingCard = _interopRequireDefault(require("../components/BookingCard"));
-var _Options = _interopRequireDefault(require("../../components/Options"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-// Import The Default Things
-// Import Context
-// Import Booking Card
-// Import Unique Components
-// Create Step
-const ServiceType = (_ref)=>{
-    let { update , copy  } = _ref;
-    const { state  } = _react.useContext(_context.default);
-    const { serviceType  } = state.reservation;
-    const selected = copy.options.find((o)=>o.value === serviceType
-    );
-    return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
-        back: {
-            disabled: true
-        },
-        disableExpand: !serviceType,
-        footer: selected && {
-            title: selected.title,
-            text: selected.description
-        }
-    }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement(_Options.default, {
-        name: "service-type",
-        options: copy.options.map((o)=>({
-                icon: o.icon,
-                label: o.name,
-                value: o.value
-            })
-        ),
-        onChange: (checked, value)=>checked && update("SERVICE-TYPE", value)
-        ,
-        selected: serviceType
-    }))));
-}; // Export Step
-_c = ServiceType;
-var _default = ServiceType;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "ServiceType");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../components/Options":"6ErSK","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"5kObL":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _context = _interopRequireDefault(require("../store/context"));
-var _hooks = require("../../helpers/hooks");
-var _animejs = _interopRequireDefault(require("animejs"));
-var _Loader = _interopRequireDefault(require("../../components/Loader"));
-var _Icon = _interopRequireDefault(require("../../components/Icon"));
-var _Buttons = require("../../components/Buttons");
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-// Animation Class Shortcut
-const aI = "animate-item"; // Open Menu
-const openMenu = (e)=>{
-    const height = $(e).children('#bc-menu').height();
-    const tl = _animejs.default.timeline({
-        easing: 'easeInOutQuad'
-    });
-    tl.add({
-        targets: $(e).children('#bc-expand').e(),
-        rotate: [
-            0,
-            180
-        ],
-        duration: 250
-    });
-    tl.add({
-        targets: $(e).children('#bc-body').e(),
-        translateY: [
-            0,
-            height
-        ],
-        duration: 300
-    }, '-=250');
-    return tl.finished;
-}; // Close Menu
-const closeMenu = (e)=>{
-    const tl = _animejs.default.timeline({
-        easing: 'easeInOutQuad'
-    });
-    tl.add({
-        targets: $(e).children('#bc-expand').e(),
-        rotate: [
-            180,
-            0
-        ],
-        duration: 250
-    });
-    tl.add({
-        targets: $(e).children('#bc-body').e(),
-        translateY: 0,
-        duration: 300
-    }, '-=250');
-    return tl.finished;
-}; // Create Component
-const BookingCard = (_ref)=>{
-    var _steps$stepIndex;
-    let { children , next , back , showLoader , footer , disableExpand , customText , contentClass  } = _ref;
-    // Get App Context
-    const { state , transition , appCopy  } = _react.useContext(_context.default); // Get Copy
-    const copy = appCopy.steps[state.app.step];
-    const { title , heading , text , next: nextCopy  } = copy || {
-    }; // Get Steps
-    const { first , dynamic , last  } = state.app.steps;
-    const steps = [
-        ...first,
-        ...dynamic,
-        ...last
-    ];
-    const stepIndex = steps.findIndex((s)=>s.name === state.app.step
-    ); // Create Local State
-    const [localState, setLocalState] = _hooks.useObjectState({
-        isOpen: false,
-        isAnimating: false
-    }); // Create Refs
-    const element = _react.useRef(); // Create Function To Toggle Menu
-    const toggleMenu = async ()=>{
-        // Prevent Menu From Opening When Disabled
-        if (disableExpand) return; // Prevent Double Click
-        if (localState.isAnimating) return;
-        setLocalState({
-            isAnimating: true
-        }); // Open Menu
-        if (!localState.isOpen) await openMenu(element.current);
-        else await closeMenu(element.current); // Set State
-        setLocalState({
-            isOpen: !localState.isOpen,
-            isAnimating: false
-        });
-    }; // Navigate
-    const navigate = (delta)=>{
-        var _steps;
-        // Prevent Dev Errors
-        if (!delta) return ()=>console.warn('No direction defined')
-        ; // Get Target Index
-        let target = typeof delta === 'string' ? delta : (_steps = steps[stepIndex + delta]) === null || _steps === void 0 ? void 0 : _steps.name; // Prevent Another Dev Errors
-        if (!target) target = "Summary"; // Get Direction
-        const direction = stepIndex === steps.length - 1 ? 'exit' : 'out'; // Return Navigation Function
-        return ()=>transition.to(target, direction)
-        ;
-    }; // Set Up Transition
-    _react.useEffect(()=>{
-        transition.set({
-            container: element.current,
-            animation: 'card'
-        });
-        state.app.map.show();
-        state.app.map.setClass(null);
-    }); // Apply UseEffect
-    _react.useEffect(()=>{
-        if (!showLoader) {
-            const prev = steps.findIndex((s)=>s.name === state.app.previousStep
-            );
-            transition.in(prev >= 0 ? 'in' : 'enter');
-        }
-    }, [
-        showLoader
-    ]); // Create Markup
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking__card",
-        ref: element
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__nav",
-        style: {
-            opacity: showLoader ? 0 : 1
-        }
-    }, /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, _extends({
-        color: "white",
-        size: "lg",
-        icon: "arrow-back",
-        animationClass: "animate-fade",
-        onClick: navigate(-1)
-    }, back || {
-    })), /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "white animate-fade",
-        onClick: toggleMenu
-    }, title), /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, {
-        color: "white",
-        size: "lg",
-        icon: "expand",
-        animationClass: "animate-fade",
-        disabled: disableExpand,
-        id: "bc-expand",
-        onClick: toggleMenu
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        id: "bc-menu",
-        className: $.join("booking-card__menu", [
-            !localState.isOpen,
-            'disabled'
-        ])
-    }, /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("ul", {
-        className: "booking-card__steps"
-    }, steps.map((step, i)=>/*#__PURE__*/ _react.default.createElement("li", {
-            key: step.name,
-            className: $.join('booking-card__step', [
-                step.complete,
-                'complete'
-            ], [
-                !step.active,
-                'disabled'
-            ], [
-                step.name === state.app.step,
-                'active'
-            ]),
-            onClick: async ()=>{
-                // Close The menu
-                await toggleMenu(); // Navigate to Next Step
-                navigate(step.name)();
-            }
-        }, /*#__PURE__*/ _react.default.createElement("span", null, appCopy.steps[step.name].title), step.complete && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-            icon: "checkmark",
-            size: "sm"
-        }))
-    ))), /*#__PURE__*/ _react.default.createElement("div", {
-        id: "bc-body",
-        className: "booking-card__body"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("booking-card__body-esc", [
-            localState.isOpen,
-            "listening"
-        ]),
-        onClick: toggleMenu
-    }), showLoader ? /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__loader"
-    }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("booking-card__content", [
-            contentClass
-        ])
-    }, (heading || text) && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__header"
-    }, heading && /*#__PURE__*/ _react.default.createElement("h5", {
-        className: aI
-    }, heading), customText ? customText : text && /*#__PURE__*/ _react.default.createElement("p", {
-        className: $.join("small", aI)
-    }, text)), children, footer && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__footer"
-    }, /*#__PURE__*/ _react.default.createElement("hr", {
-        className: aI
-    }), footer.title && /*#__PURE__*/ _react.default.createElement("h6", {
-        className: $.join("bold", aI)
-    }, footer.title), footer.text && (typeof footer.text === "string" ? /*#__PURE__*/ _react.default.createElement("p", {
-        className: $.join("small", aI)
-    }, footer.text) : footer.text))), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-card__next"
-    }, next !== false && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, _extends({
-        text: nextCopy || appCopy.common.next,
-        onClick: navigate(1),
-        disabled: !((_steps$stepIndex = steps[stepIndex]) !== null && _steps$stepIndex !== void 0 && _steps$stepIndex.complete)
-    }, next || {
-    }))))))));
-}; // Export Component
-_c = BookingCard;
-var _default = BookingCard;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "BookingCard");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../store/context":"2o6qx","../../components/Loader":"7GUXD","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../../helpers/hooks":"4wqYR","animejs":"1GvRs","../../components/Icon":"4VYCM"}],"7xzNC":[function(require,module,exports) {
-var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const a = 'animate-item';
-const BackButton = (_ref)=>{
-    let { onClick , text , animationClass , type  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        type: type || "button",
-        className: $.join("back-button", animationClass || a),
-        onClick: onClick
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "arrow-back",
-        size: "sm"
-    }), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "bold"
-    }, text || "Back")));
-};
-_c = BackButton;
-exports.BackButton = BackButton;
-const Button = (_ref2)=>{
-    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        className: $.join("button", [
-            theme
-        ], [
-            icon,
-            "with-icon"
-        ], [
-            disabled,
-            "disabled"
-        ], animationClass || a),
-        onClick: onClick,
-        ref: domRef,
-        type: type || "button"
-    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon
-    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "bold"
-    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
-        className: "button__loader"
-    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
-};
-_c1 = Button;
-exports.Button = Button;
-const IconButton = (_ref3)=>{
-    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        id: id,
-        className: $.join("icon-button", animationClass || a, [
-            disabled,
-            "disabled"
-        ], [
-            className
-        ]),
-        onClick: onClick,
-        ref: domRef
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon,
-        color: color,
-        size: size
-    })));
-};
-_c2 = IconButton;
-exports.IconButton = IconButton;
-const LinkButton = (_ref4)=>{
-    let { onClick , href , text , domRef , disabled , animationClass , cssClasses  } = _ref4;
-    return(/*#__PURE__*/ _react.default.createElement("a", {
-        href: href,
-        className: $.join("link-button", animationClass || a, [
-            disabled,
-            "disabled"
-        ], [
-            cssClasses
-        ]),
-        ref: domRef,
-        onClick: onClick
-    }, text));
-};
-_c3 = LinkButton;
-exports.LinkButton = LinkButton;
-var _c, _c1, _c2, _c3;
-$RefreshReg$(_c, "BackButton");
-$RefreshReg$(_c1, "Button");
-$RefreshReg$(_c2, "IconButton");
-$RefreshReg$(_c3, "LinkButton");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4VYCM":[function(require,module,exports) {
-var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Icon = (_ref)=>{
-    let { icon , size , color  } = _ref;
-    let classes = 'icon-md';
-    let style = {
-    };
-    if (size) {
-        if (typeof size === 'string') classes = "icon-".concat(size);
-        if (size && typeof size === 'number') style = {
-            height: size + 'rem',
-            width: size + 'rem'
-        };
-    }
-    if (color) {
-        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
-        else classes += " ".concat(color);
-    }
-    return(/*#__PURE__*/ _react.default.createElement("svg", {
-        className: classes,
-        style: style
-    }, /*#__PURE__*/ _react.default.createElement("use", {
-        href: "/img/icons.svg#".concat(icon)
-    })));
-};
-_c = Icon;
-var _default = Icon;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Icon");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4wqYR":[function(require,module,exports) {
-var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.useObjectState = void 0;
-var _react = require("react");
-const useObjectState = (initialState)=>{
-    const [state, setState] = _react.useState(initialState);
-    return [
-        state,
-        (newState)=>setState(Object.assign({
-            }, state, newState))
-    ];
-};
-exports.useObjectState = useObjectState;
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6ErSK":[function(require,module,exports) {
-var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-const Option1 = (_ref)=>{
-    let { animationClass , name , id , type , onChange , selected , icon , label , value  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("option", animationClass || "animate-item", [
-            selected,
-            "selected"
-        ])
-    }, /*#__PURE__*/ _react.default.createElement("input", {
-        type: type || "radio",
-        name: name,
-        style: {
-            "display": "none"
-        },
-        value: value,
-        checked: selected,
-        onChange: onChange && ((e)=>onChange(e.target.checked, e.target.value)
-        ),
-        id: id
-    }), /*#__PURE__*/ _react.default.createElement("label", {
-        htmlFor: id
-    }, icon && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon,
-        size: "xl"
-    }), label && /*#__PURE__*/ _react.default.createElement("p", {
-        className: "small bold"
-    }, label))));
-};
-_c = Option1;
-const Options = (_ref2)=>{
-    let { options , name , columns , selected , onChange  } = _ref2;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "options",
-        style: {
-            gridTemplateColumns: "repeat(".concat(columns || options.length, ", 1fr)")
-        }
-    }, options.map((option, index)=>/*#__PURE__*/ _react.default.createElement(Option1, _extends({
-            key: index,
-            name: name,
-            id: "".concat(name, "-").concat(index),
-            onChange: onChange,
-            selected: selected === option.value
-        }, option))
-    )));
-};
-_c1 = Options;
-var _default = Options;
-exports.default = _default;
-var _c, _c1;
-$RefreshReg$(_c, "Option");
-$RefreshReg$(_c1, "Options");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"28mEA":[function(require,module,exports) {
+},{}],"28mEA":[function(require,module,exports) {
 (function(e, n) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = n() : "function" == typeof define && define.amd ? define(n) : (e = "undefined" != typeof globalThis ? globalThis : e || self).dayjs_locale_en = n();
 })(this, function() {
@@ -68096,7 +66421,1682 @@ var amber = {
 var _default = amber;
 exports.default = _default;
 
-},{}],"548FS":[function(require,module,exports) {
+},{}],"Ab8BJ":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+const commonSteps = [
+    'Route',
+    'Passengers',
+    'Vehicle',
+    'ChildSeats',
+    'Notes'
+];
+const state = {
+    reservation: {
+        serviceType: '',
+        flight: {
+            number: '',
+            airline: '',
+            type: '',
+            time: null,
+            buffer: null,
+            airport: {
+            }
+        },
+        cruise: {
+            ship: '',
+            line: '',
+            type: '',
+            time: null,
+            buffer: null,
+            port: {
+            }
+        },
+        origin: {
+            selected: null,
+            placeId: '',
+            name: '',
+            address: ''
+        },
+        destination: {
+            selected: null,
+            placeId: '',
+            name: '',
+            address: ''
+        },
+        schedule: {
+            pickup: null,
+            dropoff: null
+        },
+        route: {
+            distance: null,
+            duration: null,
+            eta: null
+        },
+        passengers: '',
+        childSeats: {
+            rear: 0,
+            front: 0,
+            booster: 0
+        },
+        vehicle: null,
+        payment: {
+            method: '',
+            appliedCredit: '',
+            total: 0
+        },
+        notes: '',
+        quote: '',
+        code: ''
+    },
+    app: {
+        step: 'ServiceType',
+        // step: 'Checkout',
+        // step: 'Confirmation',
+        previousStep: '',
+        steps: {
+            first: [
+                {
+                    name: 'ServiceType',
+                    active: true,
+                    complete: false,
+                    group: 'first',
+                    index: 0
+                }
+            ],
+            dynamic: [],
+            last: commonSteps.map((s, i)=>({
+                    name: s,
+                    active: false,
+                    complete: false,
+                    group: 'last',
+                    index: i
+                })
+            )
+        },
+        airports: null,
+        ports: null,
+        user: window.currentUser ? _objectSpread({
+        }, window.currentUser) : {
+        },
+        isLoggedIn: !!window.currentUser.name,
+        map: null
+    }
+};
+var _default = state;
+exports.default = _default;
+
+},{}],"8zh0y":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _Merger = _interopRequireDefault(require("../helpers/Merger"));
+var _initialState = _interopRequireDefault(require("./initialState"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+// Set Current Steps
+const setSteps = (m)=>{
+    // Switch Merger To Aoo State
+    m.switch().merge({
+        steps: _objectSpread({
+        }, _initialState.default.app.steps)
+    }); // Create Dynamic Steps
+    let dynamicSteps; // Get Dynamic Steps
+    switch(m.state.reservation.serviceType){
+        case 'airport':
+            dynamicSteps = [
+                'FlightLocation',
+                'FlightSchedule'
+            ];
+            break;
+        case 'cruise':
+            dynamicSteps = [
+                'CruiseLocation',
+                'CruiseSchedule'
+            ];
+            break;
+        default:
+            dynamicSteps = [
+                'PickupTime'
+            ];
+    }
+    m.merge({
+        dynamic: dynamicSteps.map((s, i)=>({
+                name: s,
+                active: false,
+                complete: false,
+                group: 'dynamic',
+                index: i
+            })
+        )
+    }, 'steps'); // Finally, Validate and return new state
+    return m.validate('ServiceType');
+}; // Stet Current Port
+const setServicePort = (m, PL, _ref)=>{
+    var _m$state$app$$find;
+    let { portType , service  } = _ref;
+    const port = (_m$state$app$$find = m.state.app["".concat(portType, "s")].find((p)=>p.code === PL
+    )) !== null && _m$state$app$$find !== void 0 ? _m$state$app$$find : m.state.reservation[service][portType]; // Destructure Properties
+    const { placeId , address , name  } = port; // Update Airport
+    m.merge({
+        [portType]: _objectSpread({
+        }, port)
+    }, service); // Update Origin/Destination
+    switch(m.state.reservation[service].type){
+        case 'departing':
+            m.merge({
+                destination: {
+                    placeId,
+                    address,
+                    name
+                }
+            });
+            m.merge({
+                origin: _objectSpread({
+                }, _initialState.default.reservation.origin)
+            });
+            break;
+        default:
+            m.merge({
+                origin: {
+                    placeId,
+                    address,
+                    name
+                }
+            });
+            m.merge({
+                destination: _objectSpread({
+                }, _initialState.default.reservation.destination)
+            });
+    }
+    return m.state;
+};
+const setServiceTime = (m, key)=>{
+    const { reservation  } = m.state;
+    const { type , time , buffer  } = reservation[key];
+    if (type === 'departing') {
+        // Add Buffer
+        if (!buffer) return;
+        reservation.schedule.dropoff = _dayjs.default(time, 'MM-DD-YYYY H:mm').subtract(buffer, 'hours').format('MM-DD-YYYY H:mm');
+        reservation.schedule.pickup = null;
+    } else {
+        reservation.schedule.pickup = time;
+        reservation.schedule.dropoff = null;
+    }
+};
+const setRoute = (m, PL)=>{
+    var _PL$eta;
+    const { pickup , dropoff  } = m.state.reservation.schedule;
+    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule';
+    if (PL !== null && PL !== void 0 && (_PL$eta = PL.eta) !== null && _PL$eta !== void 0 && _PL$eta.value) {
+        if (!pickup) m.merge({
+            pickup: _dayjs.default(dropoff, f).subtract(PL.eta.value, u).format(f)
+        }, k);
+        else m.merge({
+            dropoff: _dayjs.default(pickup, f).add(PL.eta.value, u).format(f)
+        }, k);
+    }
+    return m.merge({
+        route: _objectSpread({
+        }, PL)
+    });
+};
+const reducer = (state, action)=>{
+    const [method, category, type] = action.type.toLowerCase().split('_');
+    if (!state[category]) return state;
+    const m = new _Merger.default(category, _objectSpread({
+    }, state));
+    let PL = action.payload; // Update Reservation State
+    if (method === 'update') switch(type){
+        case 'service-type':
+            m.merge({
+                serviceType: PL
+            });
+            return setSteps(m);
+        case 'flight-number':
+            m.merge({
+                number: PL
+            }, 'flight');
+            return m.validate('FlightLocation');
+        case 'cruise-ship':
+            m.merge({
+                ship: PL
+            }, 'cruise');
+            return m.validate('CruiseLocation');
+        case 'flight-time':
+            m.merge({
+                time: PL
+            }, 'flight');
+            setServiceTime(m, 'flight');
+            return m.validate('FlightSchedule');
+        case 'cruise-time':
+            m.merge({
+                time: PL
+            }, 'cruise');
+            setServiceTime(m, 'cruise');
+            return m.validate('CruiseSchedule');
+        case 'airline':
+            m.merge({
+                airline: PL
+            }, 'flight');
+            return m.validate('FlightLocation');
+        case 'cruise-line':
+            m.merge({
+                line: PL
+            }, 'cruise');
+            return m.validate('CruiseLocation');
+        case 'flight-type':
+            m.merge({
+                type: PL
+            }, 'flight');
+            setServicePort(m, null, {
+                portType: 'airport',
+                service: 'flight'
+            });
+            return m.validate('FlightSchedule');
+        case 'cruise-type':
+            m.merge({
+                type: PL
+            }, 'cruise');
+            setServicePort(m, null, {
+                portType: 'port',
+                service: 'cruise'
+            });
+            return m.validate('CruiseSchedule');
+        case 'flight-buffer':
+            m.merge({
+                buffer: parseFloat(PL)
+            }, 'flight');
+            setServiceTime(m, 'flight');
+            return m.validate('FlightSchedule');
+        case 'cruise-buffer':
+            m.merge({
+                buffer: parseFloat(PL)
+            }, 'cruise');
+            setServiceTime(m, 'cruise');
+            return m.validate('CruiseSchedule');
+        case 'airport':
+            setServicePort(m, PL, {
+                portType: 'airport',
+                service: 'flight'
+            });
+            return m.validate('FlightLocation');
+        case 'cruise-port':
+            setServicePort(m, PL, {
+                portType: 'port',
+                service: 'cruise'
+            });
+            return m.validate('CruiseLocation');
+        case 'origin':
+        case 'destination':
+            m.merge({
+                [type]: PL ? {
+                    selected: _objectSpread({
+                    }, PL),
+                    placeId: PL.place_id,
+                    name: PL.structured_formatting.main_text,
+                    address: PL.description
+                } : {
+                    selected: null,
+                    placeId: '',
+                    name: '',
+                    address: ''
+                }
+            });
+            return m.validate('Route');
+        case 'pickup-time':
+            m.merge({
+                pickup: PL
+            }, 'schedule');
+            return m.validate('PickupTime');
+        case 'dropoff-time':
+            return m.merge({
+                dropoff: PL
+            }, 'schedule');
+        case 'route':
+            return setRoute(m, PL);
+        case 'passengers':
+            m.merge({
+                passengers: PL
+            });
+            return m.validate('Passengers');
+        case 'child-seats':
+            const [key, value] = PL;
+            m.merge({
+                [key]: value
+            }, 'childSeats');
+            return m.validate('ChildSeats');
+        case 'vehicle':
+            m.merge({
+                vehicle: PL
+            });
+            return m.validate('Vehicle');
+        case 'notes':
+            m.merge({
+                notes: PL
+            });
+            return m.validate('Notes');
+        case 'quote':
+            return m.merge({
+                quote: PL
+            });
+        case 'payment':
+            return m.merge({
+                payment: _objectSpread({
+                }, PL)
+            });
+        case 'code':
+            return m.merge({
+                code: PL
+            });
+        default:
+            return state;
+    }
+    else if (method === 'set') switch(type){
+        case 'step':
+            m.merge({
+                previousStep: m.state.app.step
+            });
+            m.merge({
+                step: PL
+            });
+            return m.validate(PL);
+        case 'airports':
+            return m.merge({
+                airports: [
+                    ...PL
+                ]
+            });
+        case 'ports':
+            return m.merge({
+                ports: [
+                    ...PL
+                ]
+            });
+        case 'user':
+            m.merge({
+                isLoggedIn: !!PL
+            });
+            return m.merge({
+                user: _objectSpread({
+                }, PL)
+            });
+        case 'map':
+            return m.merge({
+                map: PL
+            });
+        default:
+            return state;
+    }
+    else return state;
+};
+var _default = reducer;
+exports.default = _default;
+
+},{"../helpers/Merger":"2Z7en","./initialState":"Ab8BJ","dayjs":"2UVMx"}],"2Z7en":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+class Merger {
+    merge(data, key) {
+        if (key) this.state = Object.assign({
+        }, this.state, {
+            [this.category]: Object.assign({
+            }, this.state[this.category], {
+                [key]: Object.assign({
+                }, this.state[this.category][key], data)
+            })
+        });
+        else this.state = Object.assign({
+        }, this.state, {
+            [this.category]: Object.assign({
+            }, this.state[this.category], data)
+        });
+        return this.state;
+    }
+    switch() {
+        const { category: c  } = this;
+        this.category = c === 'app' ? 'reservation' : 'app';
+        return this;
+    }
+    getConditions(step) {
+        var _flight$airport, _cruise$port;
+        // Desctructure Conditions
+        const r = this.state.reservation;
+        const { flight , cruise  } = r;
+        let c;
+        switch(step){
+            case 'ServiceType':
+                return [
+                    r.serviceType
+                ];
+            case 'FlightLocation':
+                return [
+                    flight.airline,
+                    flight.number,
+                    (_flight$airport = flight.airport) === null || _flight$airport === void 0 ? void 0 : _flight$airport.code
+                ];
+            case 'FlightSchedule':
+                c = [
+                    flight.type,
+                    flight.time
+                ];
+                if (flight.type === 'departing') c.push(flight.buffer);
+                return c;
+            case 'CruiseLocation':
+                return [
+                    cruise.line,
+                    cruise.ship,
+                    (_cruise$port = cruise.port) === null || _cruise$port === void 0 ? void 0 : _cruise$port.code
+                ];
+            case 'CruiseSchedule':
+                c = [
+                    cruise.type,
+                    cruise.time
+                ];
+                if (cruise.type === 'departing') c.push(cruise.buffer);
+                return c;
+            case 'Route':
+                return [
+                    r.origin.placeId,
+                    r.destination.placeId
+                ];
+            case 'PickupTime':
+                return [
+                    r.schedule.pickup
+                ];
+            case 'Passengers':
+                return [
+                    r.passengers
+                ];
+            case 'Vehicle':
+                return [
+                    !!r.vehicle
+                ];
+            default:
+                return [];
+        }
+    }
+    checkConditions(step) {
+        // Create Flag Variable
+        let valid = true; // Get Conditions
+        const conditions = this.getConditions(step); // Loop Through and check conditions
+        conditions.forEach((cond)=>{
+            if (!cond) valid = false;
+        });
+        return valid;
+    }
+    validate(step) {
+        // Coerce Boolean Value
+        const isValid = this.checkConditions(step); // Create Shortcut Reference
+        const app = this.state.app; // Destructure and construct array
+        const { first: f , dynamic: d , last: l  } = app.steps;
+        const steps = [
+            ...f,
+            ...d,
+            ...l
+        ]; // Find Match
+        const index = steps.findIndex((s)=>s.name === step
+        ); // Get Match. This should NEVER be null
+        const match = steps[index];
+        if (!match || index < 0) return this.state; // Determine if step is valid
+        app.steps[match.group][match.index].complete = isValid; // Manage Future Steps
+        steps.slice(index + 1).forEach((s, i)=>{
+            // Activate or Deactivate the next step
+            if (!i) app.steps[s.group][s.index].active = isValid; // If invalid deactivate all other steps
+            else if (!isValid) app.steps[s.group][s.index].active = false;
+        }); // Never Forget To Return State
+        return this.state;
+    }
+    constructor(category, state){
+        this.category = category;
+        this.state = state;
+    }
+}
+exports.default = Merger;
+
+},{}],"6uBK2":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _useGoogleMaps = _interopRequireDefault(require("../helpers/useGoogleMaps"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Default React Stuff
+// Import Google Maps
+// Cteate Map Component
+const Map1 = ()=>{
+    // Enable Google Maps
+    const [mapElement, mapClass] = _useGoogleMaps.default(); // Create Map
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("booking__map", [
+            mapClass
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        id: "google-map",
+        ref: mapElement
+    })));
+};
+_c = Map1;
+var _default = Map1;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Map");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../helpers/useGoogleMaps":"6JPFT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6JPFT":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = require("react");
+var _config = _interopRequireDefault(require("../../data/config"));
+var _context = _interopRequireDefault(require("../store/context"));
+var _axios = _interopRequireDefault(require("axios"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+var _animejs = _interopRequireDefault(require("animejs"));
+var _utils = require("../../helpers/utils");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Config
+// Import Context
+// Import Helpers
+// Create Class To Handle Map Changes
+class AppMap {
+    async placeMarker(origin, destination) {
+        // Create Key Value Pair
+        const key = origin ? "origin" : "destination";
+        const placeId = origin || destination;
+        let place = this.places[key];
+        if (place.place_id != placeId || !place.geometry) await new Promise((resolve)=>{
+            this.geocoder.geocode({
+                placeId
+            }, (res)=>{
+                place = this.places[key] = res.length ? res[0] : {
+                };
+                resolve();
+            });
+        });
+         // Return if no location found
+        if (!place.geometry) return; // Push Markers
+        this.markers.push(new google.maps.Marker({
+            title: key,
+            position: place.geometry.location,
+            animation: google.maps.Animation.DROP,
+            map: this.map
+        })); // Create Bounds
+        if (place.geometry.viewport) this.bounds.union(place.geometry.viewport);
+        else this.bounds.extend(place.geometry.location); // Apply bounds
+        this.map.fitBounds(this.bounds);
+    }
+    getRoute(origin, destination, _ref) {
+        let { pickup , dropoff  } = _ref;
+        // Set Map
+        this.renderer.setMap(this.map); // Get Departure Time
+        const departureTime = _dayjs.default("".concat(pickup || dropoff, " -04:00"), 'MM-DD-YYYY H:mm Z').toDate();
+        this.directions.route({
+            origin,
+            destination,
+            travelMode: "DRIVING",
+            drivingOptions: {
+                departureTime,
+                trafficModel: "pessimistic"
+            }
+        }, (r, s)=>this.renderRoute(r, s)
+        );
+    }
+    renderRoute(res, status) {
+        var _res$routes$0$legs$, _res$routes$;
+        // Check if response is valid
+        if (status !== 'OK' || !res) return; // Render Rout To map
+        this.renderer.setDirections(res); // Get Route Information
+        const info = (_res$routes$0$legs$ = res === null || res === void 0 ? void 0 : (_res$routes$ = res.routes[0]) === null || _res$routes$ === void 0 ? void 0 : _res$routes$.legs[0]) !== null && _res$routes$0$legs$ !== void 0 ? _res$routes$0$legs$ : {
+        };
+        const { distance , duration , duration_in_traffic: eta  } = info; // Update App State
+        this.dispatcher("ROUTE", {
+            distance,
+            duration,
+            eta
+        });
+    }
+    reset() {
+        // Get Original Map Options
+        const { zoom , center  } = this.data.options; // Reset Map
+        this.map.setZoom(zoom);
+        this.map.setCenter(center);
+    }
+    clear(route) {
+        // Define New Bounds
+        this.bounds = new google.maps.LatLngBounds(); // Clear Markers
+        this.markers.forEach((marker)=>marker.setMap(null)
+        );
+        this.markers = []; // Unset Map
+        this.renderer.setMap(null);
+        this.directions = null; // Initiaize New Directions Service
+        this.directions = new google.maps.DirectionsService(); // Update App State
+        if (route.eta) this.dispatcher("ROUTE", {
+            distance: null,
+            duration: null,
+            eta: null
+        });
+    }
+    update(origin, destination, route, schedule) {
+        // Clear The Map
+        this.clear(route); // Reset Map if No Locations Set
+        if (!origin && !destination) this.reset(); // Render Route if Both Set
+        else if (origin && destination) this.getRoute({
+            placeId: origin
+        }, {
+            placeId: destination
+        }, schedule); // Render Single Marker
+        else this.placeMarker(origin, destination);
+    }
+    hide() {
+        if (this.isHidden) return;
+        _animejs.default({
+            targets: this.element,
+            opacity: 0,
+            duration: 500,
+            easing: 'easeOutExpo',
+            complete: ()=>{
+                this.isHidden = true;
+            }
+        });
+    }
+    show() {
+        if (!this.isHidden) return;
+        _animejs.default({
+            targets: this.element,
+            opacity: 1,
+            duration: 500,
+            easing: 'easeOutExpo',
+            complete: ()=>{
+                this.isHidden = false;
+            }
+        });
+    }
+    setClass(className) {
+        // Prevent Duplicate Class
+        if (className === this.className) return; // Set Class
+        this.className = className;
+        this.classUpdater(this.className);
+    }
+    // Initialize Map
+    constructor(data, element, dispatcher, classUpdater){
+        // Destructure Things
+        const { options , polylineOptions  } = data; // Google Mpas Services
+        this.map = new google.maps.Map(element, options);
+        this.geocoder = new google.maps.Geocoder();
+        this.directions = new google.maps.DirectionsService();
+        this.renderer = new google.maps.DirectionsRenderer({
+            polylineOptions: new google.maps.Polyline(polylineOptions)
+        });
+        this.autoComplete = new google.maps.places.AutocompleteService(); // Class Used Properties
+        this.dispatcher = dispatcher;
+        this.classUpdater = classUpdater;
+        this.element = element;
+        this.bounds = null;
+        this.markers = [];
+        this.data = data;
+        this.isHidden = false;
+        this.places = {
+            origin: {
+            },
+            destination: {
+            }
+        };
+        this.className = null;
+    }
+} // Create Custom Hook
+const useGoogleMaps = ()=>{
+    // Destructure State
+    const { state: { app: { map  } , reservation: { origin , destination , route , schedule  }  } , update , updateApp  } = _react.useContext(_context.default); // Create Reference
+    const e = _react.useRef(); // Create Class Reference
+    const [mapClass, setMapClass] = _react.useState(); // Load Map
+    _react.useEffect(()=>{
+        const load = async ()=>{
+            let data1;
+            await Promise.all([
+                _utils.insertScript("https://maps.googleapis.com/maps/api/js?key=".concat(_config.default.maps.api_key, "&libraries=places"), 'google-maps-sdk'),
+                _axios.default('/api/data/map').then((res)=>data1 = res.data
+                )
+            ]);
+            updateApp("MAP", new AppMap(data1, e.current, update, setMapClass));
+        };
+        load();
+    }, []); // Update Map
+    _react.useEffect(()=>{
+        if (map) map.update(origin.placeId, destination.placeId, route, schedule);
+    }, [
+        map,
+        origin.placeId,
+        destination.placeId
+    ]); // Return Element
+    return [
+        e,
+        mapClass
+    ];
+}; // Export Hook
+var _default = useGoogleMaps;
+exports.default = _default;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../data/config":"3Re6c","../store/context":"2o6qx","axios":"5FCRD","dayjs":"2UVMx","animejs":"1GvRs","../../helpers/utils":"5inPj","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3Re6c":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const config = {
+    maps: {
+        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
+    },
+    facebook: {
+        appId: '274042323746865',
+        cookie: true,
+        xfbml: true,
+        version: 'v11.0'
+    },
+    google: {
+        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile',
+        cookiepolicy: 'single_host_origin'
+    },
+    stripe: {
+        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
+    }
+};
+var _default = config;
+exports.default = _default;
+
+},{}],"5inPj":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+const bemify = (block)=>{
+    return (element)=>element ? "".concat(block, "__").concat(element) : block
+    ;
+};
+exports.bemify = bemify;
+const constructWrappers = function constructWrappers1() {
+    const wrapper = {
+    };
+    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
+    pairs.forEach((_ref)=>{
+        let [Component, steps] = _ref;
+        Object.keys(steps).forEach((key)=>wrapper[key] = Component
+        );
+    });
+    return wrapper;
+};
+exports.constructWrappers = constructWrappers;
+const toUSD = (val)=>{
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+    }).format(val);
+};
+exports.toUSD = toUSD;
+const insertScript = (src, id)=>{
+    return new Promise((resolve)=>{
+        const ref = document.querySelector('script');
+        if (document.getElementById(id)) return resolve();
+        const js = document.createElement('script');
+        js.id = id;
+        js.src = src;
+        js.addEventListener('load', resolve);
+        ref.parentNode.insertBefore(js, ref);
+    });
+};
+exports.insertScript = insertScript;
+const validateEmail = (val)=>{
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
+};
+exports.validateEmail = validateEmail;
+const validateName = (val)=>{
+    // Allow for apostrophes!!!
+    return val && /^[a-zA-Z]+ [a-zA-Z]+$/.test(val);
+};
+exports.validateName = validateName;
+const validatePassword = (val)=>{
+    return val && val.length >= 8;
+};
+exports.validatePassword = validatePassword;
+const lettersOnly = (val)=>{
+    return val.replace(/[^A-Za-z ]+$/, '');
+};
+exports.lettersOnly = lettersOnly;
+const toHalf = (val)=>{
+    const [integer, decimal] = val.toString().split('.');
+    if (!decimal) return val;
+    else return "".concat(integer, " 1/2");
+};
+exports.toHalf = toHalf;
+
+},{}],"5ToZm":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Loader = _interopRequireDefault(require("../../components/Loader"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Components
+// Craete Wrapped Laoder
+const BookingLoader = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__loader"
+    }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)));
+};
+_c = BookingLoader;
+var _default = BookingLoader;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "BookingLoader");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../components/Loader":"7GUXD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"7GUXD":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Loader = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null)));
+};
+_c = Loader;
+var _default = Loader;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Loader");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4rFBN":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _context = _interopRequireDefault(require("../store/context"));
+var _BookingCard = _interopRequireDefault(require("../components/BookingCard"));
+var _Options = _interopRequireDefault(require("../../components/Options"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import The Default Things
+// Import Context
+// Import Booking Card
+// Import Unique Components
+// Create Step
+const ServiceType = (_ref)=>{
+    let { update , copy  } = _ref;
+    const { state  } = _react.useContext(_context.default);
+    const { serviceType  } = state.reservation;
+    const selected = copy.options.find((o)=>o.value === serviceType
+    );
+    return(/*#__PURE__*/ _react.default.createElement(_BookingCard.default, {
+        back: {
+            disabled: true
+        },
+        disableExpand: !serviceType,
+        footer: selected && {
+            title: selected.title,
+            text: selected.description
+        }
+    }, /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement(_Options.default, {
+        name: "service-type",
+        options: copy.options.map((o)=>({
+                icon: o.icon,
+                label: o.name,
+                value: o.value
+            })
+        ),
+        onChange: (checked, value)=>checked && update("SERVICE-TYPE", value)
+        ,
+        selected: serviceType
+    }))));
+}; // Export Step
+_c = ServiceType;
+var _default = ServiceType;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ServiceType");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingCard":"5kObL","../../components/Options":"6ErSK","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"5kObL":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _context = _interopRequireDefault(require("../store/context"));
+var _hooks = require("../../helpers/hooks");
+var _animejs = _interopRequireDefault(require("animejs"));
+var _Loader = _interopRequireDefault(require("../../components/Loader"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Buttons = require("../../components/Buttons");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+// Animation Class Shortcut
+const aI = "animate-item"; // Open Menu
+const openMenu = (e)=>{
+    const height = $(e).children('#bc-menu').height();
+    const tl = _animejs.default.timeline({
+        easing: 'easeInOutQuad'
+    });
+    tl.add({
+        targets: $(e).children('#bc-expand').e(),
+        rotate: [
+            0,
+            180
+        ],
+        duration: 250
+    });
+    tl.add({
+        targets: $(e).children('#bc-body').e(),
+        translateY: [
+            0,
+            height
+        ],
+        duration: 300
+    }, '-=250');
+    return tl.finished;
+}; // Close Menu
+const closeMenu = (e)=>{
+    const tl = _animejs.default.timeline({
+        easing: 'easeInOutQuad'
+    });
+    tl.add({
+        targets: $(e).children('#bc-expand').e(),
+        rotate: [
+            180,
+            0
+        ],
+        duration: 250
+    });
+    tl.add({
+        targets: $(e).children('#bc-body').e(),
+        translateY: 0,
+        duration: 300
+    }, '-=250');
+    return tl.finished;
+}; // Create Component
+const BookingCard = (_ref)=>{
+    var _steps$stepIndex;
+    let { children , next , back , showLoader , footer , disableExpand , customText , contentClass  } = _ref;
+    // Get App Context
+    const { state , transition , appCopy  } = _react.useContext(_context.default); // Get Copy
+    const copy = appCopy.steps[state.app.step];
+    const { title , heading , text , next: nextCopy  } = copy || {
+    }; // Get Steps
+    const { first , dynamic , last  } = state.app.steps;
+    const steps = [
+        ...first,
+        ...dynamic,
+        ...last
+    ];
+    const stepIndex = steps.findIndex((s)=>s.name === state.app.step
+    ); // Create Local State
+    const [localState, setLocalState] = _hooks.useObjectState({
+        isOpen: false,
+        isAnimating: false
+    }); // Create Refs
+    const element = _react.useRef(); // Create Function To Toggle Menu
+    const toggleMenu = async ()=>{
+        // Prevent Menu From Opening When Disabled
+        if (disableExpand) return; // Prevent Double Click
+        if (localState.isAnimating) return;
+        setLocalState({
+            isAnimating: true
+        }); // Open Menu
+        if (!localState.isOpen) await openMenu(element.current);
+        else await closeMenu(element.current); // Set State
+        setLocalState({
+            isOpen: !localState.isOpen,
+            isAnimating: false
+        });
+    }; // Navigate
+    const navigate = (delta)=>{
+        var _steps;
+        // Prevent Dev Errors
+        if (!delta) return ()=>console.warn('No direction defined')
+        ; // Get Target Index
+        let target = typeof delta === 'string' ? delta : (_steps = steps[stepIndex + delta]) === null || _steps === void 0 ? void 0 : _steps.name; // Prevent Another Dev Errors
+        if (!target) target = "Summary"; // Get Direction
+        const direction = stepIndex === steps.length - 1 ? 'exit' : 'out'; // Return Navigation Function
+        return ()=>transition.to(target, direction)
+        ;
+    }; // Set Up Transition
+    _react.useEffect(()=>{
+        transition.set({
+            container: element.current,
+            animation: 'card'
+        });
+        state.app.map.show();
+        state.app.map.setClass(null);
+    }); // Apply UseEffect
+    _react.useEffect(()=>{
+        if (!showLoader) {
+            const prev = steps.findIndex((s)=>s.name === state.app.previousStep
+            );
+            transition.in(prev >= 0 ? 'in' : 'enter');
+        }
+    }, [
+        showLoader
+    ]); // Create Markup
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__card",
+        ref: element
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card__nav",
+        style: {
+            opacity: showLoader ? 0 : 1
+        }
+    }, /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, _extends({
+        color: "white",
+        size: "lg",
+        icon: "arrow-back",
+        animationClass: "animate-fade",
+        onClick: navigate(-1)
+    }, back || {
+    })), /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "white animate-fade",
+        onClick: toggleMenu
+    }, title), /*#__PURE__*/ _react.default.createElement(_Buttons.IconButton, {
+        color: "white",
+        size: "lg",
+        icon: "expand",
+        animationClass: "animate-fade",
+        disabled: disableExpand,
+        id: "bc-expand",
+        onClick: toggleMenu
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        id: "bc-menu",
+        className: $.join("booking-card__menu", [
+            !localState.isOpen,
+            'disabled'
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("ul", {
+        className: "booking-card__steps"
+    }, steps.map((step, i)=>/*#__PURE__*/ _react.default.createElement("li", {
+            key: step.name,
+            className: $.join('booking-card__step', [
+                step.complete,
+                'complete'
+            ], [
+                !step.active,
+                'disabled'
+            ], [
+                step.name === state.app.step,
+                'active'
+            ]),
+            onClick: async ()=>{
+                // Close The menu
+                await toggleMenu(); // Navigate to Next Step
+                navigate(step.name)();
+            }
+        }, /*#__PURE__*/ _react.default.createElement("span", null, appCopy.steps[step.name].title), step.complete && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "checkmark",
+            size: "sm"
+        }))
+    ))), /*#__PURE__*/ _react.default.createElement("div", {
+        id: "bc-body",
+        className: "booking-card__body"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("booking-card__body-esc", [
+            localState.isOpen,
+            "listening"
+        ]),
+        onClick: toggleMenu
+    }), showLoader ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card__loader"
+    }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("booking-card__content", [
+            contentClass
+        ])
+    }, (heading || text) && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card__header"
+    }, heading && /*#__PURE__*/ _react.default.createElement("h5", {
+        className: aI
+    }, heading), customText ? customText : text && /*#__PURE__*/ _react.default.createElement("p", {
+        className: $.join("small", aI)
+    }, text)), children, footer && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card__footer"
+    }, /*#__PURE__*/ _react.default.createElement("hr", {
+        className: aI
+    }), footer.title && /*#__PURE__*/ _react.default.createElement("h6", {
+        className: $.join("bold", aI)
+    }, footer.title), footer.text && (typeof footer.text === "string" ? /*#__PURE__*/ _react.default.createElement("p", {
+        className: $.join("small", aI)
+    }, footer.text) : footer.text))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-card__next"
+    }, next !== false && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, _extends({
+        text: nextCopy || appCopy.common.next,
+        onClick: navigate(1),
+        disabled: !((_steps$stepIndex = steps[stepIndex]) !== null && _steps$stepIndex !== void 0 && _steps$stepIndex.complete)
+    }, next || {
+    }))))))));
+}; // Export Component
+_c = BookingCard;
+var _default = BookingCard;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "BookingCard");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../store/context":"2o6qx","../../helpers/hooks":"4wqYR","animejs":"1GvRs","../../components/Loader":"7GUXD","../../components/Icon":"4VYCM","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4wqYR":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.useObjectState = void 0;
+var _react = require("react");
+const useObjectState = (initialState)=>{
+    const [state, setState] = _react.useState(initialState);
+    return [
+        state,
+        (newState)=>setState(Object.assign({
+            }, state, newState))
+    ];
+};
+exports.useObjectState = useObjectState;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4VYCM":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Icon = (_ref)=>{
+    let { icon , size , color  } = _ref;
+    let classes = 'icon-md';
+    let style = {
+    };
+    if (size) {
+        if (typeof size === 'string') classes = "icon-".concat(size);
+        if (size && typeof size === 'number') style = {
+            height: size + 'rem',
+            width: size + 'rem'
+        };
+    }
+    if (color) {
+        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
+        else classes += " ".concat(color);
+    }
+    return(/*#__PURE__*/ _react.default.createElement("svg", {
+        className: classes,
+        style: style
+    }, /*#__PURE__*/ _react.default.createElement("use", {
+        href: "/img/icons.svg#".concat(icon)
+    })));
+};
+_c = Icon;
+var _default = Icon;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Icon");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"7xzNC":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const a = 'animate-item';
+const BackButton = (_ref)=>{
+    let { onClick , text , animationClass , type  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        type: type || "button",
+        className: $.join("back-button", animationClass || a),
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "arrow-back",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text || "Back")));
+};
+_c = BackButton;
+exports.BackButton = BackButton;
+const Button = (_ref2)=>{
+    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("button", [
+            theme
+        ], [
+            icon,
+            "with-icon"
+        ], [
+            disabled,
+            "disabled"
+        ], animationClass || a),
+        onClick: onClick,
+        ref: domRef,
+        type: type || "button"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "button__loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
+};
+_c1 = Button;
+exports.Button = Button;
+const IconButton = (_ref3)=>{
+    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        id: id,
+        className: $.join("icon-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            className
+        ]),
+        onClick: onClick,
+        ref: domRef
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        color: color,
+        size: size
+    })));
+};
+_c2 = IconButton;
+exports.IconButton = IconButton;
+const LinkButton = (_ref4)=>{
+    let { onClick , href , text , domRef , disabled , animationClass , cssClasses  } = _ref4;
+    return(/*#__PURE__*/ _react.default.createElement("a", {
+        href: href,
+        className: $.join("link-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            cssClasses
+        ]),
+        ref: domRef,
+        onClick: onClick
+    }, text));
+};
+_c3 = LinkButton;
+exports.LinkButton = LinkButton;
+var _c, _c1, _c2, _c3;
+$RefreshReg$(_c, "BackButton");
+$RefreshReg$(_c1, "Button");
+$RefreshReg$(_c2, "IconButton");
+$RefreshReg$(_c3, "LinkButton");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"6ErSK":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _extends() {
+    _extends = Object.assign || function(target) {
+        for(var i = 1; i < arguments.length; i++){
+            var source = arguments[i];
+            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
+        }
+        return target;
+    };
+    return _extends.apply(this, arguments);
+}
+const Option1 = (_ref)=>{
+    let { animationClass , name , id , type , onChange , selected , icon , label , value  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("option", animationClass || "animate-item", [
+            selected,
+            "selected"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("input", {
+        type: type || "radio",
+        name: name,
+        style: {
+            "display": "none"
+        },
+        value: value,
+        checked: selected,
+        onChange: onChange && ((e)=>onChange(e.target.checked, e.target.value)
+        ),
+        id: id
+    }), /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, icon && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "xl"
+    }), label && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small bold"
+    }, label))));
+};
+_c = Option1;
+const Options = (_ref2)=>{
+    let { options , name , columns , selected , onChange  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "options",
+        style: {
+            gridTemplateColumns: "repeat(".concat(columns || options.length, ", 1fr)")
+        }
+    }, options.map((option, index)=>/*#__PURE__*/ _react.default.createElement(Option1, _extends({
+            key: index,
+            name: name,
+            id: "".concat(name, "-").concat(index),
+            onChange: onChange,
+            selected: selected === option.value
+        }, option))
+    )));
+};
+_c1 = Options;
+var _default = Options;
+exports.default = _default;
+var _c, _c1;
+$RefreshReg$(_c, "Option");
+$RefreshReg$(_c1, "Options");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"548FS":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -72089,7 +72089,7 @@ $RefreshReg$(_c1, "VehiclePicker");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../components/Icon":"4VYCM","animejs":"1GvRs","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@use-gesture/react":"3FqPS"}],"3FqPS":[function(require,module,exports) {
+},{"react":"3qVBT","../../components/Icon":"4VYCM","animejs":"1GvRs","@use-gesture/react":"3FqPS","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3FqPS":[function(require,module,exports) {
 'use strict';
 module.exports = require("./use-gesture-react.cjs.dev.js");
 
@@ -74247,178 +74247,7 @@ $RefreshReg$(_c, "Textarea");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3PuMF":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _animejs = _interopRequireDefault(require("animejs"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Define Animations
-const animations = {
-    async card (container, direction, delay) {
-        const targets = container.children(".animate-item").e();
-        const navbar = container.children(".animate-fade").e();
-        const tl = _animejs.default.timeline({
-            easing: 'easeInOutQuad',
-            duration: 250
-        }); // Card Enter Animation
-        if (direction === 'in' || direction === 'enter') {
-            if (direction === 'enter') tl.add({
-                targets: container.e(),
-                translateX: [
-                    -1000,
-                    0
-                ],
-                duration: 750
-            });
-            tl.add({
-                targets: targets,
-                translateY: [
-                    _animejs.default.stagger([
-                        100,
-                        25
-                    ]),
-                    0
-                ],
-                opacity: [
-                    0,
-                    1
-                ],
-                delay: _animejs.default.stagger([
-                    0,
-                    250
-                ])
-            }); // Fade Out Navbar
-            tl.add({
-                targets: navbar,
-                opacity: [
-                    0,
-                    1
-                ],
-                delay: _animejs.default.stagger([
-                    0,
-                    150
-                ])
-            });
-        } else {
-            // Fade Out Navbar
-            tl.add({
-                targets: navbar,
-                opacity: [
-                    1,
-                    0
-                ],
-                delay: _animejs.default.stagger([
-                    0,
-                    150
-                ])
-            }); // Add Default Animation
-            tl.add({
-                targets: targets,
-                translateY: _animejs.default.stagger([
-                    -25,
-                    -100
-                ]),
-                opacity: 0,
-                delay: _animejs.default.stagger([
-                    0,
-                    250
-                ])
-            }, '-=250'); // Fade Out Card On Exit
-            if (direction === 'exit') tl.add({
-                targets: container.e(),
-                translateX: [
-                    0,
-                    -1000
-                ],
-                duration: 750
-            });
-        }
-        tl.pause();
-        await $.delay(delay);
-        tl.play();
-        await tl.finished;
-    },
-    async view (container, direction, delay) {
-        const targets = container.children(".animate-item, .animate-children > *").e();
-        const tl = _animejs.default.timeline({
-            easing: 'easeInOutQuad',
-            duration: 250
-        });
-        if (direction === 'in') tl.add({
-            targets: targets,
-            translateY: [
-                _animejs.default.stagger([
-                    100,
-                    25
-                ]),
-                0
-            ],
-            opacity: [
-                0,
-                1
-            ],
-            delay: _animejs.default.stagger([
-                0,
-                250
-            ])
-        });
-        else tl.add({
-            targets: targets,
-            translateY: _animejs.default.stagger([
-                -25,
-                -100
-            ]),
-            opacity: 0,
-            delay: _animejs.default.stagger([
-                0,
-                250
-            ])
-        }, '-=250');
-        tl.pause();
-        await $.delay(delay);
-        tl.play();
-        await tl.finished;
-    }
-};
-class Transition {
-    set(_ref) {
-        let { container , animation  } = _ref;
-        this.animation = animation;
-        this.container = $(container);
-        this.navbar = this.container.children(".animate-fade").e();
-        this.targets = this.container.children(".animate-item").e();
-    }
-    async to(step, direction) {
-        let delay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
-        await this.out(direction);
-        await $.delay(delay);
-        this.setStep(step);
-    }
-    in() {
-        let direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'in';
-        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
-        return animations[this.animation](this.container, direction, delay);
-    }
-    out() {
-        let direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'out';
-        return animations[this.animation](this.container, direction);
-    }
-    // Create Dispatcher
-    constructor(dispatcher){
-        this.setStep = (step)=>dispatcher("STEP", step)
-        ;
-    }
-}
-exports.default = Transition;
-
-},{"animejs":"1GvRs"}],"1ppUv":[function(require,module,exports) {
+},{"react":"3qVBT","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"1ppUv":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -74496,7 +74325,7 @@ $RefreshReg$(_c, "CheckoutApp");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","./Summary":"5GKC2","./Login":"2Xdn3","./Checkout":"6X3ur","./Confirmation":"K2ypK"}],"5GKC2":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","./Summary":"5GKC2","./Login":"2Xdn3","./Checkout":"6X3ur","./Confirmation":"K2ypK","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"5GKC2":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -74602,7 +74431,7 @@ $RefreshReg$(_c, "Summary");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../components/BookingPage":"55aoD","dayjs":"2UVMx","../../helpers/utils":"5inPj"}],"55aoD":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","dayjs":"2UVMx","../../helpers/utils":"5inPj","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"55aoD":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -74700,7 +74529,7 @@ $RefreshReg$(_c, "BookingPage");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","./BookingLoader":"5ToZm","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx"}],"2Xdn3":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","./BookingLoader":"5ToZm","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"2Xdn3":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -74804,7 +74633,7 @@ $RefreshReg$(_c, "Login");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","axios":"5FCRD","../../Login/App":"4B1Xh"}],"4B1Xh":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","axios":"5FCRD","../components/BookingPage":"55aoD","../../Login/App":"4B1Xh","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4B1Xh":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -76466,7 +76295,7 @@ $RefreshReg$(_c, "Greeting");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","animejs":"1GvRs"}],"3dy7A":[function(require,module,exports) {
+},{"react":"3qVBT","animejs":"1GvRs","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3dy7A":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -77061,7 +76890,674 @@ $RefreshReg$(_c, "Checkout");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../../helpers/hooks":"4wqYR","../components/PaymentMethod":"766fa","./CheckoutSections":"4BkiM","./AddPaymentMethod":"2WJWe","../helpers/useCheckout":"17flr"}],"3BTVB":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../components/PaymentMethod":"766fa","./AddPaymentMethod":"2WJWe","./CheckoutSections":"4BkiM","../../helpers/hooks":"4wqYR","@stripe/react-stripe-js":"3BTVB","../helpers/useCheckout":"17flr","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"766fa":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const PaymentMethod = (_ref)=>{
+    let { onClick , label , icon , type , selected , text , isCard , isMainBtn  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method",
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method__info"
+    }, label && /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "bold"
+    }, label), /*#__PURE__*/ _react.default.createElement("div", null, type === 'button' || isMainBtn ? /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "plus"
+    }) : /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "xl"
+    }), /*#__PURE__*/ _react.default.createElement("p", null, isCard && "•••• •••• •••• •••• ", text))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method__expand"
+    }, type === 'option' && selected && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "checkmark"
+    }), type === 'main' && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "more",
+        size: "xl"
+    }))));
+};
+_c = PaymentMethod;
+var _default = PaymentMethod;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "PaymentMethod");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../../components/Icon":"4VYCM","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"2WJWe":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = exports.AddPaymentMethod = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _context = _interopRequireDefault(require("../store/context"));
+var _Buttons = require("../../components/Buttons");
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Checkbox = _interopRequireDefault(require("../../components/Checkbox"));
+var _hooks = require("../../helpers/hooks");
+var _cardBrands = require("../helpers/cardBrands");
+var _useCheckout = require("../helpers/useCheckout");
+var _reactStripeJs = require("@stripe/react-stripe-js");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Components
+// Import Helpers
+// Import Stripe Components
+// Create Third Page
+const AddPaymentMethod = (_ref)=>{
+    let { email , name , onNameChange , stripe , setMethod , changeView , saveCard , setSaveCard  } = _ref;
+    // Create Stripe Elements
+    const elements = _reactStripeJs.useElements(); // Get State copy
+    const { state: { app: { step  }  } , appCopy: { steps  }  } = _react.useContext(_context.default);
+    const copy = steps[step];
+    const viewCopy = copy.views["add-card"]; // Create Local State
+    const [state, setState] = _hooks.useObjectState({
+        cardFocused: false,
+        cardError: false,
+        cardComplete: false,
+        cardBrand: '',
+        nameErrors: [],
+        showLoader: false
+    }); // Create Submission Handler
+    const handleSubmit = async ()=>{
+        // Show Loader
+        setState({
+            showLoader: true
+        }); // Start Timer
+        const timer = $.timer(1000).start(); // Add Payment Method
+        const { error , paymentMethod  } = await stripe.createPaymentMethod({
+            type: 'card',
+            card: elements.getElement(_reactStripeJs.CardElement),
+            billing_details: {
+                email,
+                name
+            }
+        }); // Catch Error
+        if (error) return setState({
+            cardError: 'failed'
+        }); // Artificial Delay
+        await timer.hold(); // Set Method and change view
+        const { id , type , card: { brand , last4  }  } = paymentMethod;
+        setMethod({
+            id,
+            type,
+            brand,
+            last4,
+            name: _cardBrands.getBrand(brand)
+        }); // Change View
+        changeView();
+    }; // Render Component
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__header animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h3", null, viewCopy.title)), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__form"
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-full-name",
+        type: "name",
+        icon: "person-circle",
+        label: copy.labels.name,
+        placeholder: viewCopy.placeholder,
+        value: name,
+        onChange: onNameChange,
+        errors: state.nameErrors
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("input__input", [
+            state.cardFocused,
+            "focused"
+        ], [
+            state.cardError,
+            "has-error"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__stripe"
+    }, /*#__PURE__*/ _react.default.createElement("label", null, copy.labels.card), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__stripe-container"
+    }, /*#__PURE__*/ _react.default.createElement(_reactStripeJs.CardElement, {
+        options: {
+            style: _useCheckout.stripeStyle
+        },
+        onChange: (e)=>{
+            var _e$error;
+            return setState({
+                cardError: (_e$error = e.error) === null || _e$error === void 0 ? void 0 : _e$error.code,
+                cardComplete: e.complete,
+                cardBrand: e.brand
+            });
+        },
+        onFocus: ()=>setState({
+                cardFocused: true
+            })
+        ,
+        onBlur: ()=>setState({
+                cardFocused: false
+            })
+    })))), state.cardError && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__error"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "error",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small bold"
+    }, copy.errors[state.cardError] || copy.errors.default)))), /*#__PURE__*/ _react.default.createElement(_Checkbox.default, {
+        id: "save-payment-method",
+        label: viewCopy.save,
+        checked: saveCard,
+        onChange: setSaveCard
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__form"
+    }, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: viewCopy.button,
+        disabled: !!(!state.cardComplete || state.nameErrors.length),
+        showLoader: state.showLoader,
+        onClick: handleSubmit
+    }))));
+};
+_c = AddPaymentMethod;
+exports.AddPaymentMethod = AddPaymentMethod;
+var _default = AddPaymentMethod;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AddPaymentMethod");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../store/context":"2o6qx","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../components/Icon":"4VYCM","../../components/Checkbox":"1fRxr","../../helpers/hooks":"4wqYR","../helpers/cardBrands":"3Xko7","../helpers/useCheckout":"17flr","@stripe/react-stripe-js":"3BTVB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"1fRxr":[function(require,module,exports) {
+var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Checkbox = (_ref)=>{
+    let { id , label , checked , onChange: _onChange  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "checkbox animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("input", {
+        type: "checkbox",
+        id: id,
+        checked: checked,
+        onChange: (e)=>_onChange(e.target.checked)
+    }), /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, /*#__PURE__*/ _react.default.createElement("span", null, checked && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "check",
+        size: "xs"
+    })), /*#__PURE__*/ _react.default.createElement("h6", null, label))));
+};
+_c = Checkbox;
+var _default = Checkbox;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Checkbox");
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3Xko7":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getWalletProvider = exports.getBrand = void 0;
+const getBrand = (brand)=>{
+    switch(brand){
+        case 'mastercard':
+            return 'MasterCard';
+        case 'visa':
+            return 'Visa';
+        case 'amex':
+            return 'American Express';
+        case 'discover':
+            return 'Discover';
+        default:
+            return brand;
+    }
+};
+exports.getBrand = getBrand;
+const getWalletProvider = (provider)=>{
+    switch(provider){
+        case 'google-pay':
+        case 'googlePay':
+            return 'Google Pay';
+        case 'apple-pay':
+        case 'applePay':
+            return 'Apple Pay';
+    }
+};
+exports.getWalletProvider = getWalletProvider;
+
+},{}],"17flr":[function(require,module,exports) {
+var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+helpers.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = exports.walletButtonStyle = exports.stripeStyle = exports.stripeOptions = void 0;
+var _react = require("react");
+var _context = _interopRequireDefault(require("../store/context"));
+var _stripeJs = require("@stripe/stripe-js");
+var _axios = _interopRequireDefault(require("axios"));
+var _config = _interopRequireDefault(require("../../data/config"));
+var _hooks = require("../../helpers/hooks");
+var _cardBrands = require("./cardBrands");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+// Create Stripe Options
+const stripeOptions = {
+    fonts: [
+        {
+            family: 'Silka',
+            src: "url(".concat(window.location.origin, "/fonts/silka/medium/silka-medium-webfont.woff2)"),
+            weight: '400'
+        }
+    ]
+};
+exports.stripeOptions = stripeOptions;
+const stripeStyle = {
+    base: {
+        color: "#333333",
+        fontWeight: 400,
+        fontFamily: "Silka, sans-serif",
+        fontSize: "18px",
+        fontSmoothing: "antialiased",
+        ":-webkit-autofill": {
+            color: "#333"
+        },
+        "::placeholder": {
+            color: "#C6CAD2"
+        }
+    }
+};
+exports.stripeStyle = stripeStyle;
+const walletButtonStyle = {
+    paymentRequestButton: {
+        type: "book",
+        theme: "dark",
+        height: "64px"
+    }
+};
+exports.walletButtonStyle = walletButtonStyle;
+const testData = {
+    quote: "611c6bd216d9c70f9a052b4e",
+    vehicle: "610b1cdf6c7bf65df87de41d"
+}; // Create Payment Processing Function
+const processPayment = (stripe, secret)=>{
+    const errMsg = {
+        complete: true,
+        success: false,
+        message: "Problem confirming card"
+    };
+    const succesMsg = {
+        complete: true,
+        success: true
+    };
+    return async (id, e, saveCard)=>{
+        const { paymentIntent , error  } = await stripe.confirmCardPayment(secret, {
+            payment_method: id,
+            setup_future_usage: saveCard && 'off_session'
+        }, {
+            handleActions: false
+        });
+        console.log(paymentIntent, error);
+        if (error) {
+            e && e.complete('fail');
+            return errMsg;
+        } else e && e.complete('success');
+        if (paymentIntent.status === 'requires_action') {
+            const { error: error1  } = await stripe.confirmCardPayment(secret);
+            return error1 ? errMsg : succesMsg;
+        } else return succesMsg;
+    };
+}; // Ceraete The Hook
+const useCheckout = ()=>{
+    const { state: { reservation: r  } , update  } = _react.useContext(_context.default);
+    const [state, setState] = _hooks.useObjectState({
+        status: {
+        },
+        cost: {
+            total: {
+            },
+            subtotal: {
+            }
+        },
+        credits: {
+        }
+    });
+    _react.useEffect(()=>{
+        const loadStripeAPI = async ()=>{
+            var _r$route, _r$route$distance, _r$route2, _r$route2$eta, _r$vehicle, _res$data;
+            const timer = $.timer(850).start(); // Load Stripe API
+            const stripe = await _stripeJs.loadStripe(_config.default.stripe.key); // Create payment intent on server
+            const res = await _axios.default.post('/api/booking/create-payment', {
+                service_type: r.serviceType,
+                flight: _objectSpread(_objectSpread({
+                }, r.flight), {
+                }, {
+                    airport: r.flight.airport.name
+                }),
+                cruise: _objectSpread(_objectSpread({
+                }, r.cruise), {
+                }, {
+                    port: r.cruise.port.name
+                }),
+                origin: r.origin,
+                destination: r.destination,
+                schedule: r.schedule,
+                route: {
+                    distance: (_r$route = r.route) === null || _r$route === void 0 ? void 0 : (_r$route$distance = _r$route.distance) === null || _r$route$distance === void 0 ? void 0 : _r$route$distance.text,
+                    eta: (_r$route2 = r.route) === null || _r$route2 === void 0 ? void 0 : (_r$route2$eta = _r$route2.eta) === null || _r$route2$eta === void 0 ? void 0 : _r$route2$eta.text
+                },
+                passengers: {
+                    total: r.passengers,
+                    frontSeats: r.childSeats.front,
+                    rearSeats: r.childSeats.rear,
+                    boosterSeats: r.childSeats.booster
+                },
+                vehicle: (r === null || r === void 0 ? void 0 : (_r$vehicle = r.vehicle) === null || _r$vehicle === void 0 ? void 0 : _r$vehicle._id) || testData.vehicle,
+                notes: r.notes,
+                quote: r.quote || testData.quote
+            }); // Emergency Return
+            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.total)) return; // Destructure Payment Intent
+            const { total , sub_total , secret , paymentMethods , credits , code  } = res === null || res === void 0 ? void 0 : res.data; // Update Global State
+            update("CODE", code); // Create Payment Request For Mobile Wallets
+            const paymentRequest = stripe.paymentRequest({
+                country: 'US',
+                currency: 'usd',
+                total: {
+                    label: 'Car Reservation Total',
+                    amount: total
+                },
+                requestPayerName: true,
+                requestPayerEmail: true
+            }); // Get Mobile Wallets
+            const wallets = await paymentRequest.canMakePayment() || {
+            }; // Attach Wallet Event Listers
+            if (wallets) paymentRequest.on('paymentmethod', async (e)=>{
+                const status = await processPayment(stripe, secret)(e.paymentMethod.id, e);
+                setState({
+                    status
+                });
+            });
+             // Artifical Delay
+            await timer.hold();
+            await $.delay(150); // Finally Update The State
+            setState({
+                stripe,
+                secret,
+                cost: {
+                    total: {
+                        cents: total,
+                        dollars: (total / 100).toFixed(2)
+                    },
+                    subtotal: {
+                        cents: sub_total,
+                        dollars: (sub_total / 100).toFixed(2)
+                    }
+                },
+                credits: {
+                    cents: credits,
+                    dollars: (credits / 100).toFixed(2)
+                },
+                methods: {
+                    all: paymentMethods.map((card)=>({
+                            brand: card.brand,
+                            last4: card.digits,
+                            id: card.id,
+                            name: _cardBrands.getBrand(card.brand),
+                            type: 'card'
+                        })
+                    ),
+                    default: null
+                },
+                request: paymentRequest,
+                wallets: _objectSpread(_objectSpread({
+                }, wallets), {
+                }, {
+                    enabled: Array.from(Object.entries(wallets)).map((_ref)=>{
+                        let [key, val] = _ref;
+                        return {
+                            provider: key.replace(/[A-Z]/g, (m)=>"-" + m.toLowerCase()
+                            ),
+                            enabled: val,
+                            id: key,
+                            name: _cardBrands.getWalletProvider(key),
+                            type: 'wallet'
+                        };
+                    }).filter((itm)=>itm.enabled
+                    )
+                }),
+                process: processPayment(stripe, secret),
+                update: setState
+            });
+        };
+        if (!state.stripe) loadStripeAPI();
+    }, []);
+    return state;
+}; // Export the hook
+var _default = useCheckout;
+exports.default = _default;
+
+  helpers.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"3qVBT","../store/context":"2o6qx","@stripe/stripe-js":"3ghLS","axios":"5FCRD","../../data/config":"3Re6c","../../helpers/hooks":"4wqYR","./cardBrands":"3Xko7","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3ghLS":[function(require,module,exports) {
+'use strict';
+Object.defineProperty(exports, '__esModule', {
+    value: true
+});
+var V3_URL = 'https://js.stripe.com/v3';
+var V3_URL_REGEX = /^https:\/\/js\.stripe\.com\/v3\/?(\?.*)?$/;
+var EXISTING_SCRIPT_MESSAGE = 'loadStripe.setLoadParameters was called but an existing Stripe.js script already exists in the document; existing script parameters will be used';
+var findScript = function findScript1() {
+    var scripts = document.querySelectorAll("script[src^=\"".concat(V3_URL, "\"]"));
+    for(var i = 0; i < scripts.length; i++){
+        var script = scripts[i];
+        if (!V3_URL_REGEX.test(script.src)) continue;
+        return script;
+    }
+    return null;
+};
+var injectScript = function injectScript1(params) {
+    var queryString = params && !params.advancedFraudSignals ? '?advancedFraudSignals=false' : '';
+    var script = document.createElement('script');
+    script.src = "".concat(V3_URL).concat(queryString);
+    var headOrBody = document.head || document.body;
+    if (!headOrBody) throw new Error('Expected document.body not to be null. Stripe.js requires a <body> element.');
+    headOrBody.appendChild(script);
+    return script;
+};
+var registerWrapper = function registerWrapper1(stripe, startTime) {
+    if (!stripe || !stripe._registerWrapper) return;
+    stripe._registerWrapper({
+        name: 'stripe-js',
+        version: "1.15.1",
+        startTime: startTime
+    });
+};
+var stripePromise = null;
+var loadScript = function loadScript1(params) {
+    // Ensure that we only attempt to load Stripe.js at most once
+    if (stripePromise !== null) return stripePromise;
+    stripePromise = new Promise(function(resolve, reject) {
+        if (typeof window === 'undefined') {
+            // Resolve to null when imported server side. This makes the module
+            // safe to import in an isomorphic code base.
+            resolve(null);
+            return;
+        }
+        if (window.Stripe && params) console.warn(EXISTING_SCRIPT_MESSAGE);
+        if (window.Stripe) {
+            resolve(window.Stripe);
+            return;
+        }
+        try {
+            var script = findScript();
+            if (script && params) console.warn(EXISTING_SCRIPT_MESSAGE);
+            else if (!script) script = injectScript(params);
+            script.addEventListener('load', function() {
+                if (window.Stripe) resolve(window.Stripe);
+                else reject(new Error('Stripe.js not available'));
+            });
+            script.addEventListener('error', function() {
+                reject(new Error('Failed to load Stripe.js'));
+            });
+        } catch (error) {
+            reject(error);
+            return;
+        }
+    });
+    return stripePromise;
+};
+var initStripe = function initStripe1(maybeStripe, args, startTime) {
+    if (maybeStripe === null) return null;
+    var stripe = maybeStripe.apply(undefined, args);
+    registerWrapper(stripe, startTime);
+    return stripe;
+};
+// own script injection.
+var stripePromise$1 = Promise.resolve().then(function() {
+    return loadScript(null);
+});
+var loadCalled = false;
+stripePromise$1["catch"](function(err) {
+    if (!loadCalled) console.warn(err);
+});
+var loadStripe = function loadStripe1() {
+    for(var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)args[_key] = arguments[_key];
+    loadCalled = true;
+    var startTime = Date.now();
+    return stripePromise$1.then(function(maybeStripe) {
+        return initStripe(maybeStripe, args, startTime);
+    });
+};
+exports.loadStripe = loadStripe;
+
+},{}],"3BTVB":[function(require,module,exports) {
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react')) : typeof define === 'function' && define.amd ? define([
         'exports',
@@ -77560,60 +78056,7 @@ $RefreshReg$(_c, "Checkout");
     });
 });
 
-},{"react":"3qVBT"}],"766fa":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("../../components/Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const PaymentMethod = (_ref)=>{
-    let { onClick , label , icon , type , selected , text , isCard , isMainBtn  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "payment-method",
-        onClick: onClick
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "payment-method__info"
-    }, label && /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "bold"
-    }, label), /*#__PURE__*/ _react.default.createElement("div", null, type === 'button' || isMainBtn ? /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "plus"
-    }) : /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon,
-        size: "xl"
-    }), /*#__PURE__*/ _react.default.createElement("p", null, isCard && "•••• •••• •••• •••• ", text))), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "payment-method__expand"
-    }, type === 'option' && selected && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "checkmark"
-    }), type === 'main' && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "more",
-        size: "xl"
-    }))));
-};
-_c = PaymentMethod;
-var _default = PaymentMethod;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "PaymentMethod");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../../components/Icon":"4VYCM","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"4BkiM":[function(require,module,exports) {
+},{"react":"3qVBT"}],"4BkiM":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -77759,621 +78202,7 @@ $RefreshReg$(_c1, "SelectPaymentMethod");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../store/context":"2o6qx","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","@stripe/react-stripe-js":"3BTVB","../../components/Buttons":"7xzNC","../components/PaymentMethod":"766fa","../../components/Icon":"4VYCM","../helpers/useCheckout":"17flr"}],"17flr":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = exports.walletButtonStyle = exports.stripeStyle = exports.stripeOptions = void 0;
-var _react = require("react");
-var _context = _interopRequireDefault(require("../store/context"));
-var _stripeJs = require("@stripe/stripe-js");
-var _axios = _interopRequireDefault(require("axios"));
-var _config = _interopRequireDefault(require("../../data/config"));
-var _hooks = require("../../helpers/hooks");
-var _cardBrands = require("./cardBrands");
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-        var symbols = Object.getOwnPropertySymbols(object);
-        if (enumerableOnly) symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-        keys.push.apply(keys, symbols);
-    }
-    return keys;
-}
-function _objectSpread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {
-        };
-        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
-            _defineProperty(target, key, source[key]);
-        });
-        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-        else ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-    }
-    return target;
-}
-function _defineProperty(obj, key, value) {
-    if (key in obj) Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-    });
-    else obj[key] = value;
-    return obj;
-}
-// Create Stripe Options
-const stripeOptions = {
-    fonts: [
-        {
-            family: 'Silka',
-            src: "url(".concat(window.location.origin, "/fonts/silka/medium/silka-medium-webfont.woff2)"),
-            weight: '400'
-        }
-    ]
-};
-exports.stripeOptions = stripeOptions;
-const stripeStyle = {
-    base: {
-        color: "#333333",
-        fontWeight: 400,
-        fontFamily: "Silka, sans-serif",
-        fontSize: "18px",
-        fontSmoothing: "antialiased",
-        ":-webkit-autofill": {
-            color: "#333"
-        },
-        "::placeholder": {
-            color: "#C6CAD2"
-        }
-    }
-};
-exports.stripeStyle = stripeStyle;
-const walletButtonStyle = {
-    paymentRequestButton: {
-        type: "book",
-        theme: "dark",
-        height: "64px"
-    }
-};
-exports.walletButtonStyle = walletButtonStyle;
-const testData = {
-    quote: "611c6bd216d9c70f9a052b4e",
-    vehicle: "610b1cdf6c7bf65df87de41d"
-}; // Create Payment Processing Function
-const processPayment = (stripe, secret)=>{
-    const errMsg = {
-        complete: true,
-        success: false,
-        message: "Problem confirming card"
-    };
-    const succesMsg = {
-        complete: true,
-        success: true
-    };
-    return async (id, e, saveCard)=>{
-        const { paymentIntent , error  } = await stripe.confirmCardPayment(secret, {
-            payment_method: id,
-            setup_future_usage: saveCard && 'off_session'
-        }, {
-            handleActions: false
-        });
-        console.log(paymentIntent, error);
-        if (error) {
-            e && e.complete('fail');
-            return errMsg;
-        } else e && e.complete('success');
-        if (paymentIntent.status === 'requires_action') {
-            const { error: error1  } = await stripe.confirmCardPayment(secret);
-            return error1 ? errMsg : succesMsg;
-        } else return succesMsg;
-    };
-}; // Ceraete The Hook
-const useCheckout = ()=>{
-    const { state: { reservation: r  } , update  } = _react.useContext(_context.default);
-    const [state, setState] = _hooks.useObjectState({
-        status: {
-        },
-        cost: {
-            total: {
-            },
-            subtotal: {
-            }
-        },
-        credits: {
-        }
-    });
-    _react.useEffect(()=>{
-        const loadStripeAPI = async ()=>{
-            var _r$route, _r$route$distance, _r$route2, _r$route2$eta, _r$vehicle, _res$data;
-            const timer = $.timer(850).start(); // Load Stripe API
-            const stripe = await _stripeJs.loadStripe(_config.default.stripe.key); // Create payment intent on server
-            const res = await _axios.default.post('/api/booking/create-payment', {
-                service_type: r.serviceType,
-                flight: _objectSpread(_objectSpread({
-                }, r.flight), {
-                }, {
-                    airport: r.flight.airport.name
-                }),
-                cruise: _objectSpread(_objectSpread({
-                }, r.cruise), {
-                }, {
-                    port: r.cruise.port.name
-                }),
-                origin: r.origin,
-                destination: r.destination,
-                schedule: r.schedule,
-                route: {
-                    distance: (_r$route = r.route) === null || _r$route === void 0 ? void 0 : (_r$route$distance = _r$route.distance) === null || _r$route$distance === void 0 ? void 0 : _r$route$distance.text,
-                    eta: (_r$route2 = r.route) === null || _r$route2 === void 0 ? void 0 : (_r$route2$eta = _r$route2.eta) === null || _r$route2$eta === void 0 ? void 0 : _r$route2$eta.text
-                },
-                passengers: {
-                    total: r.passengers,
-                    frontSeats: r.childSeats.front,
-                    rearSeats: r.childSeats.rear,
-                    boosterSeats: r.childSeats.booster
-                },
-                vehicle: (r === null || r === void 0 ? void 0 : (_r$vehicle = r.vehicle) === null || _r$vehicle === void 0 ? void 0 : _r$vehicle._id) || testData.vehicle,
-                notes: r.notes,
-                quote: r.quote || testData.quote
-            }); // Emergency Return
-            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.total)) return; // Destructure Payment Intent
-            const { total , sub_total , secret , paymentMethods , credits , code  } = res === null || res === void 0 ? void 0 : res.data; // Update Global State
-            update("CODE", code); // Create Payment Request For Mobile Wallets
-            const paymentRequest = stripe.paymentRequest({
-                country: 'US',
-                currency: 'usd',
-                total: {
-                    label: 'Car Reservation Total',
-                    amount: total
-                },
-                requestPayerName: true,
-                requestPayerEmail: true
-            }); // Get Mobile Wallets
-            const wallets = await paymentRequest.canMakePayment() || {
-            }; // Attach Wallet Event Listers
-            if (wallets) paymentRequest.on('paymentmethod', async (e)=>{
-                const status = await processPayment(stripe, secret)(e.paymentMethod.id, e);
-                setState({
-                    status
-                });
-            });
-             // Artifical Delay
-            await timer.hold();
-            await $.delay(150); // Finally Update The State
-            setState({
-                stripe,
-                secret,
-                cost: {
-                    total: {
-                        cents: total,
-                        dollars: (total / 100).toFixed(2)
-                    },
-                    subtotal: {
-                        cents: sub_total,
-                        dollars: (sub_total / 100).toFixed(2)
-                    }
-                },
-                credits: {
-                    cents: credits,
-                    dollars: (credits / 100).toFixed(2)
-                },
-                methods: {
-                    all: paymentMethods.map((card)=>({
-                            brand: card.brand,
-                            last4: card.digits,
-                            id: card.id,
-                            name: _cardBrands.getBrand(card.brand),
-                            type: 'card'
-                        })
-                    ),
-                    default: null
-                },
-                request: paymentRequest,
-                wallets: _objectSpread(_objectSpread({
-                }, wallets), {
-                }, {
-                    enabled: Array.from(Object.entries(wallets)).map((_ref)=>{
-                        let [key, val] = _ref;
-                        return {
-                            provider: key.replace(/[A-Z]/g, (m)=>"-" + m.toLowerCase()
-                            ),
-                            enabled: val,
-                            id: key,
-                            name: _cardBrands.getWalletProvider(key),
-                            type: 'wallet'
-                        };
-                    }).filter((itm)=>itm.enabled
-                    )
-                }),
-                process: processPayment(stripe, secret),
-                update: setState
-            });
-        };
-        if (!state.stripe) loadStripeAPI();
-    }, []);
-    return state;
-}; // Export the hook
-var _default = useCheckout;
-exports.default = _default;
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../store/context":"2o6qx","@stripe/stripe-js":"3ghLS","axios":"5FCRD","../../data/config":"3Re6c","../../helpers/hooks":"4wqYR","./cardBrands":"3Xko7","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3ghLS":[function(require,module,exports) {
-'use strict';
-Object.defineProperty(exports, '__esModule', {
-    value: true
-});
-var V3_URL = 'https://js.stripe.com/v3';
-var V3_URL_REGEX = /^https:\/\/js\.stripe\.com\/v3\/?(\?.*)?$/;
-var EXISTING_SCRIPT_MESSAGE = 'loadStripe.setLoadParameters was called but an existing Stripe.js script already exists in the document; existing script parameters will be used';
-var findScript = function findScript1() {
-    var scripts = document.querySelectorAll("script[src^=\"".concat(V3_URL, "\"]"));
-    for(var i = 0; i < scripts.length; i++){
-        var script = scripts[i];
-        if (!V3_URL_REGEX.test(script.src)) continue;
-        return script;
-    }
-    return null;
-};
-var injectScript = function injectScript1(params) {
-    var queryString = params && !params.advancedFraudSignals ? '?advancedFraudSignals=false' : '';
-    var script = document.createElement('script');
-    script.src = "".concat(V3_URL).concat(queryString);
-    var headOrBody = document.head || document.body;
-    if (!headOrBody) throw new Error('Expected document.body not to be null. Stripe.js requires a <body> element.');
-    headOrBody.appendChild(script);
-    return script;
-};
-var registerWrapper = function registerWrapper1(stripe, startTime) {
-    if (!stripe || !stripe._registerWrapper) return;
-    stripe._registerWrapper({
-        name: 'stripe-js',
-        version: "1.15.1",
-        startTime: startTime
-    });
-};
-var stripePromise = null;
-var loadScript = function loadScript1(params) {
-    // Ensure that we only attempt to load Stripe.js at most once
-    if (stripePromise !== null) return stripePromise;
-    stripePromise = new Promise(function(resolve, reject) {
-        if (typeof window === 'undefined') {
-            // Resolve to null when imported server side. This makes the module
-            // safe to import in an isomorphic code base.
-            resolve(null);
-            return;
-        }
-        if (window.Stripe && params) console.warn(EXISTING_SCRIPT_MESSAGE);
-        if (window.Stripe) {
-            resolve(window.Stripe);
-            return;
-        }
-        try {
-            var script = findScript();
-            if (script && params) console.warn(EXISTING_SCRIPT_MESSAGE);
-            else if (!script) script = injectScript(params);
-            script.addEventListener('load', function() {
-                if (window.Stripe) resolve(window.Stripe);
-                else reject(new Error('Stripe.js not available'));
-            });
-            script.addEventListener('error', function() {
-                reject(new Error('Failed to load Stripe.js'));
-            });
-        } catch (error) {
-            reject(error);
-            return;
-        }
-    });
-    return stripePromise;
-};
-var initStripe = function initStripe1(maybeStripe, args, startTime) {
-    if (maybeStripe === null) return null;
-    var stripe = maybeStripe.apply(undefined, args);
-    registerWrapper(stripe, startTime);
-    return stripe;
-};
-// own script injection.
-var stripePromise$1 = Promise.resolve().then(function() {
-    return loadScript(null);
-});
-var loadCalled = false;
-stripePromise$1["catch"](function(err) {
-    if (!loadCalled) console.warn(err);
-});
-var loadStripe = function loadStripe1() {
-    for(var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++)args[_key] = arguments[_key];
-    loadCalled = true;
-    var startTime = Date.now();
-    return stripePromise$1.then(function(maybeStripe) {
-        return initStripe(maybeStripe, args, startTime);
-    });
-};
-exports.loadStripe = loadStripe;
-
-},{}],"3Xko7":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getWalletProvider = exports.getBrand = void 0;
-const getBrand = (brand)=>{
-    switch(brand){
-        case 'mastercard':
-            return 'MasterCard';
-        case 'visa':
-            return 'Visa';
-        case 'amex':
-            return 'American Express';
-        case 'discover':
-            return 'Discover';
-        default:
-            return brand;
-    }
-};
-exports.getBrand = getBrand;
-const getWalletProvider = (provider)=>{
-    switch(provider){
-        case 'google-pay':
-        case 'googlePay':
-            return 'Google Pay';
-        case 'apple-pay':
-        case 'applePay':
-            return 'Apple Pay';
-    }
-};
-exports.getWalletProvider = getWalletProvider;
-
-},{}],"2WJWe":[function(require,module,exports) {
-var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = exports.AddPaymentMethod = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _context = _interopRequireDefault(require("../store/context"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _Icon = _interopRequireDefault(require("../../components/Icon"));
-var _Checkbox = _interopRequireDefault(require("../../components/Checkbox"));
-var _hooks = require("../../helpers/hooks");
-var _cardBrands = require("../helpers/cardBrands");
-var _useCheckout = require("../helpers/useCheckout");
-var _reactStripeJs = require("@stripe/react-stripe-js");
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-// Import Components
-// Import Helpers
-// Import Stripe Components
-// Create Third Page
-const AddPaymentMethod = (_ref)=>{
-    let { email , name , onNameChange , stripe , setMethod , changeView , saveCard , setSaveCard  } = _ref;
-    // Create Stripe Elements
-    const elements = _reactStripeJs.useElements(); // Get State copy
-    const { state: { app: { step  }  } , appCopy: { steps  }  } = _react.useContext(_context.default);
-    const copy = steps[step];
-    const viewCopy = copy.views["add-card"]; // Create Local State
-    const [state, setState] = _hooks.useObjectState({
-        cardFocused: false,
-        cardError: false,
-        cardComplete: false,
-        cardBrand: '',
-        nameErrors: [],
-        showLoader: false
-    }); // Create Submission Handler
-    const handleSubmit = async ()=>{
-        // Show Loader
-        setState({
-            showLoader: true
-        }); // Start Timer
-        const timer = $.timer(1000).start(); // Add Payment Method
-        const { error , paymentMethod  } = await stripe.createPaymentMethod({
-            type: 'card',
-            card: elements.getElement(_reactStripeJs.CardElement),
-            billing_details: {
-                email,
-                name
-            }
-        }); // Catch Error
-        if (error) return setState({
-            cardError: 'failed'
-        }); // Artificial Delay
-        await timer.hold(); // Set Method and change view
-        const { id , type , card: { brand , last4  }  } = paymentMethod;
-        setMethod({
-            id,
-            type,
-            brand,
-            last4,
-            name: _cardBrands.getBrand(brand)
-        }); // Change View
-        changeView();
-    }; // Render Component
-    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__header animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h3", null, viewCopy.title)), /*#__PURE__*/ _react.default.createElement("hr", {
-        className: "booking-view__divider animate-item"
-    }), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__form"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-full-name",
-        type: "name",
-        icon: "person-circle",
-        label: copy.labels.name,
-        placeholder: viewCopy.placeholder,
-        value: name,
-        onChange: onNameChange,
-        errors: state.nameErrors
-    }), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("input__input", [
-            state.cardFocused,
-            "focused"
-        ], [
-            state.cardError,
-            "has-error"
-        ])
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__stripe"
-    }, /*#__PURE__*/ _react.default.createElement("label", null, copy.labels.card), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__stripe-container"
-    }, /*#__PURE__*/ _react.default.createElement(_reactStripeJs.CardElement, {
-        options: {
-            style: _useCheckout.stripeStyle
-        },
-        onChange: (e)=>{
-            var _e$error;
-            return setState({
-                cardError: (_e$error = e.error) === null || _e$error === void 0 ? void 0 : _e$error.code,
-                cardComplete: e.complete,
-                cardBrand: e.brand
-            });
-        },
-        onFocus: ()=>setState({
-                cardFocused: true
-            })
-        ,
-        onBlur: ()=>setState({
-                cardFocused: false
-            })
-    })))), state.cardError && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__errors"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__error"
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "error",
-        size: "sm"
-    }), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "small bold"
-    }, copy.errors[state.cardError] || copy.errors.default)))), /*#__PURE__*/ _react.default.createElement(_Checkbox.default, {
-        id: "save-payment-method",
-        label: viewCopy.save,
-        checked: saveCard,
-        onChange: setSaveCard
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__form"
-    }, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: viewCopy.button,
-        disabled: !!(!state.cardComplete || state.nameErrors.length),
-        showLoader: state.showLoader,
-        onClick: handleSubmit
-    }))));
-};
-_c = AddPaymentMethod;
-exports.AddPaymentMethod = AddPaymentMethod;
-var _default = AddPaymentMethod;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "AddPaymentMethod");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","../store/context":"2o6qx","../../components/Buttons":"7xzNC","../../components/Input":"16GiB","../../components/Icon":"4VYCM","../../components/Checkbox":"1fRxr","../../helpers/hooks":"4wqYR","../helpers/cardBrands":"3Xko7","@stripe/react-stripe-js":"3BTVB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../helpers/useCheckout":"17flr"}],"1fRxr":[function(require,module,exports) {
-var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-helpers.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Checkbox = (_ref)=>{
-    let { id , label , checked , onChange: _onChange  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "checkbox animate-item"
-    }, /*#__PURE__*/ _react.default.createElement("input", {
-        type: "checkbox",
-        id: id,
-        checked: checked,
-        onChange: (e)=>_onChange(e.target.checked)
-    }), /*#__PURE__*/ _react.default.createElement("label", {
-        htmlFor: id
-    }, /*#__PURE__*/ _react.default.createElement("span", null, checked && /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "check",
-        size: "xs"
-    })), /*#__PURE__*/ _react.default.createElement("h6", null, label))));
-};
-_c = Checkbox;
-var _default = Checkbox;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Checkbox");
-
-  helpers.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"3qVBT","./Icon":"4VYCM","../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"K2ypK":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../../components/Buttons":"7xzNC","../../components/Icon":"4VYCM","../components/PaymentMethod":"766fa","../helpers/useCheckout":"17flr","@stripe/react-stripe-js":"3BTVB","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"K2ypK":[function(require,module,exports) {
 var helpers = require("../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -78448,7 +78277,178 @@ $RefreshReg$(_c, "Confirmation");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"3qVBT","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../components/Buttons":"7xzNC"}],"4R7YP":[function(require,module,exports) {
+},{"react":"3qVBT","../store/context":"2o6qx","../components/BookingPage":"55aoD","../../components/Buttons":"7xzNC","../../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"5AjSp"}],"3PuMF":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Define Animations
+const animations = {
+    async card (container, direction, delay) {
+        const targets = container.children(".animate-item").e();
+        const navbar = container.children(".animate-fade").e();
+        const tl = _animejs.default.timeline({
+            easing: 'easeInOutQuad',
+            duration: 250
+        }); // Card Enter Animation
+        if (direction === 'in' || direction === 'enter') {
+            if (direction === 'enter') tl.add({
+                targets: container.e(),
+                translateX: [
+                    -1000,
+                    0
+                ],
+                duration: 750
+            });
+            tl.add({
+                targets: targets,
+                translateY: [
+                    _animejs.default.stagger([
+                        100,
+                        25
+                    ]),
+                    0
+                ],
+                opacity: [
+                    0,
+                    1
+                ],
+                delay: _animejs.default.stagger([
+                    0,
+                    250
+                ])
+            }); // Fade Out Navbar
+            tl.add({
+                targets: navbar,
+                opacity: [
+                    0,
+                    1
+                ],
+                delay: _animejs.default.stagger([
+                    0,
+                    150
+                ])
+            });
+        } else {
+            // Fade Out Navbar
+            tl.add({
+                targets: navbar,
+                opacity: [
+                    1,
+                    0
+                ],
+                delay: _animejs.default.stagger([
+                    0,
+                    150
+                ])
+            }); // Add Default Animation
+            tl.add({
+                targets: targets,
+                translateY: _animejs.default.stagger([
+                    -25,
+                    -100
+                ]),
+                opacity: 0,
+                delay: _animejs.default.stagger([
+                    0,
+                    250
+                ])
+            }, '-=250'); // Fade Out Card On Exit
+            if (direction === 'exit') tl.add({
+                targets: container.e(),
+                translateX: [
+                    0,
+                    -1000
+                ],
+                duration: 750
+            });
+        }
+        tl.pause();
+        await $.delay(delay);
+        tl.play();
+        await tl.finished;
+    },
+    async view (container, direction, delay) {
+        const targets = container.children(".animate-item, .animate-children > *").e();
+        const tl = _animejs.default.timeline({
+            easing: 'easeInOutQuad',
+            duration: 250
+        });
+        if (direction === 'in') tl.add({
+            targets: targets,
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        else tl.add({
+            targets: targets,
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
+            opacity: 0,
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        }, '-=250');
+        tl.pause();
+        await $.delay(delay);
+        tl.play();
+        await tl.finished;
+    }
+};
+class Transition {
+    set(_ref) {
+        let { container , animation  } = _ref;
+        this.animation = animation;
+        this.container = $(container);
+        this.navbar = this.container.children(".animate-fade").e();
+        this.targets = this.container.children(".animate-item").e();
+    }
+    async to(step, direction) {
+        let delay = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 500;
+        await this.out(direction);
+        await $.delay(delay);
+        this.setStep(step);
+    }
+    in() {
+        let direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'in';
+        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+        return animations[this.animation](this.container, direction, delay);
+    }
+    out() {
+        let direction = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'out';
+        return animations[this.animation](this.container, direction);
+    }
+    // Create Dispatcher
+    constructor(dispatcher){
+        this.setStep = (step)=>dispatcher("STEP", step)
+        ;
+    }
+}
+exports.default = Transition;
+
+},{"animejs":"1GvRs"}],"4R7YP":[function(require,module,exports) {
 var helpers = require("../../../../node_modules/@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
