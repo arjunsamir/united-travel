@@ -30,8 +30,6 @@ const templates = {
 // Create Funciton to Send Email
 module.exports =  async ({to, template, locale, data}) => {
 
-    console.log({to, template, locale, data});
-
     const msg = {
         to,
         from: {
@@ -42,6 +40,6 @@ module.exports =  async ({to, template, locale, data}) => {
         dynamic_template_data: data || {}
     }
 
-    const res = await sgMail.send(msg);
+    await sgMail.send(msg);
 
 }
