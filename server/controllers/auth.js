@@ -261,7 +261,7 @@ exports.forgotPassword = catchAsync(async (req, res, next) => {
         template: 'reset',
         locale: user.preferredLocale || 'en',
         data: {
-            name: user.name,
+            name: user.preferredName,
             code: token
         }
     })
