@@ -5,13 +5,12 @@
   "main": "app.js",
   "scripts": {
     "start": "node server.js",
-    "start:prod": "node server.js",
     "start:dev": "nodemon server.js",
     "watch:static": "node staticGenerator.js",
     "watch": "cd client && npm start",
     "build": "cd client && npm run build",
     "preinstall": "npx npm-force-resolutions",
-    "postinstall": "cd client && npm install"
+    "heroku-prebuild": "cd client && npm install"
   },
   "author": "Arjun Patel",
   "license": "ISC",
