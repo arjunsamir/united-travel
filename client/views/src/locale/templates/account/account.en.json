@@ -1,3 +1,15 @@
 {
-    "title": "My Account - United Travel LLC"
+    "title": "My Account - United Travel LLC",
+    "greeting": "Hello, {name}!",
+    "nav": {},
+    "Rides": {
+        "upcoming": "Upcoming reservations",
+        "past": "Past reservations"
+    },
+    "Wallet": {
+        "saved": "Saved Payment Methods"
+    },
+    "Profile": {
+        "edit": "Edit your profile"
+    }
 }

@@ -209,7 +209,38 @@ window.addEventListener('DOMContentLoaded', () => {
 
                     return page.load();
                 }
-            }
+            },
+            
+            // Reservation Namespace
+            {
+                namespace: 'reservation',
+                beforeEnter() {
+                    page.addComponent({ name: 'ReservationApp', data: {
+                        page,
+                        selector: '#reservation-react-app'
+                    }});
+
+                    page.navbar.applyView('min');
+
+                    return page.load();
+                }
+            },
+            
+            // Admin Namespace
+            {
+                namespace: 'admin',
+                beforeEnter() {
+                    page.addComponent({ name: 'AdminApp', data: {
+                        page,
+                        selector: '#admin-react-app'
+                    }});
+
+                    page.navbar.applyView('min');
+
+                    return page.load();
+                }
+            },
+            
         ],
 
         // Prevent Double Clicking Links
