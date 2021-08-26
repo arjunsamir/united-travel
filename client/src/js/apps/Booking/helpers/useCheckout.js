@@ -67,8 +67,6 @@ const processPayment = (stripe, secret) => {
             handleActions: false
         });
 
-        console.log(paymentIntent, error);
-
 
         if (error) {
             e && e.complete('fail'); 

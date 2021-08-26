@@ -12,7 +12,10 @@ const Reservation = require('../models/reservation');
 // Import Utilities
 const send = require('../utils/sendResponse');
 const catchAsync = require('../utils/catchAsync');
+const sendEmail = require('../utils/sendEmail');
 const uniqid = require('uniqid');
+const dayjs = require('dayjs');
+require('dayjs/locale/es');
 
 // Initialize Maps Client
 const { Client } = require("@googlemaps/google-maps-services-js");
@@ -175,6 +178,41 @@ const getUserCredits = async (user, cost) => {
 }
 
 
+// Send Confirmation Email
+const sendConfirmationEmail = async (reservation) => {
+
+    const { user, code, schedule, origin, destination, passengers, payment } = reservation;
+    const locale = user.preferredLocale || "en";
+
+    let pickup = dayjs(schedule.pickup, "MM-DD-YYYY H:mm");
+    let dropoff = dayjs(schedule.dropoff, "MM-DD-YYYY H:mm");
+    let date;
+
+    if (locale === "es") {
+        pickup = pickup.locale("es");
+        dropoff = dropoff.locale("es");
+    }
+
+    await sendEmail({
+        to: user.email,
+        template: "confirmation",
+        locale,
+        data: {
+            name: user.preferredName || user.name,
+            code,
+            date: pickup.format("dddd MMMM D, YYYY"),
+            pickup: pickup.format("h:mm A"),
+            dropoff: dropoff.format("h:mm A"),
+            origin: origin.name,
+            destination: destination.name,
+            passengers: passengers.total,
+            total: `$${(payment.total/100).toFixed(2)}`
+        }
+    });
+
+};
+
+
 // Called By Webhook. Charge Payment
 exports.confirmPayment = catchAsync(async (req, res, next) => {
 
@@ -189,7 +227,7 @@ exports.confirmPayment = catchAsync(async (req, res, next) => {
     const intent = req.body.data?.object;
 
     // Get Reservation
-    const reservation = await Reservation.findOne({ "payment.intent": intent.id });
+    const reservation = await Reservation.findOne({ "payment.intent": intent.id }).populate('user');
     if (!reservation) return console.log("No reservation found for this payment");
 
 
@@ -220,9 +258,8 @@ exports.confirmPayment = catchAsync(async (req, res, next) => {
     // Finally Save Reservation
     await reservation.save();
 
-    // Console Log For Debugging
-    console.log('reservation saved')
-    console.log(reservation)
+    // Send The Email
+    await sendConfirmationEmail(reservation);
     
 });
 

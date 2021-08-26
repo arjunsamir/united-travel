@@ -101,6 +101,11 @@ const watchStaticFiles = () => {
     }).catch(err => process.exit());
 }
 
-watchStaticFiles().then(() => {
-    chokidar.watch('./client/views/src').on('change', watchStaticFiles);
-})
+
+if (process.env.EJS_GEN_MODE == 'watch') {
+    watchStaticFiles().then(() => {
+        chokidar.watch('./client/views/src').on('change', watchStaticFiles);
+    });
+}
+
+else watchStaticFiles().then(() => process.exit());

@@ -4,7 +4,6 @@
   "description": "Website and Application For United Travel LLC",
   "scripts": {
     "start": "parcel watch ./src/style/main.scss ./src/js/index.js --dist-dir ./public/",
-    "build-alt": "./node_modules/parcel/lib/cli.js build ./src/style/main.scss ./src/js/index.js --dist-dir ./public/",
     "build": "parcel build ./src/style/main.scss ./src/js/index.js --dist-dir ./public/",
     "preinstall": "npx npm-force-resolutions"
   },

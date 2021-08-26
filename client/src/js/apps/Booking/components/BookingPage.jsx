@@ -17,6 +17,7 @@ const BookingPage = ({ children, showLoader, back, next, backText, nextText }) =
 
     // Set Up Transition
     useEffect(() => {
+        if (!element.current) return;
         transition.set({ container: element.current, animation: 'view' });
     })
 

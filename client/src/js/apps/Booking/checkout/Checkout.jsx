@@ -71,9 +71,6 @@ const Checkout = () => {
 
         if (!d && !all.length) return;
 
-        // If 
-        // if (d) find the default method;
-
         setState({ method: all[0] });
 
     }, [payment.methods]);
