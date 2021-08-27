@@ -397,3 +397,18 @@ exports.createPayment = catchAsync(async (req, res, next) => {
     });
 
 });
+
+
+
+// Retrieve Reservations For User
+exports.listReservations = catchAsync(async (req, res, next) => {
+
+    const reservations = await Reservation.find({ user: req.params.id, status: { $ne: 'pending' } });
+
+
+    send(res, {
+        status: 'SUCCESS',
+        reservations
+    })
+
+});

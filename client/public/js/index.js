@@ -1101,6 +1101,35 @@ window.addEventListener('DOMContentLoaded', ()=>{
                         }
                     });
                     page.navbar.applyView('min');
+                    page.options.smooth = false;
+                    return page.load();
+                }
+            },
+            {
+                namespace: 'reservation',
+                beforeEnter () {
+                    page.addComponent({
+                        name: 'ReservationApp',
+                        data: {
+                            page,
+                            selector: '#reservation-react-app'
+                        }
+                    });
+                    page.navbar.applyView('min');
+                    return page.load();
+                }
+            },
+            {
+                namespace: 'admin',
+                beforeEnter () {
+                    page.addComponent({
+                        name: 'AdminApp',
+                        data: {
+                            page,
+                            selector: '#admin-react-app'
+                        }
+                    });
+                    page.navbar.applyView('min');
                     return page.load();
                 }
             }

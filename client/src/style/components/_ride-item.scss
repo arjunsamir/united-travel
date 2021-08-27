@@ -1,0 +1,42 @@
+.ride-item {
+
+    cursor: pointer;
+    user-select: none;
+
+    &__date {
+        font-weight: 700;
+        font-size: 1.4rem;
+        line-height: 1.2;
+        color: var(--slate-dark);
+        margin-bottom: 0.8rem;
+    }
+
+    &__main {
+        display: flex;
+        align-items: center;
+        @include flexGap(1.2rem);
+    }
+
+    &__icon {
+        height: 4.8rem;
+        width: 4.8rem;
+
+        @include flexCenter;
+        color: var(--white);
+
+        background-color: var(--jet);
+        border-radius: 50%;
+    }
+
+    &__route {
+        flex-grow: 10;
+        p {
+            color: var(--slate-dark);
+        }
+    }
+
+    &__expand {
+        color: var(--slate-dark);
+    }
+
+}

@@ -289,5 +289,35 @@
       <path d="M13.967 12.8721C14.5788 12.8721 15.1268 13.089 15.5594 13.5128L16.7439 12.2946C16.0245 11.605 15.0866 11.1816 13.967 11.1816C12.3455 11.1816 10.941 12.1391 10.2579 13.5343L11.6367 14.6353C11.9657 13.623 12.8842 12.8721 13.967 12.8721Z" fill="#E94235"/>
     </symbol>
 
+    <symbol id="credit-card" viewBox="0 0 512 512">
+      <title>ionicons-v5-d</title>
+      <rect x="48" y="96" width="416" height="320" rx="56" ry="56" style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+      <line x1="48" y1="192" x2="464" y2="192" style="fill:none;stroke:currentColor;stroke-linejoin:round;stroke-width:60px"/>
+      <rect x="128" y="300" width="48" height="20" style="fill:none;stroke:currentColor;stroke-linejoin:round;stroke-width:60px"/>
+    </symbol>
+
+    <symbol id="person-plus" viewBox="0 0 512 512">
+      <title>ionicons-v5-j</title><path d="M376,144c-3.92,52.87-44,96-88,96s-84.15-43.12-88-96c-4-55,35-96,88-96S380,90,376,144Z" style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+      <path d="M288,304c-87,0-175.3,48-191.64,138.6-2,10.92,4.21,21.4,15.65,21.4H464c11.44,0,17.62-10.48,15.65-21.4C463.3,352,375,304,288,304Z" style="fill:none;stroke:currentColor;stroke-miterlimit:10;stroke-width:32px"/>
+      <line x1="88" y1="176" x2="88" y2="288" style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+      <line x1="144" y1="232" x2="32" y2="232" style="fill:none;stroke:currentColor;stroke-linecap:round;stroke-linejoin:round;stroke-width:32px"/>
+    </symbol>
+
+    <symbol id="calendar" viewBox="0 0 512 512">
+      <rect fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" x="48" y="80" width="416" height="384" rx="48"/>
+      <circle cx="296" cy="232" r="24" fill="currentColor" />
+      <circle cx="376" cy="232" r="24" fill="currentColor" />
+      <circle cx="296" cy="312" r="24" fill="currentColor" />
+      <circle cx="376" cy="312" r="24" fill="currentColor" />
+      <circle cx="136" cy="312" r="24" fill="currentColor" />
+      <circle cx="216" cy="312" r="24" fill="currentColor" />
+      <circle cx="136" cy="392" r="24" fill="currentColor" />
+      <circle cx="216" cy="392" r="24" fill="currentColor" />
+      <circle cx="296" cy="392" r="24" fill="currentColor" />
+      <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" stroke-linecap="round" x1="128" y1="48" x2="128" y2="80"/>
+      <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" stroke-linecap="round" x1="384" y1="48" x2="384" y2="80"/>
+      <line fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="32" x1="464" y1="160" x2="48" y2="160"/>
+    </symbol>
+
   </defs>
 </svg>
