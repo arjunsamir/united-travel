@@ -9,14 +9,15 @@ const {
         _id,
         referralCode,
         oAuth,
-        credits
+        credits,
+        stripeID
     }
 } = window;
 
 
 // Create Initial State
 const state = {
-    step: "Rides",
+    page: "Rides",
     reservations: null, // Array
     paymentMethods: null, // Array
     email,
@@ -27,7 +28,8 @@ const state = {
     id: _id,
     oAuth,
     referralCode,
-    credits
+    credits,
+    stripeID
 };
 
 

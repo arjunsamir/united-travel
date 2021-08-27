@@ -33,9 +33,10 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
 
     // Use State
     const [isFetching, setIsFetching] = useState(false);
+    const [rejections, setRejections] = useState([]);
 
     // Check Email
-    const errors = validator.checkEmail(state.email);
+    const errors = [ ...(validator.checkEmail(state.email) || []), ...rejections ];
 
 
     // Enable Typewriter Effect
@@ -56,6 +57,41 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
 
     }, [loaded]);
 
+    const handleSubmit = async () => {
+
+        // Fetching Animation
+        const timer = $.timer(1000).start();
+        setIsFetching(true);
+
+        // Make Request
+        const res = await axios.post('/auth/check-email', { email: state.email });
+
+        // Destructure Response
+        const { exists, loginAllowed } = res.data || {};
+
+        // Create Errors
+        if (exists && !loginAllowed) {
+            setIsFetching(false);
+            setRejections([copy.errors.fails.oauth]);
+            return;
+        }
+
+        // Artificial Delay
+        await timer.hold();
+
+        // Destroy Typewwriter
+        typewriter.current.destroy();
+
+        // Update State & Navigate
+        const loginType = exists ? 'login' : 'signup';
+        update('login_type')(loginType);
+
+        // Transition to next step
+        transition.to(loginType);
+
+    }
+
+
     return (
         <div className="login__container" ref={mainRef}>
             <Image>
@@ -65,18 +101,7 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
                 back={exit ? () => exit() : null}
                 backText={copy.back}
                 showLoader={!loaded}
-                onSubmit={() => {
-                    const timer = $.timer(1000).start();
-                    setIsFetching(true);
-                    axios.post('/auth/check-email', { email: state.email }).then(async (res) => {
-                        const { exists } = res.data || {};
-                        await timer.hold();
-                        typewriter.current.destroy();
-                        const loginType = exists ? "login" : "signup";
-                        update('login_type')(loginType);
-                        transition.to(loginType);
-                    })
-                }}
+                onSubmit={handleSubmit}
             >
                 <div className="login__header">
                     <h2 className={aC}>
@@ -111,7 +136,10 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
                         label={copy.inputs.email.label}
                         placeholder={copy.inputs.email.placeholder}
                         value={state.email}
-                        onChange={update('email')}
+                        onChange={(val) => {
+                            update('email')(val);
+                            if (rejections.length) setRejections([]);
+                        }}
                         errors={errors}
                     />
                     <Button

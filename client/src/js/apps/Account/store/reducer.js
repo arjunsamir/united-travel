@@ -12,8 +12,8 @@ const reducer = (state = initialState, action) => {
     }
 
     switch (action.type) {
-        case 'SET_STEP':
-            return merge('step');
+        case 'SET_PAGE':
+            return merge('page');
 
         case 'SET_RESERVATIONS':
             return merge('reservations');

@@ -9,7 +9,7 @@ import AppContext from './store/AppContext';
 // Import Helpers
 import Transition from './helpers/Transition';
 
-// Import Steps
+// Import pages
 import Rides from './pages/Rides';
 import Profile from './Pages/Profile';
 import Wallet from './pages/Wallet';
@@ -20,8 +20,8 @@ import Nav from './components/Nav';
 import Visual from './components/Visual';
 
 
-// Register Steps
-const steps = {
+// Register pages
+const pages = {
     Rides,
     Profile,
     Wallet,
@@ -33,7 +33,7 @@ const steps = {
 const App = ({ copy }) => {
 
     const [state, dispatch] = useReducer(reducer, initialState);
-    const Step = steps[state.step];
+    const Page = pages[state.page];
 
     // Return Component
     return (
@@ -48,7 +48,7 @@ const App = ({ copy }) => {
         }}>
             <div className="account">
                 <div className="account__container">
-                    <Step />
+                    <Page />
                     <Visual />
                 </div>
                 <Nav />

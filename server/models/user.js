@@ -31,7 +31,11 @@ const schema = new mongoose.Schema({
     passwordChangedAt: Date,
     resetToken: String,
     tokenExpiration: Date,
-    oAuth: [String],
+    oAuth: [{
+        provider: String,
+        name: String,
+        email: String
+    }],
     googleID: String,
     facebookID: String,
     stripeID: String,

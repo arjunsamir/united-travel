@@ -54,6 +54,60 @@
         @include blockGap(3.6rem);
     }
 
+    &__loader {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: var(--content-width);
+        @include flexCenter;
+    }
+
+    &__profile {
+
+        @include blockGap(4.8rem);
+
+        &-header {
+            display: flex;
+            align-items: center;
+            @include flexGap(2.4rem);
+        }
+
+        &-photo {
+            height: 8rem;
+            width: 8rem;
+            overflow: hidden;
+            border-radius: 50%;
+
+            img {
+                @include cover;
+            }
+        }
+
+        &-details {
+            @include blockGap(1.2rem);
+        }
+
+        &-oauth {
+            display: flex;
+            align-items: center;
+            @include flexGap(1.2rem);
+
+            &.google {
+                color: var(--google);
+            }
+
+            &.facebook {
+                color: var(--facebook);
+            }
+
+            p {
+                color: var(--jet);
+            }
+        }
+
+    }
+
 }
 
 

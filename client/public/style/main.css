@@ -1587,8 +1587,9 @@ svg.placeholder, .icon.placeholder {
   padding-top: 1.2rem;
 }
 .input__error, .input__warning {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: -webkit-max-content 1fr;
+  grid-template-columns: max-content 1fr;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
@@ -3759,6 +3760,57 @@ svg.placeholder, .icon.placeholder {
 }
 .account__group > *:not(:last-child) {
   margin-bottom: 3.6rem;
+}
+.account__loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: var(--content-width);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.account__profile > *:not(:last-child) {
+  margin-bottom: 4.8rem;
+}
+.account__profile-header {
+  display: flex;
+  align-items: center;
+}
+.account__profile-header > *:not(:last-child) {
+  margin-right: 2.4rem;
+}
+.account__profile-photo {
+  height: 8rem;
+  width: 8rem;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.account__profile-photo img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+.account__profile-details > *:not(:last-child) {
+  margin-bottom: 1.2rem;
+}
+.account__profile-oauth {
+  display: flex;
+  align-items: center;
+}
+.account__profile-oauth > *:not(:last-child) {
+  margin-right: 1.2rem;
+}
+.account__profile-oauth.google {
+  color: var(--google);
+}
+.account__profile-oauth.facebook {
+  color: var(--facebook);
+}
+.account__profile-oauth p {
+  color: var(--jet);
 }
 .account-nav {
   background-color: var(--jet);

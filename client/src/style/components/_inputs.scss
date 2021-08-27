@@ -115,8 +115,8 @@
     }
 
     &__error, &__warning {
-        display: flex;
-        align-items: center;
+        display: grid;
+        grid-template-columns: max-content 1fr;
 
         user-select: none;
 

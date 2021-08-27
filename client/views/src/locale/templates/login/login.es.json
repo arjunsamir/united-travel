@@ -116,7 +116,8 @@
             "invalid": "El nombre no puede contener números ni caracteres especiales"
         },
         "fails": {
-            "password": "Tu contraseña es incorrecta."
+            "password": "Tu contraseña es incorrecta.",
+            "oauth": "Este correo electrónico se registró mediante el inicio de sesión de un tercero. Inicie sesión con Google o Facebook. Una vez que inicie sesión, puede establecer una contraseña en la configuración de su cuenta."
         }
     },
     "referral": {

@@ -72976,8 +72976,12 @@ const Hello = (_ref)=>{
         update('user')(user);
         transition.to("greeting");
     }); // Use State
-    const [isFetching, setIsFetching] = _react.useState(false); // Check Email
-    const errors = validator.checkEmail(state.email); // Enable Typewriter Effect
+    const [isFetching, setIsFetching] = _react.useState(false);
+    const [rejections, setRejections] = _react.useState([]); // Check Email
+    const errors = [
+        ...validator.checkEmail(state.email) || [],
+        ...rejections
+    ]; // Enable Typewriter Effect
     _react.useEffect(()=>{
         if (!loaded) return;
         transition.set(mainRef.current).in();
@@ -72990,6 +72994,28 @@ const Hello = (_ref)=>{
     }, [
         loaded
     ]);
+    const handleSubmit = async ()=>{
+        // Fetching Animation
+        const timer = $.timer(1000).start();
+        setIsFetching(true); // Make Request
+        const res = await _axios.default.post('/auth/check-email', {
+            email: state.email
+        }); // Destructure Response
+        const { exists , loginAllowed  } = res.data || {
+        }; // Create Errors
+        if (exists && !loginAllowed) {
+            setIsFetching(false);
+            setRejections([
+                copy.errors.fails.oauth
+            ]);
+            return;
+        } // Artificial Delay
+        await timer.hold(); // Destroy Typewwriter
+        typewriter.current.destroy(); // Update State & Navigate
+        const loginType = exists ? 'login' : 'signup';
+        update('login_type')(loginType); // Transition to next step
+        transition.to(loginType);
+    };
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "login__container",
         ref: mainRef
@@ -73000,21 +73026,7 @@ const Hello = (_ref)=>{
          : null,
         backText: copy.back,
         showLoader: !loaded,
-        onSubmit: ()=>{
-            const timer = $.timer(1000).start();
-            setIsFetching(true);
-            _axios.default.post('/auth/check-email', {
-                email: state.email
-            }).then(async (res)=>{
-                const { exists  } = res.data || {
-                };
-                await timer.hold();
-                typewriter.current.destroy();
-                const loginType = exists ? "login" : "signup";
-                update('login_type')(loginType);
-                transition.to(loginType);
-            });
-        }
+        onSubmit: handleSubmit
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "login__header"
     }, /*#__PURE__*/ _react.default.createElement("h2", {
@@ -73050,7 +73062,10 @@ const Hello = (_ref)=>{
         label: copy.inputs.email.label,
         placeholder: copy.inputs.email.placeholder,
         value: state.email,
-        onChange: update('email'),
+        onChange: (val)=>{
+            update('email')(val);
+            if (rejections.length) setRejections([]);
+        },
         errors: errors
     }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
         text: copy.button,
@@ -74460,7 +74475,6 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _animejs = _interopRequireDefault(require("animejs"));
-var _uniqid = require("uniqid");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -74608,100 +74622,7 @@ class Transition {
 }
 exports.default = Transition;
 
-},{"animejs":"aMVBn","uniqid":"hVNv8"}],"hVNv8":[function(require,module,exports) {
-var process = require("process");
-/* 
-(The MIT License)
-Copyright (c) 2014-2021 Halász Ádám <adam@aimform.com>
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-*/ //  Unique Hexatridecimal ID Generator
-// ================================================
-//  Dependencies
-// ================================================
-var pid = typeof process !== 'undefined' && process.pid ? process.pid.toString(36) : '';
-var address = '';
-if (typeof __webpack_require__ !== 'function') {
-    var mac = '', networkInterfaces = require('os').networkInterfaces();
-    loop: for(let interface_key in networkInterfaces){
-        const networkInterface = networkInterfaces[interface_key];
-        const length = networkInterface.length;
-        for(var i = 0; i < length; i++)if (networkInterface[i] !== undefined && networkInterface[i].mac && networkInterface[i].mac != '00:00:00:00:00:00') {
-            mac = networkInterface[i].mac;
-            break loop;
-        }
-    }
-    address = mac ? parseInt(mac.replace(/\:|\D+/gi, '')).toString(36) : '';
-}
-//  Exports
-// ================================================
-module.exports = module.exports.default = function(prefix, suffix) {
-    return (prefix ? prefix : '') + address + pid + now().toString(36) + (suffix ? suffix : '');
-};
-module.exports.process = function(prefix, suffix) {
-    return (prefix ? prefix : '') + pid + now().toString(36) + (suffix ? suffix : '');
-};
-module.exports.time = function(prefix, suffix) {
-    return (prefix ? prefix : '') + now().toString(36) + (suffix ? suffix : '');
-};
-//  Helpers
-// ================================================
-function now() {
-    var time = Date.now();
-    var last = now.last || time;
-    return now.last = time > last ? time : last + 1;
-}
-
-},{"process":"h5OvF","os":"170MD"}],"170MD":[function(require,module,exports) {
-exports.endianness = function() {
-    return 'LE';
-};
-exports.hostname = function() {
-    if (typeof location !== 'undefined') return location.hostname;
-    else return '';
-};
-exports.loadavg = function() {
-    return [];
-};
-exports.uptime = function() {
-    return 0;
-};
-exports.freemem = function() {
-    return Number.MAX_VALUE;
-};
-exports.totalmem = function() {
-    return Number.MAX_VALUE;
-};
-exports.cpus = function() {
-    return [];
-};
-exports.type = function() {
-    return 'Browser';
-};
-exports.release = function() {
-    if (typeof navigator !== 'undefined') return navigator.appVersion;
-    return '';
-};
-exports.networkInterfaces = exports.getNetworkInterfaces = function() {
-    return {
-    };
-};
-exports.arch = function() {
-    return 'javascript';
-};
-exports.platform = function() {
-    return 'browser';
-};
-exports.tmpdir = exports.tmpDir = function() {
-    return '/tmp';
-};
-exports.EOL = '\n';
-exports.homedir = function() {
-    return '/';
-};
-
-},{}],"fds8Q":[function(require,module,exports) {
+},{"animejs":"aMVBn"}],"fds8Q":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true

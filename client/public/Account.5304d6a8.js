@@ -1031,10 +1031,10 @@ function _interopRequireWildcard(obj) {
 // Import Base React Dependencies
 // Import Store
 // Import Helpers
-// Import Steps
+// Import pages
 // Import Components
-// Register Steps
-const steps = {
+// Register pages
+const pages = {
     Rides: _Rides.default,
     Profile: _Profile.default,
     Wallet: _Wallet.default,
@@ -1043,7 +1043,7 @@ const steps = {
 const App = (_ref)=>{
     let { copy  } = _ref;
     const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default);
-    const Step = steps[state.step]; // Return Component
+    const Page = pages[state.page]; // Return Component
     return(/*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
             state,
@@ -1058,7 +1058,7 @@ const App = (_ref)=>{
         className: "account"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "account__container"
-    }, /*#__PURE__*/ _react.default.createElement(Step, null), /*#__PURE__*/ _react.default.createElement(_Visual.default, null)), /*#__PURE__*/ _react.default.createElement(_Nav.default, null))));
+    }, /*#__PURE__*/ _react.default.createElement(Page, null), /*#__PURE__*/ _react.default.createElement(_Visual.default, null)), /*#__PURE__*/ _react.default.createElement(_Nav.default, null))));
 };
 _c = App;
 var _default = App;
@@ -2875,8 +2875,8 @@ const reducer = function reducer1() {
         });
     };
     switch(action.type){
-        case 'SET_STEP':
-            return merge('step');
+        case 'SET_PAGE':
+            return merge('page');
         case 'SET_RESERVATIONS':
             return merge('reservations');
         case 'SET_PAYMENT_METHODS':
@@ -2906,9 +2906,9 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 // Get User Initial Data
-const { currentUser: { name , preferredName , email , preferredLocale , photo , _id , referralCode , oAuth , credits  }  } = window; // Create Initial State
+const { currentUser: { name , preferredName , email , preferredLocale , photo , _id , referralCode , oAuth , credits , stripeID  }  } = window; // Create Initial State
 const state = {
-    step: "Rides",
+    page: "Rides",
     reservations: null,
     // Array
     paymentMethods: null,
@@ -2921,7 +2921,8 @@ const state = {
     id: _id,
     oAuth,
     referralCode,
-    credits
+    credits,
+    stripeID
 };
 var _default = state;
 exports.default = _default;
@@ -2940,7 +2941,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _AppContext = _interopRequireDefault(require("../store/AppContext"));
-var _Loader = _interopRequireDefault(require("../../components/Loader"));
+var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
 var _ReservationList = _interopRequireDefault(require("../components/ReservationList"));
 var _axios = _interopRequireDefault(require("axios"));
 var _dayjs = _interopRequireDefault(require("dayjs"));
@@ -3043,12 +3044,10 @@ const Rides = ()=>{
             update("reservations")(filtered);
         }; // Initialize Load
         if (!reservations) fetchReservations();
-    }, []); // Create component
-    return reservations ? /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__content"
-    }, /*#__PURE__*/ _react.default.createElement("h2", {
-        className: "account__title animate-item"
-    }, "Hello ", /*#__PURE__*/ _react.default.createElement("span", null, "Arjun")), reservations.all.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
+    }, []); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
+        showLoader: !reservations
+    }, reservations && reservations.all.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
         label: "Upcoming Reservations",
         reservations: reservations.upcoming,
         fallback: "No upcoming reservations..."
@@ -3056,7 +3055,9 @@ const Rides = ()=>{
         label: "Past Reservations",
         reservations: reservations.past,
         fallback: "No past reservations..."
-    })) : /*#__PURE__*/ _react.default.createElement("div", null, "You got no reservations you poor fuck")) : /*#__PURE__*/ _react.default.createElement(_Loader.default, null);
+    })) : /*#__PURE__*/ _react.default.createElement("div", {
+        className: "animate-item"
+    }, "You got no reservations you poor fuck")));
 };
 _c = Rides;
 var _default = Rides;
@@ -3069,7 +3070,7 @@ $RefreshReg$(_c, "Rides");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","axios":"hDAj5","../store/AppContext":"bdnEg","dayjs":"ihFi1","../../components/Loader":"klMDW","../components/ReservationList":"aOEpY"}],"bdnEg":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","axios":"hDAj5","../store/AppContext":"bdnEg","dayjs":"ihFi1","../components/ReservationList":"aOEpY","../components/AccountPage":"7WoBC"}],"bdnEg":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$e6df = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3385,41 +3386,7 @@ exports.default = _default;
     }, w;
 });
 
-},{}],"klMDW":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$e18d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$e18d.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Loader = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "loader"
-    }, /*#__PURE__*/ _react.default.createElement("span", null)));
-};
-_c = Loader;
-var _default = Loader;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Loader");
-
-  $parcel$ReactRefreshHelpers$e18d.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"aOEpY":[function(require,module,exports) {
+},{}],"aOEpY":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$628f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3586,6 +3553,121 @@ $RefreshReg$(_c, "Icon");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"7WoBC":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$d6fc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$d6fc.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _Loader = _interopRequireDefault(require("../../components/Loader"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Create Component
+const AccountPage = (_ref)=>{
+    let { children , showLoader , showTitle =true  } = _ref;
+    // Destructure State
+    const { state , transition  } = _react.useContext(_AppContext.default); // Crete Refs
+    const element = _react.useRef(); // Component Did Mount
+    _react.useEffect(()=>{
+        if (!element.current || showLoader) return; // Set Transition & Transition In
+        transition.set(element.current).in();
+    }, [
+        showLoader
+    ]); // Return Container
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__content",
+        ref: element
+    }, showLoader ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__loader"
+    }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, showTitle && /*#__PURE__*/ _react.default.createElement("h2", {
+        className: "account__title animate-item"
+    }, "Hello ", /*#__PURE__*/ _react.default.createElement("span", null, "Arjun")), children)));
+}; // Export Component
+_c = AccountPage;
+var _default = AccountPage;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AccountPage");
+
+  $parcel$ReactRefreshHelpers$d6fc.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../../components/Loader":"klMDW","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"klMDW":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$e18d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$e18d.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Loader = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null)));
+};
+_c = Loader;
+var _default = Loader;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Loader");
+
+  $parcel$ReactRefreshHelpers$e18d.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
 },{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"Rmdsg":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
@@ -3602,13 +3684,66 @@ function _interopRequireDefault(obj) {
 // Define Tranition Class
 class Transition {
     set(container) {
-        this.container = $(container);
+        // Set Container
+        this.container = $(container); // Define Animation targets
+        this.targets = this.container.children(".animate-item, .animate-children > *").e(); // Return Instance
+        return this;
+    }
+    async in() {
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        tl.add({
+            targets: this.targets,
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        await tl.finished;
+    }
+    async out() {
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        tl.add({
+            targets: this.targets,
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
+            opacity: 0,
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        await tl.finished;
+    }
+    async to(page) {
+        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+        await this.out();
+        await $.delay(delay);
+        this.setPage(page);
     }
     constructor(dispatch){
         // Create Dispatcher Reference
-        this.setStep = (step)=>dispatch({
-                type: 'SET_STEP',
-                payload: step
+        this.setPage = (page)=>dispatch({
+                type: 'SET_PAGE',
+                data: page
             })
         ;
     }
@@ -3627,14 +3762,83 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Inputs
+// Create Profile
 const Profile = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", null, "Yumbo"));
+    const { state: user  } = _react.useContext(_AppContext.default);
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
+        showTitle: false
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-header"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-photo animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: user.photo,
+        alt: "Profile Photo"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-info animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email))), !!user.oAuth.length && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-details animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Linked Accounts"), user.oAuth.map((auth)=>/*#__PURE__*/ _react.default.createElement("div", {
+            key: auth.provider,
+            className: $.join("account__profile-oauth", [
+                auth.provider
+            ])
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: auth.provider
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small"
+        }, auth.name, " - ", auth.email))
+    )), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__form"
+    }, /*#__PURE__*/ _react.default.createElement("h5", {
+        className: "animate-item"
+    }, "Edit Your Profile")), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__form"
+    }, /*#__PURE__*/ _react.default.createElement("h5", {
+        className: "animate-item"
+    }, "Edit Your Account")))));
 };
 _c = Profile;
 var _default = Profile;
@@ -3643,6 +3847,133 @@ var _c;
 $RefreshReg$(_c, "Profile");
 
   $parcel$ReactRefreshHelpers$c663.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../store/AppContext":"bdnEg","../components/AccountPage":"7WoBC","../../components/Icon":"3WqAm","../../components/Input":"83Axu"}],"83Axu":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$bdcc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$bdcc.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _hooks = require("../helpers/hooks");
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React Defaults
+// Import Helpers
+// Import Other Components
+// Create Component
+const Input = (_ref)=>{
+    let { value , placeholder , onChange , onBlur: _onBlur , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
+    const [state, setState] = _hooks.useObjectState({
+        type,
+        showErrors: false
+    });
+    const isText = state.type === "text";
+    const hasError = state.showErrors && errors && errors.length > 0;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "input"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("input__input", [
+            hasError,
+            "has-error"
+        ], animationClass || "animate-item")
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__main"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "lg"
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__field"
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("input", {
+        id: id,
+        type: state.type || "text",
+        value: value,
+        placeholder: placeholder,
+        onChange: (onChange || formatInput) && ((e)=>{
+            let val = e.target.value;
+            if (formatInput) val = formatInput(val);
+            onChange && onChange(val);
+        }),
+        onBlur: (e)=>{
+            if (!state.showErrors) setState({
+                showErrors: true
+            });
+            _onBlur && _onBlur(e);
+        },
+        onFocus: selectOnFocus && ((e)=>e.target.select()
+        ),
+        className: "input__text-input"
+    }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__toggle",
+        onClick: ()=>setState({
+                type: isText ? "password" : "text"
+            })
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: isText ? "eye-off" : "eye",
+        size: "lg"
+    }))), hasError && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__error animate-item",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
+};
+_c = Input;
+var _default = Input;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Input");
+
+  $parcel$ReactRefreshHelpers$bdcc.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../helpers/hooks":"8wHZG","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8wHZG":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$134e = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$134e.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.useObjectState = void 0;
+var _react = require("react");
+const useObjectState = (initialState)=>{
+    const [state, setState] = _react.useState(initialState);
+    return [
+        state,
+        (newState)=>setState(Object.assign({
+            }, state, newState))
+    ];
+};
+exports.useObjectState = useObjectState;
+
+  $parcel$ReactRefreshHelpers$134e.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
@@ -3762,14 +4093,14 @@ function _interopRequireWildcard(obj) {
 // Import Components
 // Create Item Component
 const NavItem = (_ref)=>{
-    let { icon , label , onClick , name  } = _ref;
-    const { state  } = _react.useContext(_AppContext.default);
+    let { icon , label , name  } = _ref;
+    const { state , transition  } = _react.useContext(_AppContext.default);
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: $.join("account-nav__item", [
-            state.step === name,
+            state.page === name,
             "active"
         ]),
-        onClick: onClick
+        onClick: ()=>state.page !== name && transition.to(name)
     }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
         icon: icon
     }), /*#__PURE__*/ _react.default.createElement("p", null, label)));

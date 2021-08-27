@@ -4,7 +4,7 @@ import React, { useEffect, useContext } from 'react';
 import AppContext from '../store/AppContext';
 
 // Import Components
-import Loader from '../../components/Loader';
+import AccountPage from '../components/AccountPage';
 import ReservationList from '../components/ReservationList';
 
 // Import Helpers
@@ -59,12 +59,10 @@ const Rides = () => {
     }, []);
 
 
-    // Create component
-    return reservations ? (
-        <div className="account__content">
-            <h2 className="account__title animate-item">Hello <span>Arjun</span></h2>
-
-            {reservations.all.length ? (
+    // Create Component
+    return (
+        <AccountPage showLoader={!reservations} >
+            {reservations && reservations.all.length ? (
                 <>
                     <ReservationList
                         label="Upcoming Reservations"
@@ -79,13 +77,10 @@ const Rides = () => {
                     />
                 </>
             ) : (
-                <div>You got no reservations you poor fuck</div>
+                <div className="animate-item">You got no reservations you poor fuck</div>
             )}
-
-            
-
-        </div>
-    ) : <Loader />
+        </AccountPage>
+    )
 
 };
 

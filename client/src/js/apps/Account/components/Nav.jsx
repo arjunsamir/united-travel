@@ -9,12 +9,15 @@ import Icon from '../../components/Icon';
 
 
 // Create Item Component
-const NavItem = ({ icon, label, onClick, name }) => {
+const NavItem = ({ icon, label, name }) => {
 
-    const { state } = useContext(AppContext);
+    const { state, transition } = useContext(AppContext);
 
     return (
-        <div className={$.join("account-nav__item", [state.step === name, "active"])} onClick={onClick}>
+        <div
+            className={$.join("account-nav__item", [state.page === name, "active"])}
+            onClick={() => state.page !== name && transition.to(name)}
+        >
             <Icon icon={icon} />
             <p>{label}</p>
         </div>

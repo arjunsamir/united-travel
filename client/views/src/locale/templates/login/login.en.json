@@ -116,7 +116,8 @@
             "invalid": "Name cannot contain numbers or special characters"
         },
         "fails": {
-            "password": "Your password is incorrect."
+            "password": "Your password is incorrect.",
+            "oauth": "This email was registered through third party sign in. Please sign in with Google or Facebook. Once you login you can set a password in your account settings."
         }
     },
     "referral": {

@@ -7,9 +7,9 @@ export default class Transition {
     constructor(dispatch) {
 
         // Create Dispatcher Reference
-        this.setStep = (step) => dispatch({
-            type: 'SET_STEP',
-            payload: step
+        this.setPage = (page) => dispatch({
+            type: 'SET_PAGE',
+            data: page
         });
 
 
@@ -17,7 +17,63 @@ export default class Transition {
 
     set(container) {
 
+        // Set Container
         this.container = $(container)
+
+        // Define Animation targets
+        this.targets = this.container.children(".animate-item, .animate-children > *").e();
+
+        // Return Instance
+        return this;
+
+    }
+
+
+    async in() {
+
+        const tl = anime.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+
+        tl.add({
+            targets: this.targets,
+            translateY: [anime.stagger([100, 25]), 0],
+            opacity: [0, 1],
+            delay: anime.stagger([0, 250])
+        });
+
+
+        await tl.finished;
+
+    }
+
+
+    async out() {
+
+        const tl = anime.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+
+        tl.add({
+            targets: this.targets,
+            translateY: anime.stagger([-25, -100]),
+            opacity: 0,
+            delay: anime.stagger([0, 250])
+        });
+
+        await tl.finished;
+
+    }
+
+    async to(page, delay = 500) {
+
+        await this.out();
+
+        await $.delay(delay);
+
+        this.setPage(page);
 
     }
 

@@ -1,5 +1,4 @@
 import anime from 'animejs';
-import { time } from 'uniqid';
 
 export default class Transition {
 

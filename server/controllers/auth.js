@@ -117,6 +117,11 @@ exports.continueWithGoogle = catchAsync(async (req, res, next) => {
     // Link Account With Social Media Login if Not Already Linked
     let user = await User.findOne({ $or: [{ email: payload.email }, { googleID: payload.sub }] });
 
+    const oauthObj = {
+        provider: 'google',
+        name: payload.name,
+        email: payload.email,
+    };
 
     const data = {
         name: payload.name,
@@ -124,7 +129,7 @@ exports.continueWithGoogle = catchAsync(async (req, res, next) => {
         email: payload.email,
         photos: [payload.picture],
         photo: payload.picture,
-        oAuth: ['google'],
+        oAuth: [oauthObj],
         googleID: payload.sub,
         preferredLocale: req.body.preferredLocale
     };
@@ -135,11 +140,10 @@ exports.continueWithGoogle = catchAsync(async (req, res, next) => {
     // If User Does Not Exist Then Create One
     if (!user) user = await createAccount(data);
 
-
     // If Account Exists & is not linked to google then add Google OAUTH
     if (!user.googleID) {
         user.googleID = payload.sub;
-        user.oAuth.push('google');
+        user.oAuth.push(oauthObj);
         user.photos.push(data.photo);
         if (user.photo === 'default.jpg') user.photo = data.photo;
         await user.save();
@@ -158,13 +162,19 @@ exports.continueWithFacebook = catchAsync(async (req, res, next) => {
 
     let user = await User.findOne({ $or: [{ email: req.body.email }, { facebookID: req.body.facebookID }] });
 
+    const oauthObj = {
+        provider: 'facebook',
+        name: req.body.name,
+        email: req.body.email,
+    };
+
     const data = {
         name: req.body.name,
         preferredName: req.body.preferredName,
         email: req.body.email,
         photos: [req.body.photo],
         photo: req.body.photo,
-        oAuth: ['facebook'],
+        oAuth: [oauthObj],
         facebookID: req.body.facebookID,
         preferredLocale: req.body.preferredLocale
     };
@@ -179,7 +189,7 @@ exports.continueWithFacebook = catchAsync(async (req, res, next) => {
      // If Account Exists & is not linked to facebook then add facebook OAUTH
      if (!user.facebookID) {
         user.facebookID = data.facebookID;
-        user.oAuth.push('facebook');
+        user.oAuth.push(oauthObj);
         user.photos.push(data.photo);
         if (user.photo === 'default.jpg') user.photo = data.photo;
         await user.save();
@@ -214,15 +224,18 @@ exports.checkEmail = catchAsync(async (req, res, next) => {
 
     const { email } = req.body;
     let exists = false;
+    let loginAllowed = true;
 
     if (email) {
-        const user = await User.findOne({ email });
+        const user = await User.findOne({ email }).select('+password');
         if (user) exists = true;
+        if (user && !user.password) loginAllowed = false;
     }
 
     send(res, {
         status: 'success',
-        exists
+        exists,
+        loginAllowed
     });
 
 });
@@ -399,6 +412,23 @@ exports.isLoggedIn = (req, res, next) => {
     else next();
 
 };
+
+
+// Redirect Requests
+exports.redirect = (target, status = "logged-out") => (req, res, next) => {
+
+    if (status === "logged-in") {
+        if (req.user) res.redirect(target);
+        else next();
+    }
+
+    else {
+        if (!req.user) res.redirect(target);
+        else next();
+    }
+
+
+}
 
 
 exports.validateSession = catchAsync(async (req, res, next) => {
