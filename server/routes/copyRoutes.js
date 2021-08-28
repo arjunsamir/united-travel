@@ -11,6 +11,7 @@ const router = express.Router();
 router.get('/fleet/:locale', control.getFleet);
 router.get('/login/:locale', control.getLogin);
 router.get('/booking/:locale', control.getBooking);
+router.get('/account/:locale', control.getAccount);
 
 
 // Export Router

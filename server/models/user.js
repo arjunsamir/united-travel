@@ -28,13 +28,15 @@ const schema = new mongoose.Schema({
         default: Date.now(),
         select: false
     },
+    passwordSet: Boolean,
     passwordChangedAt: Date,
     resetToken: String,
     tokenExpiration: Date,
     oAuth: [{
         provider: String,
         name: String,
-        email: String
+        email: String,
+        photo: String
     }],
     googleID: String,
     facebookID: String,
@@ -50,10 +52,13 @@ const schema = new mongoose.Schema({
         default: true,
         select: false
     },
-    photos: [String],
+    photos: {
+        type: [String],
+        default: ['https://storage.googleapis.com/utravel-site-content/user-photos/utravel-default.png']
+    },
     photo: {
         type: String,
-        default: '/img/profile-photos/default.png'
+        default: 'https://storage.googleapis.com/utravel-site-content/user-photos/utravel-default.png'
     },
     referralCode: String,
     referredBy: String,
@@ -67,14 +72,22 @@ const schema = new mongoose.Schema({
             type: mongoose.Schema.ObjectId,
             ref: 'Credit'
         }
-    ]
+    ],
 });
 
 
 schema.pre('save', async function(next) {
 
+    // Filter Out Unmodified Passwords
     if (!this.isModified('password') || !this.password) return next();
+
+    // Set Pasword Status
+    this.passwordSet = !!this.password;
+
+    // Encrypt Password
     this.password = await bcrypt.hash(this.password, 12);
+
+    // Call Next Middleware in stack
     next();
 
 });
@@ -82,7 +95,7 @@ schema.pre('save', async function(next) {
 
 schema.pre(/^find/, function(next) {
 
-    //this.find({ active: { $ne: false } });
+    this.find({ active: { $ne: false } });
     next();
 
 });

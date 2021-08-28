@@ -77,7 +77,7 @@ const Rides = () => {
                     />
                 </>
             ) : (
-                <div className="animate-item">You got no reservations you poor fuck</div>
+                <div className="animate-item">You haven't made any reservations yet.</div>
             )}
         </AccountPage>
     )

@@ -6,10 +6,29 @@ const User = require('../models/user');
 
 exports.getMe = catchAsync(async (req, res, next) => {
 
+    send(res, {
+        user: req.user
+    })
+
 });
 
 
 exports.updateMe = catchAsync(async (req, res, next) => {
+
+    if (!req.userId) return send(res, {
+        status: "FAIL"
+    });
+
+    const user = await User.findByIdAndUpdate(req.userId, req.body, {
+        new: true,
+        runValidators: true
+    });
+    
+    send(res, {
+        status: "SUCCESS",
+        user
+    })
+    
     
 });
 

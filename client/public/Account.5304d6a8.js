@@ -946,24 +946,68 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
-// Do Initial Request
-const copy = {
-    en: "What our riders say about us.",
-    es: "Lo que nuestros jinetes dicen de nosotros."
-};
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
 class AccountApp extends _ReactAppWrapper.default {
     async load() {
         const res = {
         };
         const promises = [
-            _axios.default('/api/reviews').then((r)=>{
-                var _r$data, _r$data$data;
-                return res.reviews = r === null || r === void 0 ? void 0 : (_r$data = r.data) === null || _r$data === void 0 ? void 0 : (_r$data$data = _r$data.data) === null || _r$data$data === void 0 ? void 0 : _r$data$data.data.filter((review)=>review.locale === window.locale
-                );
-            })
+            _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.login = data === null || data === void 0 ? void 0 : data.data
+            ),
+            _axios.default("/api/copy/account/".concat(window.locale)).then((data)=>res.account = data === null || data === void 0 ? void 0 : data.data
+            )
         ];
-        await Promise.all(promises);
-        res.copy = copy[window.locale];
+        await Promise.all(promises); // Do a shitload of destructuring and restructuring
+        const { login , account  } = res;
+        const errors = login.errors;
+        const inputs = _objectSpread(_objectSpread(_objectSpread(_objectSpread({
+        }, login.common), login.registration.inputs), login.login.inputs), {
+        }, {
+            newPassword: _objectSpread({
+            }, login.reset.inputs.password)
+        });
+        res.copy = _objectSpread(_objectSpread({
+        }, account), {
+        }, {
+            inputs: _objectSpread(_objectSpread({
+            }, inputs), account.inputs),
+            errors: _objectSpread(_objectSpread({
+            }, errors), account.errors)
+        });
         await this.render(res);
     }
     constructor(dta, ctn){
@@ -990,6 +1034,7 @@ var _reducer = _interopRequireDefault(require("./store/reducer"));
 var _initialState = _interopRequireDefault(require("./store/initialState"));
 var _AppContext = _interopRequireDefault(require("./store/AppContext"));
 var _Transition = _interopRequireDefault(require("./helpers/Transition"));
+var _Validator = _interopRequireDefault(require("../helpers/Validator"));
 var _Rides = _interopRequireDefault(require("./pages/Rides"));
 var _Profile = _interopRequireDefault(require("./Pages/Profile"));
 var _Wallet = _interopRequireDefault(require("./pages/Wallet"));
@@ -1043,12 +1088,14 @@ const pages = {
 const App = (_ref)=>{
     let { copy  } = _ref;
     const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default);
-    const Page = pages[state.page]; // Return Component
+    const Page = pages[state.page];
+    console.log(copy); // Return Component
     return(/*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
             state,
             appCopy: copy,
             transition: new _Transition.default(dispatch),
+            validator: new _Validator.default(copy.errors),
             update: (key)=>(val)=>dispatch({
                         type: "SET_".concat(key.toUpperCase()),
                         data: val
@@ -1071,7 +1118,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./store/reducer":"bb6So","./store/initialState":"isorc","./pages/Rides":"ezDAX","./helpers/Transition":"Rmdsg","./store/AppContext":"bdnEg","./Pages/Profile":"8h88q","./pages/Wallet":"htIHb","./pages/Invite":"a49Vv","./components/Nav":"10lW9","./components/Visual":"8Owmr"}],"a4ork":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./store/reducer":"bb6So","./store/initialState":"isorc","./pages/Rides":"ezDAX","./helpers/Transition":"Rmdsg","./store/AppContext":"bdnEg","./Pages/Profile":"8h88q","./pages/Wallet":"htIHb","./pages/Invite":"a49Vv","./components/Nav":"10lW9","./components/Visual":"8Owmr","../helpers/Validator":"DGwNW"}],"a4ork":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -2906,9 +2953,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 // Get User Initial Data
-const { currentUser: { name , preferredName , email , preferredLocale , photo , _id , referralCode , oAuth , credits , stripeID  }  } = window; // Create Initial State
+const { currentUser: { name , preferredName , email , preferredLocale , photo , _id , referralCode , oAuth , credits , stripeID , passwordSet  }  } = window; // Create Initial State
 const state = {
-    page: "Rides",
+    // page: "Rides",
+    page: "Profile",
     reservations: null,
     // Array
     paymentMethods: null,
@@ -2922,7 +2970,8 @@ const state = {
     oAuth,
     referralCode,
     credits,
-    stripeID
+    stripeID,
+    passwordSet
 };
 var _default = state;
 exports.default = _default;
@@ -3057,7 +3106,7 @@ const Rides = ()=>{
         fallback: "No past reservations..."
     })) : /*#__PURE__*/ _react.default.createElement("div", {
         className: "animate-item"
-    }, "You got no reservations you poor fuck")));
+    }, "You haven't made any reservations yet.")));
 };
 _c = Rides;
 var _default = Rides;
@@ -3764,8 +3813,102 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _EditProfile = _interopRequireDefault(require("../sections/EditProfile"));
+var _EditAccount = _interopRequireDefault(require("../sections/EditAccount"));
+var _DeleteAccount = _interopRequireDefault(require("../sections/DeleteAccount"));
 var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
 var _Icon = _interopRequireDefault(require("../../components/Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Sections
+// Import Components
+// Create Profile
+const Profile = ()=>{
+    const { state: user  } = _react.useContext(_AppContext.default);
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
+        showTitle: false
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-header"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-photo animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: user.photo,
+        alt: "Profile Photo"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-info animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email))), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), !!user.oAuth.length && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-details animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Linked Accounts"), user.oAuth.map((auth)=>/*#__PURE__*/ _react.default.createElement("div", {
+            key: auth.provider,
+            className: $.join("account__profile-oauth", [
+                auth.provider
+            ])
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: auth.provider
+        }), /*#__PURE__*/ _react.default.createElement("h6", {
+            className: "small"
+        }, auth.name, " - ", auth.email))
+    )), /*#__PURE__*/ _react.default.createElement(_EditProfile.default, null), /*#__PURE__*/ _react.default.createElement(_EditAccount.default, null), /*#__PURE__*/ _react.default.createElement(_DeleteAccount.default, null)));
+};
+_c = Profile;
+var _default = Profile;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Profile");
+
+  $parcel$ReactRefreshHelpers$c663.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../store/AppContext":"bdnEg","../components/AccountPage":"7WoBC","../../components/Icon":"3WqAm","../sections/EditProfile":"aCIWu","../sections/EditAccount":"cttlh","../sections/DeleteAccount":"c6hBA"}],"aCIWu":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$b9bb = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$b9bb.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountField = _interopRequireDefault(require("../components/AccountField"));
 var _Input = _interopRequireDefault(require("../../components/Input"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -3801,57 +3944,490 @@ function _interopRequireWildcard(obj) {
 }
 // Import Context
 // Import Components
-// Import Inputs
-// Create Profile
-const Profile = ()=>{
-    const { state: user  } = _react.useContext(_AppContext.default);
-    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
-        showTitle: false
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-header"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-photo animate-item"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: user.photo,
-        alt: "Profile Photo"
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-info animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h4", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email))), !!user.oAuth.length && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-details animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Linked Accounts"), user.oAuth.map((auth)=>/*#__PURE__*/ _react.default.createElement("div", {
-            key: auth.provider,
-            className: $.join("account__profile-oauth", [
-                auth.provider
-            ])
-        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-            icon: auth.provider
-        }), /*#__PURE__*/ _react.default.createElement("p", {
-            className: "small"
-        }, auth.name, " - ", auth.email))
-    )), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__form"
-    }, /*#__PURE__*/ _react.default.createElement("h5", {
-        className: "animate-item"
-    }, "Edit Your Profile")), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__form"
-    }, /*#__PURE__*/ _react.default.createElement("h5", {
-        className: "animate-item"
-    }, "Edit Your Account")))));
+// Create Component
+const EditProfile = ()=>{
+    // Destructure State
+    const { update , validator , state: user , appCopy: { inputs: { fullName: fn , preferredName: pn  }  }  } = _react.useContext(_AppContext.default); // Create Local State
+    const [name, setName] = _react.useState(user.name);
+    const [preferredName, setPreferredName] = _react.useState(user.preferredName);
+    const [nameErrs, setNameErrs] = _react.useState([]);
+    const [prefErrs, setPrefErrs] = _react.useState([]); // Valide Fields
+    const errors = {
+        name: [
+            ...nameErrs,
+            ...validator.checkName(name)
+        ],
+        preferredName: [
+            ...prefErrs,
+            ...validator.checkName(preferredName)
+        ]
+    };
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Edit Your Profile"), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        label: fn.label,
+        value: user.name,
+        title: "Update Full Name",
+        submit: {
+            text: "Update Full Name",
+            disabled: user.name === name || errors.name.length > 0,
+            data: {
+                name
+            },
+            callback (_ref) {
+                let { data , close , error  } = _ref;
+                if (error || data.status === "ERROR") return setNameErrs([
+                    'Something went wrong...'
+                ]);
+                update("name")(data.user.name);
+                close && close();
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-full-name",
+        type: "name",
+        icon: "person-circle",
+        label: fn.label,
+        placeholder: fn.placeholder,
+        value: name,
+        onChange: setName,
+        errors: errors.name
+    })), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        label: "Preferred Name",
+        value: user.preferredName,
+        title: "Update Preferred Name",
+        submit: {
+            text: "Update Preferred Name",
+            disabled: user.preferredName === preferredName || errors.preferredName.length > 0,
+            data: {
+                preferredName
+            },
+            callback: (_ref2)=>{
+                let { data , close , error  } = _ref2;
+                if (error || data.status === "ERROR") return setPrefErrs([
+                    'Something went wrong...'
+                ]);
+                update("preferred_name")(data.user.preferredName);
+                close && close();
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-preferred-name",
+        type: "name",
+        icon: "person-circle",
+        label: pn.label,
+        placeholder: pn.placeholder,
+        value: preferredName,
+        onChange: setPreferredName,
+        errors: errors.preferredName
+    }))));
 };
-_c = Profile;
-var _default = Profile;
+_c = EditProfile;
+var _default = EditProfile;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "Profile");
+$RefreshReg$(_c, "EditProfile");
 
-  $parcel$ReactRefreshHelpers$c663.postlude(module);
+  $parcel$ReactRefreshHelpers$b9bb.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../store/AppContext":"bdnEg","../components/AccountPage":"7WoBC","../../components/Icon":"3WqAm","../../components/Input":"83Axu"}],"83Axu":[function(require,module,exports) {
+},{"react":"a4ork","../store/AppContext":"bdnEg","../components/AccountField":"apYoF","../../components/Input":"83Axu","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"apYoF":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$730c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$730c.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Modal = _interopRequireDefault(require("../../components/Modal"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Buttons = require("../../components/Buttons");
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Base React Shit
+// Import Components
+// Import Helpers
+const AccountField = (_ref)=>{
+    let { title , label , value , children , submit ={
+    }  } = _ref;
+    // Cretate Local State
+    const [showModal, setShowModal] = _react.useState(false);
+    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const modal = _react.useRef(); // Create Submission handler
+    const handleSubmit = async ()=>{
+        // Start Timer
+        const timer = $.timer(1000).start(); // Set Fetch Status
+        setIsFetching(true);
+        try {
+            var _modal$current;
+            // Start Request
+            const res = await _axios.default.patch(submit.endpoint || '/users/me', submit.data); // Hold For Timer
+            await timer.hold(); // Set Fetch Status
+            setIsFetching(false); // Execute Submit Callback
+            submit.callback({
+                data: res === null || res === void 0 ? void 0 : res.data,
+                close: modal.current && ((_modal$current = modal.current) === null || _modal$current === void 0 ? void 0 : _modal$current.close)
+            });
+        } catch (error) {
+            var _modal$current2;
+            // Set Fetch Status
+            setIsFetching(false); // Execte Error Callback
+            submit.callback({
+                error: true,
+                close: modal.current && ((_modal$current2 = modal.current) === null || _modal$current2 === void 0 ? void 0 : _modal$current2.close)
+            });
+        }
+    }; // Create Modal
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__field",
+        onClick: ()=>setShowModal(true)
+    }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, label), /*#__PURE__*/ _react.default.createElement("p", null, value)), /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "create",
+        size: "lg"
+    })), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+        isOpen: showModal,
+        close: setShowModal,
+        preventClose: isFetching,
+        closeRef: modal
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__modal"
+    }, title && /*#__PURE__*/ _react.default.createElement("h4", {
+        className: "account__modal-title animate-item"
+    }, title), children, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: submit.text,
+        onClick: handleSubmit,
+        showLoader: isFetching,
+        disabled: submit.disabled
+    })))));
+};
+_c = AccountField;
+var _default = AccountField;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AccountField");
+
+  $parcel$ReactRefreshHelpers$730c.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5"}],"h4i0T":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$5818.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const animateModalOpen = (element)=>{
+    const e = $(element);
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade In Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: [
+            _animejs.default.stagger([
+                100,
+                25
+            ]),
+            0
+        ],
+        opacity: [
+            0,
+            1
+        ],
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    });
+    return tl.finished;
+};
+const animateModalClose = (element)=>{
+    const e = $(element); // Create Anime Timeline
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade Out Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: _animejs.default.stagger([
+            0,
+            -50
+        ]),
+        opacity: 0,
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    }); // Then Fade Out Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: 0
+    }); // Then Fade Out Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: 0
+    });
+    return tl.finished;
+};
+const Modal = (_ref)=>{
+    let { children , isOpen , close , preventClose , closeRef  } = _ref;
+    // Create Refs & State
+    const [isAnimating, setIsAnimating] = _react.useState(false);
+    const element = _react.useRef(); // Animate Opening And Closing
+    _react.useEffect(()=>{
+        const triggerOpen = async ()=>{
+            if (!element.current || isAnimating) return;
+            setIsAnimating(true);
+            await animateModalOpen(element.current);
+            setIsAnimating(false);
+        };
+        if (isOpen) triggerOpen();
+    }, [
+        isOpen
+    ]); // Create Close Function
+    const closeModal = async ()=>{
+        // Prevent Double Clicking
+        if (isAnimating || preventClose) return; // Update State
+        setIsAnimating(true); // Do Some Animation
+        await animateModalClose(element.current); // Update State
+        setIsAnimating(false); // Close Modal State
+        close(false);
+    }; // Pass Close Function Updwards
+    if (closeRef) closeRef.current = {
+        close: closeModal
+    };
+    return isOpen ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal",
+        ref: element
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__escape",
+        onClick: closeModal
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__window"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__close animate-item",
+        onClick: closeModal
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "close",
+        size: "xl"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__content"
+    }, children))) : null;
+};
+_c = Modal;
+var _default = Modal;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Modal");
+
+  $parcel$ReactRefreshHelpers$5818.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./Icon":"3WqAm","animejs":"aMVBn"}],"6z8CS":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$094f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$094f.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const a = 'animate-item';
+const BackButton = (_ref)=>{
+    let { onClick , text , animationClass , type  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        type: type || "button",
+        className: $.join("back-button", animationClass || a),
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "arrow-back",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text || "Back")));
+};
+_c = BackButton;
+exports.BackButton = BackButton;
+const Button = (_ref2)=>{
+    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("button", [
+            theme
+        ], [
+            icon,
+            "with-icon"
+        ], [
+            disabled,
+            "disabled"
+        ], animationClass || a),
+        onClick: onClick,
+        ref: domRef,
+        type: type || "button"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "button__loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
+};
+_c1 = Button;
+exports.Button = Button;
+const IconButton = (_ref3)=>{
+    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        id: id,
+        className: $.join("icon-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            className
+        ]),
+        onClick: onClick,
+        ref: domRef
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        color: color,
+        size: size
+    })));
+};
+_c2 = IconButton;
+exports.IconButton = IconButton;
+const LinkButton = (_ref4)=>{
+    let { onClick , href , text , children , domRef , disabled , animationClass , cssClasses  } = _ref4;
+    return(/*#__PURE__*/ _react.default.createElement("a", {
+        href: href,
+        className: $.join("link-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            cssClasses
+        ]),
+        ref: domRef,
+        onClick: onClick
+    }, text || children));
+};
+_c3 = LinkButton;
+exports.LinkButton = LinkButton;
+var _c, _c1, _c2, _c3;
+$RefreshReg$(_c, "BackButton");
+$RefreshReg$(_c1, "Button");
+$RefreshReg$(_c2, "IconButton");
+$RefreshReg$(_c3, "LinkButton");
+
+  $parcel$ReactRefreshHelpers$094f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"83Axu":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$bdcc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3978,7 +4554,194 @@ exports.useObjectState = useObjectState;
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"htIHb":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"cttlh":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$740a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$740a.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountField = _interopRequireDefault(require("../components/AccountField"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Create Component
+const EditProfile = ()=>{
+    // Destructure State
+    const { update , validator , state: user , appCopy: { inputs: { email: eml , password: pwd , currentPassword: cPwd , newPassword: nPwd  } , errors: errCopy  }  } = _react.useContext(_AppContext.default);
+    console.log(errCopy); // Create Local State
+    const [email, setEmail] = _react.useState(user.email);
+    const [emailErrs, setEmailErrs] = _react.useState([]);
+    const [password, setPassword] = _react.useState("");
+    const [passwordErrs, setPasswordErrs] = _react.useState([]);
+    const [code, setCode] = _react.useState("");
+    const [codeErrs, setCodeErrs] = _react.useState([]);
+    const errors = {
+        email: [
+            ...emailErrs,
+            ...validator.checkEmail(email)
+        ]
+    };
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Edit Your Account"), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        label: eml.label,
+        value: user.email,
+        title: "Update Email Address",
+        submit: {
+            text: "Update Email Address",
+            disabled: user.email === email || errors.email.length > 0,
+            data: {
+                email
+            },
+            callback (_ref) {
+                let { error , data , close  } = _ref;
+                if (error) return setEmailErrs([
+                    "FUCK YOU"
+                ]);
+                update("email")(data.user.email);
+                close && close();
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "user-email",
+        type: "email",
+        icon: "email",
+        label: eml.label,
+        placeholder: eml.placeholder,
+        value: email,
+        onChange: (val)=>{
+            setEmail(val);
+            if (emailErrs.length) setEmailErrs([]);
+        },
+        errors: errors.email
+    })), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        label: pwd.label,
+        value: user.passwordSet ? "• • • • • • • •" : /*#__PURE__*/ _react.default.createElement("span", null, "No Password Set"),
+        title: "Change Your Passwrod"
+    })));
+};
+_c = EditProfile;
+var _default = EditProfile;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "EditProfile");
+
+  $parcel$ReactRefreshHelpers$740a.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../components/AccountField":"apYoF","../../components/Input":"83Axu","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"c6hBA":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$e60a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$e60a.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _Buttons = require("../../components/Buttons");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Create Component
+const EditProfile = ()=>{
+    const { state: user , update  } = _react.useContext(_AppContext.default);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Delete Your Account"), /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
+        text: "Delete My Account",
+        animationClass: "nill"
+    })));
+};
+_c = EditProfile;
+var _default = EditProfile;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "EditProfile");
+
+  $parcel$ReactRefreshHelpers$e60a.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../../components/Buttons":"6z8CS","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"htIHb":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$2e29 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -4180,7 +4943,58 @@ $RefreshReg$(_c, "Visual");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"krKvU":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"DGwNW":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const regex = {
+    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
+    lettersOnly: /[^A-Za-z ]+$/
+};
+class Validator {
+    checkEmail(val) {
+        const { invalid , required  } = this.errors.email;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.email.test(val.toLowerCase())) return [
+            invalid
+        ];
+        else return [];
+    }
+    checkPassword(val) {
+        const { required , short  } = this.errors.password;
+        if (!val) return [
+            required
+        ];
+        else if (val.length < 8) return [
+            short
+        ];
+        else return [];
+    }
+    checkName(val) {
+        const { invalid , required  } = this.errors.name;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.name.test(val)) return [
+            invalid
+        ];
+        else return [];
+    }
+    cleanInput(val) {
+        return val.replace(regex.test, '');
+    }
+    constructor(errors){
+        this.errors = errors;
+    }
+}
+exports.default = Validator;
+
+},{}],"krKvU":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8839 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

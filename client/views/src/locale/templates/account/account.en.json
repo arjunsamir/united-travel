@@ -11,5 +11,12 @@
     },
     "Profile": {
         "edit": "Edit your profile"
-    }
+    },
+    "inputs": {
+        "currentPassword": {
+            "label": "Current Password",
+            "placeholder": "••••••••"
+        }
+    },
+    "errors": {}
 }

@@ -66110,7 +66110,7 @@ const IconButton = (_ref3)=>{
 _c2 = IconButton;
 exports.IconButton = IconButton;
 const LinkButton = (_ref4)=>{
-    let { onClick , href , text , domRef , disabled , animationClass , cssClasses  } = _ref4;
+    let { onClick , href , text , children , domRef , disabled , animationClass , cssClasses  } = _ref4;
     return(/*#__PURE__*/ _react.default.createElement("a", {
         href: href,
         className: $.join("link-button", animationClass || a, [
@@ -66121,7 +66121,7 @@ const LinkButton = (_ref4)=>{
         ]),
         ref: domRef,
         onClick: onClick
-    }, text));
+    }, text || children));
 };
 _c3 = LinkButton;
 exports.LinkButton = LinkButton;
@@ -72762,7 +72762,7 @@ var _Reset = _interopRequireDefault(require("./steps/Reset"));
 var _Signup = _interopRequireDefault(require("./steps/Signup"));
 var _Greeting = _interopRequireDefault(require("./steps/Greeting"));
 var _axios = _interopRequireDefault(require("axios"));
-var _Validator = _interopRequireDefault(require("./helpers/Validator"));
+var _Validator = _interopRequireDefault(require("../helpers/Validator"));
 var _Transition = _interopRequireDefault(require("./helpers/Transition"));
 var _store = require("./store");
 function _interopRequireDefault(obj) {
@@ -72900,7 +72900,7 @@ $RefreshReg$(_c, "LoginApp");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./steps/Hello":"fNIlX","./steps/Login":"6pzqE","./steps/Registration":"4rs0o","./steps/RequestReset":"5BwuI","./steps/ResetCode":"lCvGe","./steps/Reset":"bzPFV","./steps/Signup":"1ENqT","./steps/Greeting":"gGr5Q","axios":"hDAj5","./helpers/Validator":"gamuT","./helpers/Transition":"gt2AC","./store":"fds8Q","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"fNIlX":[function(require,module,exports) {
+},{"react":"a4ork","./steps/Hello":"fNIlX","./steps/Login":"6pzqE","./steps/Registration":"4rs0o","./steps/RequestReset":"5BwuI","./steps/ResetCode":"lCvGe","./steps/Reset":"bzPFV","./steps/Signup":"1ENqT","./steps/Greeting":"gGr5Q","axios":"hDAj5","./helpers/Transition":"gt2AC","./store":"fds8Q","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../helpers/Validator":"DGwNW"}],"fNIlX":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$56d5 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -74417,58 +74417,7 @@ $RefreshReg$(_c, "Greeting");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","animejs":"aMVBn","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"gamuT":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-const regex = {
-    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
-    lettersOnly: /[^A-Za-z ]+$/
-};
-class Validator {
-    checkEmail(val) {
-        const { invalid , required  } = this.errors.email;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.email.test(val.toLowerCase())) return [
-            invalid
-        ];
-        else return [];
-    }
-    checkPassword(val) {
-        const { required , short  } = this.errors.password;
-        if (!val) return [
-            required
-        ];
-        else if (val.length < 8) return [
-            short
-        ];
-        else return [];
-    }
-    checkName(val) {
-        const { invalid , required  } = this.errors.name;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.name.test(val)) return [
-            invalid
-        ];
-        else return [];
-    }
-    cleanInput(val) {
-        return val.replace(regex.test, '');
-    }
-    constructor(errors){
-        this.errors = errors;
-    }
-}
-exports.default = Validator;
-
-},{}],"gt2AC":[function(require,module,exports) {
+},{"react":"a4ork","animejs":"aMVBn","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"gt2AC":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -74678,6 +74627,57 @@ const reducer = function reducer1() {
     }
 };
 exports.reducer = reducer;
+
+},{}],"DGwNW":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const regex = {
+    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
+    lettersOnly: /[^A-Za-z ]+$/
+};
+class Validator {
+    checkEmail(val) {
+        const { invalid , required  } = this.errors.email;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.email.test(val.toLowerCase())) return [
+            invalid
+        ];
+        else return [];
+    }
+    checkPassword(val) {
+        const { required , short  } = this.errors.password;
+        if (!val) return [
+            required
+        ];
+        else if (val.length < 8) return [
+            short
+        ];
+        else return [];
+    }
+    checkName(val) {
+        const { invalid , required  } = this.errors.name;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.name.test(val)) return [
+            invalid
+        ];
+        else return [];
+    }
+    cleanInput(val) {
+        return val.replace(regex.test, '');
+    }
+    constructor(errors){
+        this.errors = errors;
+    }
+}
+exports.default = Validator;
 
 },{}],"iANcj":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$f5e5 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");

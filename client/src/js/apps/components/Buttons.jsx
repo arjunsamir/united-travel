@@ -69,7 +69,7 @@ export const IconButton = ({ onClick, icon, color, animationClass, domRef, size,
 }
 
 
-export const LinkButton = ({ onClick, href, text, domRef, disabled, animationClass, cssClasses }) => {
+export const LinkButton = ({ onClick, href, text, children, domRef, disabled, animationClass, cssClasses }) => {
 
     return (
         <a
@@ -78,7 +78,7 @@ export const LinkButton = ({ onClick, href, text, domRef, disabled, animationCla
             ref={domRef}
             onClick={onClick}
         >
-            {text}
+            {text || children}
         </a>
     )
 

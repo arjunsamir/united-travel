@@ -15,3 +15,7 @@ exports.getLogin = (req, res) => {
 exports.getBooking = (req, res) => {
     res.sendFile(path.join(__dirname, getPath('book', req.params.locale)))
 }
+
+exports.getAccount = (req, res) => {
+    res.sendFile(path.join(__dirname, getPath('account', req.params.locale)))
+}

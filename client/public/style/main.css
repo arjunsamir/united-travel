@@ -2296,6 +2296,43 @@ svg.placeholder, .icon.placeholder {
 .ride-item__expand {
   color: var(--slate-dark);
 }
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  z-index: 1000000;
+  --modal-content-width: 44rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.modal__escape {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.modal__window {
+  position: relative;
+  background-color: var(--white);
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
+  border-radius: 1.6rem;
+  padding: var(--x-pad);
+}
+.modal__close {
+  position: absolute;
+  top: 1.6rem;
+  right: 2.4rem;
+  cursor: pointer;
+}
+.modal__content {
+  width: var(--modal-content-width);
+}
 .hero {
   height: 100vh;
   width: 100%;
@@ -3761,6 +3798,9 @@ svg.placeholder, .icon.placeholder {
 .account__group > *:not(:last-child) {
   margin-bottom: 3.6rem;
 }
+.account__group h5 {
+  font-weight: 700;
+}
 .account__loader {
   position: fixed;
   top: 0;
@@ -3771,9 +3811,6 @@ svg.placeholder, .icon.placeholder {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-.account__profile > *:not(:last-child) {
-  margin-bottom: 4.8rem;
 }
 .account__profile-header {
   display: flex;
@@ -3794,7 +3831,11 @@ svg.placeholder, .icon.placeholder {
   object-fit: cover;
 }
 .account__profile-details > *:not(:last-child) {
-  margin-bottom: 1.2rem;
+  margin-bottom: 1.6rem;
+}
+.account__profile-details h5 {
+  font-weight: 700;
+  padding-bottom: 1.2rem;
 }
 .account__profile-oauth {
   display: flex;
@@ -3809,8 +3850,47 @@ svg.placeholder, .icon.placeholder {
 .account__profile-oauth.facebook {
   color: var(--facebook);
 }
-.account__profile-oauth p {
+.account__profile-oauth h6 {
+  color: var(--slate-dark);
+  font-weight: 700;
+}
+.account__fields > *:not(:last-child) {
+  margin-bottom: 1.6rem;
+}
+.account__fields h5 {
+  padding-bottom: 1.2rem;
+  font-weight: 700;
+}
+.account__field {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+      -ms-user-select: none;
+          user-select: none;
+}
+.account__field div:first-child {
+  flex-grow: 10;
+}
+.account__field h6 {
+  color: var(--slate-dark);
+  font-weight: 700;
+}
+.account__field p {
   color: var(--jet);
+}
+.account__field p span {
+  color: var(--text);
+}
+.account__field svg {
+  color: var(--slate-dark);
+}
+.account__modal > *:not(:last-child) {
+  margin-bottom: 2.4rem;
+}
+.account__modal-title {
+  padding-bottom: 1.6rem;
 }
 .account-nav {
   background-color: var(--jet);

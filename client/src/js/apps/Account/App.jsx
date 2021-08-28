@@ -8,6 +8,7 @@ import AppContext from './store/AppContext';
 
 // Import Helpers
 import Transition from './helpers/Transition';
+import Validator from '../helpers/Validator';
 
 // Import pages
 import Rides from './pages/Rides';
@@ -35,12 +36,15 @@ const App = ({ copy }) => {
     const [state, dispatch] = useReducer(reducer, initialState);
     const Page = pages[state.page];
 
+    console.log(copy);
+
     // Return Component
     return (
         <AppContext.Provider value={{
             state,
             appCopy: copy,
             transition: new Transition(dispatch),
+            validator: new Validator(copy.errors),
             update: (key) => (val) => dispatch({
                 type: `SET_${key.toUpperCase()}`,
                 data: val

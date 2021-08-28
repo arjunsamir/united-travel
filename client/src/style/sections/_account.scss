@@ -52,6 +52,9 @@
 
     &__group {
         @include blockGap(3.6rem);
+        h5 {
+            font-weight: 700;
+        }
     }
 
     &__loader {
@@ -64,8 +67,6 @@
     }
 
     &__profile {
-
-        @include blockGap(4.8rem);
 
         &-header {
             display: flex;
@@ -85,7 +86,12 @@
         }
 
         &-details {
-            @include blockGap(1.2rem);
+            @include blockGap(1.6rem);
+
+            h5 {
+                font-weight: 700;
+                padding-bottom: 1.2rem;
+            }
         }
 
         &-oauth {
@@ -101,11 +107,61 @@
                 color: var(--facebook);
             }
 
-            p {
-                color: var(--jet);
+            h6 {
+                color: var(--slate-dark);
+                font-weight: 700;
             }
         }
 
+    }
+
+
+    &__fields {
+        @include blockGap(1.6rem);
+
+        h5 {
+            padding-bottom: 1.2rem;
+            font-weight: 700;
+        }
+    }
+
+    &__field {
+
+        display: flex;
+        align-items: center;
+
+        cursor: pointer;
+        user-select: none;
+
+        div:first-child {
+            flex-grow: 10;
+        }
+
+        h6 {
+            color: var(--slate-dark);
+            font-weight: 700;
+        }
+
+        p {
+            color: var(--jet);
+
+            span {
+                color: var(--text);
+            }
+        }
+
+        svg {
+            color: var(--slate-dark);
+        }
+
+    }
+
+    &__modal {
+        @include blockGap(2.4rem);
+
+        &-title {
+            padding-bottom: 1.6rem;
+        }
     }
 
 }

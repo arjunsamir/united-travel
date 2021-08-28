@@ -12,7 +12,7 @@ import Greeting from './steps/Greeting';
 
 // Import Tools
 import axios from 'axios';
-import Validator from './helpers/Validator';
+import Validator from '../helpers/Validator';
 import Transition from './helpers/Transition';
 
 // Import Context

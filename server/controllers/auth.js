@@ -48,8 +48,9 @@ const createAccount = async body => {
     // Transform data
     data.email = data.email.toLowerCase();
     data.name = capitalize.words(data.name);
+    data.passwordSet = !!data.password;
     if (!data.preferredName) data.preferredName = data.name.split(" ")[0];
-
+    if (data.photo) data.photos = [data.photo];
     if (data.referredBy) data.credits = await credits.issue(data.referredBy, data.name);
     
     const user = await User.create(data);
@@ -71,11 +72,23 @@ const createAccount = async body => {
 }
 
 
-const findUserByJWT = async (token) => {
+const decodeJWT = async (token) => {
 
     if (!token || token === 'logged-out') return null;
-
     const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+    return decoded;
+}
+
+
+const findUserByJWT = async (token) => {
+
+    // if (!token || token === 'logged-out') return null;
+
+    // const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+
+    const decoded = await decodeJWT(token);
+
+    if (!decoded) return null;
 
     const user = await User.findById(decoded.id);
 
@@ -121,13 +134,13 @@ exports.continueWithGoogle = catchAsync(async (req, res, next) => {
         provider: 'google',
         name: payload.name,
         email: payload.email,
+        photo: payload.picture
     };
 
     const data = {
         name: payload.name,
         preferredName: payload.given_name,
         email: payload.email,
-        photos: [payload.picture],
         photo: payload.picture,
         oAuth: [oauthObj],
         googleID: payload.sub,
@@ -145,7 +158,7 @@ exports.continueWithGoogle = catchAsync(async (req, res, next) => {
         user.googleID = payload.sub;
         user.oAuth.push(oauthObj);
         user.photos.push(data.photo);
-        if (user.photo === 'default.jpg') user.photo = data.photo;
+        if (!user.photo || user.photo.endsWith('utravel-default.png')) user.photo = data.photo;
         await user.save();
     }
 
@@ -166,13 +179,13 @@ exports.continueWithFacebook = catchAsync(async (req, res, next) => {
         provider: 'facebook',
         name: req.body.name,
         email: req.body.email,
+        photo: req.body.photo
     };
 
     const data = {
         name: req.body.name,
         preferredName: req.body.preferredName,
         email: req.body.email,
-        photos: [req.body.photo],
         photo: req.body.photo,
         oAuth: [oauthObj],
         facebookID: req.body.facebookID,
@@ -191,7 +204,7 @@ exports.continueWithFacebook = catchAsync(async (req, res, next) => {
         user.facebookID = data.facebookID;
         user.oAuth.push(oauthObj);
         user.photos.push(data.photo);
-        if (user.photo === 'default.jpg') user.photo = data.photo;
+        if (!user.photo || user.photo.endsWith('utravel-default.png')) user.photo = data.photo;
         await user.save();
     }
 
@@ -379,6 +392,19 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
 
 });
+
+
+exports.getUserIdFromJWT = catchAsync(async (req, res, next) => {
+
+    const decoded = await decodeJWT(req.cookies.jwt);
+
+    if (!decoded) return next();
+
+    req.userId = decoded.id;
+
+    next();
+
+})
 
 
 exports.screen = catchAsync(async (req, res, next) => {
