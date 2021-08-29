@@ -5,7 +5,17 @@
     align-items: center;
     user-select: none;
 
-    cursor: pointer;
+    &:not(.no-pointer) {
+        cursor: pointer;
+    }
+
+    &.no-pointer &__expand {
+        cursor: pointer;
+
+        align-self: stretch;
+        @include flexCenter;
+        padding-left: 2rem;
+    }
 
     &__info {
         h6, p {

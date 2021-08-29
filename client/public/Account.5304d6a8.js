@@ -5789,14 +5789,66 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
+var _PaymentMethod = _interopRequireDefault(require("../components/PaymentMethod"));
+var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
 const Wallet = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", null, "Yumbo"));
+    // Destructure Global State
+    const { state  } = _react.useContext(_AppContext.default); // Create Local State
+    const [isFetching, setIsFetching] = _react.useState(!state.paymentMethods); // Load Payment Methods
+    _react.useEffect(()=>{
+        const fetchPaymentMethods = async ()=>{
+            // Create Timer
+            const timer = $.timer(1000).start();
+            const res = await _axios.default('/users/me/payment-methods');
+            console.log(res);
+        };
+        if (!state.paymentMethods) fetchPaymentMethods();
+    }, []);
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
+        showLoader: isFetching
+    }, /*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+        label: "American Express",
+        text: "0005",
+        icon: "amex"
+    })));
 };
 _c = Wallet;
 var _default = Wallet;
@@ -5809,7 +5861,53 @@ $RefreshReg$(_c, "Wallet");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"a49Vv":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../store/AppContext":"bdnEg","axios":"hDAj5","../components/AccountPage":"7WoBC","../components/PaymentMethod":"27a3y"}],"27a3y":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$f3fb = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$f3fb.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Components
+const PaymentMethod = (_ref)=>{
+    let { onClick , label , icon , text  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method no-pointer animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method__info"
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, label), /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "xl"
+    }), /*#__PURE__*/ _react.default.createElement("p", null, "\u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 \u2022\u2022\u2022\u2022 ", text))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "payment-method__expand"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "close"
+    }))));
+};
+_c = PaymentMethod;
+var _default = PaymentMethod;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "PaymentMethod");
+
+  $parcel$ReactRefreshHelpers$f3fb.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Icon":"3WqAm"}],"a49Vv":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$960b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

@@ -2233,7 +2233,18 @@ svg.placeholder, .icon.placeholder {
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+}
+.payment-method:not(.no-pointer) {
   cursor: pointer;
+}
+.payment-method.no-pointer .payment-method__expand {
+  cursor: pointer;
+  align-self: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding-left: 2rem;
 }
 .payment-method__info h6, .payment-method__info p {
   color: var(--slate-dark);

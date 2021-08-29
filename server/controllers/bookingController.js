@@ -525,3 +525,24 @@ exports.getReservation = catchAsync(async (req, res, next) => {
     })
 
 });
+
+
+
+// List Payment Methods
+exports.listPaymentMethods = catchAsync(async (req, res, next) => {
+
+    // Get Customer
+    const [customer, paymentMethods] = await getStripeUser(req.user);
+
+   // Handle Errors
+   if (!customer || !paymentMethods) return send(res, {
+       status: 'ERROR'
+   }) 
+
+    // Return Response
+    send(res, {
+        status: 'SUCCESS',
+        paymentMethods
+    })
+
+});
