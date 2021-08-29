@@ -15,6 +15,13 @@ const reducer = (state = initialState, action) => {
         case 'SET_PAGE':
             return merge('page');
 
+        case 'SET_VIEW':
+            return merge('view');
+
+        case 'SET_CURRENT_RESERVATION':
+        case 'SET_CURRENTRESERVATION':
+            return merge('currentReservation');
+
         case 'SET_RESERVATIONS':
             return merge('reservations');
 

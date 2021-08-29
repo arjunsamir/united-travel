@@ -419,6 +419,8 @@ exports.createPayment = catchAsync(async (req, res, next) => {
 // Issue Refunds
 exports.issueRefund = catchAsync(async (req, res, next) => {
 
+    const { cancellation: { fees }, contact } = await refreshSettings();
+
     // Find Reservation
     const reservation = await Reservation.findById(req.body.id).populate('vehicle');
 
@@ -437,14 +439,24 @@ exports.issueRefund = catchAsync(async (req, res, next) => {
         message: 'This reservation is not eligible for a refund'
     });
 
+    // Calculate REfund Amount
+    const amount = (reservation.payment.total * (1 - fees.percent)) - fees.flat;
+
     // Create Refund
     const refund = await stripe.refunds.create({
-        payment_intent: reservation.payment.intent
+        payment_intent: reservation.payment.intent,
+        amount
     });
 
     // Update Reservation
     reservation.status = 'cancelled';
     reservation.payment.status = 'refunded';
+    reservation.payment.refund = {
+        id: refund.id,
+        status: refund.status,
+        amount: refund.amount,
+        date: dayjs().format("MM-DD-YYYY H:mm")
+    }
 
     // TODO: REFUND CREDITS
 
@@ -452,12 +464,31 @@ exports.issueRefund = catchAsync(async (req, res, next) => {
     await reservation.save();
 
     // Send Email
+    await sendEmail({
+        to: req.body.email,
+        locale: req.body.locale,
+        template: 'refund',
+        data: {
+            name: req.body.name,
+            code: reservation.code,
+            date: req.body.date
+        }
+    })
 
     // Send Response
     send(res, {
         status: 'SUCCESS',
         reservation,
         refund
+    });
+
+
+    // Send Email To Admin
+    sendEmail({
+        to: contact.notificationEmail,
+        locale: 'en',
+        template: 'refund_notification',
+        data: {}
     })
 
 });

@@ -10,13 +10,13 @@
         <div class="content">
             <h2><%- title %></h2>
             <p><%- copy %></p>
-            <a class="contact__method" href="m&#97;i&#108;&#116;o&#58;&#104;e&#108;lo&#64;un%&#54;9&#116;ed&#116;&#37;72%&#54;1&#118;e&#108;&#46;llc" >
+            <a class="contact__method" href="mailto:{{ settings.contact.email }}" >
                 <svg><use href="/img/icons.svg#email"></use></svg>
-                <h5><%- email %></h5>
+                <h5>{{ settings.contact.email }}</h5>
             </a>
-            <a class="contact__method" href="tel:123-456-7890">
+            <a class="contact__method" href="tel:{{ settings.contact.phone }}">
                 <svg><use href="/img/icons.svg#iphone"></use></svg>
-                <h5><%- phone %></h5>
+                <h5>{{ settings.phone }}</h5>
             </a>
         </div>
     </div>

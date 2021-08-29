@@ -74,6 +74,12 @@ const schema = new mongoose.Schema({
         billing: {
             name: String,
             zip: String
+        },
+        refund: {
+            id: String,
+            status: String,
+            amount: Number,
+            date: String
         }
     },
     code: String,

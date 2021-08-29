@@ -11,8 +11,14 @@ const schema = new mongoose.Schema({
         default: true
     },
     charter: {
-        rate: Number,
-        minHours: Number
+        rate: {
+            type: Number,
+            default: 75
+        },
+        minHours: {
+            type: Number,
+            default: 3
+        }
     },
     thresholds: {
         extended: Number,
@@ -37,6 +43,11 @@ const schema = new mongoose.Schema({
             flat: Number,
             percent: Number
         }
+    },
+    contact: {
+        email: String,
+        notificationEmail: String,
+        phone: String
     }
 });
 

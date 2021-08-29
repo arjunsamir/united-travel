@@ -1,5 +1,4 @@
 const sgMail = require('@sendgrid/mail');
-const http = require("https");
 
 
 // Init SendGrid
@@ -16,9 +15,25 @@ const templates = {
         en: "d-ed64b503ab884ec9837ab42908f40e9b",
         es: "d-6c8b6e17d86740b09bf5b5dafb8b5f12"
     },
+    confirmation_notification: {
+        en: "",
+        es: ""
+    },
     reset: {
         en: "d-9a9e4871986f4f738dd4dad88e7cb9e2",
         es: "d-e2d6051ed5714641b017c6ebc1f41bb7"
+    },
+    refund: {
+        en: "d-cf0935c4a486410580387a88c3658681",
+        es: "d-ddbd33d04e5d41aa96f198b5f6eb253c"
+    },
+    new_credit: {
+        en: "",
+        es: ""
+    },
+    refund_notification: {
+        en: "",
+        es: ""
     },
     reminder: {
         en: "",

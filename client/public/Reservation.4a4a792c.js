@@ -1025,7 +1025,7 @@ const fallbackCopy = {
     es: "Lo sentimos, no podemos encontrar su reserva."
 }; // Create App
 const App = (_ref)=>{
-    let { reservation , copy  } = _ref;
+    let { reservation , copy , back  } = _ref;
     const [res, setReservation] = _react.useState(reservation);
     return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
@@ -1040,7 +1040,8 @@ const App = (_ref)=>{
         destination: res.destination.placeId
     }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, {
         reservation: res,
-        copy: copy
+        copy: copy,
+        back: back
     }))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
         src: "https://storage.googleapis.com/utravel-site-content/img/not_found.png",
         copy: fallbackCopy[window.locale] || fallbackCopy.en
@@ -3130,6 +3131,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireDefault(require("react"));
 var _Cancel = _interopRequireDefault(require("./Cancel"));
+var _Buttons = require("../../components/Buttons");
 var _dayjs = _interopRequireDefault(require("dayjs"));
 var _utils = require("../../helpers/utils");
 function _interopRequireDefault(obj) {
@@ -3161,9 +3163,10 @@ const canCancel = (date, status)=>{
     return now.isBefore(time);
 }; // Crate Component
 const ReservationDetails = (_ref2)=>{
-    let { reservation , copy  } = _ref2;
+    let { reservation , copy , back  } = _ref2;
     console.log(reservation);
-    console.log(copy); // Create Shortcuts
+    console.log(copy);
+    console.log(back); // Create Shortcuts
     const r = reservation;
     const s = copy.steps.Summary;
     const p = r.payment;
@@ -3174,29 +3177,34 @@ const ReservationDetails = (_ref2)=>{
         seats: copy.steps.Vehicle.seats,
         passengers: copy.steps.Passengers.title
     };
-    return(/*#__PURE__*/ _react.default.createElement(Wrapper, null, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__header"
-    }, /*#__PURE__*/ _react.default.createElement("h4", null, s.title, " ", /*#__PURE__*/ _react.default.createElement("span", null, r.code.toUpperCase())), r.status !== "cancelled" ? /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - ", p.method.brand[0].toUpperCase() + p.method.brand.substring(1), " ", p.method.last4) : /*#__PURE__*/ _react.default.createElement("h5", null, "Refunded")), /*#__PURE__*/ _react.default.createElement("div", {
+    return(/*#__PURE__*/ _react.default.createElement(Wrapper, null, back && /*#__PURE__*/ _react.default.createElement(_Buttons.BackButton, {
+        onClick: back.onClick,
+        text: back.text
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__header animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, s.title, " ", /*#__PURE__*/ _react.default.createElement("span", null, r.code.toUpperCase())), r.status !== "cancelled" ? /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - ", p.method.brand[0].toUpperCase() + p.method.brand.substring(1), " ", p.method.last4) : /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - Refunded")), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route"
-    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format('dddd MMMM D, YYYY')), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__route-container"
+    }, /*#__PURE__*/ _react.default.createElement("p", {
+        className: "animate-item"
+    }, _dayjs.default(sh.pickup, format).format('dddd MMMM D, YYYY')), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-container animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-icon"
     }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("span", null)), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__route-details"
+        className: "booking-view__route-details animate-children"
     }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("hr", {
-        className: "booking-view__divider"
+        className: "booking-view__divider animate-item"
     }), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__block"
+        className: "booking-view__block animate-children"
     }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__vehicle"
+        className: "booking-view__vehicle animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, v["info_".concat(window.locale)].name), /*#__PURE__*/ _react.default.createElement("p", null, r.passengers.total, " ", cc.passengers), !!cs.rearSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.rearSeats, " \xD7 ", csr.label, " ", cc.seats), !!cs.frontSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.frontSeats, " \xD7 ", csf.label, " ", cc.seats), !!cs.boosterSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.boosterSeats, " \xD7 ", csb.label, " ", cc.seats)), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__vehicle-image"
     }, /*#__PURE__*/ _react.default.createElement("img", {
         src: v.image,
         alt: "Vehicle image"
     }))), r.notes && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__block"
+        className: "booking-view__block animate-children"
     }, /*#__PURE__*/ _react.default.createElement("h6", null, s.notes), /*#__PURE__*/ _react.default.createElement("p", null, r.notes)), canCancel(sh.pickup, r.status) && /*#__PURE__*/ _react.default.createElement(_Cancel.default, {
         reservation: r
     })));
@@ -3213,7 +3221,7 @@ $RefreshReg$(_c1, "ReservationDetails");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","dayjs":"ihFi1","../../helpers/utils":"dGtD3","./Cancel":"Ea1Vr"}],"ihFi1":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","dayjs":"ihFi1","../../helpers/utils":"dGtD3","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS"}],"ihFi1":[function(require,module,exports) {
 !function(t, e) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
 }(this, function() {
@@ -3518,6 +3526,7 @@ var _react = _interopRequireWildcard(require("react"));
 var _AppContext = _interopRequireDefault(require("../AppContext"));
 var _Modal = _interopRequireDefault(require("../../components/Modal"));
 var _Buttons = require("../../components/Buttons");
+var _dayjs = _interopRequireDefault(require("dayjs"));
 var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -3556,7 +3565,9 @@ function _interopRequireWildcard(obj) {
 // Import Helpers
 // Create Component
 const Cancel = ()=>{
-    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default); // Create Refs and State
+    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default);
+    const user = window.currentUser || {
+    }; // Create Refs and State
     const modal = _react.useRef();
     const [showModal, setShowModal] = _react.useState(false);
     const [isFetching, setIsFetching] = _react.useState(false);
@@ -3581,7 +3592,10 @@ const Cancel = ()=>{
             setIsFetching(true);
             const timer = $.timer(1000).start(); // Make Request
             const res = await _axios.default.post('/api/booking/issue-refund', {
-                id: reservation._id
+                id: reservation._id,
+                locale: user.preferredLocale || window.locale || 'en',
+                name: user.preferredName,
+                date: _dayjs.default(reservation.schedule.pickup, "MM-DD-YYYY H:mm").format('dddd MMMM D, YYYY')
             }); // Check Response
             console.log(res); // Update App
             updateApp(res.data.reservation); // Wait For Delay
@@ -3602,7 +3616,7 @@ $RefreshReg$(_c, "Cancel");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5","../AppContext":"6jzOU"}],"h4i0T":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5","../AppContext":"6jzOU","dayjs":"ihFi1"}],"h4i0T":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

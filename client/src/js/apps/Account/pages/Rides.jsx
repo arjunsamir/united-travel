@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 
 // Import Context
 import AppContext from '../store/AppContext';
@@ -20,6 +20,10 @@ const Rides = () => {
     const { state: { reservations }, update } = useContext(AppContext);
 
 
+    // Create Local State
+    const [isLoading, setIsLoading] = useState(!reservations);
+
+
     // Get Reservations on Load
     useEffect(() => {
 
@@ -37,12 +41,14 @@ const Rides = () => {
             const filtered = {
                 all: res.data.reservations.map(getTimestamps).sort(sortFilter),
                 upcoming: [],
+                cancelled: [],
                 past: []
             };
 
             filtered.all.forEach(r => {
 
-                if (dayjs(r.schedule.pickup, "MM-DD-YYYY H:mm").isBefore(today)) filtered.past.push(r);
+                if (r.status === 'cancelled') filtered.cancelled.push(r);
+                else if (dayjs(r.schedule.pickup, "MM-DD-YYYY H:mm").isBefore(today)) filtered.past.push(r);
                 else filtered.upcoming.push(r);
                 
             });
@@ -50,6 +56,8 @@ const Rides = () => {
             await timer.hold();
 
             update("reservations")(filtered);
+
+            setIsLoading(false);
 
         }
 
@@ -61,19 +69,28 @@ const Rides = () => {
 
     // Create Component
     return (
-        <AccountPage showLoader={!reservations} >
+        <AccountPage showLoader={isLoading} >
             {reservations && reservations.all.length ? (
                 <>
                     <ReservationList
                         label="Upcoming Reservations"
                         reservations={reservations.upcoming}
                         fallback={"No upcoming reservations..."}
+                        setLoader={setIsLoading}
                     />
                     
                     <ReservationList
                         label="Past Reservations"
                         reservations={reservations.past}
                         fallback={"No past reservations..."}
+                        setLoader={setIsLoading}
+                    />
+
+                    <ReservationList
+                        label="Cancelled Reservations"
+                        reservations={reservations.cancelled}
+                        fallback={"No cancelled reservations..."}
+                        setLoader={setIsLoading}
                     />
                 </>
             ) : (

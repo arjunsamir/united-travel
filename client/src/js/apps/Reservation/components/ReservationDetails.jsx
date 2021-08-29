@@ -3,6 +3,7 @@ import React from 'react';
 
 // Import Components
 import Cancel from './Cancel';
+import { BackButton } from '../../components/Buttons';
 
 // Import Helpers
 import dayjs from 'dayjs';
@@ -37,10 +38,11 @@ const canCancel = (date, status) => {
 
 
 // Crate Component
-const ReservationDetails = ({ reservation, copy }) => {
+const ReservationDetails = ({ reservation, copy, back }) => {
 
     console.log(reservation);
     console.log(copy);
+    console.log(back);
 
     // Create Shortcuts
     const r = reservation;
@@ -60,26 +62,27 @@ const ReservationDetails = ({ reservation, copy }) => {
     return (
         <Wrapper>
 
+            {back && <BackButton onClick={back.onClick} text={back.text} />}
 
-            <div className="booking-view__header">
+            <div className="booking-view__header animate-children">
                 <h4>{s.title} <span>{r.code.toUpperCase()}</span></h4>
                 {r.status !== "cancelled" ? (
                     <h5>${(p.total / 100).toFixed(2)} - {p.method.brand[0].toUpperCase() + p.method.brand.substring(1)} {p.method.last4}</h5>
                 ) : (
-                    <h5>Refunded</h5>
+                    <h5>${(p.total / 100).toFixed(2)} - Refunded</h5>
                 )}
             </div>
 
 
             <div className="booking-view__route">
-                <p>{dayjs(sh.pickup, format).format('dddd MMMM D, YYYY')}</p>
-                <div className="booking-view__route-container">
+                <p className="animate-item">{dayjs(sh.pickup, format).format('dddd MMMM D, YYYY')}</p>
+                <div className="booking-view__route-container animate-item">
                     <div className="booking-view__route-icon">
                         <span />
                         <hr />
                         <span />
                     </div>
-                    <div className="booking-view__route-details">
+                    <div className="booking-view__route-details animate-children">
                         <p>{dayjs(sh.pickup, format).format("h:mm A")}, {r.origin.name}</p>
                         <p>{dayjs(sh.dropoff, format).format("h:mm A")}, {r.destination.name}</p>
                     </div>
@@ -89,9 +92,9 @@ const ReservationDetails = ({ reservation, copy }) => {
 
             {r.service_type !== "general" && (
                 <>
-                    <hr className="booking-view__divider" />
+                    <hr className="booking-view__divider animate-item" />
 
-                    <div className="booking-view__block">
+                    <div className="booking-view__block animate-children">
                         <h6>{s.services[r.service_type]}</h6>
                         {r.service_type === 'airport' ? (
                             <>
@@ -109,7 +112,7 @@ const ReservationDetails = ({ reservation, copy }) => {
             )}
 
 
-            <div className="booking-view__vehicle">
+            <div className="booking-view__vehicle animate-item">
                 <div>
                     <h6>{v[`info_${window.locale}`].name}</h6>
                     <p>{r.passengers.total} {cc.passengers}</p>
@@ -124,7 +127,7 @@ const ReservationDetails = ({ reservation, copy }) => {
 
 
             {r.notes && (
-                <div className="booking-view__block">
+                <div className="booking-view__block animate-children">
                     <h6>{s.notes}</h6>
                     <p>{r.notes}</p>
                 </div>

@@ -982,16 +982,7 @@ function _defineProperty(obj, key, value) {
     return obj;
 }
 class AccountApp extends _ReactAppWrapper.default {
-    async load() {
-        const res = {
-        };
-        const promises = [
-            _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.login = data === null || data === void 0 ? void 0 : data.data
-            ),
-            _axios.default("/api/copy/account/".concat(window.locale)).then((data)=>res.account = data === null || data === void 0 ? void 0 : data.data
-            )
-        ];
-        await Promise.all(promises); // Do a shitload of destructuring and restructuring
+    formatAccountCopy(res) {
         const { login , account  } = res;
         const errors = login.errors;
         const inputs = _objectSpread(_objectSpread(_objectSpread(_objectSpread({
@@ -1000,7 +991,7 @@ class AccountApp extends _ReactAppWrapper.default {
             newPassword: _objectSpread({
             }, login.reset.inputs.password)
         });
-        res.copy = _objectSpread(_objectSpread({
+        return _objectSpread(_objectSpread({
         }, account), {
         }, {
             inputs: _objectSpread(_objectSpread({
@@ -1008,6 +999,20 @@ class AccountApp extends _ReactAppWrapper.default {
             errors: _objectSpread(_objectSpread({
             }, errors), account.errors)
         });
+    }
+    async load() {
+        const res = {
+        };
+        const promises = [
+            _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.login = data === null || data === void 0 ? void 0 : data.data
+            ),
+            _axios.default("/api/copy/account/".concat(window.locale)).then((data)=>res.account = data === null || data === void 0 ? void 0 : data.data
+            ),
+            _axios.default("/api/copy/booking/".concat(window.locale)).then((data)=>res.resCopy = data === null || data === void 0 ? void 0 : data.data
+            )
+        ];
+        await Promise.all(promises);
+        res.copy = this.formatAccountCopy(res);
         await this.render(res);
     }
     constructor(dta, ctn){
@@ -1035,12 +1040,8 @@ var _initialState = _interopRequireDefault(require("./store/initialState"));
 var _AppContext = _interopRequireDefault(require("./store/AppContext"));
 var _Transition = _interopRequireDefault(require("./helpers/Transition"));
 var _Validator = _interopRequireDefault(require("../helpers/Validator"));
-var _Rides = _interopRequireDefault(require("./pages/Rides"));
-var _Profile = _interopRequireDefault(require("./Pages/Profile"));
-var _Wallet = _interopRequireDefault(require("./pages/Wallet"));
-var _Invite = _interopRequireDefault(require("./pages/Invite"));
-var _Nav = _interopRequireDefault(require("./components/Nav"));
-var _Visual = _interopRequireDefault(require("./components/Visual"));
+var _App = _interopRequireDefault(require("../Reservation/App"));
+var _Account = _interopRequireDefault(require("./views/Account"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -1076,36 +1077,44 @@ function _interopRequireWildcard(obj) {
 // Import Base React Dependencies
 // Import Store
 // Import Helpers
-// Import pages
-// Import Components
-// Register pages
-const pages = {
-    Rides: _Rides.default,
-    Profile: _Profile.default,
-    Wallet: _Wallet.default,
-    Invite: _Invite.default
+// Import Views
+const views = {
+    Account: _Account.default,
+    Reservation: _App.default
 }; // Create Account App
 const App = (_ref)=>{
-    let { copy  } = _ref;
-    const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default);
-    const Page = pages[state.page];
-    console.log(copy); // Return Component
+    let { copy , resCopy  } = _ref;
+    // Destructure State
+    const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default); // Create Refs
+    const element = _react.useRef();
+    const transition = _react.useRef(new _Transition.default(dispatch)); // Update Container
+    _react.useEffect(()=>{
+        transition.current.set(element.current).mount(state.view);
+    }, [
+        state.view
+    ]); // Determine View
+    const View = views[state.view]; // Return Component
     return(/*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
             state,
             appCopy: copy,
-            transition: new _Transition.default(dispatch),
+            transition: transition.current,
             validator: new _Validator.default(copy.errors),
             update: (key)=>(val)=>dispatch({
                         type: "SET_".concat(key.toUpperCase()),
                         data: val
                     })
         }
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__container"
-    }, /*#__PURE__*/ _react.default.createElement(Page, null), /*#__PURE__*/ _react.default.createElement(_Visual.default, null)), /*#__PURE__*/ _react.default.createElement(_Nav.default, null))));
+    }, /*#__PURE__*/ _react.default.createElement("section", {
+        ref: element
+    }, /*#__PURE__*/ _react.default.createElement(View, {
+        reservation: state.currentReservation,
+        copy: resCopy,
+        back: {
+            text: "Back",
+            onClick: ()=>transition.current.changeView("Account")
+        }
+    }))));
 };
 _c = App;
 var _default = App;
@@ -1118,7 +1127,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./store/reducer":"bb6So","./store/initialState":"isorc","./pages/Rides":"ezDAX","./helpers/Transition":"Rmdsg","./store/AppContext":"bdnEg","./Pages/Profile":"8h88q","./pages/Wallet":"htIHb","./pages/Invite":"a49Vv","./components/Nav":"10lW9","./components/Visual":"8Owmr","../helpers/Validator":"DGwNW"}],"a4ork":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./store/reducer":"bb6So","./store/initialState":"isorc","./helpers/Transition":"Rmdsg","./store/AppContext":"bdnEg","../helpers/Validator":"DGwNW","../Reservation/App":"69dzI","./views/Account":"5LcjZ"}],"a4ork":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -2924,6 +2933,11 @@ const reducer = function reducer1() {
     switch(action.type){
         case 'SET_PAGE':
             return merge('page');
+        case 'SET_VIEW':
+            return merge('view');
+        case 'SET_CURRENT_RESERVATION':
+        case 'SET_CURRENTRESERVATION':
+            return merge('currentReservation');
         case 'SET_RESERVATIONS':
             return merge('reservations');
         case 'SET_PAYMENT_METHODS':
@@ -2957,6 +2971,8 @@ const { currentUser: { name , preferredName , email , preferredLocale , photo , 
 const state = {
     // page: "Rides",
     page: "Profile",
+    view: "Account",
+    currentReservation: null,
     reservations: null,
     // Array
     paymentMethods: null,
@@ -2976,11 +2992,252 @@ const state = {
 var _default = state;
 exports.default = _default;
 
-},{}],"ezDAX":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$5b09 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{}],"Rmdsg":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Dependencies
+// Define Tranition Class
+class Transition {
+    set(container) {
+        // Set Container
+        this.container = $(container);
+        return this.update();
+    }
+    update() {
+        // Define Animation targets
+        this.targets = this.container.children(".animate-item, .animate-children > *").e(); // Return Instance
+        return this;
+    }
+    async in(view) {
+        if (!this.mounted) return this.mount(view);
+        if (this.contentVisible) return;
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        tl.add({
+            targets: this.targets,
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        await tl.finished;
+        this.contentVisible = true;
+    }
+    async out() {
+        if (!this.contentVisible) return;
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        tl.add({
+            targets: this.targets,
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
+            opacity: 0,
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        await tl.finished;
+        this.contentVisible = false;
+    }
+    async mount(view) {
+        if (this.mounted === view) return this.in();
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        tl.add({
+            targets: this.container.children(".account__visual, .account__nav, .booking__map, .loader").e(),
+            opacity: [
+                0,
+                1
+            ],
+            duration: 800
+        });
+        tl.add({
+            targets: this.targets,
+            translateY: [
+                _animejs.default.stagger([
+                    100,
+                    25
+                ]),
+                0
+            ],
+            opacity: [
+                0,
+                1
+            ],
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        await tl.finished;
+        this.mounted = view;
+        this.contentVisible = true;
+    }
+    async unmount() {
+        const tl = _animejs.default.timeline({
+            easing: 'easeOutQuad',
+            duration: 250
+        });
+        if (this.contentVisible) tl.add({
+            targets: this.targets,
+            translateY: _animejs.default.stagger([
+                -25,
+                -100
+            ]),
+            opacity: 0,
+            delay: _animejs.default.stagger([
+                0,
+                250
+            ])
+        });
+        tl.add({
+            targets: this.container.children(".account__visual, .account__nav, .booking__map, .loader").e(),
+            opacity: 0,
+            duration: 800
+        });
+        await tl.finished;
+        this.contentVisible = false;
+    }
+    async changeView(view) {
+        await this.unmount();
+        this.setView(view);
+    }
+    async to(page) {
+        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
+        await this.out();
+        await $.delay(delay);
+        this.setPage(page);
+    }
+    constructor(dispatch){
+        // Create Dispatcher Reference
+        this.setPage = (page)=>dispatch({
+                type: 'SET_PAGE',
+                data: page
+            })
+        ; // Create View Dispatcher
+        this.setView = (view)=>dispatch({
+                type: 'SET_VIEW',
+                data: view
+            })
+        ;
+        this.mounted = null;
+        this.contentVisible = false;
+    }
+}
+exports.default = Transition;
+
+},{"animejs":"aMVBn"}],"bdnEg":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$e6df = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$5b09.prelude(module);
+$parcel$ReactRefreshHelpers$e6df.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const AppContext = /*#__PURE__*/ _react.default.createContext();
+var _default = AppContext;
+exports.default = _default;
+
+  $parcel$ReactRefreshHelpers$e6df.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"DGwNW":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const regex = {
+    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
+    lettersOnly: /[^A-Za-z ]+$/
+};
+class Validator {
+    checkEmail(val) {
+        const { invalid , required  } = this.errors.email;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.email.test(val.toLowerCase())) return [
+            invalid
+        ];
+        else return [];
+    }
+    checkPassword(val) {
+        const { required , short  } = this.errors.password;
+        if (!val) return [
+            required
+        ];
+        else if (val.length < 8) return [
+            short
+        ];
+        else return [];
+    }
+    checkName(val) {
+        const { invalid , required  } = this.errors.name;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.name.test(val)) return [
+            invalid
+        ];
+        else return [];
+    }
+    cleanInput(val) {
+        return val.replace(regex.test, '');
+    }
+    constructor(errors){
+        this.errors = errors;
+    }
+}
+exports.default = Validator;
+
+},{}],"69dzI":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$dffe = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$dffe.prelude(module);
 
 try {
 "use strict";
@@ -2989,11 +3246,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
-var _AppContext = _interopRequireDefault(require("../store/AppContext"));
-var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
-var _ReservationList = _interopRequireDefault(require("../components/ReservationList"));
-var _axios = _interopRequireDefault(require("axios"));
-var _dayjs = _interopRequireDefault(require("dayjs"));
+var _AppContext = _interopRequireDefault(require("./AppContext"));
+var _Oopsie = _interopRequireDefault(require("../components/Oopsie"));
+var _Map = _interopRequireDefault(require("./components/Map"));
+var _ReservationDetails = _interopRequireDefault(require("./components/ReservationDetails"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -3026,104 +3282,53 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
-function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-        var symbols = Object.getOwnPropertySymbols(object);
-        if (enumerableOnly) symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-        keys.push.apply(keys, symbols);
-    }
-    return keys;
-}
-function _objectSpread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {
-        };
-        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
-            _defineProperty(target, key, source[key]);
-        });
-        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-        else ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-    }
-    return target;
-}
-function _defineProperty(obj, key, value) {
-    if (key in obj) Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
+// Import base react stuff
+// Import Context
+// import Components
+// Define Fallback Copy
+const fallbackCopy = {
+    en: "Sorry, we can't find your reservation.",
+    es: "Lo sentimos, no podemos encontrar su reserva."
+}; // Create App
+const App = (_ref)=>{
+    let { reservation , copy , back  } = _ref;
+    const [res, setReservation] = _react.useState(reservation);
+    return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
+        value: {
+            reservation: res,
+            copy,
+            updateApp: setReservation
+        }
+    }, /*#__PURE__*/ _react.default.createElement("section", {
+        className: "booking"
+    }, /*#__PURE__*/ _react.default.createElement(_Map.default, {
+        origin: res.origin.placeId,
+        destination: res.destination.placeId
+    }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, {
+        reservation: res,
+        copy: copy,
+        back: back
+    }))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
+        src: "https://storage.googleapis.com/utravel-site-content/img/not_found.png",
+        copy: fallbackCopy[window.locale] || fallbackCopy.en
     });
-    else obj[key] = value;
-    return obj;
-}
-const sortFilter = (a, b)=>a.timestamp - b.timestamp
-;
-const getTimestamps = (r)=>_objectSpread(_objectSpread({
-    }, r), {
-    }, {
-        timestamp: _dayjs.default(r.schedule.pickup).unix()
-    })
-;
-const Rides = ()=>{
-    // Destructure State
-    const { state: { reservations  } , update  } = _react.useContext(_AppContext.default); // Get Reservations on Load
-    _react.useEffect(()=>{
-        // Get And Sort Reservations
-        const fetchReservations = async ()=>{
-            var _res$data;
-            const timer = $.timer(1000).start();
-            const res = await _axios.default('/api/booking/reservations/users/me');
-            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.reservations)) return;
-            const today = _dayjs.default();
-            const filtered = {
-                all: res.data.reservations.map(getTimestamps).sort(sortFilter),
-                upcoming: [],
-                past: []
-            };
-            filtered.all.forEach((r)=>{
-                if (_dayjs.default(r.schedule.pickup, "MM-DD-YYYY H:mm").isBefore(today)) filtered.past.push(r);
-                else filtered.upcoming.push(r);
-            });
-            await timer.hold();
-            update("reservations")(filtered);
-        }; // Initialize Load
-        if (!reservations) fetchReservations();
-    }, []); // Create Component
-    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
-        showLoader: !reservations
-    }, reservations && reservations.all.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
-        label: "Upcoming Reservations",
-        reservations: reservations.upcoming,
-        fallback: "No upcoming reservations..."
-    }), /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
-        label: "Past Reservations",
-        reservations: reservations.past,
-        fallback: "No past reservations..."
-    })) : /*#__PURE__*/ _react.default.createElement("div", {
-        className: "animate-item"
-    }, "You haven't made any reservations yet.")));
 };
-_c = Rides;
-var _default = Rides;
+_c = App;
+var _default = App;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "Rides");
+$RefreshReg$(_c, "App");
 
-  $parcel$ReactRefreshHelpers$5b09.postlude(module);
+  $parcel$ReactRefreshHelpers$dffe.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","axios":"hDAj5","../store/AppContext":"bdnEg","dayjs":"ihFi1","../components/ReservationList":"aOEpY","../components/AccountPage":"7WoBC"}],"bdnEg":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$e6df = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../components/Oopsie":"ckamV","./components/Map":"8spew","./components/ReservationDetails":"hFFyc","./AppContext":"6jzOU"}],"ckamV":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$1528 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$e6df.prelude(module);
+$parcel$ReactRefreshHelpers$1528.prelude(module);
 
 try {
 "use strict";
@@ -3137,16 +3342,371 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
-const AppContext = /*#__PURE__*/ _react.default.createContext();
-var _default = AppContext;
+const localCopy = {
+    en: "We're having trouble loading this application. Please try again later.",
+    es: "Tenemos problemas para cargar esta aplicación. Por favor, inténtelo de nuevo más tarde."
+};
+const Oppsie = (_ref)=>{
+    let { copy , src  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("section", {
+        className: "oopsie"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: src || "/img/oopsie.svg",
+        alt: "Oopsie"
+    }), /*#__PURE__*/ _react.default.createElement("h3", null, copy || localCopy[window.locale] || localCopy.en)));
+};
+_c = Oppsie;
+var _default = Oppsie;
 exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Oppsie");
 
-  $parcel$ReactRefreshHelpers$e6df.postlude(module);
+  $parcel$ReactRefreshHelpers$1528.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"ihFi1":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8spew":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$466f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$466f.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _useMaps = _interopRequireDefault(require("../helpers/useMaps"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Default React Stuff
+// Import Google Maps
+// Cteate Map Component
+const Map1 = (_ref)=>{
+    let { origin , destination  } = _ref;
+    // Enable Google Maps
+    const [mapElement] = _useMaps.default(origin, destination); // Create Map
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__map min"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        id: "google-map",
+        ref: mapElement
+    })));
+};
+_c = Map1;
+var _default = Map1;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Map");
+
+  $parcel$ReactRefreshHelpers$466f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../helpers/useMaps":"fW2j7"}],"fW2j7":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$faf3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$faf3.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = require("react");
+var _config = _interopRequireDefault(require("../../data/config"));
+var _axios = _interopRequireDefault(require("axios"));
+var _utils = require("../../helpers/utils");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Config
+// Import Helpers
+// Create Class To Handle Map Changes
+class AppMap {
+    getRoute() {
+        // Set Map
+        this.renderer.setMap(this.map);
+        this.directions.route({
+            origin: {
+                placeId: this.origin
+            },
+            destination: {
+                placeId: this.destination
+            },
+            travelMode: "DRIVING"
+        }, (r, s)=>this.renderRoute(r, s)
+        );
+    }
+    renderRoute(res, status) {
+        // Check if response is valid
+        if (status !== 'OK' || !res) return; // Render Rout To map
+        this.renderer.setDirections(res);
+    }
+    // Initialize Map
+    constructor(_ref){
+        let { data , element , origin , destination  } = _ref;
+        // Destructure Things
+        const { options , polylineOptions  } = data; // Google Mpas Services
+        this.map = new google.maps.Map(element, options);
+        this.directions = new google.maps.DirectionsService();
+        this.renderer = new google.maps.DirectionsRenderer({
+            polylineOptions: new google.maps.Polyline(polylineOptions)
+        }); // Set Origin and Destination
+        this.origin = origin;
+        this.destination = destination;
+    }
+} // Create Custom Hook
+const useGoogleMaps = (origin1, destination1)=>{
+    // Create Reference
+    const e = _react.useRef();
+    const [map, setMap] = _react.useState(); // Load Map
+    _react.useEffect(()=>{
+        const load = async ()=>{
+            let data1;
+            await Promise.all([
+                _utils.insertScript("https://maps.googleapis.com/maps/api/js?key=".concat(_config.default.maps.api_key, "&libraries=places"), 'google-maps-sdk'),
+                _axios.default('/api/data/map').then((res)=>data1 = res.data
+                )
+            ]);
+            setMap(new AppMap({
+                data: data1,
+                element: e.current,
+                origin: origin1,
+                destination: destination1
+            }));
+        };
+        load();
+    }, []); // Update Map
+    _react.useEffect(()=>{
+        if (map) map.getRoute();
+    }, [
+        map
+    ]); // Return Element
+    return [
+        e,
+        map
+    ];
+}; // Export Hook
+var _default = useGoogleMaps;
+exports.default = _default;
+
+  $parcel$ReactRefreshHelpers$faf3.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../../data/config":"4k2ZQ","axios":"hDAj5","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"4k2ZQ":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const config = {
+    maps: {
+        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
+    },
+    facebook: {
+        appId: '274042323746865',
+        cookie: true,
+        xfbml: true,
+        version: 'v11.0'
+    },
+    google: {
+        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile',
+        cookiepolicy: 'single_host_origin'
+    },
+    stripe: {
+        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
+    }
+};
+var _default = config;
+exports.default = _default;
+
+},{}],"dGtD3":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+const bemify = (block)=>{
+    return (element)=>element ? "".concat(block, "__").concat(element) : block
+    ;
+};
+exports.bemify = bemify;
+const constructWrappers = function constructWrappers1() {
+    const wrapper = {
+    };
+    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
+    pairs.forEach((_ref)=>{
+        let [Component, steps] = _ref;
+        Object.keys(steps).forEach((key)=>wrapper[key] = Component
+        );
+    });
+    return wrapper;
+};
+exports.constructWrappers = constructWrappers;
+const toUSD = (val)=>{
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+    }).format(val);
+};
+exports.toUSD = toUSD;
+const insertScript = (src, id)=>{
+    return new Promise((resolve)=>{
+        const ref = document.querySelector('script');
+        if (document.getElementById(id)) return resolve();
+        const js = document.createElement('script');
+        js.id = id;
+        js.src = src;
+        js.addEventListener('load', resolve);
+        ref.parentNode.insertBefore(js, ref);
+    });
+};
+exports.insertScript = insertScript;
+const validateEmail = (val)=>{
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
+};
+exports.validateEmail = validateEmail;
+const validateName = (val)=>{
+    // Allow for apostrophes!!!
+    return val && /^[a-zA-Z]+ [a-zA-Z]+$/.test(val);
+};
+exports.validateName = validateName;
+const validatePassword = (val)=>{
+    return val && val.length >= 8;
+};
+exports.validatePassword = validatePassword;
+const lettersOnly = (val)=>{
+    return val.replace(/[^A-Za-z ]+$/, '');
+};
+exports.lettersOnly = lettersOnly;
+const toHalf = (val)=>{
+    const [integer, decimal] = val.toString().split('.');
+    if (!decimal) return val;
+    else return "".concat(integer, " 1/2");
+};
+exports.toHalf = toHalf;
+
+},{}],"hFFyc":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$9eca = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$9eca.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Cancel = _interopRequireDefault(require("./Cancel"));
+var _Buttons = require("../../components/Buttons");
+var _dayjs = _interopRequireDefault(require("dayjs"));
+var _utils = require("../../helpers/utils");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Base React Shit
+// Import Components
+// Import Helpers
+const Wrapper = (_ref)=>{
+    let { children  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__container"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__content"
+    }, children))));
+};
+_c = Wrapper;
+const format = "MM-DD-YYYY H:mm";
+const canCancel = (date, status)=>{
+    var _window$settings, _window$settings$canc;
+    if (!window.settings || !((_window$settings = window.settings) !== null && _window$settings !== void 0 && (_window$settings$canc = _window$settings.cancellation) !== null && _window$settings$canc !== void 0 && _window$settings$canc.allowed)) return false;
+    if (status !== 'ready') return false;
+    const time = _dayjs.default(date, format).subtract(window.settings.cancellation.hoursBefore, 'hour');
+    const now = _dayjs.default();
+    return now.isBefore(time);
+}; // Crate Component
+const ReservationDetails = (_ref2)=>{
+    let { reservation , copy , back  } = _ref2;
+    console.log(reservation);
+    console.log(copy);
+    console.log(back); // Create Shortcuts
+    const r = reservation;
+    const s = copy.steps.Summary;
+    const p = r.payment;
+    const sh = r.schedule;
+    const [csr, csf, csb] = copy.steps.ChildSeats.inputs;
+    const { passengers: cs , vehicle: v  } = r;
+    const cc = {
+        seats: copy.steps.Vehicle.seats,
+        passengers: copy.steps.Passengers.title
+    };
+    return(/*#__PURE__*/ _react.default.createElement(Wrapper, null, back && /*#__PURE__*/ _react.default.createElement(_Buttons.BackButton, {
+        onClick: back.onClick,
+        text: back.text
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__header animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, s.title, " ", /*#__PURE__*/ _react.default.createElement("span", null, r.code.toUpperCase())), r.status !== "cancelled" ? /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - ", p.method.brand[0].toUpperCase() + p.method.brand.substring(1), " ", p.method.last4) : /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - Refunded")), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route"
+    }, /*#__PURE__*/ _react.default.createElement("p", {
+        className: "animate-item"
+    }, _dayjs.default(sh.pickup, format).format('dddd MMMM D, YYYY')), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-container animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-icon"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("span", null)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-details animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__vehicle animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, v["info_".concat(window.locale)].name), /*#__PURE__*/ _react.default.createElement("p", null, r.passengers.total, " ", cc.passengers), !!cs.rearSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.rearSeats, " \xD7 ", csr.label, " ", cc.seats), !!cs.frontSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.frontSeats, " \xD7 ", csf.label, " ", cc.seats), !!cs.boosterSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.boosterSeats, " \xD7 ", csb.label, " ", cc.seats)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__vehicle-image"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: v.image,
+        alt: "Vehicle image"
+    }))), r.notes && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.notes), /*#__PURE__*/ _react.default.createElement("p", null, r.notes)), canCancel(sh.pickup, r.status) && /*#__PURE__*/ _react.default.createElement(_Cancel.default, {
+        reservation: r
+    })));
+};
+_c1 = ReservationDetails;
+var _default = ReservationDetails;
+exports.default = _default;
+var _c, _c1;
+$RefreshReg$(_c, "Wrapper");
+$RefreshReg$(_c1, "ReservationDetails");
+
+  $parcel$ReactRefreshHelpers$9eca.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","dayjs":"ihFi1","../../helpers/utils":"dGtD3","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS"}],"ihFi1":[function(require,module,exports) {
 !function(t, e) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
 }(this, function() {
@@ -3435,11 +3995,11 @@ exports.default = _default;
     }, w;
 });
 
-},{}],"aOEpY":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$628f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{}],"Ea1Vr":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$6173 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$628f.prelude(module);
+$parcel$ReactRefreshHelpers$6173.prelude(module);
 
 try {
 "use strict";
@@ -3447,46 +4007,105 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _RideItem = _interopRequireDefault(require("./RideItem"));
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../AppContext"));
+var _Modal = _interopRequireDefault(require("../../components/Modal"));
+var _Buttons = require("../../components/Buttons");
 var _dayjs = _interopRequireDefault(require("dayjs"));
+var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-// Import Base
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
 // Import Components
 // Import Helpers
-const ReservationList = (_ref)=>{
-    let { reservations , label , fallback  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__group animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h5", null, label), reservations.length ? reservations.map((r)=>/*#__PURE__*/ _react.default.createElement(_RideItem.default, {
-            key: r._id,
-            date: _dayjs.default(r.schedule.pickup).format("dddd MMMM D, YYYY"),
-            service: r.service_type,
-            origin: r.origin.name,
-            destination: r.destination.name
-        })
-    ) : /*#__PURE__*/ _react.default.createElement("p", null, fallback)));
+// Create Component
+const Cancel = ()=>{
+    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default);
+    const user = window.currentUser || {
+    }; // Create Refs and State
+    const modal = _react.useRef();
+    const [showModal, setShowModal] = _react.useState(false);
+    const [isFetching, setIsFetching] = _react.useState(false);
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
+        text: "Cancel Reservation",
+        onClick: ()=>setShowModal(true)
+    }))), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+        isOpen: showModal,
+        closeRef: modal,
+        preventClose: isFetching,
+        close: setShowModal
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__modal animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, "Confirm Cancellation"), /*#__PURE__*/ _react.default.createElement("p", null, "Once you cancel, your original payment will be refunded the full amount within 10 business days."), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Confirm Cancellation",
+        animationClass: "no-animate",
+        showLoader: isFetching,
+        onClick: async ()=>{
+            // Create Visual Animations
+            setIsFetching(true);
+            const timer = $.timer(1000).start(); // Make Request
+            const res = await _axios.default.post('/api/booking/issue-refund', {
+                id: reservation._id,
+                locale: user.preferredLocale || window.locale || 'en',
+                name: user.preferredName,
+                date: _dayjs.default(reservation.schedule.pickup, "MM-DD-YYYY H:mm").format('dddd MMMM D, YYYY')
+            }); // Check Response
+            console.log(res); // Update App
+            updateApp(res.data.reservation); // Wait For Delay
+            await timer.hold();
+            setIsFetching(false); // Close Modal
+            modal.current.close();
+        }
+    })))));
 };
-_c = ReservationList;
-var _default = ReservationList;
+_c = Cancel;
+var _default = Cancel;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "ReservationList");
+$RefreshReg$(_c, "Cancel");
 
-  $parcel$ReactRefreshHelpers$628f.postlude(module);
+  $parcel$ReactRefreshHelpers$6173.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./RideItem":"eAMua","dayjs":"ihFi1","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"eAMua":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$b8ec = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5","../AppContext":"6jzOU","dayjs":"ihFi1"}],"h4i0T":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$b8ec.prelude(module);
+$parcel$ReactRefreshHelpers$5818.prelude(module);
 
 try {
 "use strict";
@@ -3494,63 +4113,166 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _react = _interopRequireWildcard(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+var _animejs = _interopRequireDefault(require("animejs"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-// Import Components
-// Create Component
-const RideItem = (_ref)=>{
-    let { date , service , origin , destination  } = _ref;
-    let icon;
-    switch(service){
-        case 'cruise':
-            icon = 'ship';
-            break;
-        case 'airport':
-            icon = 'airplane';
-            break;
-        default:
-            icon = 'location-pin';
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
     }
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "ride-item"
-    }, /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "ride-item__date"
-    }, date), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "ride-item__main"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "ride-item__icon"
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "ride-item__route"
-    }, /*#__PURE__*/ _react.default.createElement("p", {
-        className: "small"
-    }, origin), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "small"
-    }, destination)), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "ride-item__expand"
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "more",
-        size: "xl"
-    })))));
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const animateModalOpen = (element)=>{
+    const e = $(element);
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade In Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: [
+            _animejs.default.stagger([
+                100,
+                25
+            ]),
+            0
+        ],
+        opacity: [
+            0,
+            1
+        ],
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    });
+    return tl.finished;
 };
-_c = RideItem;
-var _default = RideItem;
+const animateModalClose = (element)=>{
+    const e = $(element); // Create Anime Timeline
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade Out Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: _animejs.default.stagger([
+            0,
+            -50
+        ]),
+        opacity: 0,
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    }); // Then Fade Out Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: 0
+    }); // Then Fade Out Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: 0
+    });
+    return tl.finished;
+};
+const Modal = (_ref)=>{
+    let { children , isOpen , close , preventClose , closeRef  } = _ref;
+    // Create Refs & State
+    const [isAnimating, setIsAnimating] = _react.useState(false);
+    const element = _react.useRef(); // Animate Opening And Closing
+    _react.useEffect(()=>{
+        const triggerOpen = async ()=>{
+            if (!element.current || isAnimating) return;
+            setIsAnimating(true);
+            await animateModalOpen(element.current);
+            setIsAnimating(false);
+        };
+        if (isOpen) triggerOpen();
+    }, [
+        isOpen
+    ]); // Create Close Function
+    const closeModal = async ()=>{
+        // Prevent Double Clicking
+        if (isAnimating || preventClose) return; // Update State
+        setIsAnimating(true); // Do Some Animation
+        await animateModalClose(element.current); // Update State
+        setIsAnimating(false); // Close Modal State
+        close(false);
+    }; // Pass Close Function Updwards
+    if (closeRef) closeRef.current = {
+        close: closeModal
+    };
+    return isOpen ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal",
+        ref: element
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__escape",
+        onClick: closeModal
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__window"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__close animate-item",
+        onClick: closeModal
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "close",
+        size: "xl"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__content"
+    }, children))) : null;
+};
+_c = Modal;
+var _default = Modal;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "RideItem");
+$RefreshReg$(_c, "Modal");
 
-  $parcel$ReactRefreshHelpers$b8ec.postlude(module);
+  $parcel$ReactRefreshHelpers$5818.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"3WqAm":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./Icon":"3WqAm","animejs":"aMVBn"}],"3WqAm":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3602,7 +4324,517 @@ $RefreshReg$(_c, "Icon");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"7WoBC":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6z8CS":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$094f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$094f.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const a = 'animate-item';
+const BackButton = (_ref)=>{
+    let { onClick , text , animationClass , type  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        type: type || "button",
+        className: $.join("back-button", animationClass || a),
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "arrow-back",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text || "Back")));
+};
+_c = BackButton;
+exports.BackButton = BackButton;
+const Button = (_ref2)=>{
+    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("button", [
+            theme
+        ], [
+            icon,
+            "with-icon"
+        ], [
+            disabled,
+            "disabled"
+        ], animationClass || a),
+        onClick: onClick,
+        ref: domRef,
+        type: type || "button"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "button__loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
+};
+_c1 = Button;
+exports.Button = Button;
+const IconButton = (_ref3)=>{
+    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        id: id,
+        className: $.join("icon-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            className
+        ]),
+        onClick: onClick,
+        ref: domRef
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        color: color,
+        size: size
+    })));
+};
+_c2 = IconButton;
+exports.IconButton = IconButton;
+const LinkButton = (_ref4)=>{
+    let { onClick , href , text , children , domRef , disabled , animationClass , cssClasses  } = _ref4;
+    return(/*#__PURE__*/ _react.default.createElement("a", {
+        href: href,
+        className: $.join("link-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            cssClasses
+        ]),
+        ref: domRef,
+        onClick: onClick
+    }, text || children));
+};
+_c3 = LinkButton;
+exports.LinkButton = LinkButton;
+var _c, _c1, _c2, _c3;
+$RefreshReg$(_c, "BackButton");
+$RefreshReg$(_c1, "Button");
+$RefreshReg$(_c2, "IconButton");
+$RefreshReg$(_c3, "LinkButton");
+
+  $parcel$ReactRefreshHelpers$094f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6jzOU":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$8df0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$8df0.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const AppContext = /*#__PURE__*/ _react.default.createContext();
+var _default = AppContext;
+exports.default = _default;
+
+  $parcel$ReactRefreshHelpers$8df0.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"5LcjZ":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$d4b8 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$d4b8.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _Rides = _interopRequireDefault(require("../pages/Rides"));
+var _Profile = _interopRequireDefault(require("../Pages/Profile"));
+var _Wallet = _interopRequireDefault(require("../pages/Wallet"));
+var _Invite = _interopRequireDefault(require("../pages/Invite"));
+var _Nav = _interopRequireDefault(require("../components/Nav"));
+var _Visual = _interopRequireDefault(require("../components/Visual"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Base React Stuff
+// Import Context
+// Import pages
+// Import Components
+// Register pages
+const pages = {
+    Rides: _Rides.default,
+    Profile: _Profile.default,
+    Wallet: _Wallet.default,
+    Invite: _Invite.default
+};
+const Account = ()=>{
+    // Destructure State
+    const { state  } = _react.useContext(_AppContext.default); // Set Page
+    const Page = pages[state.page];
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__container"
+    }, /*#__PURE__*/ _react.default.createElement(Page, null), /*#__PURE__*/ _react.default.createElement(_Visual.default, null)), /*#__PURE__*/ _react.default.createElement(_Nav.default, null)));
+};
+_c = Account;
+var _default = Account;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Account");
+
+  $parcel$ReactRefreshHelpers$d4b8.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../components/Nav":"10lW9","../components/Visual":"8Owmr","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../pages/Rides":"ezDAX","../Pages/Profile":"8h88q","../pages/Wallet":"htIHb","../pages/Invite":"a49Vv"}],"10lW9":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5c6e = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$5c6e.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import AppContext
+// Import Components
+// Create Item Component
+const NavItem = (_ref)=>{
+    let { icon , label , name  } = _ref;
+    const { state , transition  } = _react.useContext(_AppContext.default);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("account-nav__item", [
+            state.page === name,
+            "active"
+        ]),
+        onClick: ()=>state.page !== name && transition.to(name)
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), /*#__PURE__*/ _react.default.createElement("p", null, label)));
+}; // Create Main Component
+_c = NavItem;
+const Nav = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__nav"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account-nav"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account-nav__items"
+    }, /*#__PURE__*/ _react.default.createElement(NavItem, {
+        icon: "calendar",
+        label: "Rides",
+        name: "Rides"
+    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
+        icon: "person-circle",
+        label: "Profile",
+        name: "Profile"
+    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
+        icon: "credit-card",
+        label: "Wallet",
+        name: "Wallet"
+    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
+        icon: "person-plus",
+        label: "Invite",
+        name: "Invite"
+    })))));
+};
+_c1 = Nav;
+var _default = Nav;
+exports.default = _default;
+var _c, _c1;
+$RefreshReg$(_c, "NavItem");
+$RefreshReg$(_c1, "Nav");
+
+  $parcel$ReactRefreshHelpers$5c6e.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8Owmr":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$691a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$691a.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Visual = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__visual"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: "https://storage.googleapis.com/utravel-site-content/img/account-pattern.png",
+        alt: "Texuted Pattern"
+    })));
+};
+_c = Visual;
+var _default = Visual;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Visual");
+
+  $parcel$ReactRefreshHelpers$691a.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"ezDAX":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5b09 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$5b09.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
+var _ReservationList = _interopRequireDefault(require("../components/ReservationList"));
+var _axios = _interopRequireDefault(require("axios"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+const sortFilter = (a, b)=>a.timestamp - b.timestamp
+;
+const getTimestamps = (r)=>_objectSpread(_objectSpread({
+    }, r), {
+    }, {
+        timestamp: _dayjs.default(r.schedule.pickup).unix()
+    })
+;
+const Rides = ()=>{
+    // Destructure State
+    const { state: { reservations  } , update  } = _react.useContext(_AppContext.default); // Create Local State
+    const [isLoading, setIsLoading] = _react.useState(!reservations); // Get Reservations on Load
+    _react.useEffect(()=>{
+        // Get And Sort Reservations
+        const fetchReservations = async ()=>{
+            var _res$data;
+            const timer = $.timer(1000).start();
+            const res = await _axios.default('/api/booking/reservations/users/me');
+            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.reservations)) return;
+            const today = _dayjs.default();
+            const filtered = {
+                all: res.data.reservations.map(getTimestamps).sort(sortFilter),
+                upcoming: [],
+                cancelled: [],
+                past: []
+            };
+            filtered.all.forEach((r)=>{
+                if (r.status === 'cancelled') filtered.cancelled.push(r);
+                else if (_dayjs.default(r.schedule.pickup, "MM-DD-YYYY H:mm").isBefore(today)) filtered.past.push(r);
+                else filtered.upcoming.push(r);
+            });
+            await timer.hold();
+            update("reservations")(filtered);
+            setIsLoading(false);
+        }; // Initialize Load
+        if (!reservations) fetchReservations();
+    }, []); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
+        showLoader: isLoading
+    }, reservations && reservations.all.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
+        label: "Upcoming Reservations",
+        reservations: reservations.upcoming,
+        fallback: "No upcoming reservations...",
+        setLoader: setIsLoading
+    }), /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
+        label: "Past Reservations",
+        reservations: reservations.past,
+        fallback: "No past reservations...",
+        setLoader: setIsLoading
+    }), /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
+        label: "Cancelled Reservations",
+        reservations: reservations.cancelled,
+        fallback: "No cancelled reservations...",
+        setLoader: setIsLoading
+    })) : /*#__PURE__*/ _react.default.createElement("div", {
+        className: "animate-item"
+    }, "You haven't made any reservations yet.")));
+};
+_c = Rides;
+var _default = Rides;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Rides");
+
+  $parcel$ReactRefreshHelpers$5b09.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../components/AccountPage":"7WoBC","../components/ReservationList":"aOEpY","axios":"hDAj5","dayjs":"ihFi1","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"7WoBC":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$d6fc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3655,17 +4887,16 @@ function _interopRequireWildcard(obj) {
 const AccountPage = (_ref)=>{
     let { children , showLoader , showTitle =true  } = _ref;
     // Destructure State
-    const { state , transition  } = _react.useContext(_AppContext.default); // Crete Refs
-    const element = _react.useRef(); // Component Did Mount
+    const { transition  } = _react.useContext(_AppContext.default); // Component Did Mount
     _react.useEffect(()=>{
-        if (!element.current || showLoader) return; // Set Transition & Transition In
-        transition.set(element.current).in();
+        if (showLoader || !transition.container) return; // Set Transition & Transition In
+        transition.update().in();
     }, [
-        showLoader
+        showLoader,
+        transition.container
     ]); // Return Container
     return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__content",
-        ref: element
+        className: "account__content"
     }, showLoader ? /*#__PURE__*/ _react.default.createElement("div", {
         className: "account__loader"
     }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, showTitle && /*#__PURE__*/ _react.default.createElement("h2", {
@@ -3717,89 +4948,172 @@ $RefreshReg$(_c, "Loader");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"Rmdsg":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"aOEpY":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$628f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$628f.prelude(module);
+
+try {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _animejs = _interopRequireDefault(require("animejs"));
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _RideItem = _interopRequireDefault(require("./RideItem"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-// Import Dependencies
-// Define Tranition Class
-class Transition {
-    set(container) {
-        // Set Container
-        this.container = $(container); // Define Animation targets
-        this.targets = this.container.children(".animate-item, .animate-children > *").e(); // Return Instance
-        return this;
-    }
-    async in() {
-        const tl = _animejs.default.timeline({
-            easing: 'easeOutQuad',
-            duration: 250
-        });
-        tl.add({
-            targets: this.targets,
-            translateY: [
-                _animejs.default.stagger([
-                    100,
-                    25
-                ]),
-                0
-            ],
-            opacity: [
-                0,
-                1
-            ],
-            delay: _animejs.default.stagger([
-                0,
-                250
-            ])
-        });
-        await tl.finished;
-    }
-    async out() {
-        const tl = _animejs.default.timeline({
-            easing: 'easeOutQuad',
-            duration: 250
-        });
-        tl.add({
-            targets: this.targets,
-            translateY: _animejs.default.stagger([
-                -25,
-                -100
-            ]),
-            opacity: 0,
-            delay: _animejs.default.stagger([
-                0,
-                250
-            ])
-        });
-        await tl.finished;
-    }
-    async to(page) {
-        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
-        await this.out();
-        await $.delay(delay);
-        this.setPage(page);
-    }
-    constructor(dispatch){
-        // Create Dispatcher Reference
-        this.setPage = (page)=>dispatch({
-                type: 'SET_PAGE',
-                data: page
-            })
-        ;
-    }
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
 }
-exports.default = Transition;
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Base
+// Import Context
+// Import Components
+// Import Helpers
+const ReservationList = (_ref)=>{
+    let { reservations , label , fallback , setLoader  } = _ref;
+    const { transition , update  } = _react.useContext(_AppContext.default);
+    console.log(reservations);
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__group animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, label), reservations.length ? reservations.map((r)=>/*#__PURE__*/ _react.default.createElement(_RideItem.default, {
+            key: r._id,
+            date: _dayjs.default(r.schedule.pickup).format("dddd MMMM D, YYYY"),
+            service: r.service_type,
+            origin: r.origin.name,
+            destination: r.destination.name,
+            onClick: async ()=>{
+                var _res$data, _res$data$data, _res$data2, _res$data2$data;
+                // Prevent Duplicate Fetching
+                if (typeof r.vehicle === 'object') {
+                    update("current_reservation")(r);
+                    return transition.changeView("Reservation");
+                } // Transition Out Current View
+                await transition.out(); // Set Loader
+                setLoader(true); // Start A Timer
+                const timer = $.timer(1000).start(); // Make Request
+                const res = await _axios.default("/api/vehicles/".concat(r.vehicle));
+                if (!((_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.data)) return; // Wait For 1 Second
+                await timer.hold(); // Update State
+                r.vehicle = (_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : (_res$data2$data = _res$data2.data) === null || _res$data2$data === void 0 ? void 0 : _res$data2$data.data;
+                update("current_reservation")(r); // Finally Change View
+                transition.changeView("Reservation");
+            }
+        })
+    ) : /*#__PURE__*/ _react.default.createElement("p", null, fallback)));
+};
+_c = ReservationList;
+var _default = ReservationList;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ReservationList");
 
-},{"animejs":"aMVBn"}],"8h88q":[function(require,module,exports) {
+  $parcel$ReactRefreshHelpers$628f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","./RideItem":"eAMua","dayjs":"ihFi1","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"eAMua":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$b8ec = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$b8ec.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Components
+// Create Component
+const RideItem = (_ref)=>{
+    let { date , service , origin , destination , onClick  } = _ref;
+    let icon;
+    switch(service){
+        case 'cruise':
+            icon = 'ship';
+            break;
+        case 'airport':
+            icon = 'airplane';
+            break;
+        default:
+            icon = 'location-pin';
+    }
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "ride-item",
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "ride-item__date"
+    }, date), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "ride-item__main"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "ride-item__icon"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "ride-item__route"
+    }, /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small"
+    }, origin), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small"
+    }, destination)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "ride-item__expand"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "more",
+        size: "xl"
+    })))));
+};
+_c = RideItem;
+var _default = RideItem;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "RideItem");
+
+  $parcel$ReactRefreshHelpers$b8ec.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8h88q":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$c663 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3894,7 +5208,7 @@ $RefreshReg$(_c, "Profile");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../store/AppContext":"bdnEg","../components/AccountPage":"7WoBC","../../components/Icon":"3WqAm","../sections/EditProfile":"aCIWu","../sections/EditAccount":"cttlh","../sections/DeleteAccount":"c6hBA"}],"aCIWu":[function(require,module,exports) {
+},{"react":"a4ork","../store/AppContext":"bdnEg","../sections/EditProfile":"aCIWu","../sections/EditAccount":"cttlh","../sections/DeleteAccount":"c6hBA","../components/AccountPage":"7WoBC","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"aCIWu":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$b9bb = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -4149,285 +5463,7 @@ $RefreshReg$(_c, "AccountField");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5"}],"h4i0T":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$5818.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-var _animejs = _interopRequireDefault(require("animejs"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-const animateModalOpen = (element)=>{
-    const e = $(element);
-    const tl = _animejs.default.timeline({
-        easing: 'easeOutQuad',
-        duration: 250
-    }); // First Fade In Background
-    tl.add({
-        targets: e.children(".modal__escape").e(),
-        opacity: [
-            0,
-            1
-        ]
-    }); // Then Fade In Window
-    tl.add({
-        targets: e.children(".modal__window").e(),
-        opacity: [
-            0,
-            1
-        ]
-    }); // Then Fade In Content
-    tl.add({
-        targets: e.children(".animate-item, .animate-children > *").e(),
-        translateY: [
-            _animejs.default.stagger([
-                100,
-                25
-            ]),
-            0
-        ],
-        opacity: [
-            0,
-            1
-        ],
-        delay: _animejs.default.stagger([
-            0,
-            250
-        ])
-    });
-    return tl.finished;
-};
-const animateModalClose = (element)=>{
-    const e = $(element); // Create Anime Timeline
-    const tl = _animejs.default.timeline({
-        easing: 'easeOutQuad',
-        duration: 250
-    }); // First Fade Out Content
-    tl.add({
-        targets: e.children(".animate-item, .animate-children > *").e(),
-        translateY: _animejs.default.stagger([
-            0,
-            -50
-        ]),
-        opacity: 0,
-        delay: _animejs.default.stagger([
-            0,
-            250
-        ])
-    }); // Then Fade Out Window
-    tl.add({
-        targets: e.children(".modal__window").e(),
-        opacity: 0
-    }); // Then Fade Out Background
-    tl.add({
-        targets: e.children(".modal__escape").e(),
-        opacity: 0
-    });
-    return tl.finished;
-};
-const Modal = (_ref)=>{
-    let { children , isOpen , close , preventClose , closeRef  } = _ref;
-    // Create Refs & State
-    const [isAnimating, setIsAnimating] = _react.useState(false);
-    const element = _react.useRef(); // Animate Opening And Closing
-    _react.useEffect(()=>{
-        const triggerOpen = async ()=>{
-            if (!element.current || isAnimating) return;
-            setIsAnimating(true);
-            await animateModalOpen(element.current);
-            setIsAnimating(false);
-        };
-        if (isOpen) triggerOpen();
-    }, [
-        isOpen
-    ]); // Create Close Function
-    const closeModal = async ()=>{
-        // Prevent Double Clicking
-        if (isAnimating || preventClose) return; // Update State
-        setIsAnimating(true); // Do Some Animation
-        await animateModalClose(element.current); // Update State
-        setIsAnimating(false); // Close Modal State
-        close(false);
-    }; // Pass Close Function Updwards
-    if (closeRef) closeRef.current = {
-        close: closeModal
-    };
-    return isOpen ? /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal",
-        ref: element
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__escape",
-        onClick: closeModal
-    }), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__window"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__close animate-item",
-        onClick: closeModal
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "close",
-        size: "xl"
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__content"
-    }, children))) : null;
-};
-_c = Modal;
-var _default = Modal;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Modal");
-
-  $parcel$ReactRefreshHelpers$5818.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./Icon":"3WqAm","animejs":"aMVBn"}],"6z8CS":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$094f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$094f.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const a = 'animate-item';
-const BackButton = (_ref)=>{
-    let { onClick , text , animationClass , type  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        type: type || "button",
-        className: $.join("back-button", animationClass || a),
-        onClick: onClick
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "arrow-back",
-        size: "sm"
-    }), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "bold"
-    }, text || "Back")));
-};
-_c = BackButton;
-exports.BackButton = BackButton;
-const Button = (_ref2)=>{
-    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        className: $.join("button", [
-            theme
-        ], [
-            icon,
-            "with-icon"
-        ], [
-            disabled,
-            "disabled"
-        ], animationClass || a),
-        onClick: onClick,
-        ref: domRef,
-        type: type || "button"
-    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon
-    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "bold"
-    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
-        className: "button__loader"
-    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
-};
-_c1 = Button;
-exports.Button = Button;
-const IconButton = (_ref3)=>{
-    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        id: id,
-        className: $.join("icon-button", animationClass || a, [
-            disabled,
-            "disabled"
-        ], [
-            className
-        ]),
-        onClick: onClick,
-        ref: domRef
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon,
-        color: color,
-        size: size
-    })));
-};
-_c2 = IconButton;
-exports.IconButton = IconButton;
-const LinkButton = (_ref4)=>{
-    let { onClick , href , text , children , domRef , disabled , animationClass , cssClasses  } = _ref4;
-    return(/*#__PURE__*/ _react.default.createElement("a", {
-        href: href,
-        className: $.join("link-button", animationClass || a, [
-            disabled,
-            "disabled"
-        ], [
-            cssClasses
-        ]),
-        ref: domRef,
-        onClick: onClick
-    }, text || children));
-};
-_c3 = LinkButton;
-exports.LinkButton = LinkButton;
-var _c, _c1, _c2, _c3;
-$RefreshReg$(_c, "BackButton");
-$RefreshReg$(_c1, "Button");
-$RefreshReg$(_c2, "IconButton");
-$RefreshReg$(_c3, "LinkButton");
-
-  $parcel$ReactRefreshHelpers$094f.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"83Axu":[function(require,module,exports) {
+},{"react":"a4ork","../../components/Modal":"h4i0T","../../components/Icon":"3WqAm","../../components/Buttons":"6z8CS","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"83Axu":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$bdcc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -4805,196 +5841,7 @@ $RefreshReg$(_c, "Invite");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"10lW9":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$5c6e = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$5c6e.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _AppContext = _interopRequireDefault(require("../store/AppContext"));
-var _Icon = _interopRequireDefault(require("../../components/Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-// Import AppContext
-// Import Components
-// Create Item Component
-const NavItem = (_ref)=>{
-    let { icon , label , name  } = _ref;
-    const { state , transition  } = _react.useContext(_AppContext.default);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("account-nav__item", [
-            state.page === name,
-            "active"
-        ]),
-        onClick: ()=>state.page !== name && transition.to(name)
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon
-    }), /*#__PURE__*/ _react.default.createElement("p", null, label)));
-}; // Create Main Component
-_c = NavItem;
-const Nav = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__nav"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account-nav"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account-nav__items"
-    }, /*#__PURE__*/ _react.default.createElement(NavItem, {
-        icon: "calendar",
-        label: "Rides",
-        name: "Rides"
-    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
-        icon: "person-circle",
-        label: "Profile",
-        name: "Profile"
-    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
-        icon: "credit-card",
-        label: "Wallet",
-        name: "Wallet"
-    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
-        icon: "person-plus",
-        label: "Invite",
-        name: "Invite"
-    })))));
-};
-_c1 = Nav;
-var _default = Nav;
-exports.default = _default;
-var _c, _c1;
-$RefreshReg$(_c, "NavItem");
-$RefreshReg$(_c1, "Nav");
-
-  $parcel$ReactRefreshHelpers$5c6e.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Icon":"3WqAm","../store/AppContext":"bdnEg"}],"8Owmr":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$691a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$691a.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Visual = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__visual"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: "https://storage.googleapis.com/utravel-site-content/img/account-pattern.png",
-        alt: "Texuted Pattern"
-    })));
-};
-_c = Visual;
-var _default = Visual;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Visual");
-
-  $parcel$ReactRefreshHelpers$691a.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"DGwNW":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-const regex = {
-    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
-    lettersOnly: /[^A-Za-z ]+$/
-};
-class Validator {
-    checkEmail(val) {
-        const { invalid , required  } = this.errors.email;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.email.test(val.toLowerCase())) return [
-            invalid
-        ];
-        else return [];
-    }
-    checkPassword(val) {
-        const { required , short  } = this.errors.password;
-        if (!val) return [
-            required
-        ];
-        else if (val.length < 8) return [
-            short
-        ];
-        else return [];
-    }
-    checkName(val) {
-        const { invalid , required  } = this.errors.name;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.name.test(val)) return [
-            invalid
-        ];
-        else return [];
-    }
-    cleanInput(val) {
-        return val.replace(regex.test, '');
-    }
-    constructor(errors){
-        this.errors = errors;
-    }
-}
-exports.default = Validator;
-
-},{}],"krKvU":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"krKvU":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8839 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

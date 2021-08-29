@@ -1,5 +1,5 @@
 // Import Base React Dependencies
-import React, { useReducer } from 'react';
+import React, { useReducer, useEffect, useRef } from 'react';
 
 // Import Store
 import  reducer from './store/reducer';
@@ -10,53 +10,55 @@ import AppContext from './store/AppContext';
 import Transition from './helpers/Transition';
 import Validator from '../helpers/Validator';
 
-// Import pages
-import Rides from './pages/Rides';
-import Profile from './Pages/Profile';
-import Wallet from './pages/Wallet';
-import Invite from './pages/Invite';
 
-// Import Components
-import Nav from './components/Nav';
-import Visual from './components/Visual';
+// Import Views
+import Reservation from '../Reservation/App';
+import Account from './views/Account'; 
 
-
-// Register pages
-const pages = {
-    Rides,
-    Profile,
-    Wallet,
-    Invite
-}
-
+const views = { Account, Reservation }
 
 // Create Account App
-const App = ({ copy }) => {
+const App = ({ copy, resCopy }) => {
 
+    // Destructure State
     const [state, dispatch] = useReducer(reducer, initialState);
-    const Page = pages[state.page];
 
-    console.log(copy);
+    // Create Refs
+    const element = useRef();
+    const transition = useRef(new Transition(dispatch));
+
+    // Update Container
+    useEffect(() => {
+        transition.current.set(element.current).mount(state.view);
+    }, [state.view]);
+
+
+    // Determine View
+    const View = views[state.view];
 
     // Return Component
     return (
         <AppContext.Provider value={{
             state,
             appCopy: copy,
-            transition: new Transition(dispatch),
+            transition: transition.current,
             validator: new Validator(copy.errors),
             update: (key) => (val) => dispatch({
                 type: `SET_${key.toUpperCase()}`,
                 data: val
             })
         }}>
-            <div className="account">
-                <div className="account__container">
-                    <Page />
-                    <Visual />
-                </div>
-                <Nav />
-            </div>
+            <section ref={element}>
+                <View
+                    reservation={state.currentReservation}
+                    copy={resCopy}
+                    back={{
+                        text: "Back",
+                        onClick: () => transition.current.changeView("Account")
+                    }}
+                />
+            </section>
+            
         </AppContext.Provider>
     )
     

@@ -12,18 +12,7 @@ export default class AccountApp extends ReactAppWrapper {
         this.App = App;
     }
 
-    async load() {
-
-        const res = {};
-
-        const promises = [
-            axios(`/api/copy/login/${window.locale}`).then(data => res.login = data?.data),
-            axios(`/api/copy/account/${window.locale}`).then(data => res.account = data?.data)
-        ];
-
-        await Promise.all(promises);
-
-        // Do a shitload of destructuring and restructuring
+    formatAccountCopy(res) {
         const { login, account } = res;
         const errors = login.errors;
         const inputs = {
@@ -32,11 +21,26 @@ export default class AccountApp extends ReactAppWrapper {
             ...login.login.inputs,
             newPassword: { ...login.reset.inputs.password }
         };
-        res.copy = {
+        return {
             ...account,
             inputs: { ...inputs, ...account.inputs },
             errors: { ...errors, ...account.errors }
         }
+    }
+
+    async load() {
+
+        const res = {};
+
+        const promises = [
+            axios(`/api/copy/login/${window.locale}`).then(data => res.login = data?.data),
+            axios(`/api/copy/account/${window.locale}`).then(data => res.account = data?.data),
+            axios(`/api/copy/booking/${window.locale}`).then(data => res.resCopy = data?.data)
+        ];
+
+        await Promise.all(promises);
+
+        res.copy = this.formatAccountCopy(res);
 
         await this.render(res);
 

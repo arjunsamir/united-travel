@@ -20,6 +20,8 @@ const {
 const state = {
     // page: "Rides",
     page: "Profile",
+    view: "Account",
+    currentReservation: null,
     reservations: null, // Array
     paymentMethods: null, // Array
     email,

@@ -17,7 +17,7 @@ const fallbackCopy = {
 }
 
  // Create App
-const App = ({ reservation, copy }) => {
+const App = ({ reservation, copy, back }) => {
 
     const [res, setReservation] = useState(reservation);
 
@@ -32,6 +32,7 @@ const App = ({ reservation, copy }) => {
                 <ReservationDetails
                     reservation={res}
                     copy={copy}
+                    back={back}
                 />
             </section>
         </AppContext.Provider>

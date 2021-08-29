@@ -13,8 +13,8 @@
             <div class="footer__contact">
                 <h5 class="white"><%= contact.title %></h5>
                 <hr>
-                <a href="m&#97;i&#108;&#116;o&#58;&#104;e&#108;lo&#64;un%&#54;9&#116;ed&#116;&#37;72%&#54;1&#118;e&#108;&#46;llc"><%= contact.email %></a>
-                <a href="tel:123-456-7890"><%= contact.phone %></a>
+                <a href="mailto:{{ settings.contact.email }}">{{ settings.contact.email }}</a>
+                <a href="tel:{{ settings.contact.phone }}">{{ settings.phone }}</a>
             </div>
             <ul class="footer__links">
                 <li><a href="<%= path %>/account"><%= links.account %></a></li>
@@ -23,7 +23,7 @@
             </ul>
         </div>
         <div class="footer__copyright">
-            <p>&copy; <script>document.write(new Date().getFullYear())</script> United Travel LLC. <%- copyright %></p>
+            <p>&copy; {{ settings.copyrightYear }} United Travel LLC. <%- copyright %></p>
         </div>
     </div>
 

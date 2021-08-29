@@ -11,7 +11,12 @@ class Views {
 
         this.settings = await Settings.findOne({ active: true });
         this.expiration = Date.now() + (60000 * 30);
+        this.year = new Date().getFullYear();
 
+    }
+
+    formatPhoneNumber(num) {
+        return num.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
     }
 
     home(req, res) {
@@ -68,6 +73,9 @@ class Views {
         res.locals.settings = {
             referrals: this.settings.referrals,
             cancellation: this.settings.cancellation,
+            contact: this.settings.contact || {},
+            phone: this.formatPhoneNumber(this.settings.contact.phone),
+            copyrightYear: this.year
         }
 
         // Set User On Locals

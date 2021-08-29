@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useEffect } from 'react';
 
 // Import Context
 import AppContext from '../store/AppContext';
@@ -10,24 +10,21 @@ import Loader from '../../components/Loader';
 const AccountPage = ({ children, showLoader, showTitle = true }) => {
 
     // Destructure State
-    const { state, transition } = useContext(AppContext);
-
-    // Crete Refs
-    const element = useRef();
+    const { transition } = useContext(AppContext);
 
     // Component Did Mount
     useEffect(() => {
 
-        if (!element.current || showLoader) return;
+        if (showLoader || !transition.container) return;
 
         // Set Transition & Transition In
-        transition.set(element.current).in();
+        transition.update().in();
 
-    }, [showLoader])
+    }, [showLoader, transition.container])
 
     // Return Container
     return (
-        <div className="account__content" ref={element}>
+        <div className="account__content">
             {showLoader ? (
                 <div className="account__loader">
                     <Loader />

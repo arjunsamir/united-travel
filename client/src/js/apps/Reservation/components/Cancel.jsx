@@ -8,12 +8,15 @@ import Modal from '../../components/Modal';
 import { LinkButton, Button } from '../../components/Buttons';
 
 // Import Helpers
+import dayjs from 'dayjs';
 import axios from 'axios';
 
 // Create Component
 const Cancel = () => {
 
     const { reservation, updateApp, copy } = useContext(AppContext);
+
+    const user = window.currentUser || {};
 
     // Create Refs and State
     const modal = useRef();
@@ -51,7 +54,10 @@ const Cancel = () => {
 
                             // Make Request
                             const res = await axios.post('/api/booking/issue-refund', {
-                                id: reservation._id
+                                id: reservation._id,
+                                locale: user.preferredLocale || window.locale || 'en',
+                                name: user.preferredName,
+                                date: dayjs(reservation.schedule.pickup, "MM-DD-YYYY H:mm").format('dddd MMMM D, YYYY')
                             });
 
                             // Check Response

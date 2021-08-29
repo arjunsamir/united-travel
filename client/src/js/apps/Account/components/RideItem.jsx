@@ -5,7 +5,7 @@ import Icon from '../../components/Icon';
 
 
 // Create Component
-const RideItem = ({ date, service, origin, destination }) => {
+const RideItem = ({ date, service, origin, destination, onClick }) => {
 
     let icon;
 
@@ -23,7 +23,7 @@ const RideItem = ({ date, service, origin, destination }) => {
     }
 
     return (
-        <div className="ride-item">
+        <div className="ride-item" onClick={onClick}>
             <h6 className="ride-item__date">{date}</h6>
             <div className="ride-item__main">
                 <div className="ride-item__icon">
