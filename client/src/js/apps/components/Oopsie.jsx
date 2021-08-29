@@ -1,16 +1,16 @@
 import React from 'react';
 
-const copy = {
+const localCopy = {
     en: "We're having trouble loading this application. Please try again later.",
     es: "Tenemos problemas para cargar esta aplicación. Por favor, inténtelo de nuevo más tarde."
 }
 
-const Oppsie = () => {
+const Oppsie = ({ copy, src }) => {
 
     return (
         <section className="oopsie">
-            <img src="/img/oopsie.svg" alt="Oopsie" />
-            <h3>{copy[window.locale] || copy.en}</h3>
+            <img src={src || "/img/oopsie.svg"} alt="Oopsie" />
+            <h3>{copy || (localCopy[window.locale] || localCopy.en)}</h3>
         </section>
     )
 

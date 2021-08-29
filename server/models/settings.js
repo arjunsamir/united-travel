@@ -29,7 +29,15 @@ const schema = new mongoose.Schema({
         }
     },
     baseMpg: Number,
-    touristZips: [String]
+    touristZips: [String],
+    cancellation: {
+        allowed: Boolean,
+        hoursBefore: Number,
+        fees: {
+            flat: Number,
+            percent: Number
+        }
+    }
 });
 
 

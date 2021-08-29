@@ -73,6 +73,10 @@ const schema = new mongoose.Schema({
             ref: 'Credit'
         }
     ],
+    marketingOptIn: {
+        type: Boolean,
+        default: false
+    }
 });
 
 

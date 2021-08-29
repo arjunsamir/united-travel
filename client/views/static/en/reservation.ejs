@@ -264,12 +264,17 @@
         <div id="reservation-react-app"></div>
 
     </main>
+
+    <script>
+        window.confirmationCode = "<%- confirmationCode %>";
+    </script>
     
     <!-- JavaScript -->
     <!-- Decalre Global Locale -->
 <script>
     window.locale = "en";
     window.currentUser = JSON.parse('<%- JSON.stringify(user) %>');
+    window.settings = JSON.parse('<%- JSON.stringify(settings) %>');
 </script>
 
 <!-- External JavaScript Links -->

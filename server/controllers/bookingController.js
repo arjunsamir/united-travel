@@ -41,6 +41,8 @@ const refreshSettings = async () => {
         await settings.promise;
     }
 
+    return settings.data;
+
 }
 
 
@@ -176,6 +178,21 @@ const getUserCredits = async (user, cost) => {
     return [0, cost, []]
 
 }
+
+
+// Determine Refund Eligiblity
+const isRefundable = async (date, status) => {
+
+    const settings = await refreshSettings();
+
+    if (!settings.cancellation.allowed || status !== 'ready') return false;
+
+    const time = dayjs(date, "MM-DD-YYYY H:mm");
+    const now = dayjs();
+
+    return now.isBefore(time)
+
+};
 
 
 // Send Confirmation Email
@@ -399,16 +416,81 @@ exports.createPayment = catchAsync(async (req, res, next) => {
 });
 
 
+// Issue Refunds
+exports.issueRefund = catchAsync(async (req, res, next) => {
+
+    // Find Reservation
+    const reservation = await Reservation.findById(req.body.id).populate('vehicle');
+
+    // Handle Errors
+    if (!reservation) return send(res, {
+        status: 'NOT FOUND',
+        message: 'Reservation not found'
+    });
+
+    // Determine Refund Eligibility
+    const eligible = await isRefundable(reservation.schedule.pickup, reservation.status);
+
+    // Handle Errors
+    if (!eligible) return send(res, {
+        status: 'INELIGIBLE',
+        message: 'This reservation is not eligible for a refund'
+    });
+
+    // Create Refund
+    const refund = await stripe.refunds.create({
+        payment_intent: reservation.payment.intent
+    });
+
+    // Update Reservation
+    reservation.status = 'cancelled';
+    reservation.payment.status = 'refunded';
+
+    // TODO: REFUND CREDITS
+
+    // Save Reservation
+    await reservation.save();
+
+    // Send Email
+
+    // Send Response
+    send(res, {
+        status: 'SUCCESS',
+        reservation,
+        refund
+    })
+
+});
+
 
 // Retrieve Reservations For User
 exports.listReservations = catchAsync(async (req, res, next) => {
 
-    const reservations = await Reservation.find({ user: req.params.id, status: { $ne: 'pending' } });
+    const reservations = await Reservation.find({ user: req.user._id, status: { $ne: 'pending' } });
 
 
     send(res, {
         status: 'SUCCESS',
         reservations
+    })
+
+});
+
+
+// Get Single Reservation
+exports.getReservation = catchAsync(async (req, res, next) => {
+
+    if (!req.user || !req.user._id || !req.params.code) return send(res, {
+        status: 'ERROR'
+    })
+
+    const code = req.params.code.replaceAll("-", "");
+
+    const reservation = await Reservation.findOne({ user: req.user._id, code }).populate("vehicle");
+
+    send(res, {
+        status: 'SUCCESS',
+        reservation
     })
 
 });

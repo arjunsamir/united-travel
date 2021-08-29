@@ -12,9 +12,13 @@ export default class LoginApp extends ReactAppWrapper {
         this.page = dta.page;
     }
 
-    getReferral() {
+    getParams() {
         const url = new URLSearchParams(window.location.search);
-        return url.get('code')
+
+        return {
+            code: url.get('code'),
+            reservation: url.get('reservation')
+        }
     }
 
     async loginCallback(user) {
@@ -25,8 +29,13 @@ export default class LoginApp extends ReactAppWrapper {
         // Refresh Page Navbar
         await this.page.navbar.refresh();
 
+        const baseUrl = window.locale === "es" ? "/es" : "";
+
+        // Navigate to reservation
+        if (this.referral) this.page.barba.go(`${baseUrl}/account/reservations/${this.reservation}`);
+
         // Navigate to Home Page
-        this.page.barba.go('/');
+        else this.page.barba.go(baseUrl + "/");
 
     }
 
@@ -40,7 +49,10 @@ export default class LoginApp extends ReactAppWrapper {
             axios(`/api/copy/login/${window.locale}`).then(data => res.copy = data?.data)
         ];
 
-        const code = this.getReferral();
+        const { code, reservation } = this.getParams();
+
+        this.reservation = reservation;
+
         if (code) promises.push(axios(`/users/referrals/${code}`).then(data => res.referral = data?.data?.user));
 
         await Promise.all(promises);

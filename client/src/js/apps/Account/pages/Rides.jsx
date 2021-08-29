@@ -17,7 +17,7 @@ const getTimestamps = r => ({ ...r, timestamp: dayjs(r.schedule.pickup).unix() }
 const Rides = () => {
 
     // Destructure State
-    const { state: { reservations, id }, update } = useContext(AppContext);
+    const { state: { reservations }, update } = useContext(AppContext);
 
 
     // Get Reservations on Load
@@ -28,7 +28,7 @@ const Rides = () => {
 
             const timer = $.timer(1000).start();
 
-            const res = await axios(`/api/booking/reservations/users/${id}`);
+            const res = await axios('/api/booking/reservations/users/me');
 
             if (!res?.data?.reservations) return;
 

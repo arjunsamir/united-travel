@@ -618,13 +618,13 @@ module.exports = require('./cjs/react-refresh-runtime.development.js');
     exports.setSignature = setSignature;
 })();
 
-},{}],"al6Zf":[function(require,module,exports) {
+},{}],"7fzp9":[function(require,module,exports) {
 "use strict";
 var HMR_HOST = null;
 var HMR_PORT = 1234;
 var HMR_SECURE = false;
 var HMR_ENV_HASH = "d27dd77ff3afa812";
-module.bundle.HMR_BUNDLE_ID = "14c4a6190f7efb41";
+module.bundle.HMR_BUNDLE_ID = "4329d8934a4a792c";
 function _createForOfIteratorHelper(o, allowArrayLike) {
     var it;
     if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
@@ -932,7 +932,7 @@ function hmrAcceptRun(bundle, id) {
     acceptedAssets[id] = true;
 }
 
-},{}],"ll8Q6":[function(require,module,exports) {
+},{}],"bE9OA":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -947,56 +947,31 @@ function _interopRequireDefault(obj) {
     };
 }
 // Do Initial Request
-class LoginApp extends _ReactAppWrapper.default {
-    getParams() {
-        const url = new URLSearchParams(window.location.search);
-        return {
-            code: url.get('code'),
-            reservation: url.get('reservation')
-        };
-    }
-    async loginCallback(user) {
-        // Update Window user
-        window.currentUser = user; // Refresh Page Navbar
-        await this.page.navbar.refresh();
-        const baseUrl = window.locale === "es" ? "/es" : ""; // Navigate to reservation
-        if (this.referral) this.page.barba.go("".concat(baseUrl, "/account/reservations/").concat(this.reservation)); // Navigate to Home Page
-        else this.page.barba.go(baseUrl + "/");
-    }
+class ReservationApp extends _ReactAppWrapper.default {
     async load() {
         const res = {
-            onLogin: (user)=>this.loginCallback(user)
         };
         const promises = [
-            _axios.default("/api/copy/login/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
+            _axios.default("/api/copy/booking/".concat(window.locale)).then((data)=>res.copy = data === null || data === void 0 ? void 0 : data.data
+            ),
+            _axios.default("/api/booking/reservations/users/me/".concat(window.confirmationCode)).then((data)=>res.reservation = data === null || data === void 0 ? void 0 : data.data.reservation
             )
         ];
-        const { code , reservation  } = this.getParams();
-        this.reservation = reservation;
-        if (code) promises.push(_axios.default("/users/referrals/".concat(code)).then((data)=>{
-            var _data$data;
-            return res.referral = data === null || data === void 0 ? void 0 : (_data$data = data.data) === null || _data$data === void 0 ? void 0 : _data$data.user;
-        }));
         await Promise.all(promises);
         await this.render(res);
-    }
-    static async getReactApp() {
-        const res = await _axios.default("/api/copy/login/".concat(window.locale));
-        console.log(res);
     }
     constructor(dta, ctn){
         super(dta.selector, ctn);
         this.App = _App.default;
-        this.page = dta.page;
     }
 }
-exports.default = LoginApp;
+exports.default = ReservationApp;
 
-},{"axios":"hDAj5","./App":"5sUMk","../helpers/ReactAppWrapper":"krKvU"}],"5sUMk":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$434a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{"axios":"hDAj5","./App":"69dzI","../helpers/ReactAppWrapper":"krKvU"}],"69dzI":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$dffe = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$434a.prelude(module);
+$parcel$ReactRefreshHelpers$dffe.prelude(module);
 
 try {
 "use strict";
@@ -1005,18 +980,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
-var _Hello = _interopRequireDefault(require("./steps/Hello"));
-var _Login = _interopRequireDefault(require("./steps/Login"));
-var _Registration = _interopRequireDefault(require("./steps/Registration"));
-var _RequestReset = _interopRequireDefault(require("./steps/RequestReset"));
-var _ResetCode = _interopRequireDefault(require("./steps/ResetCode"));
-var _Reset = _interopRequireDefault(require("./steps/Reset"));
-var _Signup = _interopRequireDefault(require("./steps/Signup"));
-var _Greeting = _interopRequireDefault(require("./steps/Greeting"));
-var _axios = _interopRequireDefault(require("axios"));
-var _Validator = _interopRequireDefault(require("../helpers/Validator"));
-var _Transition = _interopRequireDefault(require("./helpers/Transition"));
-var _store = require("./store");
+var _AppContext = _interopRequireDefault(require("./AppContext"));
+var _Oopsie = _interopRequireDefault(require("../components/Oopsie"));
+var _Map = _interopRequireDefault(require("./components/Map"));
+var _ReservationDetails = _interopRequireDefault(require("./components/ReservationDetails"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -1049,110 +1016,48 @@ function _interopRequireWildcard(obj) {
     if (cache) cache.set(obj, newObj);
     return newObj;
 }
-function ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-        var symbols = Object.getOwnPropertySymbols(object);
-        if (enumerableOnly) symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        });
-        keys.push.apply(keys, symbols);
-    }
-    return keys;
-}
-function _objectSpread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = arguments[i] != null ? arguments[i] : {
-        };
-        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
-            _defineProperty(target, key, source[key]);
-        });
-        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-        else ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-    }
-    return target;
-}
-function _defineProperty(obj, key, value) {
-    if (key in obj) Object.defineProperty(obj, key, {
-        value: value,
-        enumerable: true,
-        configurable: true,
-        writable: true
-    });
-    else obj[key] = value;
-    return obj;
-}
-const steps = {
-    hello: _Hello.default,
-    login: _Login.default,
-    registration: _Registration.default,
-    requestReset: _RequestReset.default,
-    reset: _Reset.default,
-    signup: _Signup.default,
-    resetCode: _ResetCode.default,
-    greeting: _Greeting.default
-};
-const getCopy = (copy, step)=>{
-    const { common , errors , referral  } = copy;
-    const stepCopy = copy[step];
-    stepCopy.inputs = Object.assign({
-    }, stepCopy.inputs, common);
-    return _objectSpread(_objectSpread({
-    }, stepCopy), {
-    }, {
-        errors,
-        referral
+// Import base react stuff
+// Import Context
+// import Components
+// Define Fallback Copy
+const fallbackCopy = {
+    en: "Sorry, we can't find your reservation.",
+    es: "Lo sentimos, no podemos encontrar su reserva."
+}; // Create App
+const App = (_ref)=>{
+    let { reservation , copy  } = _ref;
+    const [res, setReservation] = _react.useState(reservation);
+    return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
+        value: {
+            reservation: res,
+            copy,
+            updateApp: setReservation
+        }
+    }, /*#__PURE__*/ _react.default.createElement("section", {
+        className: "booking"
+    }, /*#__PURE__*/ _react.default.createElement(_Map.default, {
+        origin: res.origin.placeId,
+        destination: res.destination.placeId
+    }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, {
+        reservation: res,
+        copy: copy
+    }))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
+        src: "https://storage.googleapis.com/utravel-site-content/img/not_found.png",
+        copy: fallbackCopy[window.locale] || fallbackCopy.en
     });
 };
-const LoginApp = (_ref)=>{
-    let { copy , back , onLogin , referral  } = _ref;
-    const [state, dispatch] = _react.useReducer(_store.reducer, _store.initialState);
-    const Step = steps[state.step] || /*#__PURE__*/ _react.default.createElement("div", null, "Something went wrong...");
-    const transition = _react.useRef(new _Transition.default(dispatch));
-    return(/*#__PURE__*/ _react.default.createElement("section", {
-        className: "login"
-    }, /*#__PURE__*/ _react.default.createElement(Step, {
-        copy: getCopy(copy, state.step),
-        exit: back && (async ()=>{
-            await transition.current.out();
-            await $.delay(250);
-            back();
-        }),
-        authenticate: async (endpoint, data)=>{
-            var _res$data, _res$data$data;
-            const res = await _axios.default.post(endpoint, data);
-            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.user)) return;
-            return res.data.data.user;
-        },
-        update: (field)=>{
-            const type = "SET_".concat(field.toUpperCase());
-            return (data)=>dispatch({
-                    type,
-                    data
-                })
-            ;
-        },
-        state: state,
-        referral: referral,
-        validator: new _Validator.default(copy.errors),
-        transition: transition.current,
-        callback: onLogin
-    })));
-};
-_c = LoginApp;
-var _default = LoginApp;
+_c = App;
+var _default = App;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "LoginApp");
+$RefreshReg$(_c, "App");
 
-  $parcel$ReactRefreshHelpers$434a.postlude(module);
+  $parcel$ReactRefreshHelpers$dffe.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./steps/Hello":"fNIlX","./steps/Login":"6pzqE","./steps/Registration":"4rs0o","./steps/RequestReset":"5BwuI","./steps/ResetCode":"lCvGe","./steps/Reset":"bzPFV","./steps/Signup":"1ENqT","./steps/Greeting":"gGr5Q","axios":"hDAj5","./helpers/Transition":"gt2AC","./store":"fds8Q","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../helpers/Validator":"DGwNW"}],"a4ork":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../components/Oopsie":"ckamV","./components/Map":"8spew","./components/ReservationDetails":"hFFyc","./AppContext":"6jzOU"}],"a4ork":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -2813,237 +2718,7 @@ module.exports = shouldUseNative() ? Object.assign : function(target, source) {
     return to;
 };
 
-},{}],"fNIlX":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$56d5 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$56d5.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Referral = _interopRequireDefault(require("../components/Referral"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _Typewriter = _interopRequireDefault(require("../../../main/Typewriter"));
-var _useOAuth = _interopRequireDefault(require("../helpers/useOAuth"));
-var _axios = _interopRequireDefault(require("axios"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-// Animation Class Shortcut
-const aC = "animate-item";
-const Hello = (_ref)=>{
-    let { copy , exit , authenticate , transition , update , state , validator , referral  } = _ref;
-    // Create Refs
-    const typeRef = _react.useRef();
-    const mainRef = _react.useRef();
-    const typewriter = _react.useRef(); // Enable Third Party Login
-    const { loaded , useAuthProvider  } = _useOAuth.default(async (endpoint, data)=>{
-        const user = await authenticate(endpoint, data);
-        update('user')(user);
-        transition.to("greeting");
-    }); // Use State
-    const [isFetching, setIsFetching] = _react.useState(false);
-    const [rejections, setRejections] = _react.useState([]); // Check Email
-    const errors = [
-        ...validator.checkEmail(state.email) || [],
-        ...rejections
-    ]; // Enable Typewriter Effect
-    _react.useEffect(()=>{
-        if (!loaded) return;
-        transition.set(mainRef.current).in();
-        if (typewriter.current) return;
-        typewriter.current = new _Typewriter.default(null, null, {
-            element: typeRef.current,
-            period: 2500,
-            words: copy.words
-        }).init();
-    }, [
-        loaded
-    ]);
-    const handleSubmit = async ()=>{
-        // Fetching Animation
-        const timer = $.timer(1000).start();
-        setIsFetching(true); // Make Request
-        const res = await _axios.default.post('/auth/check-email', {
-            email: state.email
-        }); // Destructure Response
-        const { exists , loginAllowed  } = res.data || {
-        }; // Create Errors
-        if (exists && !loginAllowed) {
-            setIsFetching(false);
-            setRejections([
-                copy.errors.fails.oauth
-            ]);
-            return;
-        } // Artificial Delay
-        await timer.hold(); // Destroy Typewwriter
-        typewriter.current.destroy(); // Update State & Navigate
-        const loginType = exists ? 'login' : 'signup';
-        update('login_type')(loginType); // Transition to next step
-        transition.to(loginType);
-    };
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
-        copy: copy.referral
-    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: exit ? ()=>exit()
-         : null,
-        backText: copy.back,
-        showLoader: !loaded,
-        onSubmit: handleSubmit
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__header"
-    }, /*#__PURE__*/ _react.default.createElement("h2", {
-        className: aC
-    }, copy.title, /*#__PURE__*/ _react.default.createElement("span", {
-        ref: typeRef
-    }), /*#__PURE__*/ _react.default.createElement("span", {
-        className: "blink"
-    }, "|"))), /*#__PURE__*/ _react.default.createElement("fieldset", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "bold ".concat(aC)
-    }, copy.continueWith), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__inline"
-    }, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: "Google",
-        icon: "google",
-        theme: "google",
-        onClick: loaded && useAuthProvider('google')
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: "Facebook",
-        icon: "facebook",
-        theme: "facebook",
-        onClick: loaded && useAuthProvider('facebook')
-    }))), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "bold ".concat(aC)
-    }, copy.alt), /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-email",
-        type: "email",
-        icon: "email",
-        label: copy.inputs.email.label,
-        placeholder: copy.inputs.email.placeholder,
-        value: state.email,
-        onChange: (val)=>{
-            update('email')(val);
-            if (rejections.length) setRejections([]);
-        },
-        errors: errors
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: errors.length,
-        showLoader: isFetching
-    })))));
-};
-_c = Hello;
-var _default = Hello;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Hello");
-
-  $parcel$ReactRefreshHelpers$56d5.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../components/Referral":"g3u02","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","../../../main/Typewriter":"8CWue","../helpers/useOAuth":"bc30w","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"duEL0":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$a8de = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$a8de.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Image1 = (_ref)=>{
-    let { src , domRef , children  } = _ref;
-    const img = src || "https://storage.googleapis.com/utravel-site-content/img/login-1.jpg";
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__visual",
-        ref: domRef
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__image"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: img,
-        alt: "Login Visual"
-    }), /*#__PURE__*/ _react.default.createElement("img", {
-        src: img,
-        alt: "Login Visual"
-    })), children));
-};
-_c = Image1;
-var _default = Image1;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Image");
-
-  $parcel$ReactRefreshHelpers$a8de.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"fo4q3":[function(require,module,exports) {
+},{}],"fo4q3":[function(require,module,exports) {
 "use strict";
 var Refresh = require('react-refresh/runtime');
 function debounce(func, delay) {
@@ -3163,11 +2838,11 @@ function registerExportsForReactRefresh(module) {
     }
 }
 
-},{"react-refresh/runtime":"cWWA1"}],"53dVp":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$9c57 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{"react-refresh/runtime":"cWWA1"}],"ckamV":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$1528 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$9c57.prelude(module);
+$parcel$ReactRefreshHelpers$1528.prelude(module);
 
 try {
 "use strict";
@@ -3176,47 +2851,981 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _react = _interopRequireDefault(require("react"));
-var _Buttons = require("../../components/Buttons");
-var _Loader = _interopRequireDefault(require("../../components/Loader"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
     };
 }
-const LoginForm = (_ref)=>{
-    let { back , backText , onSubmit , title , text , children , showLoader  } = _ref;
-    const handleSubmit = (e)=>{
-        e.preventDefault();
-        onSubmit && onSubmit();
-    };
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__content"
-    }, showLoader ? /*#__PURE__*/ _react.default.createElement(_Loader.default, null) : /*#__PURE__*/ _react.default.createElement("form", {
-        className: "login__form",
-        onSubmit: handleSubmit
-    }, back && /*#__PURE__*/ _react.default.createElement(_Buttons.BackButton, {
-        onClick: back,
-        text: backText
-    }), title && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__header"
-    }, /*#__PURE__*/ _react.default.createElement("h3", {
-        className: "animate-item"
-    }, title), text && /*#__PURE__*/ _react.default.createElement("p", {
-        className: "animate-item"
-    }, text)), children)));
+const localCopy = {
+    en: "We're having trouble loading this application. Please try again later.",
+    es: "Tenemos problemas para cargar esta aplicación. Por favor, inténtelo de nuevo más tarde."
 };
-_c = LoginForm;
-var _default = LoginForm;
+const Oppsie = (_ref)=>{
+    let { copy , src  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("section", {
+        className: "oopsie"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: src || "/img/oopsie.svg",
+        alt: "Oopsie"
+    }), /*#__PURE__*/ _react.default.createElement("h3", null, copy || localCopy[window.locale] || localCopy.en)));
+};
+_c = Oppsie;
+var _default = Oppsie;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "LoginForm");
+$RefreshReg$(_c, "Oppsie");
 
-  $parcel$ReactRefreshHelpers$9c57.postlude(module);
+  $parcel$ReactRefreshHelpers$1528.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../../components/Buttons":"6z8CS","../../components/Loader":"klMDW","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6z8CS":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8spew":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$466f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$466f.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _useMaps = _interopRequireDefault(require("../helpers/useMaps"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Default React Stuff
+// Import Google Maps
+// Cteate Map Component
+const Map1 = (_ref)=>{
+    let { origin , destination  } = _ref;
+    // Enable Google Maps
+    const [mapElement] = _useMaps.default(origin, destination); // Create Map
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__map min"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        id: "google-map",
+        ref: mapElement
+    })));
+};
+_c = Map1;
+var _default = Map1;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Map");
+
+  $parcel$ReactRefreshHelpers$466f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../helpers/useMaps":"fW2j7"}],"fW2j7":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$faf3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$faf3.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = require("react");
+var _config = _interopRequireDefault(require("../../data/config"));
+var _axios = _interopRequireDefault(require("axios"));
+var _utils = require("../../helpers/utils");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Config
+// Import Helpers
+// Create Class To Handle Map Changes
+class AppMap {
+    getRoute() {
+        // Set Map
+        this.renderer.setMap(this.map);
+        this.directions.route({
+            origin: {
+                placeId: this.origin
+            },
+            destination: {
+                placeId: this.destination
+            },
+            travelMode: "DRIVING"
+        }, (r, s)=>this.renderRoute(r, s)
+        );
+    }
+    renderRoute(res, status) {
+        // Check if response is valid
+        if (status !== 'OK' || !res) return; // Render Rout To map
+        this.renderer.setDirections(res);
+    }
+    // Initialize Map
+    constructor(_ref){
+        let { data , element , origin , destination  } = _ref;
+        // Destructure Things
+        const { options , polylineOptions  } = data; // Google Mpas Services
+        this.map = new google.maps.Map(element, options);
+        this.directions = new google.maps.DirectionsService();
+        this.renderer = new google.maps.DirectionsRenderer({
+            polylineOptions: new google.maps.Polyline(polylineOptions)
+        }); // Set Origin and Destination
+        this.origin = origin;
+        this.destination = destination;
+    }
+} // Create Custom Hook
+const useGoogleMaps = (origin1, destination1)=>{
+    // Create Reference
+    const e = _react.useRef();
+    const [map, setMap] = _react.useState(); // Load Map
+    _react.useEffect(()=>{
+        const load = async ()=>{
+            let data1;
+            await Promise.all([
+                _utils.insertScript("https://maps.googleapis.com/maps/api/js?key=".concat(_config.default.maps.api_key, "&libraries=places"), 'google-maps-sdk'),
+                _axios.default('/api/data/map').then((res)=>data1 = res.data
+                )
+            ]);
+            setMap(new AppMap({
+                data: data1,
+                element: e.current,
+                origin: origin1,
+                destination: destination1
+            }));
+        };
+        load();
+    }, []); // Update Map
+    _react.useEffect(()=>{
+        if (map) map.getRoute();
+    }, [
+        map
+    ]); // Return Element
+    return [
+        e,
+        map
+    ];
+}; // Export Hook
+var _default = useGoogleMaps;
+exports.default = _default;
+
+  $parcel$ReactRefreshHelpers$faf3.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../../data/config":"4k2ZQ","axios":"hDAj5","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"4k2ZQ":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const config = {
+    maps: {
+        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
+    },
+    facebook: {
+        appId: '274042323746865',
+        cookie: true,
+        xfbml: true,
+        version: 'v11.0'
+    },
+    google: {
+        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
+        scope: 'https://www.googleapis.com/auth/userinfo.profile',
+        cookiepolicy: 'single_host_origin'
+    },
+    stripe: {
+        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
+    }
+};
+var _default = config;
+exports.default = _default;
+
+},{}],"dGtD3":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+const bemify = (block)=>{
+    return (element)=>element ? "".concat(block, "__").concat(element) : block
+    ;
+};
+exports.bemify = bemify;
+const constructWrappers = function constructWrappers1() {
+    const wrapper = {
+    };
+    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
+    pairs.forEach((_ref)=>{
+        let [Component, steps] = _ref;
+        Object.keys(steps).forEach((key)=>wrapper[key] = Component
+        );
+    });
+    return wrapper;
+};
+exports.constructWrappers = constructWrappers;
+const toUSD = (val)=>{
+    return new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 2
+    }).format(val);
+};
+exports.toUSD = toUSD;
+const insertScript = (src, id)=>{
+    return new Promise((resolve)=>{
+        const ref = document.querySelector('script');
+        if (document.getElementById(id)) return resolve();
+        const js = document.createElement('script');
+        js.id = id;
+        js.src = src;
+        js.addEventListener('load', resolve);
+        ref.parentNode.insertBefore(js, ref);
+    });
+};
+exports.insertScript = insertScript;
+const validateEmail = (val)=>{
+    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
+};
+exports.validateEmail = validateEmail;
+const validateName = (val)=>{
+    // Allow for apostrophes!!!
+    return val && /^[a-zA-Z]+ [a-zA-Z]+$/.test(val);
+};
+exports.validateName = validateName;
+const validatePassword = (val)=>{
+    return val && val.length >= 8;
+};
+exports.validatePassword = validatePassword;
+const lettersOnly = (val)=>{
+    return val.replace(/[^A-Za-z ]+$/, '');
+};
+exports.lettersOnly = lettersOnly;
+const toHalf = (val)=>{
+    const [integer, decimal] = val.toString().split('.');
+    if (!decimal) return val;
+    else return "".concat(integer, " 1/2");
+};
+exports.toHalf = toHalf;
+
+},{}],"hFFyc":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$9eca = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$9eca.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Cancel = _interopRequireDefault(require("./Cancel"));
+var _dayjs = _interopRequireDefault(require("dayjs"));
+var _utils = require("../../helpers/utils");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Base React Shit
+// Import Components
+// Import Helpers
+const Wrapper = (_ref)=>{
+    let { children  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking__container"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__content"
+    }, children))));
+};
+_c = Wrapper;
+const format = "MM-DD-YYYY H:mm";
+const canCancel = (date, status)=>{
+    var _window$settings, _window$settings$canc;
+    if (!window.settings || !((_window$settings = window.settings) !== null && _window$settings !== void 0 && (_window$settings$canc = _window$settings.cancellation) !== null && _window$settings$canc !== void 0 && _window$settings$canc.allowed)) return false;
+    if (status !== 'ready') return false;
+    const time = _dayjs.default(date, format).subtract(window.settings.cancellation.hoursBefore, 'hour');
+    const now = _dayjs.default();
+    return now.isBefore(time);
+}; // Crate Component
+const ReservationDetails = (_ref2)=>{
+    let { reservation , copy  } = _ref2;
+    console.log(reservation);
+    console.log(copy); // Create Shortcuts
+    const r = reservation;
+    const s = copy.steps.Summary;
+    const p = r.payment;
+    const sh = r.schedule;
+    const [csr, csf, csb] = copy.steps.ChildSeats.inputs;
+    const { passengers: cs , vehicle: v  } = r;
+    const cc = {
+        seats: copy.steps.Vehicle.seats,
+        passengers: copy.steps.Passengers.title
+    };
+    return(/*#__PURE__*/ _react.default.createElement(Wrapper, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__header"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, s.title, " ", /*#__PURE__*/ _react.default.createElement("span", null, r.code.toUpperCase())), r.status !== "cancelled" ? /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - ", p.method.brand[0].toUpperCase() + p.method.brand.substring(1), " ", p.method.last4) : /*#__PURE__*/ _react.default.createElement("h5", null, "Refunded")), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format('dddd MMMM D, YYYY')), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-container"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-icon"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("span", null)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__route-details"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block"
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__vehicle"
+    }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, v["info_".concat(window.locale)].name), /*#__PURE__*/ _react.default.createElement("p", null, r.passengers.total, " ", cc.passengers), !!cs.rearSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.rearSeats, " \xD7 ", csr.label, " ", cc.seats), !!cs.frontSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.frontSeats, " \xD7 ", csf.label, " ", cc.seats), !!cs.boosterSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.boosterSeats, " \xD7 ", csb.label, " ", cc.seats)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__vehicle-image"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: v.image,
+        alt: "Vehicle image"
+    }))), r.notes && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block"
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.notes), /*#__PURE__*/ _react.default.createElement("p", null, r.notes)), canCancel(sh.pickup, r.status) && /*#__PURE__*/ _react.default.createElement(_Cancel.default, {
+        reservation: r
+    })));
+};
+_c1 = ReservationDetails;
+var _default = ReservationDetails;
+exports.default = _default;
+var _c, _c1;
+$RefreshReg$(_c, "Wrapper");
+$RefreshReg$(_c1, "ReservationDetails");
+
+  $parcel$ReactRefreshHelpers$9eca.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","dayjs":"ihFi1","../../helpers/utils":"dGtD3","./Cancel":"Ea1Vr"}],"ihFi1":[function(require,module,exports) {
+!function(t, e) {
+    "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
+}(this, function() {
+    "use strict";
+    var t = 1000, e = 60000, n = 3600000, r = "millisecond", i = "second", s = "minute", u = "hour", a = "day", o = "week", f = "month", h = "quarter", c = "year", d = "date", $ = "Invalid Date", l = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, y = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, M = {
+        name: "en",
+        weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
+        months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_")
+    }, m = function(t1, e1, n1) {
+        var r1 = String(t1);
+        return !r1 || r1.length >= e1 ? t1 : "" + Array(e1 + 1 - r1.length).join(n1) + t1;
+    }, g = {
+        s: m,
+        z: function(t1) {
+            var e1 = -t1.utcOffset(), n1 = Math.abs(e1), r1 = Math.floor(n1 / 60), i1 = n1 % 60;
+            return (e1 <= 0 ? "+" : "-") + m(r1, 2, "0") + ":" + m(i1, 2, "0");
+        },
+        m: function t1(e1, n1) {
+            if (e1.date() < n1.date()) return -t1(n1, e1);
+            var r1 = 12 * (n1.year() - e1.year()) + (n1.month() - e1.month()), i1 = e1.clone().add(r1, f), s1 = n1 - i1 < 0, u1 = e1.clone().add(r1 + (s1 ? -1 : 1), f);
+            return +(-(r1 + (n1 - i1) / (s1 ? i1 - u1 : u1 - i1)) || 0);
+        },
+        a: function(t2) {
+            return t2 < 0 ? Math.ceil(t2) || 0 : Math.floor(t2);
+        },
+        p: function(t2) {
+            return ({
+                M: f,
+                y: c,
+                w: o,
+                d: a,
+                D: d,
+                h: u,
+                m: s,
+                s: i,
+                ms: r,
+                Q: h
+            })[t2] || String(t2 || "").toLowerCase().replace(/s$/, "");
+        },
+        u: function(t2) {
+            return (void 0) === t2;
+        }
+    }, D = "en", v = {
+    };
+    v[D] = M;
+    var p = function(t1) {
+        return t1 instanceof _;
+    }, S = function(t1, e1, n1) {
+        var r1;
+        if (!t1) return D;
+        if ("string" == typeof t1) v[t1] && (r1 = t1), e1 && (v[t1] = e1, r1 = t1);
+        else {
+            var i1 = t1.name;
+            v[i1] = t1, r1 = i1;
+        }
+        return !n1 && r1 && (D = r1), r1 || !n1 && D;
+    }, w = function(t1, e1) {
+        if (p(t1)) return t1.clone();
+        var n1 = "object" == typeof e1 ? e1 : {
+        };
+        return n1.date = t1, n1.args = arguments, new _(n1);
+    }, O = g;
+    O.l = S, O.i = p, O.w = function(t1, e1) {
+        return w(t1, {
+            locale: e1.$L,
+            utc: e1.$u,
+            x: e1.$x,
+            $offset: e1.$offset
+        });
+    };
+    var _ = function() {
+        function M1(t1) {
+            this.$L = S(t1.locale, null, !0), this.parse(t1);
+        }
+        var m1 = M1.prototype;
+        return m1.parse = function(t1) {
+            this.$d = (function(t2) {
+                var e1 = t2.date, n1 = t2.utc;
+                if (null === e1) return new Date(NaN);
+                if (O.u(e1)) return new Date;
+                if (e1 instanceof Date) return new Date(e1);
+                if ("string" == typeof e1 && !/Z$/i.test(e1)) {
+                    var r1 = e1.match(l);
+                    if (r1) {
+                        var i2 = r1[2] - 1 || 0, s1 = (r1[7] || "0").substring(0, 3);
+                        return n1 ? new Date(Date.UTC(r1[1], i2, r1[3] || 1, r1[4] || 0, r1[5] || 0, r1[6] || 0, s1)) : new Date(r1[1], i2, r1[3] || 1, r1[4] || 0, r1[5] || 0, r1[6] || 0, s1);
+                    }
+                }
+                return new Date(e1);
+            })(t1), this.$x = t1.x || {
+            }, this.init();
+        }, m1.init = function() {
+            var t1 = this.$d;
+            this.$y = t1.getFullYear(), this.$M = t1.getMonth(), this.$D = t1.getDate(), this.$W = t1.getDay(), this.$H = t1.getHours(), this.$m = t1.getMinutes(), this.$s = t1.getSeconds(), this.$ms = t1.getMilliseconds();
+        }, m1.$utils = function() {
+            return O;
+        }, m1.isValid = function() {
+            return !(this.$d.toString() === $);
+        }, m1.isSame = function(t1, e1) {
+            var n1 = w(t1);
+            return this.startOf(e1) <= n1 && n1 <= this.endOf(e1);
+        }, m1.isAfter = function(t1, e1) {
+            return w(t1) < this.startOf(e1);
+        }, m1.isBefore = function(t1, e1) {
+            return this.endOf(e1) < w(t1);
+        }, m1.$g = function(t1, e1, n1) {
+            return O.u(t1) ? this[e1] : this.set(n1, t1);
+        }, m1.unix = function() {
+            return Math.floor(this.valueOf() / 1000);
+        }, m1.valueOf = function() {
+            return this.$d.getTime();
+        }, m1.startOf = function(t1, e1) {
+            var n1 = this, r2 = !!O.u(e1) || e1, h1 = O.p(t1), $1 = function(t2, e2) {
+                var i3 = O.w(n1.$u ? Date.UTC(n1.$y, e2, t2) : new Date(n1.$y, e2, t2), n1);
+                return r2 ? i3 : i3.endOf(a);
+            }, l1 = function(t2, e2) {
+                return O.w(n1.toDate()[t2].apply(n1.toDate("s"), (r2 ? [
+                    0,
+                    0,
+                    0,
+                    0
+                ] : [
+                    23,
+                    59,
+                    59,
+                    999
+                ]).slice(e2)), n1);
+            }, y1 = this.$W, M2 = this.$M, m2 = this.$D, g1 = "set" + (this.$u ? "UTC" : "");
+            switch(h1){
+                case c:
+                    return r2 ? $1(1, 0) : $1(31, 11);
+                case f:
+                    return r2 ? $1(1, M2) : $1(0, M2 + 1);
+                case o:
+                    var D1 = this.$locale().weekStart || 0, v1 = (y1 < D1 ? y1 + 7 : y1) - D1;
+                    return $1(r2 ? m2 - v1 : m2 + (6 - v1), M2);
+                case a:
+                case d:
+                    return l1(g1 + "Hours", 0);
+                case u:
+                    return l1(g1 + "Minutes", 1);
+                case s:
+                    return l1(g1 + "Seconds", 2);
+                case i:
+                    return l1(g1 + "Milliseconds", 3);
+                default:
+                    return this.clone();
+            }
+        }, m1.endOf = function(t1) {
+            return this.startOf(t1, !1);
+        }, m1.$set = function(t1, e1) {
+            var n1, o1 = O.p(t1), h1 = "set" + (this.$u ? "UTC" : ""), $1 = (n1 = {
+            }, n1[a] = h1 + "Date", n1[d] = h1 + "Date", n1[f] = h1 + "Month", n1[c] = h1 + "FullYear", n1[u] = h1 + "Hours", n1[s] = h1 + "Minutes", n1[i] = h1 + "Seconds", n1[r] = h1 + "Milliseconds", n1)[o1], l1 = o1 === a ? this.$D + (e1 - this.$W) : e1;
+            if (o1 === f || o1 === c) {
+                var y1 = this.clone().set(d, 1);
+                y1.$d[$1](l1), y1.init(), this.$d = y1.set(d, Math.min(this.$D, y1.daysInMonth())).$d;
+            } else $1 && this.$d[$1](l1);
+            return this.init(), this;
+        }, m1.set = function(t1, e1) {
+            return this.clone().$set(t1, e1);
+        }, m1.get = function(t1) {
+            return this[O.p(t1)]();
+        }, m1.add = function(r2, h1) {
+            var d1, $1 = this;
+            r2 = Number(r2);
+            var l1 = O.p(h1), y2 = function(t1) {
+                var e1 = w($1);
+                return O.w(e1.date(e1.date() + Math.round(t1 * r2)), $1);
+            };
+            if (l1 === f) return this.set(f, this.$M + r2);
+            if (l1 === c) return this.set(c, this.$y + r2);
+            if (l1 === a) return y2(1);
+            if (l1 === o) return y2(7);
+            var M2 = (d1 = {
+            }, d1[s] = e, d1[u] = n, d1[i] = t, d1)[l1] || 1, m2 = this.$d.getTime() + r2 * M2;
+            return O.w(m2, this);
+        }, m1.subtract = function(t1, e1) {
+            return this.add(-1 * t1, e1);
+        }, m1.format = function(t1) {
+            var e1 = this, n1 = this.$locale();
+            if (!this.isValid()) return n1.invalidDate || $;
+            var r2 = t1 || "YYYY-MM-DDTHH:mm:ssZ", i3 = O.z(this), s2 = this.$H, u1 = this.$m, a1 = this.$M, o1 = n1.weekdays, f1 = n1.months, h1 = function(t2, n2, i4, s3) {
+                return t2 && (t2[n2] || t2(e1, r2)) || i4[n2].substr(0, s3);
+            }, c1 = function(t2) {
+                return O.s(s2 % 12 || 12, t2, "0");
+            }, d1 = n1.meridiem || function(t2, e2, n2) {
+                var r3 = t2 < 12 ? "AM" : "PM";
+                return n2 ? r3.toLowerCase() : r3;
+            }, l1 = {
+                YY: String(this.$y).slice(-2),
+                YYYY: this.$y,
+                M: a1 + 1,
+                MM: O.s(a1 + 1, 2, "0"),
+                MMM: h1(n1.monthsShort, a1, f1, 3),
+                MMMM: h1(f1, a1),
+                D: this.$D,
+                DD: O.s(this.$D, 2, "0"),
+                d: String(this.$W),
+                dd: h1(n1.weekdaysMin, this.$W, o1, 2),
+                ddd: h1(n1.weekdaysShort, this.$W, o1, 3),
+                dddd: o1[this.$W],
+                H: String(s2),
+                HH: O.s(s2, 2, "0"),
+                h: c1(1),
+                hh: c1(2),
+                a: d1(s2, u1, !0),
+                A: d1(s2, u1, !1),
+                m: String(u1),
+                mm: O.s(u1, 2, "0"),
+                s: String(this.$s),
+                ss: O.s(this.$s, 2, "0"),
+                SSS: O.s(this.$ms, 3, "0"),
+                Z: i3
+            };
+            return r2.replace(y, function(t2, e2) {
+                return e2 || l1[t2] || i3.replace(":", "");
+            });
+        }, m1.utcOffset = function() {
+            return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
+        }, m1.diff = function(r2, d1, $1) {
+            var l1, y2 = O.p(d1), M2 = w(r2), m2 = (M2.utcOffset() - this.utcOffset()) * e, g1 = this - M2, D1 = O.m(this, M2);
+            return D1 = (l1 = {
+            }, l1[c] = D1 / 12, l1[f] = D1, l1[h] = D1 / 3, l1[o] = (g1 - m2) / 604800000, l1[a] = (g1 - m2) / 86400000, l1[u] = g1 / n, l1[s] = g1 / e, l1[i] = g1 / t, l1)[y2] || g1, $1 ? D1 : O.a(D1);
+        }, m1.daysInMonth = function() {
+            return this.endOf(f).$D;
+        }, m1.$locale = function() {
+            return v[this.$L];
+        }, m1.locale = function(t1, e1) {
+            if (!t1) return this.$L;
+            var n1 = this.clone(), r2 = S(t1, e1, !0);
+            return r2 && (n1.$L = r2), n1;
+        }, m1.clone = function() {
+            return O.w(this.$d, this);
+        }, m1.toDate = function() {
+            return new Date(this.valueOf());
+        }, m1.toJSON = function() {
+            return this.isValid() ? this.toISOString() : null;
+        }, m1.toISOString = function() {
+            return this.$d.toISOString();
+        }, m1.toString = function() {
+            return this.$d.toUTCString();
+        }, M1;
+    }(), b = _.prototype;
+    return w.prototype = b, [
+        [
+            "$ms",
+            r
+        ],
+        [
+            "$s",
+            i
+        ],
+        [
+            "$m",
+            s
+        ],
+        [
+            "$H",
+            u
+        ],
+        [
+            "$W",
+            a
+        ],
+        [
+            "$M",
+            f
+        ],
+        [
+            "$y",
+            c
+        ],
+        [
+            "$D",
+            d
+        ]
+    ].forEach(function(t1) {
+        b[t1[1]] = function(e1) {
+            return this.$g(e1, t1[0], t1[1]);
+        };
+    }), w.extend = function(t1, e1) {
+        return t1.$i || (t1(e1, _, w), t1.$i = !0), w;
+    }, w.locale = S, w.isDayjs = p, w.unix = function(t1) {
+        return w(1000 * t1);
+    }, w.en = v[D], w.Ls = v, w.p = {
+    }, w;
+});
+
+},{}],"Ea1Vr":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$6173 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$6173.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../AppContext"));
+var _Modal = _interopRequireDefault(require("../../components/Modal"));
+var _Buttons = require("../../components/Buttons");
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+// Create Component
+const Cancel = ()=>{
+    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default); // Create Refs and State
+    const modal = _react.useRef();
+    const [showModal, setShowModal] = _react.useState(false);
+    const [isFetching, setIsFetching] = _react.useState(false);
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
+        text: "Cancel Reservation",
+        onClick: ()=>setShowModal(true)
+    }))), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+        isOpen: showModal,
+        closeRef: modal,
+        preventClose: isFetching,
+        close: setShowModal
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__modal animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, "Confirm Cancellation"), /*#__PURE__*/ _react.default.createElement("p", null, "Once you cancel, your original payment will be refunded the full amount within 10 business days."), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Confirm Cancellation",
+        animationClass: "no-animate",
+        showLoader: isFetching,
+        onClick: async ()=>{
+            // Create Visual Animations
+            setIsFetching(true);
+            const timer = $.timer(1000).start(); // Make Request
+            const res = await _axios.default.post('/api/booking/issue-refund', {
+                id: reservation._id
+            }); // Check Response
+            console.log(res); // Update App
+            updateApp(res.data.reservation); // Wait For Delay
+            await timer.hold();
+            setIsFetching(false); // Close Modal
+            modal.current.close();
+        }
+    })))));
+};
+_c = Cancel;
+var _default = Cancel;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Cancel");
+
+  $parcel$ReactRefreshHelpers$6173.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5","../AppContext":"6jzOU"}],"h4i0T":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$5818.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const animateModalOpen = (element)=>{
+    const e = $(element);
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade In Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: [
+            _animejs.default.stagger([
+                100,
+                25
+            ]),
+            0
+        ],
+        opacity: [
+            0,
+            1
+        ],
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    });
+    return tl.finished;
+};
+const animateModalClose = (element)=>{
+    const e = $(element); // Create Anime Timeline
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade Out Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: _animejs.default.stagger([
+            0,
+            -50
+        ]),
+        opacity: 0,
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    }); // Then Fade Out Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: 0
+    }); // Then Fade Out Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: 0
+    });
+    return tl.finished;
+};
+const Modal = (_ref)=>{
+    let { children , isOpen , close , preventClose , closeRef  } = _ref;
+    // Create Refs & State
+    const [isAnimating, setIsAnimating] = _react.useState(false);
+    const element = _react.useRef(); // Animate Opening And Closing
+    _react.useEffect(()=>{
+        const triggerOpen = async ()=>{
+            if (!element.current || isAnimating) return;
+            setIsAnimating(true);
+            await animateModalOpen(element.current);
+            setIsAnimating(false);
+        };
+        if (isOpen) triggerOpen();
+    }, [
+        isOpen
+    ]); // Create Close Function
+    const closeModal = async ()=>{
+        // Prevent Double Clicking
+        if (isAnimating || preventClose) return; // Update State
+        setIsAnimating(true); // Do Some Animation
+        await animateModalClose(element.current); // Update State
+        setIsAnimating(false); // Close Modal State
+        close(false);
+    }; // Pass Close Function Updwards
+    if (closeRef) closeRef.current = {
+        close: closeModal
+    };
+    return isOpen ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal",
+        ref: element
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__escape",
+        onClick: closeModal
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__window"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__close animate-item",
+        onClick: closeModal
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "close",
+        size: "xl"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__content"
+    }, children))) : null;
+};
+_c = Modal;
+var _default = Modal;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Modal");
+
+  $parcel$ReactRefreshHelpers$5818.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./Icon":"3WqAm","animejs":"aMVBn"}],"3WqAm":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$fde0.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Icon = (_ref)=>{
+    let { icon , size , color  } = _ref;
+    let classes = 'icon-md';
+    let style = {
+    };
+    if (size) {
+        if (typeof size === 'string') classes = "icon-".concat(size);
+        if (size && typeof size === 'number') style = {
+            height: size + 'rem',
+            width: size + 'rem'
+        };
+    }
+    if (color) {
+        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
+        else classes += " ".concat(color);
+    }
+    return(/*#__PURE__*/ _react.default.createElement("svg", {
+        className: classes,
+        style: style
+    }, /*#__PURE__*/ _react.default.createElement("use", {
+        href: "/img/icons.svg#".concat(icon)
+    })));
+};
+_c = Icon;
+var _default = Icon;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Icon");
+
+  $parcel$ReactRefreshHelpers$fde0.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6z8CS":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$094f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3323,11 +3932,11 @@ $RefreshReg$(_c3, "LinkButton");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"3WqAm":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6jzOU":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$8df0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$fde0.prelude(module);
+$parcel$ReactRefreshHelpers$8df0.prelude(module);
 
 try {
 "use strict";
@@ -3341,1793 +3950,16 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
-const Icon = (_ref)=>{
-    let { icon , size , color  } = _ref;
-    let classes = 'icon-md';
-    let style = {
-    };
-    if (size) {
-        if (typeof size === 'string') classes = "icon-".concat(size);
-        if (size && typeof size === 'number') style = {
-            height: size + 'rem',
-            width: size + 'rem'
-        };
-    }
-    if (color) {
-        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
-        else classes += " ".concat(color);
-    }
-    return(/*#__PURE__*/ _react.default.createElement("svg", {
-        className: classes,
-        style: style
-    }, /*#__PURE__*/ _react.default.createElement("use", {
-        href: "/img/icons.svg#".concat(icon)
-    })));
-};
-_c = Icon;
-var _default = Icon;
+const AppContext = /*#__PURE__*/ _react.default.createContext();
+var _default = AppContext;
 exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Icon");
 
-  $parcel$ReactRefreshHelpers$fde0.postlude(module);
+  $parcel$ReactRefreshHelpers$8df0.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"klMDW":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$e18d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$e18d.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Loader = ()=>{
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "loader"
-    }, /*#__PURE__*/ _react.default.createElement("span", null)));
-};
-_c = Loader;
-var _default = Loader;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Loader");
-
-  $parcel$ReactRefreshHelpers$e18d.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"g3u02":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$fa76 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$fa76.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Referral = (_ref)=>{
-    let { name , photo , copy , amount  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "referral"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "referral__bg"
-    }), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "referral__photo"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: photo,
-        alt: "picture of ".concat(name)
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "referral__content"
-    }, /*#__PURE__*/ _react.default.createElement("h6", {
-        className: "bold"
-    }, copy.title.replace("{name}", name)), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "small"
-    }, copy.subtitle.replace("{amount}", amount || 15)))));
-};
-_c = Referral;
-var _default = Referral;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Referral");
-
-  $parcel$ReactRefreshHelpers$fa76.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"83Axu":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$bdcc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$bdcc.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _hooks = require("../helpers/hooks");
-var _Icon = _interopRequireDefault(require("./Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Import React Defaults
-// Import Helpers
-// Import Other Components
-// Create Component
-const Input = (_ref)=>{
-    let { value , placeholder , onChange , onBlur: _onBlur , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
-    const [state, setState] = _hooks.useObjectState({
-        type,
-        showErrors: false
-    });
-    const isText = state.type === "text";
-    const hasError = state.showErrors && errors && errors.length > 0;
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "input"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: $.join("input__input", [
-            hasError,
-            "has-error"
-        ], animationClass || "animate-item")
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__main"
-    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon,
-        size: "lg"
-    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__field"
-    }, /*#__PURE__*/ _react.default.createElement("label", {
-        htmlFor: id
-    }, label), /*#__PURE__*/ _react.default.createElement("input", {
-        id: id,
-        type: state.type || "text",
-        value: value,
-        placeholder: placeholder,
-        onChange: (onChange || formatInput) && ((e)=>{
-            let val = e.target.value;
-            if (formatInput) val = formatInput(val);
-            onChange && onChange(val);
-        }),
-        onBlur: (e)=>{
-            if (!state.showErrors) setState({
-                showErrors: true
-            });
-            _onBlur && _onBlur(e);
-        },
-        onFocus: selectOnFocus && ((e)=>e.target.select()
-        ),
-        className: "input__text-input"
-    }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__toggle",
-        onClick: ()=>setState({
-                type: isText ? "password" : "text"
-            })
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: isText ? "eye-off" : "eye",
-        size: "lg"
-    }))), hasError && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__errors"
-    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
-            className: "input__error animate-item",
-            key: i
-        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-            icon: "error",
-            size: "sm"
-        }), /*#__PURE__*/ _react.default.createElement("p", {
-            className: "small bold"
-        }, err))
-    ))));
-};
-_c = Input;
-var _default = Input;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Input");
-
-  $parcel$ReactRefreshHelpers$bdcc.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../helpers/hooks":"8wHZG","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8wHZG":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$134e = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$134e.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.useObjectState = void 0;
-var _react = require("react");
-const useObjectState = (initialState)=>{
-    const [state, setState] = _react.useState(initialState);
-    return [
-        state,
-        (newState)=>setState(Object.assign({
-            }, state, newState))
-    ];
-};
-exports.useObjectState = useObjectState;
-
-  $parcel$ReactRefreshHelpers$134e.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"bc30w":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$042a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$042a.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = require("react");
-var _config = _interopRequireDefault(require("../../data/config"));
-var _utils = require("../../helpers/utils");
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-// Import React Items
-// Import Config & Helpers
-// Facebook oAuth Class
-class FacebookAuth {
-    async load() {
-        if (window.FB) return;
-        window.fbAsyncInit = ()=>{
-            window.FB.init(_config.default.facebook);
-        };
-        await _utils.insertScript('https://connect.facebook.net/en_US/sdk.js', 'facebook-jssdk');
-    }
-    async getUserData() {
-        const user = {
-            preferredLocale: window.locale
-        };
-        await Promise.all([
-            new Promise((resolve)=>{
-                FB.api('/me', this.fields, (data)=>{
-                    user.name = data.name;
-                    user.email = data.email;
-                    user.preferredName = data.short_name || data.first_name;
-                    user.facebookID = data.id;
-                    resolve();
-                });
-            }),
-            new Promise((resolve)=>{
-                FB.api('/me/picture', {
-                    redirect: false,
-                    height: '250',
-                    width: '250',
-                    type: 'normal'
-                }, (data)=>{
-                    user.photo = data.data.url;
-                    resolve();
-                });
-            })
-        ]);
-        this.callback(this.endpoint, user);
-        FB.logout();
-    }
-    authenticate() {
-        FB.login(()=>this.getUserData()
-        , {
-            scope: 'email',
-            return_scopes: true
-        });
-    }
-    constructor(_ref){
-        let { callback , endpoint  } = _ref;
-        this.callback = callback;
-        this.endpoint = endpoint;
-        this.fields = {
-            fields: 'email,name,first_name,last_name,middle_name,short_name'
-        };
-    }
-} // Google oAuth Class
-class GoogleAuth {
-    async load() {
-        await _utils.insertScript('https://apis.google.com/js/api:client.js', 'google-oauth');
-        if (!window.GoogleAuth) await new Promise((resolve)=>{
-            // Load Google API
-            gapi.load('client:auth2', ()=>{
-                gapi.client.init(_config.default.google).then(resolve);
-            });
-        }); // Create New Auth Instance
-        this.auth = window.GoogleAuth = gapi.auth2.getAuthInstance(); // Sign Out User
-        this.auth.signOut(); // Listen For Chances to Authenticator
-        this.auth.isSignedIn.listen(()=>this.updateStatus()
-        );
-    }
-    updateStatus() {
-        if (!this.allowCallback || !this.auth.isSignedIn.get()) return;
-        const token = this.auth.currentUser.get().getAuthResponse().id_token; // Request JWT from server
-        this.callback(this.endpoint, {
-            token,
-            preferredLocale: window.locale
-        }); // Sign googleuser back out to rely on JWT
-        this.auth.signOut();
-    }
-    authenticate() {
-        this.allowCallback = true;
-        this.auth.signIn();
-    }
-    constructor(_ref2){
-        let { callback: callback1 , endpoint: endpoint1  } = _ref2;
-        this.callback = callback1;
-        this.endpoint = endpoint1;
-        this.allowCallback = false;
-    }
-} // Create Custom Hook
-const useOAuth = (callback2)=>{
-    const [oAuth, setOAuth] = _react.useState({
-    });
-    _react.useEffect(()=>{
-        const loadClients = async ()=>{
-            const googleAuth = new GoogleAuth({
-                callback: callback2,
-                endpoint: '/auth/google'
-            });
-            const facebookAuth = new FacebookAuth({
-                callback: callback2,
-                endpoint: '/auth/facebook'
-            }); // Wait For oAuth Providers to load
-            await Promise.all([
-                googleAuth.load(),
-                facebookAuth.load()
-            ]);
-            setOAuth({
-                loaded: true,
-                useAuthProvider: (service)=>{
-                    switch(service){
-                        case 'google':
-                            return ()=>googleAuth.authenticate()
-                            ;
-                        case 'facebook':
-                            return ()=>facebookAuth.authenticate()
-                            ;
-                    }
-                }
-            });
-        };
-        if (!oAuth.loaded) loadClients();
-    }, []);
-    return oAuth;
-};
-var _default = useOAuth;
-exports.default = _default;
-
-  $parcel$ReactRefreshHelpers$042a.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../../data/config":"4k2ZQ","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"4k2ZQ":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-const config = {
-    maps: {
-        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
-    },
-    facebook: {
-        appId: '274042323746865',
-        cookie: true,
-        xfbml: true,
-        version: 'v11.0'
-    },
-    google: {
-        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
-        scope: 'https://www.googleapis.com/auth/userinfo.profile',
-        cookiepolicy: 'single_host_origin'
-    },
-    stripe: {
-        key: 'pk_test_51JPdLVKAJPvyZxDBYI7RyJFkeqsvaVXyCWRRcEf1B5Z21FfIOPzYX8cfcxm2hamVM5IsgLxUi19TtS0aZifhxLMK00ds7FHe4q'
-    }
-};
-var _default = config;
-exports.default = _default;
-
-},{}],"dGtD3":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
-const bemify = (block)=>{
-    return (element)=>element ? "".concat(block, "__").concat(element) : block
-    ;
-};
-exports.bemify = bemify;
-const constructWrappers = function constructWrappers1() {
-    const wrapper = {
-    };
-    for(var _len = arguments.length, pairs = new Array(_len), _key = 0; _key < _len; _key++)pairs[_key] = arguments[_key];
-    pairs.forEach((_ref)=>{
-        let [Component, steps] = _ref;
-        Object.keys(steps).forEach((key)=>wrapper[key] = Component
-        );
-    });
-    return wrapper;
-};
-exports.constructWrappers = constructWrappers;
-const toUSD = (val)=>{
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2
-    }).format(val);
-};
-exports.toUSD = toUSD;
-const insertScript = (src, id)=>{
-    return new Promise((resolve)=>{
-        const ref = document.querySelector('script');
-        if (document.getElementById(id)) return resolve();
-        const js = document.createElement('script');
-        js.id = id;
-        js.src = src;
-        js.addEventListener('load', resolve);
-        ref.parentNode.insertBefore(js, ref);
-    });
-};
-exports.insertScript = insertScript;
-const validateEmail = (val)=>{
-    return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
-};
-exports.validateEmail = validateEmail;
-const validateName = (val)=>{
-    // Allow for apostrophes!!!
-    return val && /^[a-zA-Z]+ [a-zA-Z]+$/.test(val);
-};
-exports.validateName = validateName;
-const validatePassword = (val)=>{
-    return val && val.length >= 8;
-};
-exports.validatePassword = validatePassword;
-const lettersOnly = (val)=>{
-    return val.replace(/[^A-Za-z ]+$/, '');
-};
-exports.lettersOnly = lettersOnly;
-const toHalf = (val)=>{
-    const [integer, decimal] = val.toString().split('.');
-    if (!decimal) return val;
-    else return "".concat(integer, " 1/2");
-};
-exports.toHalf = toHalf;
-
-},{}],"6pzqE":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$9c1c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$9c1c.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _hooks = require("../../helpers/hooks");
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-// Import Login Components
-// Import Generic Components
-// Import Helpers
-const Login = (_ref)=>{
-    let { copy , authenticate , transition , update , state , validator  } = _ref;
-    // Set Up Local State
-    const [localState, setLocalState] = _hooks.useObjectState({
-        isFetching: false,
-        errors: []
-    }); // Create Refs
-    const mainRef = _react.useRef(); // Check Email & Password
-    const emailErrors = validator.checkEmail(state.email);
-    const passwordErrors = [
-        ...validator.checkPassword(state.password),
-        ...localState.errors
-    ];
-    _react.useEffect(()=>{
-        transition.set(mainRef.current).in();
-    }, []);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: ()=>transition.to("hello")
-        ,
-        backText: copy.back,
-        title: copy.title,
-        onSubmit: async ()=>{
-            // Set State
-            setLocalState({
-                isFetching: true
-            }); // Start Timer
-            const timer = $.timer(1000).start(); // Fetch Data
-            const user = await authenticate('/auth/create-session', {
-                email: state.email,
-                password: state.password
-            }); // Hold For Timer
-            await timer.hold(); // Set Error
-            if (!user) return setLocalState({
-                errors: [
-                    copy.errors.fails.password
-                ]
-            }); // Update Global State
-            update('user')(user); // Update State
-            transition.to("greeting");
-        }
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-email-2",
-        type: "email",
-        icon: "email",
-        label: copy.inputs.email.label,
-        placeholder: copy.inputs.email.placeholder,
-        value: state.email,
-        onChange: update('email'),
-        errors: emailErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-password",
-        type: "password",
-        icon: "lock",
-        label: copy.inputs.password.label,
-        placeholder: copy.inputs.password.placeholder,
-        value: state.password,
-        onChange: (val)=>{
-            update('password')(val);
-            if (localState.errors.length) setLocalState({
-                errors: []
-            });
-        },
-        errors: passwordErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: emailErrors.length || passwordErrors.length,
-        showLoader: localState.isFetching
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
-        text: copy.forgot,
-        onClick: ()=>transition.to("requestReset")
-    })))));
-};
-_c = Login;
-var _default = Login;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Login");
-
-  $parcel$ReactRefreshHelpers$9c1c.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","../../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"4rs0o":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$510c = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$510c.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Referral = _interopRequireDefault(require("../components/Referral"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _ImageUpload = _interopRequireDefault(require("../../components/ImageUpload"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-const Registration = (_ref)=>{
-    let { copy , authenticate , transition , update , state , validator , referral  } = _ref;
-    // Use That State
-    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
-    const mainRef = _react.useRef(); // Check Email & Password
-    const fullNameErrors = validator.checkName(state.fullName);
-    const preferredNameErrors = validator.checkName(state.preferredName); // Enable Typewriter Effect
-    _react.useEffect(()=>{
-        transition.set(mainRef.current).in();
-    }, []);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
-        copy: copy.referral
-    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: ()=>transition.to("signup")
-        ,
-        backText: copy.back,
-        title: copy.title,
-        onSubmit: async ()=>{
-            // Update Local State
-            setIsFetching(true); // Start a timer
-            const timer = $.timer(1000).start(); // Make Request
-            const user = await authenticate('/auth/register', {
-                name: state.fullName,
-                preferredName: state.preferredName,
-                password: state.password,
-                email: state.email,
-                photo: state.profilePhoto,
-                referredBy: referral === null || referral === void 0 ? void 0 : referral.code,
-                preferredLocale: window.locale
-            }); // Wait For Timer To Expire
-            await timer.hold(); // Update Global State
-            update('user')(user); // Transition To Greeting
-            transition.to("greeting");
-        }
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-full-name",
-        type: "name",
-        icon: "person-circle",
-        label: copy.inputs.fullName.label,
-        placeholder: copy.inputs.fullName.placeholder,
-        value: state.fullName,
-        onChange: update('full_name'),
-        onBlur: ()=>{
-            if (state.preferredName || !state.fullName) return;
-            update('preferred_name')(state.fullName.split(" ")[0]);
-        },
-        errors: fullNameErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-preferred-name",
-        type: "name",
-        icon: "person-circle",
-        label: copy.inputs.preferredName.label,
-        placeholder: copy.inputs.preferredName.placeholder,
-        value: state.preferredName,
-        onChange: update('preferred_name'),
-        errors: preferredNameErrors
-    }), /*#__PURE__*/ _react.default.createElement(_ImageUpload.default, {
-        id: "user-profile-photo-upload",
-        label: copy.inputs.profilePhoto.label,
-        placeholder: copy.inputs.profilePhoto.placeholder,
-        endpoint: "/api/upload/profile-photo",
-        success: copy.inputs.profilePhoto.success,
-        onUpload: update('profile_photo'),
-        filename: state.fullName || 'user-photo'
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: fullNameErrors.length || preferredNameErrors.length,
-        showLoader: isFetching
-    })))));
-};
-_c = Registration;
-var _default = Registration;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Registration");
-
-  $parcel$ReactRefreshHelpers$510c.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../components/Referral":"g3u02","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","../../components/ImageUpload":"jDN5L","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"jDN5L":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$a17a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$a17a.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _hooks = require("../helpers/hooks");
-var _Icon = _interopRequireDefault(require("./Icon"));
-var _axios = _interopRequireDefault(require("axios"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-const ImageUpload = (_ref)=>{
-    let { label , placeholder , success , error , id , endpoint , onUpload , filename  } = _ref;
-    // Set Up Object State
-    const [state, setState] = _hooks.useObjectState({
-        image: null,
-        isUploading: false,
-        error: "false"
-    }); // Define Refs
-    const input = _react.useRef(); // Create Change Handler
-    const onFileChange = async (e)=>{
-        var _res$data;
-        // Set State
-        setState({
-            isUploading: true
-        }); // Create Variables For Upload
-        const files = Array.from(e.target.files);
-        const formData = new FormData(); // Append Form Files
-        files.forEach((file)=>{
-            formData.append('photo', file);
-        });
-        formData.append('name', filename.replaceAll(' ', '-').toLowerCase());
-        const timer = $.timer(1000).start(); // Upload File
-        const res = await _axios.default.post(endpoint, formData);
-        await timer.hold();
-        setState({
-            isUploading: false,
-            image: res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.file
-        });
-        onUpload && onUpload(res.data.file);
-    };
-    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__input file animate-item",
-        onClick: ()=>input.current.click()
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__main"
-    }, state.image ? /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__photo"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: state.image,
-        alt: "uploaded photo"
-    })) : /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__icon"
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "upload"
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__field"
-    }, /*#__PURE__*/ _react.default.createElement("label", {
-        htmlFor: id
-    }, label), /*#__PURE__*/ _react.default.createElement("input", {
-        type: "file",
-        id: id,
-        className: "input__file",
-        ref: input,
-        onChange: onFileChange
-    }), /*#__PURE__*/ _react.default.createElement("p", {
-        className: $.join("small", [
-            state.image,
-            "success"
-        ], [
-            state.error,
-            "error"
-        ])
-    }, state.image ? success : placeholder))), state.isUploading && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "input__loader"
-    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))))));
-};
-_c = ImageUpload;
-var _default = ImageUpload;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "ImageUpload");
-
-  $parcel$ReactRefreshHelpers$a17a.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../helpers/hooks":"8wHZG","./Icon":"3WqAm","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"5BwuI":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$3758 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$3758.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Referral = _interopRequireDefault(require("../components/Referral"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _axios = _interopRequireDefault(require("axios"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-const RequestReset = (_ref)=>{
-    let { copy , transition , update , state , validator , referral  } = _ref;
-    // Create State
-    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
-    const mainRef = _react.useRef(); // Check Email 
-    const emailErrors = validator.checkEmail(state.email); // Enable Typewriter Effect
-    _react.useEffect(()=>{
-        transition.set(mainRef.current).in();
-    }, []);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
-        copy: copy.referral
-    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: ()=>transition.to("signup")
-        ,
-        backText: copy.back,
-        title: copy.title,
-        text: copy.copy,
-        onSubmit: async ()=>{
-            // Set Local State
-            setIsFetching(true); // Create Timer
-            const timer = $.timer(1000).start(); // Request Reset Code From API
-            const res = await _axios.default.post('auth/request-reset-token', {
-                email: state.email
-            });
-            console.log(res); // Wait For Timer
-            await timer.hold(); // Transition To Next Screen
-            transition.to("resetCode");
-        }
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-email-2",
-        type: "email",
-        icon: "email",
-        label: copy.inputs.email.label,
-        placeholder: copy.inputs.email.placeholder,
-        value: state.email,
-        onChange: update('email'),
-        errors: emailErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: emailErrors.length,
-        showLoader: isFetching
-    })))));
-};
-_c = RequestReset;
-var _default = RequestReset;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "RequestReset");
-
-  $parcel$ReactRefreshHelpers$3758.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../components/Referral":"g3u02","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"lCvGe":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$4c5d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$4c5d.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Referral = _interopRequireDefault(require("../components/Referral"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _axios = _interopRequireDefault(require("axios"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-const ResetCode = (_ref)=>{
-    let { copy , transition , update , state , validator , referral  } = _ref;
-    // Create Local State
-    const [isFetching, setIsFetching] = _react.useState(false);
-    const [enableResend, setEnableResend] = _react.useState(true);
-    const [codeErrors, setCodeErrors] = _react.useState([]); // Create Refs
-    const mainRef = _react.useRef(); // Enable Typewriter Effect
-    _react.useEffect(()=>{
-        transition.set(mainRef.current).in();
-    }, []); // Disable Resend Button
-    _react.useEffect(()=>{
-        if (enableResend) return;
-        const timeout = setTimeout(()=>setEnableResend(true)
-        , 25000);
-        return ()=>clearTimeout(timeout)
-        ;
-    }, [
-        enableResend
-    ]); // Return Component
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
-        copy: copy.referral
-    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: ()=>transition.to("requestReset")
-        ,
-        backText: copy.back,
-        title: copy.title,
-        text: copy.copy.replace("{email}", state.email),
-        onSubmit: async ()=>{
-            var _res$data;
-            // Update State
-            setIsFetching(true); // Start Timer
-            const timer = $.timer(1000).start(); // Validate API Errors
-            const res = await _axios.default.post('/auth/validate-reset-code', {
-                email: state.email,
-                code: state.code
-            }); // Await Timer
-            await timer.hold(); // Apply Errors
-            if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.status) || res.data.status === "fail") {
-                setCodeErrors([
-                    copy.invalid
-                ]);
-                setIsFetching(false);
-                return;
-            } // Update State
-            update("token")(res.data.token); // Transition To Next Page
-            transition.to("reset");
-        }
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "reset-code",
-        icon: "keypad",
-        label: copy.inputs.code.label,
-        placeholder: copy.inputs.code.placeholder,
-        value: state.code,
-        onChange: update('code'),
-        errors: codeErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: state.code.length < 6,
-        showLoader: isFetching
-    }), enableResend ? /*#__PURE__*/ _react.default.createElement("p", {
-        className: "animate-item"
-    }, copy.resend[0] + " ", /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
-        text: copy.resend[1],
-        onClick: ()=>{
-            if (!enableResend) return;
-            _axios.default.post('auth/request-reset-token', {
-                email: state.email
-            });
-            setEnableResend(false);
-        },
-        animationClass: "no-animate"
-    })) : /*#__PURE__*/ _react.default.createElement("p", {
-        className: "animate-item"
-    }, copy.sent)))));
-};
-_c = ResetCode;
-var _default = ResetCode;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "ResetCode");
-
-  $parcel$ReactRefreshHelpers$4c5d.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../components/Referral":"g3u02","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"bzPFV":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$1fbb = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$1fbb.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Referral = _interopRequireDefault(require("../components/Referral"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-var _axios = _interopRequireDefault(require("axios"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-const RequestReset = (_ref)=>{
-    var _validator$checkPassw;
-    let { copy , transition , update , state , validator , referral , authenticate  } = _ref;
-    // Create Local State
-    const [isFetching, setIsFetching] = _react.useState(false);
-    const [passwordErrors, setPasswordErrors] = _react.useState([]); // Create Refs
-    const mainRef = _react.useRef(); // Check Email 
-    const errors = [
-        ...(_validator$checkPassw = validator.checkPassword(state.password)) !== null && _validator$checkPassw !== void 0 ? _validator$checkPassw : [],
-        ...passwordErrors
-    ]; // Enable Typewriter Effect
-    _react.useEffect(()=>{
-        // Set Transition Target
-        transition.set(mainRef.current).in(); // Clear Previous Passwords
-        update("password")("");
-    }, []);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
-        copy: copy.referral
-    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: ()=>transition.to("login")
-        ,
-        backText: copy.back,
-        title: copy.title,
-        text: copy.copy,
-        onSubmit: async ()=>{
-            // Set Local State
-            setIsFetching(true); // Start timer
-            const timer = $.timer(1000).start(); // Validate Reset
-            const user = await authenticate('/auth/reset-password', {
-                token: state.token,
-                password: state.password
-            }); // Hold For Timer
-            await timer.hold(); // Set Errors
-            if (!user) {
-                setPasswordErrors([
-                    copy.errors.fails.password
-                ]);
-                setIsFetching(false);
-                return;
-            } // Update State
-            update("user")(user); // Transition to next view
-            transition.to("greeting");
-        }
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-password",
-        type: "password",
-        icon: "lock",
-        label: copy.inputs.password.label,
-        placeholder: copy.inputs.password.placeholder,
-        value: state.password,
-        onChange: update('password'),
-        errors: errors
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: errors.length,
-        showLoader: isFetching
-    })))));
-};
-_c = RequestReset;
-var _default = RequestReset;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "RequestReset");
-
-  $parcel$ReactRefreshHelpers$1fbb.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../components/Referral":"g3u02","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"1ENqT":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$f2e0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$f2e0.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Image = _interopRequireDefault(require("../components/Image"));
-var _LoginForm = _interopRequireDefault(require("../components/LoginForm"));
-var _Referral = _interopRequireDefault(require("../components/Referral"));
-var _Buttons = require("../../components/Buttons");
-var _Input = _interopRequireDefault(require("../../components/Input"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-function _extends() {
-    _extends = Object.assign || function(target) {
-        for(var i = 1; i < arguments.length; i++){
-            var source = arguments[i];
-            for(var key in source)if (Object.prototype.hasOwnProperty.call(source, key)) target[key] = source[key];
-        }
-        return target;
-    };
-    return _extends.apply(this, arguments);
-}
-const Signup = (_ref)=>{
-    let { copy , transition , update , state , validator , referral  } = _ref;
-    // Create Refs
-    const mainRef = _react.useRef(); // Check Email & Password
-    const emailErrors = validator.checkEmail(state.email);
-    const passwordErrors = validator.checkPassword(state.password);
-    _react.useEffect(()=>{
-        // Transition Into View
-        transition.set(mainRef.current).in();
-    }, []);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container",
-        ref: mainRef
-    }, /*#__PURE__*/ _react.default.createElement(_Image.default, null, referral && /*#__PURE__*/ _react.default.createElement(_Referral.default, _extends({
-        copy: copy.referral
-    }, referral))), /*#__PURE__*/ _react.default.createElement(_LoginForm.default, {
-        back: ()=>transition.to("hello")
-        ,
-        backText: copy.back,
-        title: copy.title,
-        onSubmit: ()=>transition.to("registration")
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-email-2",
-        type: "email",
-        icon: "email",
-        label: copy.inputs.email.label,
-        placeholder: copy.inputs.email.placeholder,
-        value: state.email,
-        onChange: update('email'),
-        errors: emailErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Input.default, {
-        id: "user-password",
-        type: "password",
-        icon: "lock",
-        label: copy.inputs.password.label,
-        placeholder: copy.inputs.password.placeholder,
-        value: state.password,
-        onChange: update('password'),
-        errors: passwordErrors
-    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: copy.button,
-        type: "submit",
-        disabled: emailErrors.length || passwordErrors.length
-    })))));
-};
-_c = Signup;
-var _default = Signup;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Signup");
-
-  $parcel$ReactRefreshHelpers$f2e0.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","../components/Image":"duEL0","../components/LoginForm":"53dVp","../components/Referral":"g3u02","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"gGr5Q":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$ceb3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$ceb3.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _animejs = _interopRequireDefault(require("animejs"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-const Greeting = (_ref)=>{
-    let { copy , state , callback  } = _ref;
-    // Create Refs
-    const mainRef = _react.useRef(); // Animate Out of app
-    _react.useEffect(()=>{
-        const tl = _animejs.default.timeline({
-            easing: 'easeOutQuad',
-            duration: 800
-        });
-        tl.add({
-            targets: mainRef.current,
-            opacity: [
-                0,
-                1
-            ]
-        });
-        tl.add({
-            targets: mainRef.current,
-            opacity: 0,
-            delay: 1500
-        });
-        tl.finished.then(()=>callback(state.user)
-        );
-    }, []);
-    return(/*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__container"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "login__greeting"
-    }, /*#__PURE__*/ _react.default.createElement("h1", {
-        className: "light",
-        ref: mainRef
-    }, copy.titles[state.loginType] || copy.titles.default, " ", /*#__PURE__*/ _react.default.createElement("span", null, state.user.preferredName)))));
-};
-_c = Greeting;
-var _default = Greeting;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Greeting");
-
-  $parcel$ReactRefreshHelpers$ceb3.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","animejs":"aMVBn","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"gt2AC":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _animejs = _interopRequireDefault(require("animejs"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-class Transition {
-    set(container) {
-        let selector = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "animate-item";
-        this.targets = $(container).children(".".concat(selector)).e();
-        this.image = $(container).children(".login__visual").e();
-        this.container = $(container);
-        return this;
-    }
-    async to(step) {
-        let delay = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 500;
-        await this.out();
-        await $.delay(delay);
-        this.dispatch({
-            type: "SET_STEP",
-            data: step
-        });
-    }
-    getReferralTargets() {
-        const ref = this.container.children('.referral');
-        if (!ref.length) return; // ref.children('.referral__bg, .referral__content, .referral__photo').clearInlineStyles();
-        ref.children('*').clearInlineStyles();
-        return {
-            bg: ref.children(".referral__bg").e(),
-            content: ref.children(".referral__content").e(),
-            photo: ref.children(".referral__bg, .referral__photo").e()
-        };
-    }
-    async in() {
-        const targets = this.getReferralTargets();
-        const timeline = _animejs.default.timeline({
-            easing: 'easeOutQuad',
-            duration: 250
-        });
-        timeline.add({
-            targets: this.image,
-            opacity: [
-                0,
-                1
-            ],
-            duration: 800
-        });
-        if (targets) {
-            _animejs.default.set(targets.bg, {
-                width: '10.4rem',
-                opacity: 0
-            });
-            _animejs.default.set(targets.photo, {
-                scale: 0
-            });
-        }
-        timeline.add({
-            targets: this.targets,
-            translateY: [
-                _animejs.default.stagger([
-                    100,
-                    25
-                ]),
-                0
-            ],
-            opacity: [
-                0,
-                1
-            ],
-            delay: _animejs.default.stagger([
-                0,
-                250
-            ])
-        });
-        if (targets) {
-            timeline.add({
-                targets: targets.photo,
-                scale: 1
-            });
-            timeline.add({
-                targets: targets.bg,
-                width: '100%',
-                opacity: 1
-            });
-            timeline.add({
-                targets: targets.content,
-                opacity: [
-                    0,
-                    1
-                ]
-            });
-        }
-        await timeline.finished;
-    }
-    async out() {
-        const targets = this.getReferralTargets();
-        const timeline = _animejs.default.timeline({
-            easing: 'easeOutQuad',
-            duration: 250
-        });
-        if (targets) {
-            timeline.add({
-                targets: targets.content,
-                opacity: [
-                    1,
-                    0
-                ]
-            });
-            timeline.add({
-                targets: targets.bg,
-                width: '10.4rem'
-            });
-            timeline.add({
-                targets: targets.photo,
-                duration: 800,
-                scale: [
-                    1,
-                    0
-                ]
-            });
-        }
-        timeline.add({
-            targets: this.targets,
-            translateY: _animejs.default.stagger([
-                -25,
-                -100
-            ]),
-            opacity: 0,
-            delay: _animejs.default.stagger([
-                0,
-                250
-            ])
-        });
-        timeline.add({
-            targets: this.image,
-            opacity: [
-                1,
-                0
-            ]
-        }, "-=500");
-        await timeline.finished;
-    }
-    constructor(dispatch){
-        this.dispatch = dispatch;
-    }
-}
-exports.default = Transition;
-
-},{"animejs":"aMVBn"}],"fds8Q":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.reducer = exports.initialState = void 0;
-// Define initial state
-const initialState = {
-    step: 'hello',
-    email: 'me@arjunsamir.com',
-    password: 'password',
-    fullName: 'Samir Patel',
-    preferredName: 'Arjun',
-    profilePhoto: '',
-    code: '',
-    loginType: '',
-    token: '',
-    user: {
-    }
-}; // Create the reducer
-exports.initialState = initialState;
-const reducer = function reducer1() {
-    let state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
-    let action = arguments.length > 1 ? arguments[1] : undefined;
-    const merge = (field)=>{
-        return Object.assign({
-        }, state, {
-            [field]: action.data
-        });
-    };
-    switch(action.type){
-        case 'SET_STEP':
-            return merge('step');
-        case 'SET_EMAIL':
-            return merge('email');
-        case 'SET_PASSWORD':
-            return merge('password');
-        case 'SET_FULL_NAME':
-            return merge('fullName');
-        case 'SET_PREFERRED_NAME':
-            return merge('preferredName');
-        case 'SET_PROFILE_PHOTO':
-            return merge('profilePhoto');
-        case 'SET_CODE':
-            return merge('code');
-        case 'SET_USER':
-            return merge('user');
-        case 'SET_LOGIN_TYPE':
-            return merge('loginType');
-        case 'SET_TOKEN':
-            return merge('token');
-        default:
-            return state;
-    }
-};
-exports.reducer = reducer;
-
-},{}],"DGwNW":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-const regex = {
-    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
-    lettersOnly: /[^A-Za-z ]+$/
-};
-class Validator {
-    checkEmail(val) {
-        const { invalid , required  } = this.errors.email;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.email.test(val.toLowerCase())) return [
-            invalid
-        ];
-        else return [];
-    }
-    checkPassword(val) {
-        const { required , short  } = this.errors.password;
-        if (!val) return [
-            required
-        ];
-        else if (val.length < 8) return [
-            short
-        ];
-        else return [];
-    }
-    checkName(val) {
-        const { invalid , required  } = this.errors.name;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.name.test(val)) return [
-            invalid
-        ];
-        else return [];
-    }
-    cleanInput(val) {
-        return val.replace(regex.test, '');
-    }
-    constructor(errors){
-        this.errors = errors;
-    }
-}
-exports.default = Validator;
-
-},{}],"krKvU":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"krKvU":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8839 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -24620,6 +23452,6 @@ module.exports = require('./cjs/scheduler-tracing.development.js');
     exports.unstable_wrap = unstable_wrap;
 })();
 
-},{}]},["3wPsc","al6Zf"], null, "parcelRequire9d12")
+},{}]},["3wPsc","7fzp9"], null, "parcelRequire9d12")
 
-//# sourceMappingURL=Login.0f7efb41.js.map
+//# sourceMappingURL=Reservation.4a4a792c.js.map

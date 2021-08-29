@@ -14,6 +14,8 @@ router.post('/confirm-payment', controller.confirmPayment);
 // Protected Routes
 router.use(auth.screen);
 router.post('/create-payment', controller.createPayment);
-router.get('/reservations/users/:id', controller.listReservations);
+router.post('/issue-refund', controller.issueRefund);
+router.get('/reservations/users/me', controller.listReservations);
+router.get('/reservations/users/me/:code', controller.getReservation);
 
 module.exports = router;

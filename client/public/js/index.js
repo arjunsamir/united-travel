@@ -4236,6 +4236,11 @@ const componentsRegistry = {
             return require("6d7c66d8027ad54d");
         }).then((res)=>_interopRequireWildcard(res)
         ))
+    ,
+    ReservationApp: (dta, ctn)=>new _AppLoader.default(dta, ctn, Promise.resolve().then(function() {
+            return require("7cce616a81ab2eb2");
+        }).then((res)=>_interopRequireWildcard(res)
+        ))
 }; // Create Page Class
 class Page {
     init() {
@@ -4320,7 +4325,7 @@ class Page {
 }
 exports.default = Page;
 
-},{"./Scroll":"f0216","./Navbar":"6vZgo","./Typewriter":"8CWue","./helpers/AppLoader":"lPEFa","a5a88b054a6c7864":"JZDJm","8656c188ae1d4dfa":"dxLmZ","bf279e10d4105c7f":"7jcdN","2bbce453403fac0b":"eNFFg","6d7c66d8027ad54d":"9mzJR"}],"f0216":[function(require,module,exports) {
+},{"./Scroll":"f0216","./Navbar":"6vZgo","./Typewriter":"8CWue","./helpers/AppLoader":"lPEFa","a5a88b054a6c7864":"JZDJm","8656c188ae1d4dfa":"dxLmZ","bf279e10d4105c7f":"7jcdN","2bbce453403fac0b":"eNFFg","6d7c66d8027ad54d":"9mzJR","7cce616a81ab2eb2":"DQBd2"}],"f0216":[function(require,module,exports) {
 "use strict";
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -8911,6 +8916,13 @@ module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundl
     delete module.bundle.cache[module.id];
     throw err;
 }).then(()=>module.bundle.root('djOlM')
+);
+
+},{"./helpers/browser/js-loader":"fsKDC","./helpers/bundle-url":"64ddf"}],"DQBd2":[function(require,module,exports) {
+module.exports = require("./helpers/browser/js-loader")(require('./helpers/bundle-url').getBundleURL('dmBLj') + "../Reservation.4a4a792c.js").catch((err)=>{
+    delete module.bundle.cache[module.id];
+    throw err;
+}).then(()=>module.bundle.root('bE9OA')
 );
 
 },{"./helpers/browser/js-loader":"fsKDC","./helpers/bundle-url":"64ddf"}],"9fl8j":[function(require,module,exports) {

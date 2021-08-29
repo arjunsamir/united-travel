@@ -1,8 +1,17 @@
+const Settings = require('../models/settings');
+
 
 class Views {
 
     constructor(lang) {
         this.lang = lang || 'en';
+    }
+
+    async getSettings() {
+
+        this.settings = await Settings.findOne({ active: true });
+        this.expiration = Date.now() + (60000 * 30);
+
     }
 
     home(req, res) {
@@ -47,12 +56,23 @@ class Views {
 
     async reservation(req, res) {
         this.render(res, 'reservation', {
-            test: 'bitch'
+            confirmationCode: (req.params.code || "").toLowerCase()
         });
     }
 
     async render(res, page, data = {}) {
+
+        if (!this.settings || Date.now() > this.expiration) await this.getSettings();
+
+        // Set Settings Locals
+        res.locals.settings = {
+            referrals: this.settings.referrals,
+            cancellation: this.settings.cancellation,
+        }
+
+        // Set User On Locals
         if (!res.locals.user) res.locals.user = {};
+
         res.render(`${this.lang}/${page}`, { ...data })
     }
 

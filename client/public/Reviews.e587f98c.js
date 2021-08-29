@@ -2834,17 +2834,18 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
-const copy = {
+const localCopy = {
     en: "We're having trouble loading this application. Please try again later.",
     es: "Tenemos problemas para cargar esta aplicación. Por favor, inténtelo de nuevo más tarde."
 };
-const Oppsie = ()=>{
+const Oppsie = (_ref)=>{
+    let { copy , src  } = _ref;
     return(/*#__PURE__*/ _react.default.createElement("section", {
         className: "oopsie"
     }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: "/img/oopsie.svg",
+        src: src || "/img/oopsie.svg",
         alt: "Oopsie"
-    }), /*#__PURE__*/ _react.default.createElement("h3", null, copy[window.locale] || copy.en)));
+    }), /*#__PURE__*/ _react.default.createElement("h3", null, copy || localCopy[window.locale] || localCopy.en)));
 };
 _c = Oppsie;
 var _default = Oppsie;

@@ -3071,13 +3071,13 @@ const getTimestamps = (r)=>_objectSpread(_objectSpread({
 ;
 const Rides = ()=>{
     // Destructure State
-    const { state: { reservations , id  } , update  } = _react.useContext(_AppContext.default); // Get Reservations on Load
+    const { state: { reservations  } , update  } = _react.useContext(_AppContext.default); // Get Reservations on Load
     _react.useEffect(()=>{
         // Get And Sort Reservations
         const fetchReservations = async ()=>{
             var _res$data;
             const timer = $.timer(1000).start();
-            const res = await _axios.default("/api/booking/reservations/users/".concat(id));
+            const res = await _axios.default('/api/booking/reservations/users/me');
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.reservations)) return;
             const today = _dayjs.default();
             const filtered = {
