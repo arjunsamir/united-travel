@@ -9,7 +9,7 @@ import Checkbox from '../../components/Checkbox';
 
 // Import Helpers
 import { useObjectState } from '../../helpers/hooks';
-import { getBrand } from '../helpers/cardBrands';
+import { getBrand } from '../../helpers/cardBrands';
 
 
 // Import Stripe Components

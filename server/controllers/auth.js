@@ -80,17 +80,16 @@ const decodeJWT = async (token) => {
 }
 
 
-const findUserByJWT = async (token) => {
-
-    // if (!token || token === 'logged-out') return null;
-
-    // const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
+const findUserByJWT = async (token, selectPassword = false) => {
 
     const decoded = await decodeJWT(token);
 
     if (!decoded) return null;
 
-    const user = await User.findById(decoded.id);
+    let user;
+
+    if (selectPassword) user = await User.findById(decoded.id).select("+password")
+    else user = await User.findById(decoded.id)
 
     if (!user || user.changedPasswordAfter(decoded.iat)) return null;
 
@@ -264,6 +263,66 @@ exports.logout = (req, res) => {
     send(res, { status: 'success' });
 
 };
+
+
+exports.deactivateAccount = catchAsync(async (req, res, next) => {
+
+    // Find User
+    const user = await findUserByJWT(req.cookies.jwt);
+
+    // Deactivate User
+    user.active = false;
+    await user.save();
+
+    // Revoke Session
+    res.cookie('jwt', 'logged-out', {
+        expires: new Date(Date.now() + 10000),
+        httpOnly: true
+    });
+
+
+    // Send Response
+    send(res, { status: 'success' });
+
+
+});
+
+
+exports.updatePassword = catchAsync(async (req, res, next) => {
+
+    // Destructure Variables
+    const { password, newPassword } = req.body;
+
+    // Get User
+    const user = await findUserByJWT(req.cookies.jwt, true);
+
+    // Handle Errors
+    if (!user) return send(res, {
+        status: "ERROR"
+    });
+
+    // Check if Passwords Match
+    const match = await user.checkPassword(password, user.password);
+
+    // Handle Errors
+    if (!match || !newPassword) return send(res, {
+        status: "FAIL"
+    });
+
+    // Update Password
+    user.password = newPassword;
+    user.resetToken = undefined;
+    user.tokenExpiration = undefined;
+
+    // Save User
+    await user.save();
+
+    // Send Response
+    send(res, {
+        status: 'SUCCESS'
+    })
+
+});
 
 
 exports.forgotPassword = catchAsync(async (req, res, next) => {

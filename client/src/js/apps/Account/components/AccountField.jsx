@@ -34,7 +34,12 @@ const AccountField = ({ title, label, value, children, submit = {} }) => {
 
         try {
             // Start Request
-            const res = await axios.patch(submit.endpoint || '/users/me', submit.data);
+            const res = await axios[submit.method || "patch"](submit.endpoint || '/users/me', submit.data);
+
+            console.log(res);
+
+            // Throw Error
+            if (res.data.status === 'ERROR' || res.data.status === 'FAIL') throw res;
 
             // Hold For Timer
             await timer.hold();

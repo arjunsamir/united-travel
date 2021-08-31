@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import axios from 'axios';
 import config from '../../data/config';
 import { useObjectState } from '../../helpers/hooks';
-import { getBrand, getWalletProvider } from './cardBrands';
+import { getBrand, getWalletProvider } from '../../helpers/cardBrands';
 
 // Create Stripe Options
 export const stripeOptions = {

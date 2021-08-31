@@ -546,3 +546,26 @@ exports.listPaymentMethods = catchAsync(async (req, res, next) => {
     })
 
 });
+
+
+exports.deletePaymentMethod = catchAsync(async (req, res, next) => {
+
+    // Detach Payment Method
+    const paymentMethod = await stripe.paymentMethods.detach(req.params.method);
+
+    // Retrieve New List of Payment methods
+    const [customer, paymentMethods] = await getStripeUser(req.user);
+
+    // Handle Errors
+    if (!customer) return send(res, {
+        status: 'ERROR'
+    })
+
+    // Send Response
+    send(res, {
+        status: 'SUCCESS',
+        paymentMethods,
+        paymentMethod
+    })
+
+});

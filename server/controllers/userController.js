@@ -15,11 +15,15 @@ exports.getMe = catchAsync(async (req, res, next) => {
 
 exports.updateMe = catchAsync(async (req, res, next) => {
 
+    const data = { ...req.body };
+
+    if (data.password) delete data.password;
+
     if (!req.userId) return send(res, {
         status: "FAIL"
     });
 
-    const user = await User.findByIdAndUpdate(req.userId, req.body, {
+    const user = await User.findByIdAndUpdate(req.userId, data, {
         new: true,
         runValidators: true
     });

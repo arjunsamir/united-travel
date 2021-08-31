@@ -18,6 +18,8 @@ router.get('/revoke-session', auth.logout);
 router.post('/request-reset-token', auth.forgotPassword);
 router.post('/validate-reset-code', auth.validateResetCode);
 router.post('/reset-password', auth.resetPassword);
+router.post('/update-password', auth.updatePassword);
+router.delete('/account', auth.deactivateAccount);
 
 
 // 4. Export Router

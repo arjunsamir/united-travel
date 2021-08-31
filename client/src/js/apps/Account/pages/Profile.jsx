@@ -52,7 +52,7 @@ const Profile = () => {
 
             <EditProfile />
             
-            <EditAccount />
+            {user.passwordSet && <EditAccount />}
             
             <DeleteAccount />
 

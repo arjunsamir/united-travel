@@ -14,6 +14,7 @@ router.patch('/me', auth.getUserIdFromJWT, user.updateMe);
 // Create Rout
 router.use(auth.protect);
 router.get('/me/payment-methods', bookingController.listPaymentMethods);
+router.delete('/me/payment-methods/:method', bookingController.deletePaymentMethod);
 
 
 // Admin Restricted Routes

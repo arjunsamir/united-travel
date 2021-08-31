@@ -16,8 +16,6 @@ const ReservationList = ({ reservations, label, fallback, setLoader }) => {
 
     const { transition, update } = useContext(AppContext);
 
-    console.log(reservations);
-
     return (
         <div className="account__group animate-children">
             <h5>{label}</h5>

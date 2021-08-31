@@ -3903,6 +3903,13 @@ svg.placeholder, .icon.placeholder {
 .account__modal-title {
   padding-bottom: 1.6rem;
 }
+.account__modal--delete p span {
+  color: var(--jet);
+  font-weight: 700;
+}
+.account__modal--delete .account__modal-title {
+  padding-bottom: 0;
+}
 .account-nav {
   background-color: var(--jet);
   padding: 1.6rem 6.4rem;

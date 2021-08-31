@@ -74989,7 +74989,7 @@ var _Input = _interopRequireDefault(require("../../components/Input"));
 var _Icon = _interopRequireDefault(require("../../components/Icon"));
 var _Checkbox = _interopRequireDefault(require("../../components/Checkbox"));
 var _hooks = require("../../helpers/hooks");
-var _cardBrands = require("../helpers/cardBrands");
+var _cardBrands = require("../../helpers/cardBrands");
 var _useCheckout = require("../helpers/useCheckout");
 var _reactStripeJs = require("@stripe/react-stripe-js");
 function _interopRequireDefault(obj) {
@@ -75154,7 +75154,7 @@ $RefreshReg$(_c, "AddPaymentMethod");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../store/context":"jkMRf","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","../../components/Icon":"3WqAm","../../components/Checkbox":"ebI0H","../../helpers/hooks":"8wHZG","../helpers/cardBrands":"2O5g8","../helpers/useCheckout":"8ocnj","@stripe/react-stripe-js":"clqT9","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"ebI0H":[function(require,module,exports) {
+},{"react":"a4ork","../store/context":"jkMRf","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","../../components/Icon":"3WqAm","../../components/Checkbox":"ebI0H","../../helpers/hooks":"8wHZG","../helpers/useCheckout":"8ocnj","@stripe/react-stripe-js":"clqT9","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../helpers/cardBrands":"eB4D1"}],"ebI0H":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$49e3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -75200,40 +75200,7 @@ $RefreshReg$(_c, "Checkbox");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"2O5g8":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.getWalletProvider = exports.getBrand = void 0;
-const getBrand = (brand)=>{
-    switch(brand){
-        case 'mastercard':
-            return 'MasterCard';
-        case 'visa':
-            return 'Visa';
-        case 'amex':
-            return 'American Express';
-        case 'discover':
-            return 'Discover';
-        default:
-            return brand;
-    }
-};
-exports.getBrand = getBrand;
-const getWalletProvider = (provider)=>{
-    switch(provider){
-        case 'google-pay':
-        case 'googlePay':
-            return 'Google Pay';
-        case 'apple-pay':
-        case 'applePay':
-            return 'Apple Pay';
-    }
-};
-exports.getWalletProvider = getWalletProvider;
-
-},{}],"8ocnj":[function(require,module,exports) {
+},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8ocnj":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$82d0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -75251,7 +75218,7 @@ var _stripeJs = require("@stripe/stripe-js");
 var _axios = _interopRequireDefault(require("axios"));
 var _config = _interopRequireDefault(require("../../data/config"));
 var _hooks = require("../../helpers/hooks");
-var _cardBrands = require("./cardBrands");
+var _cardBrands = require("../../helpers/cardBrands");
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -75491,7 +75458,7 @@ exports.default = _default;
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../store/context":"jkMRf","@stripe/stripe-js":"7MqGf","axios":"hDAj5","../../data/config":"4k2ZQ","../../helpers/hooks":"8wHZG","./cardBrands":"2O5g8","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"7MqGf":[function(require,module,exports) {
+},{"react":"a4ork","../store/context":"jkMRf","@stripe/stripe-js":"7MqGf","axios":"hDAj5","../../data/config":"4k2ZQ","../../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../helpers/cardBrands":"eB4D1"}],"7MqGf":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "loadStripe", ()=>loadStripe
@@ -75582,7 +75549,40 @@ var loadStripe = function loadStripe1() {
     });
 };
 
-},{"@parcel/transformer-js/src/esmodule-helpers.js":"21r4b"}],"clqT9":[function(require,module,exports) {
+},{"@parcel/transformer-js/src/esmodule-helpers.js":"21r4b"}],"eB4D1":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.getWalletProvider = exports.getBrand = void 0;
+const getBrand = (brand)=>{
+    switch(brand){
+        case 'mastercard':
+            return 'MasterCard';
+        case 'visa':
+            return 'Visa';
+        case 'amex':
+            return 'American Express';
+        case 'discover':
+            return 'Discover';
+        default:
+            return brand;
+    }
+};
+exports.getBrand = getBrand;
+const getWalletProvider = (provider)=>{
+    switch(provider){
+        case 'google-pay':
+        case 'googlePay':
+            return 'Google Pay';
+        case 'apple-pay':
+        case 'applePay':
+            return 'Apple Pay';
+    }
+};
+exports.getWalletProvider = getWalletProvider;
+
+},{}],"clqT9":[function(require,module,exports) {
 (function(global, factory) {
     typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('react')) : typeof define === 'function' && define.amd ? define([
         'exports',

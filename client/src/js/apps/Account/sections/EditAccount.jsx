@@ -27,20 +27,20 @@ const EditProfile = () => {
         }
     } = useContext(AppContext);
 
-    console.log(errCopy);
+    // console.log(errCopy);
 
     // Create Local State
     const [email, setEmail] = useState(user.email);
     const [emailErrs, setEmailErrs] = useState([]);
 
     const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
     const [passwordErrs, setPasswordErrs] = useState([]);
-
-    const [code, setCode] = useState("");
-    const [codeErrs, setCodeErrs] = useState([]);
 
     const errors = {
         email: [...emailErrs, ...validator.checkEmail(email)],
+        password: validator.checkPassword(password),
+        newPassword: [...passwordErrs, ...validator.checkPassword(newPassword)],
     }
 
     return (
@@ -78,9 +78,42 @@ const EditProfile = () => {
 
             <AccountField
                 label={pwd.label}
-                value={user.passwordSet ? "• • • • • • • •" : <span>No Password Set</span>}
+                value="• • • • • • • •"
                 title="Change Your Passwrod"
-            />
+                submit={{
+                    text: "Set New Password",
+                    disabled: errors.password.length || errors.newPassword.length,
+                    data: { password, newPassword },
+                    method: "post",
+                    endpoint: "/auth/update-password",
+                    callback({ error, data, close }) {
+                        if (error) return setPasswordErrs(["FUCK YOU"]);
+                        close && close();
+                    }
+                }}
+            >
+                <Input
+                    id="current-password"
+                    type="password"
+                    label={cPwd.label}
+                    placeholder={cPwd.placeholder}
+                    value={password}
+                    errors={errors.password}
+                    onChange={(val) => setPassword(val)}
+                />
+                <Input
+                    id="new-password"
+                    type="password"
+                    label={nPwd.label}
+                    placeholder={nPwd.placeholder}
+                    value={newPassword}
+                    errors={errors.newPassword}
+                    onChange={(val) => {
+                        setNewPassword(val);
+                        if (passwordErrs.length) setPasswordErrs([]);
+                    }}
+                />
+            </AccountField>
         </div>
     )
 

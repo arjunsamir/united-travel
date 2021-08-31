@@ -162,6 +162,17 @@
         &-title {
             padding-bottom: 1.6rem;
         }
+
+        &--delete {
+            p span {
+                color: var(--jet);
+                font-weight: 700;
+            }
+        }
+
+        &--delete &-title {
+            padding-bottom: 0;
+        }
     }
 
 }
