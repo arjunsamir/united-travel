@@ -5,9 +5,9 @@ import initialState from './initialState';
 const reducer = (state = initialState, action) => {
 
 
-    const merge = (field) => {
-        return Object.assign({}, state, {
-            [field]: action.data
+    const merge = (field, payload, currentState = state) => {
+        return Object.assign({}, currentState, {
+            [field]: payload ?? action.data
         })
     }
 
@@ -27,7 +27,7 @@ const reducer = (state = initialState, action) => {
 
         case 'SET_PAYMENT_METHODS':
         case 'SET_PAYMENTMETHODS':
-            return merge('paymentMethods');
+            return merge('credits', action.data.credits, merge('paymentMethods', action.data.paymentMethods));
         
         case 'SET_EMAIL':
             return merge('email');

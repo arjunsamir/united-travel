@@ -11,8 +11,12 @@ const router = express.Router();
 router.get('/referrals/:code', user.getUserByCode);
 router.patch('/me', auth.getUserIdFromJWT, user.updateMe);
 
-// Create Rout
-router.use(auth.protect);
+
+// Create Route
+router.use(auth.createCustomQuery(
+    async (Model, id) => Model.findById(id).populate('credits')),
+    auth.protect
+);
 router.get('/me/payment-methods', bookingController.listPaymentMethods);
 router.delete('/me/payment-methods/:method', bookingController.deletePaymentMethod);
 

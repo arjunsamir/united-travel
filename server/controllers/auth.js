@@ -41,19 +41,30 @@ const sendToken = (user, status, req, res) => {
 
 const createAccount = async body => {
 
+    // Destructure and Protect Data
     const data = { ...body };
     if (data.role) delete data.role;
-    data.referralCode = encodeURIComponent(`${data.name.replace(/\s+/g, '-').toLowerCase()}-${uniqid.time()}`);
-
-    // Transform data
-    data.email = data.email.toLowerCase();
-    data.name = capitalize.words(data.name);
-    data.passwordSet = !!data.password;
-    if (!data.preferredName) data.preferredName = data.name.split(" ")[0];
-    if (data.photo) data.photos = [data.photo];
-    if (data.referredBy) data.credits = await credits.issue(data.referredBy, data.name);
     
+    // Transform Name
+    data.name = capitalize.words(data.name);
+    if (!data.preferredName) data.preferredName = data.name.split(" ")[0];
+
+    // Handle Login
+    data.email = data.email.toLowerCase();
+    data.passwordSet = !!data.password;
+
+    // Create Referral code
+    data.referralCode = encodeURIComponent(`${data.preferredName.replace(/\s+/g, '-').toLowerCase()}-${uniqid.time()}`);
+    
+    // Manage User Photos
+    if (data.photo) data.photos = [data.photo];
+    else delete data.photo;
+    
+    // Create User
     const user = await User.create(data);
+
+    // Issue Credits
+    await credits.issue(user);
 
     // Send Welcome Email
     sendEmail({
@@ -64,8 +75,6 @@ const createAccount = async body => {
             name: user.preferredName
         }
     });
-
-    console.log('email should have sent');
 
     return user;
 
@@ -80,7 +89,7 @@ const decodeJWT = async (token) => {
 }
 
 
-const findUserByJWT = async (token, selectPassword = false) => {
+const findUserByJWT = async (token, customQuery) => {
 
     const decoded = await decodeJWT(token);
 
@@ -88,8 +97,11 @@ const findUserByJWT = async (token, selectPassword = false) => {
 
     let user;
 
-    if (selectPassword) user = await User.findById(decoded.id).select("+password")
+    if (customQuery) user = await customQuery(User, decoded.id);
     else user = await User.findById(decoded.id)
+
+    // if (selectPassword) user = await User.findById(decoded.id).select("+password")
+    // else user = await User.findById(decoded.id)
 
     if (!user || user.changedPasswordAfter(decoded.iat)) return null;
 
@@ -294,7 +306,7 @@ exports.updatePassword = catchAsync(async (req, res, next) => {
     const { password, newPassword } = req.body;
 
     // Get User
-    const user = await findUserByJWT(req.cookies.jwt, true);
+    const user = await findUserByJWT(req.cookies.jwt, async (Model, id) => Model.findById(id).select('+password'));
 
     // Handle Errors
     if (!user) return send(res, {
@@ -437,7 +449,7 @@ exports.protect = catchAsync(async (req, res, next) => {
     else if (req.cookies.jwt) token = req.cookies.jwt;
     else return next(new AppError('You are not logged in. Please log in to access this route', 401));
 
-    const user = await findUserByJWT(token);
+    const user = await findUserByJWT(token, req.customQuery);
 
     // const data = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
     // const user = await User.findById(data.id);
@@ -451,6 +463,14 @@ exports.protect = catchAsync(async (req, res, next) => {
     next();
 
 });
+
+
+exports.createCustomQuery = (query) => (req, res, next) => {
+
+    req.customQuery = query;
+    next();
+
+}
 
 
 exports.getUserIdFromJWT = catchAsync(async (req, res, next) => {
@@ -468,7 +488,7 @@ exports.getUserIdFromJWT = catchAsync(async (req, res, next) => {
 
 exports.screen = catchAsync(async (req, res, next) => {
 
-    const user = await findUserByJWT(req.cookies.jwt);
+    const user = await findUserByJWT(req.cookies.jwt, req.customQuery);
 
     if (user) {
         req.user = user;

@@ -1058,7 +1058,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../components/Oopsie":"ckamV","./components/Map":"8spew","./components/ReservationDetails":"hFFyc","./AppContext":"6jzOU"}],"a4ork":[function(require,module,exports) {
+},{"react":"a4ork","./AppContext":"6jzOU","../components/Oopsie":"ckamV","./components/Map":"8spew","./components/ReservationDetails":"hFFyc","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"a4ork":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -2719,7 +2719,34 @@ module.exports = shouldUseNative() ? Object.assign : function(target, source) {
     return to;
 };
 
-},{}],"fo4q3":[function(require,module,exports) {
+},{}],"6jzOU":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$8df0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$8df0.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const AppContext = /*#__PURE__*/ _react.default.createContext();
+var _default = AppContext;
+exports.default = _default;
+
+  $parcel$ReactRefreshHelpers$8df0.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"fo4q3":[function(require,module,exports) {
 "use strict";
 var Refresh = require('react-refresh/runtime');
 function debounce(func, delay) {
@@ -2925,7 +2952,7 @@ $RefreshReg$(_c, "Map");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../helpers/useMaps":"fW2j7"}],"fW2j7":[function(require,module,exports) {
+},{"react":"a4ork","../helpers/useMaps":"fW2j7","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"fW2j7":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$faf3 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3221,7 +3248,443 @@ $RefreshReg$(_c1, "ReservationDetails");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","dayjs":"ihFi1","../../helpers/utils":"dGtD3","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS"}],"ihFi1":[function(require,module,exports) {
+},{"react":"a4ork","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS","dayjs":"ihFi1","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"Ea1Vr":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$6173 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$6173.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../AppContext"));
+var _Modal = _interopRequireDefault(require("../../components/Modal"));
+var _Buttons = require("../../components/Buttons");
+var _dayjs = _interopRequireDefault(require("dayjs"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+// Create Component
+const Cancel = ()=>{
+    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default);
+    const user = window.currentUser || {
+    }; // Create Refs and State
+    const modal = _react.useRef();
+    const [showModal, setShowModal] = _react.useState(false);
+    const [isFetching, setIsFetching] = _react.useState(false);
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "booking-view__block"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
+        text: "Cancel Reservation",
+        onClick: ()=>setShowModal(true)
+    }))), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+        isOpen: showModal,
+        closeRef: modal,
+        preventClose: isFetching,
+        close: setShowModal
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__modal animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, "Confirm Cancellation"), /*#__PURE__*/ _react.default.createElement("p", null, "Once you cancel, your original payment will be refunded the full amount within 10 business days."), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Confirm Cancellation",
+        animationClass: "no-animate",
+        showLoader: isFetching,
+        onClick: async ()=>{
+            // Create Visual Animations
+            setIsFetching(true);
+            const timer = $.timer(1000).start(); // Make Request
+            const res = await _axios.default.post('/api/booking/issue-refund', {
+                id: reservation._id,
+                locale: user.preferredLocale || window.locale || 'en',
+                name: user.preferredName,
+                date: _dayjs.default(reservation.schedule.pickup, "MM-DD-YYYY H:mm").format('dddd MMMM D, YYYY')
+            }); // Check Response
+            console.log(res); // Update App
+            updateApp(res.data.reservation); // Wait For Delay
+            await timer.hold();
+            setIsFetching(false); // Close Modal
+            modal.current.close();
+        }
+    })))));
+};
+_c = Cancel;
+var _default = Cancel;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Cancel");
+
+  $parcel$ReactRefreshHelpers$6173.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../AppContext":"6jzOU","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","dayjs":"ihFi1","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"h4i0T":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$5818.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+var _animejs = _interopRequireDefault(require("animejs"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const animateModalOpen = (element)=>{
+    const e = $(element);
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade In Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: [
+            0,
+            1
+        ]
+    }); // Then Fade In Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: [
+            _animejs.default.stagger([
+                100,
+                25
+            ]),
+            0
+        ],
+        opacity: [
+            0,
+            1
+        ],
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    });
+    return tl.finished;
+};
+const animateModalClose = (element)=>{
+    const e = $(element); // Create Anime Timeline
+    const tl = _animejs.default.timeline({
+        easing: 'easeOutQuad',
+        duration: 250
+    }); // First Fade Out Content
+    tl.add({
+        targets: e.children(".animate-item, .animate-children > *").e(),
+        translateY: _animejs.default.stagger([
+            0,
+            -50
+        ]),
+        opacity: 0,
+        delay: _animejs.default.stagger([
+            0,
+            250
+        ])
+    }); // Then Fade Out Window
+    tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: 0
+    }); // Then Fade Out Background
+    tl.add({
+        targets: e.children(".modal__escape").e(),
+        opacity: 0
+    });
+    return tl.finished;
+};
+const Modal = (_ref)=>{
+    let { children , isOpen , close , preventClose , closeRef  } = _ref;
+    // Create Refs & State
+    const [isAnimating, setIsAnimating] = _react.useState(false);
+    const element = _react.useRef(); // Animate Opening And Closing
+    _react.useEffect(()=>{
+        const triggerOpen = async ()=>{
+            if (!element.current || isAnimating) return;
+            setIsAnimating(true);
+            await animateModalOpen(element.current);
+            setIsAnimating(false);
+        };
+        if (isOpen) triggerOpen();
+    }, [
+        isOpen
+    ]); // Create Close Function
+    const closeModal = async ()=>{
+        // Prevent Double Clicking
+        if (isAnimating || preventClose) return; // Update State
+        setIsAnimating(true); // Do Some Animation
+        await animateModalClose(element.current); // Update State
+        setIsAnimating(false); // Close Modal State
+        close(false);
+    }; // Pass Close Function Updwards
+    if (closeRef) closeRef.current = {
+        close: closeModal
+    };
+    return isOpen ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal",
+        ref: element
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__escape",
+        onClick: closeModal
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__window"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__close animate-item",
+        onClick: closeModal
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "close",
+        size: "xl"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "modal__content"
+    }, children))) : null;
+};
+_c = Modal;
+var _default = Modal;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Modal");
+
+  $parcel$ReactRefreshHelpers$5818.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","./Icon":"3WqAm","animejs":"aMVBn","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"3WqAm":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$fde0.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const Icon = (_ref)=>{
+    let { icon , size , color  } = _ref;
+    let classes = 'icon-md';
+    let style = {
+    };
+    if (size) {
+        if (typeof size === 'string') classes = "icon-".concat(size);
+        if (size && typeof size === 'number') style = {
+            height: size + 'rem',
+            width: size + 'rem'
+        };
+    }
+    if (color) {
+        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
+        else classes += " ".concat(color);
+    }
+    return(/*#__PURE__*/ _react.default.createElement("svg", {
+        className: classes,
+        style: style
+    }, /*#__PURE__*/ _react.default.createElement("use", {
+        href: "/img/icons.svg#".concat(icon)
+    })));
+};
+_c = Icon;
+var _default = Icon;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Icon");
+
+  $parcel$ReactRefreshHelpers$fde0.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6z8CS":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$094f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$094f.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+const a = 'animate-item';
+const BackButton = (_ref)=>{
+    let { onClick , text , animationClass , type  } = _ref;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        type: type || "button",
+        className: $.join("back-button", animationClass || a),
+        onClick: onClick
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "arrow-back",
+        size: "sm"
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text || "Back")));
+};
+_c = BackButton;
+exports.BackButton = BackButton;
+const Button = (_ref2)=>{
+    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        className: $.join("button", [
+            theme
+        ], [
+            icon,
+            "with-icon"
+        ], [
+            disabled,
+            "disabled"
+        ], animationClass || a),
+        onClick: onClick,
+        ref: domRef,
+        type: type || "button"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
+        className: "bold"
+    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
+        className: "button__loader"
+    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
+};
+_c1 = Button;
+exports.Button = Button;
+const IconButton = (_ref3)=>{
+    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
+    return(/*#__PURE__*/ _react.default.createElement("button", {
+        id: id,
+        className: $.join("icon-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            className
+        ]),
+        onClick: onClick,
+        ref: domRef
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        color: color,
+        size: size
+    })));
+};
+_c2 = IconButton;
+exports.IconButton = IconButton;
+const LinkButton = (_ref4)=>{
+    let { onClick , href , text , children , domRef , disabled , animationClass , cssClasses  } = _ref4;
+    return(/*#__PURE__*/ _react.default.createElement("a", {
+        href: href,
+        className: $.join("link-button", animationClass || a, [
+            disabled,
+            "disabled"
+        ], [
+            cssClasses
+        ]),
+        ref: domRef,
+        onClick: onClick
+    }, text || children));
+};
+_c3 = LinkButton;
+exports.LinkButton = LinkButton;
+var _c, _c1, _c2, _c3;
+$RefreshReg$(_c, "BackButton");
+$RefreshReg$(_c1, "Button");
+$RefreshReg$(_c2, "IconButton");
+$RefreshReg$(_c3, "LinkButton");
+
+  $parcel$ReactRefreshHelpers$094f.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"ihFi1":[function(require,module,exports) {
 !function(t, e) {
     "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
 }(this, function() {
@@ -3510,470 +3973,7 @@ $RefreshReg$(_c1, "ReservationDetails");
     }, w;
 });
 
-},{}],"Ea1Vr":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$6173 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$6173.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _AppContext = _interopRequireDefault(require("../AppContext"));
-var _Modal = _interopRequireDefault(require("../../components/Modal"));
-var _Buttons = require("../../components/Buttons");
-var _dayjs = _interopRequireDefault(require("dayjs"));
-var _axios = _interopRequireDefault(require("axios"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-// Import Context
-// Import Components
-// Import Helpers
-// Create Component
-const Cancel = ()=>{
-    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default);
-    const user = window.currentUser || {
-    }; // Create Refs and State
-    const modal = _react.useRef();
-    const [showModal, setShowModal] = _react.useState(false);
-    const [isFetching, setIsFetching] = _react.useState(false);
-    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "booking-view__block"
-    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement(_Buttons.LinkButton, {
-        text: "Cancel Reservation",
-        onClick: ()=>setShowModal(true)
-    }))), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
-        isOpen: showModal,
-        closeRef: modal,
-        preventClose: isFetching,
-        close: setShowModal
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__modal animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h4", null, "Confirm Cancellation"), /*#__PURE__*/ _react.default.createElement("p", null, "Once you cancel, your original payment will be refunded the full amount within 10 business days."), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
-        text: "Confirm Cancellation",
-        animationClass: "no-animate",
-        showLoader: isFetching,
-        onClick: async ()=>{
-            // Create Visual Animations
-            setIsFetching(true);
-            const timer = $.timer(1000).start(); // Make Request
-            const res = await _axios.default.post('/api/booking/issue-refund', {
-                id: reservation._id,
-                locale: user.preferredLocale || window.locale || 'en',
-                name: user.preferredName,
-                date: _dayjs.default(reservation.schedule.pickup, "MM-DD-YYYY H:mm").format('dddd MMMM D, YYYY')
-            }); // Check Response
-            console.log(res); // Update App
-            updateApp(res.data.reservation); // Wait For Delay
-            await timer.hold();
-            setIsFetching(false); // Close Modal
-            modal.current.close();
-        }
-    })))));
-};
-_c = Cancel;
-var _default = Cancel;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Cancel");
-
-  $parcel$ReactRefreshHelpers$6173.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","axios":"hDAj5","../AppContext":"6jzOU","dayjs":"ihFi1"}],"h4i0T":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$5818 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$5818.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireWildcard(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-var _animejs = _interopRequireDefault(require("animejs"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-function _getRequireWildcardCache() {
-    if (typeof WeakMap !== "function") return null;
-    var cache = new WeakMap();
-    _getRequireWildcardCache = function _getRequireWildcardCache1() {
-        return cache;
-    };
-    return cache;
-}
-function _interopRequireWildcard(obj) {
-    if (obj && obj.__esModule) return obj;
-    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
-        default: obj
-    };
-    var cache = _getRequireWildcardCache();
-    if (cache && cache.has(obj)) return cache.get(obj);
-    var newObj = {
-    };
-    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
-    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
-        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
-        else newObj[key] = obj[key];
-    }
-    newObj.default = obj;
-    if (cache) cache.set(obj, newObj);
-    return newObj;
-}
-const animateModalOpen = (element)=>{
-    const e = $(element);
-    const tl = _animejs.default.timeline({
-        easing: 'easeOutQuad',
-        duration: 250
-    }); // First Fade In Background
-    tl.add({
-        targets: e.children(".modal__escape").e(),
-        opacity: [
-            0,
-            1
-        ]
-    }); // Then Fade In Window
-    tl.add({
-        targets: e.children(".modal__window").e(),
-        opacity: [
-            0,
-            1
-        ]
-    }); // Then Fade In Content
-    tl.add({
-        targets: e.children(".animate-item, .animate-children > *").e(),
-        translateY: [
-            _animejs.default.stagger([
-                100,
-                25
-            ]),
-            0
-        ],
-        opacity: [
-            0,
-            1
-        ],
-        delay: _animejs.default.stagger([
-            0,
-            250
-        ])
-    });
-    return tl.finished;
-};
-const animateModalClose = (element)=>{
-    const e = $(element); // Create Anime Timeline
-    const tl = _animejs.default.timeline({
-        easing: 'easeOutQuad',
-        duration: 250
-    }); // First Fade Out Content
-    tl.add({
-        targets: e.children(".animate-item, .animate-children > *").e(),
-        translateY: _animejs.default.stagger([
-            0,
-            -50
-        ]),
-        opacity: 0,
-        delay: _animejs.default.stagger([
-            0,
-            250
-        ])
-    }); // Then Fade Out Window
-    tl.add({
-        targets: e.children(".modal__window").e(),
-        opacity: 0
-    }); // Then Fade Out Background
-    tl.add({
-        targets: e.children(".modal__escape").e(),
-        opacity: 0
-    });
-    return tl.finished;
-};
-const Modal = (_ref)=>{
-    let { children , isOpen , close , preventClose , closeRef  } = _ref;
-    // Create Refs & State
-    const [isAnimating, setIsAnimating] = _react.useState(false);
-    const element = _react.useRef(); // Animate Opening And Closing
-    _react.useEffect(()=>{
-        const triggerOpen = async ()=>{
-            if (!element.current || isAnimating) return;
-            setIsAnimating(true);
-            await animateModalOpen(element.current);
-            setIsAnimating(false);
-        };
-        if (isOpen) triggerOpen();
-    }, [
-        isOpen
-    ]); // Create Close Function
-    const closeModal = async ()=>{
-        // Prevent Double Clicking
-        if (isAnimating || preventClose) return; // Update State
-        setIsAnimating(true); // Do Some Animation
-        await animateModalClose(element.current); // Update State
-        setIsAnimating(false); // Close Modal State
-        close(false);
-    }; // Pass Close Function Updwards
-    if (closeRef) closeRef.current = {
-        close: closeModal
-    };
-    return isOpen ? /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal",
-        ref: element
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__escape",
-        onClick: closeModal
-    }), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__window"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__close animate-item",
-        onClick: closeModal
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "close",
-        size: "xl"
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "modal__content"
-    }, children))) : null;
-};
-_c = Modal;
-var _default = Modal;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Modal");
-
-  $parcel$ReactRefreshHelpers$5818.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./Icon":"3WqAm","animejs":"aMVBn"}],"3WqAm":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$fde0.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Icon = (_ref)=>{
-    let { icon , size , color  } = _ref;
-    let classes = 'icon-md';
-    let style = {
-    };
-    if (size) {
-        if (typeof size === 'string') classes = "icon-".concat(size);
-        if (size && typeof size === 'number') style = {
-            height: size + 'rem',
-            width: size + 'rem'
-        };
-    }
-    if (color) {
-        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
-        else classes += " ".concat(color);
-    }
-    return(/*#__PURE__*/ _react.default.createElement("svg", {
-        className: classes,
-        style: style
-    }, /*#__PURE__*/ _react.default.createElement("use", {
-        href: "/img/icons.svg#".concat(icon)
-    })));
-};
-_c = Icon;
-var _default = Icon;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Icon");
-
-  $parcel$ReactRefreshHelpers$fde0.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6z8CS":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$094f = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$094f.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.LinkButton = exports.IconButton = exports.Button = exports.BackButton = void 0;
-var _react = _interopRequireDefault(require("react"));
-var _Icon = _interopRequireDefault(require("./Icon"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const a = 'animate-item';
-const BackButton = (_ref)=>{
-    let { onClick , text , animationClass , type  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        type: type || "button",
-        className: $.join("back-button", animationClass || a),
-        onClick: onClick
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: "arrow-back",
-        size: "sm"
-    }), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "bold"
-    }, text || "Back")));
-};
-_c = BackButton;
-exports.BackButton = BackButton;
-const Button = (_ref2)=>{
-    let { onClick , text , icon , theme , domRef , type , disabled , animationClass , showLoader  } = _ref2;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        className: $.join("button", [
-            theme
-        ], [
-            icon,
-            "with-icon"
-        ], [
-            disabled,
-            "disabled"
-        ], animationClass || a),
-        onClick: onClick,
-        ref: domRef,
-        type: type || "button"
-    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon
-    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("p", {
-        className: "bold"
-    }, text), showLoader && /*#__PURE__*/ _react.default.createElement("p", {
-        className: "button__loader"
-    }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))));
-};
-_c1 = Button;
-exports.Button = Button;
-const IconButton = (_ref3)=>{
-    let { onClick , icon , color , animationClass , domRef , size , disabled , id , className  } = _ref3;
-    return(/*#__PURE__*/ _react.default.createElement("button", {
-        id: id,
-        className: $.join("icon-button", animationClass || a, [
-            disabled,
-            "disabled"
-        ], [
-            className
-        ]),
-        onClick: onClick,
-        ref: domRef
-    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-        icon: icon,
-        color: color,
-        size: size
-    })));
-};
-_c2 = IconButton;
-exports.IconButton = IconButton;
-const LinkButton = (_ref4)=>{
-    let { onClick , href , text , children , domRef , disabled , animationClass , cssClasses  } = _ref4;
-    return(/*#__PURE__*/ _react.default.createElement("a", {
-        href: href,
-        className: $.join("link-button", animationClass || a, [
-            disabled,
-            "disabled"
-        ], [
-            cssClasses
-        ]),
-        ref: domRef,
-        onClick: onClick
-    }, text || children));
-};
-_c3 = LinkButton;
-exports.LinkButton = LinkButton;
-var _c, _c1, _c2, _c3;
-$RefreshReg$(_c, "BackButton");
-$RefreshReg$(_c1, "Button");
-$RefreshReg$(_c2, "IconButton");
-$RefreshReg$(_c3, "LinkButton");
-
-  $parcel$ReactRefreshHelpers$094f.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"6jzOU":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$8df0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$8df0.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const AppContext = /*#__PURE__*/ _react.default.createContext();
-var _default = AppContext;
-exports.default = _default;
-
-  $parcel$ReactRefreshHelpers$8df0.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"krKvU":[function(require,module,exports) {
+},{}],"krKvU":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8839 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

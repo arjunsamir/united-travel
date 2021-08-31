@@ -6,6 +6,7 @@ import AppContext from '../store/AppContext';
 // Import Components
 import AccountPage from '../components/AccountPage';
 import PaymentMethod from '../components/PaymentMethod';
+import RideCredit from '../components/RideCredit';
 import Modal from '../../components/Modal';
 import { Button } from '../../components/Buttons';
 
@@ -17,7 +18,7 @@ import { getBrand } from '../../helpers/cardBrands';
 const Wallet = () => {
 
     // Destructure Global State
-    const { state: { paymentMethods }, update } = useContext(AppContext);
+    const { state: { paymentMethods, credits }, update } = useContext(AppContext);
 
     // Create Local State
     const [isFetching, setIsFetching] = useState(!paymentMethods);
@@ -58,7 +59,10 @@ const Wallet = () => {
             await timer.hold();
 
             // Set State
-            update("payment_methods")(res.data?.paymentMethods || []);
+            update("payment_methods")({
+                paymentMethods: res.data?.paymentMethods || [],
+                credits: res.data?.credits || []
+            });
             setIsFetching(false);
 
         };
@@ -66,6 +70,8 @@ const Wallet = () => {
         if (!paymentMethods) fetchPaymentMethods();
 
     }, [])
+
+    console.log(credits);
 
 
     return (
@@ -90,7 +96,12 @@ const Wallet = () => {
             
             <div className="account__fields animate-children">
                 <h5>Ride Credits</h5>
-                <p className="small">Looks like you don't have fucking shit you wanker</p>
+                {credits && credits.length > 0 && credits.map((credit, i) => (
+                    <RideCredit
+                        key={credit?.id || i}
+                        credit={credit}
+                    />
+                ))}
             </div>
 
             <Modal

@@ -537,12 +537,13 @@ exports.listPaymentMethods = catchAsync(async (req, res, next) => {
    // Handle Errors
    if (!customer || !paymentMethods) return send(res, {
        status: 'ERROR'
-   }) 
+   });
 
     // Return Response
     send(res, {
         status: 'SUCCESS',
-        paymentMethods
+        paymentMethods,
+        credits: req.user.credits
     })
 
 });

@@ -7,7 +7,7 @@ export default class Scroll {
         const isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
         const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
 
-        this.scrollMultiplier = isMac && isFirefox ? 4.8 : 1.2;
+        this.scrollMultiplier = isMac && isFirefox ? 1.6 : 1.2;
         this.smoothScrollMultiplier = .18;
         this.scrollEase = [0.00, 0.28, 1.00, 0.69];
         this.lerp = .2;

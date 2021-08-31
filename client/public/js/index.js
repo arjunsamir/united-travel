@@ -4434,7 +4434,7 @@ class Scroll {
     constructor(page){
         const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
         const isFirefox = navigator.userAgent.toLowerCase().indexOf('firefox') > -1;
-        this.scrollMultiplier = isMac && isFirefox ? 4.8 : 1.2;
+        this.scrollMultiplier = isMac && isFirefox ? 1.6 : 1.2;
         this.smoothScrollMultiplier = 0.18;
         this.scrollEase = [
             0,

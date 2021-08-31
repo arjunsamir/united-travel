@@ -36,16 +36,6 @@ exports.updateMe = catchAsync(async (req, res, next) => {
     
 });
 
-
-exports.updatePassword = catchAsync(async (req, res, next) => {
-    
-});
-
-
-exports.deleteMe = catchAsync(async (req, res, next) => {
-    
-});
-
 exports.getUserByCode = catchAsync(async (req, res, next) => {
     const code = req.params.code;
 
