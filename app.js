@@ -30,8 +30,6 @@ const uploadRouter = require('./server/routes/uploadRoutes');
 const adminRouter = require('./server/routes/adminRoutes');
 
 
-
-
 // 2. CREATE EXPRESS APPLICATION
 const app = express();
 app.use(cors())

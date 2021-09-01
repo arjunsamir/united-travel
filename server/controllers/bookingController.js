@@ -13,6 +13,7 @@ const Reservation = require('../models/reservation');
 const send = require('../utils/sendResponse');
 const catchAsync = require('../utils/catchAsync');
 const sendEmail = require('../utils/sendEmail');
+const APIFeatures = require('../utils/apiFeatures');
 const uniqid = require('uniqid');
 const dayjs = require('dayjs');
 require('dayjs/locale/es');
@@ -399,7 +400,9 @@ exports.createPayment = catchAsync(async (req, res, next) => {
             applied_credits
         },
         status: 'pending',
-        code: uniqid.time()
+        code: uniqid.time(),
+        created_at: Date.now(),
+        reminderSent: false
     });
 
     // Send Response
@@ -567,6 +570,20 @@ exports.deletePaymentMethod = catchAsync(async (req, res, next) => {
         status: 'SUCCESS',
         paymentMethods,
         paymentMethod
+    })
+
+});
+
+
+// Admin Reservations
+exports.getReservations = catchAsync(async (req, res, next) => {
+
+    // Retrieve
+
+    send(res, {
+        status: 'SUCCESS',
+        page: 1,
+        limit: 20,
     })
 
 });

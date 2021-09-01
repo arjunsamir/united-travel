@@ -91,10 +91,9 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.ObjectId,
         ref: 'User'
     },
-    created_at: {
-        type: Date,
-        default: Date.now()
-    }
+    created_at: Date,
+    scheduledComplete: Date,
+    reminderSent: Boolean
 });
 
 

@@ -2936,6 +2936,8 @@ const reducer = function reducer1() {
             return merge('page');
         case 'SET_VIEW':
             return merge('view');
+        case 'SET_RESERVATIONS':
+            return merge('reservations');
     }
 };
 var _default = reducer;
@@ -4606,6 +4608,10 @@ const Nav = ()=>{
         icon: "car",
         label: "Vehicles",
         name: "Vehicles"
+    }), /*#__PURE__*/ _react.default.createElement(NavItem, {
+        icon: "star-outline",
+        label: "Reviews",
+        name: "Reviews"
     })))));
 };
 _c1 = Nav;

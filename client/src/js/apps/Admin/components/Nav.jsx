@@ -48,6 +48,11 @@ const Nav = () => {
                         label="Vehicles"
                         name="Vehicles"
                     />
+                    <NavItem
+                        icon="star-outline"
+                        label="Reviews"
+                        name="Reviews"
+                    />
                 </div>
             </div>
         </div>

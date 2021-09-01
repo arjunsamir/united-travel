@@ -8,6 +8,10 @@ const dotenv = require('dotenv');
 const devcert = require('devcert');
 
 
+// Cron Jobs
+const cron = require('./server/utils/cron');
+
+
 
 // 2. IMPORT ENVIORNMENT & START SERVER
 
@@ -39,8 +43,12 @@ mongoose.connect(process.env.DB, {
     useCreateIndex: true,
     useFindAndModify: false
 })
-.then(() => console.log('🙏🏾DB Connection Succesful'))
-.catch(err => console.log(err));
+.catch(err => console.log(err))
+.then(() => {
+    console.log('🙏🏾DB Connection Succesful');
+    cron();
+});
+
 
 
 

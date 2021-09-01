@@ -18,6 +18,9 @@ const reducer = (state = initialState, action) => {
         case 'SET_VIEW':
             return merge('view');
 
+        case 'SET_RESERVATIONS':
+            return merge('reservations');
+
     }
 
 
