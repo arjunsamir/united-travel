@@ -2344,6 +2344,33 @@ svg.placeholder, .icon.placeholder {
 .modal__content {
   width: var(--modal-content-width);
 }
+.ride-credit {
+  border-radius: 1.2rem;
+  display: flex;
+  align-items: center;
+  padding: 2.4rem;
+}
+.ride-credit > *:not(:last-child) {
+  margin-right: 2.4rem;
+}
+.ride-credit p {
+  color: var(--white);
+  line-height: 1.3;
+}
+.ride-credit p:first-child {
+  margin-bottom: 0.4rem;
+}
+.ride-credit.valid {
+  background-color: var(--success);
+}
+.ride-credit.pending {
+  background-color: var(--primary);
+}
+.ride-credit.redeemed, .ride-credit.expired {
+  background-color: var(--placeholder);
+  -webkit-filter: opacity(50%);
+          filter: opacity(50%);
+}
 .hero {
   height: 100vh;
   width: 100%;
@@ -2392,7 +2419,6 @@ svg.placeholder, .icon.placeholder {
 }
 @media (max-width: 37.5em) {
   .hero__content {
-    align-items: flex-start;
     padding: var(--y-pad) var(--x-pad);
   }
 }
@@ -2409,6 +2435,7 @@ svg.placeholder, .icon.placeholder {
 @media (max-width: 37.5em) {
   .hero__content h1 {
     font-size: 4.9rem;
+    text-align: center;
   }
   .hero__content h1 span:not(:last-child)::before {
     content: "\a";
@@ -3762,20 +3789,52 @@ svg.placeholder, .icon.placeholder {
   --visual-width: 45vw;
   --content-width: 55vw;
 }
-.account__container {
+@media (max-width: 75em) {
+  .account {
+    --visual-width: 38vw;
+    --content-width: 62vw;
+  }
+}
+@media (max-width: 56.25em) {
+  .account {
+    --visual-width: 100vw;
+    --content-width: 100vw;
+  }
+}
+.account__content {
+  position: relative;
+  width: 100%;
+  max-width: 44rem;
+}
+.account__content > *:not(:last-child) {
+  margin-bottom: 5.6rem;
+}
+.account__main {
+  position: relative;
   padding: 20rem 4.8rem;
   width: var(--content-width);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
-.account__content {
-  width: 100%;
-  max-width: 44rem;
+@media (max-width: 56.25em) {
+  .account__main {
+    margin-top: 25vh;
+    background-color: var(--white);
+    padding: var(--y-pad) var(--x-pad) 25rem;
+    border-top-right-radius: 3.6rem;
+    border-top-left-radius: 3.6rem;
+    min-height: 100vh;
+    justify-content: flex-start;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.08), 0px 0px 12.5px rgba(0, 0, 0, 0.06), 0px 0px 25px rgba(0, 0, 0, 0.04);
+  }
 }
-.account__content > *:not(:last-child) {
-  margin-bottom: 5.6rem;
+@media (max-width: 37.5em) {
+  .account__main {
+    padding: 6.4rem var(--x-pad) 25rem;
+  }
 }
 .account__title {
   font-weight: 300;
@@ -3805,6 +3864,11 @@ svg.placeholder, .icon.placeholder {
   justify-content: center;
   align-items: center;
   padding-bottom: 4.8rem;
+}
+@media (max-width: 37.5em) {
+  .account__nav {
+    padding: 0 var(--x-pad) 3.6rem;
+  }
 }
 .account__group > *:not(:last-child) {
   margin-bottom: 3.6rem;
@@ -3910,6 +3974,16 @@ svg.placeholder, .icon.placeholder {
 .account__modal--delete .account__modal-title {
   padding-bottom: 0;
 }
+@media (max-width: 37.5em) {
+  .account__qr {
+    padding-top: 4.8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+  }
+}
 .account-nav {
   background-color: var(--jet);
   padding: 1.6rem 6.4rem;
@@ -3920,11 +3994,26 @@ svg.placeholder, .icon.placeholder {
       -ms-user-select: none;
           user-select: none;
 }
+@media (max-width: 37.5em) {
+  .account-nav {
+    width: 100%;
+    padding: 1.6rem 2.4rem;
+  }
+}
 .account-nav__items {
   display: flex;
 }
 .account-nav__items > *:not(:last-child) {
   margin-right: 2.4rem;
+}
+@media (max-width: 37.5em) {
+  .account-nav__items {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+  }
+  .account-nav__items > *:not(:last-child) {
+    margin-right: 0;
+  }
 }
 .account-nav__item {
   width: 10rem;
@@ -3933,6 +4022,11 @@ svg.placeholder, .icon.placeholder {
   justify-content: center;
   align-items: center;
   cursor: pointer;
+}
+@media (max-width: 37.5em) {
+  .account-nav__item {
+    width: unset;
+  }
 }
 .account-nav__item p {
   color: inherit;

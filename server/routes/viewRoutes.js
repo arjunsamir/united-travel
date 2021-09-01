@@ -28,6 +28,7 @@ module.exports = lang => {
     router.get('/terms', render(views, 'terms'));
     router.get('/navbar', render(views, 'navbar'));
     router.get('/reservations/:code', render(views, 'reservation'))
+    router.get('/admin', auth.screen, auth.restrictAndRedirect(`${prefix}/login`, 'admin'), render(views, 'admin'));
     
     return router;
 

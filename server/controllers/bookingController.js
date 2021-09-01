@@ -527,7 +527,6 @@ exports.getReservation = catchAsync(async (req, res, next) => {
 });
 
 
-
 // List Payment Methods
 exports.listPaymentMethods = catchAsync(async (req, res, next) => {
 
@@ -549,6 +548,7 @@ exports.listPaymentMethods = catchAsync(async (req, res, next) => {
 });
 
 
+// Remove/Detach A Payment Method
 exports.deletePaymentMethod = catchAsync(async (req, res, next) => {
 
     // Detach Payment Method

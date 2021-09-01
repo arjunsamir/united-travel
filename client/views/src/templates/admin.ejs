@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="booking-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="admin">
+
+        <!-- Fleet React App -->
+        <div id="admin-react-app"></div>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+    <!-- Deliver Full Settings JSON -->
+    <script>
+        window.fullSettings = JSON.parse('{{ JSON.stringify(fullSettings) }}');
+    </script>
+
+</body>
+
+</html

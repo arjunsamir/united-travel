@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - United Travel LLC</title>
+
+  <!-- Main Style -->
+  <link rel="stylesheet" type="text/css" href="/style/main.css">
+  
+  <!-- Fonts -->
+  <link rel="stylesheet" type="text/css" href="/fonts/silka.css">
+
+</head>
+
+<body class="booking-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <section class="preloader" id="preloader">
+    <div class="preloader__content">
+        <svg><use href="/img/icons.svg#logo"></use></svg>
+        <span class="preloader__spinner"></span>
+    </div>
+</section>
+
+    <!-- Navbar -->
+    <!--NBCTN-->
+<div class="navbar full" id="navbar">
+
+    <div class="nb-esc no-esc"></div>
+
+    <!-- Desktop Navbar -->
+    <div class="navbar__full">
+
+        <div class="navbar__background"></div>
+
+        <a class="navbar__brand" href="/">
+            <svg><use href="/img/icons.svg#logo"></use></svg>
+            <span>United Travel</span>
+        </a>
+
+        <nav class="navbar__nav" aria-label="desktop">
+            <ul class="navbar__nav-list">
+    <li class="animate-item"><a href="/" data-nav-namespace="home">Home</a></li>
+    <li class="animate-item"><a href="/about" data-nav-namespace="about">About</a></li>
+    <li class="animate-item"><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li class="animate-item"><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+    
+</ul>
+        </nav>
+
+        <div class="navbar__actions">
+            <!-- Language -->
+            <div class="navbar__lang">
+                <div class="navbar__lang-icon nb-lng">
+                    <svg><use href="/img/icons.svg#language"></use></svg>
+                </div>
+                
+                <div class="navbar__lang-menu hidden">
+                    <ul>
+                        <li data-nav-lang="en" class="active"><p class="small">English</p></li>
+                        <li data-nav-lang="es" class=""><p class="small">Español</p></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- Divider -->
+            <hr>
+
+            <!-- Profile Logged In -->
+            <% if (user._id) { %>
+                <div class="navbar__profile">
+
+                    <!-- Logged In Icon -->
+                    <div class="navbar__profile-pic nb-clt">
+                        <img src="<%- user.photo %>" alt="Profile Photo">
+                    </div>
+
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><p class="small">Hello <%- user.preferredName %></p></li>
+                            <hr>
+                            <li><a href="/account"><span>My account</span></a></li>
+                            <li><a class="app-logout" href="#" id="nb-logout"><span>Log out</span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            <% } else { %>
+                <div class="navbar__profile">
+
+                    <!-- Logged Out Icon -->
+                    <svg class="navbar__profile-icon nb-clt"><use href="/img/icons.svg#person-circle"></use></svg>
+                    
+                    <div class="navbar__profile-menu hidden">
+                        <ul>
+                            <li><a href="/login"><span>Create account</span></a></li>
+                            <li><a href="/login"><span>Login</span></a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            <% } %>
+
+            <!-- Call To Action -->
+            <a href="/book" class="navbar__cta">Book Now</a>
+        </div>
+
+    </div>
+
+    <!-- Hamburger Menu Only -->
+    <div class="navbar__min">
+        <div class="navbar__menu-icon">
+            <span></span>
+            <span></span>
+        </div>
+    </div>
+    
+</div>
+
+<div class="nav-menu hidden" id="nav-menu">
+
+    <!-- Menu Background -->
+    <div class="nav-menu__bg"></div>
+
+    <!-- Desktop Menu Layout -->
+    <div class="nav-menu__desktop">
+
+        <div class="nav-menu__visual">
+
+            <!-- Absolutely Positioned Nav menu -->
+            <div class="nav-menu__image">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/menu-visual.png" alt="Mercedes driving in fog">
+            </div>
+
+            <!-- Branding -->
+            <a href="/" class="nav-menu__brand">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+                <span class="h5">United Travel</span>
+            </a>
+
+            <!-- Log In Card -->
+            <div class="user-acct">
+
+                <!-- Backgronud -->
+                <div class="user-acct__bg"></div>
+
+                <% if (user._id) { %>
+                    <div class="user-acct__photo">
+                        <img src="<%- user.photo %>" alt="profile photo" />
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Hello <%- user.preferredName %></h6>
+                        <div>
+                            <a href="/account">My account</a>
+                            <hr>
+                            <a href="#" class="app-logout">Log out</a>
+                        </div>
+                    </div>
+                <% } else { %>
+                    <div class="user-acct__icon">
+                        <svg class="icon-xl"><use href="/img/icons.svg#person-circle"></use></svg>
+                    </div>
+
+                    <div class="user-acct__content">
+                        <h6 class="bold">Welcome Traveller</h6>
+                        <div>
+                            <a href="/login">Create account</a>
+                            <hr>
+                            <a href="/login">Login</a>
+                        </div>
+                    </div>
+                <% } %>
+
+            </div>
+
+        </div>
+        
+        <div class="nav-menu__content">
+
+            <nav aria-label="desktop hamburger">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/" data-nav-namespace="home">Home</a></li>
+    <li class="animate-item"><a href="/about" data-nav-namespace="about">About</a></li>
+    <li class="animate-item"><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li class="animate-item"><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+    
+</ul>
+            </nav>
+
+            <div class="nav-menu__cta">
+                <div class="content">
+                    <h4 class="white animate-item">Ready to book?</h4>
+                    <p class="small animate-item">Ready to book a ride for your next trip to Orlando? You can book your ride online using our online booking system.</p>
+                    <a href="/book" class="btn-pill filled primary animate-item">Book Now </a>
+                </div>
+            </div>
+
+            <div class="nav-menu__lang">
+                <svg class="icon-md animate-item"><use href="/img/icons.svg#language"></use></svg>
+                <ul>
+                    <li data-nav-lang="en" class="animate-item  active"><h5>English</h5></li>
+                    <li data-nav-lang="es" class="animate-item "><h5>Español</h5></li>
+                </ul>
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="nav-menu__mobile">
+
+        <div class="nav-menu__content">
+            <a href="/" class="nav-menu__brand animate-item">
+                <svg><use href="/img/icons.svg#logo"></use></svg>
+            </a>
+    
+            <nav aria-label="mobile">
+                <ul class="nav-menu__list">
+    <li class="animate-item"><a href="/" data-nav-namespace="home">Home</a></li>
+    <li class="animate-item"><a href="/about" data-nav-namespace="about">About</a></li>
+    <li class="animate-item"><a href="/fleet" data-nav-namespace="fleet">Fleet</a></li>
+    <li class="animate-item"><a href="/contact" data-nav-namespace="contact">Contact</a></li>
+    
+        <li class="animate-item"><a href="/book" data-nav-namespace="booking">Book Now</a></li>
+    
+</ul>
+            </nav>
+    
+            <div class="nav-menu__account">
+                <% if (user._id) { %>
+                    <h5 class="white animate-item">Hello <%- user.preferredName %></h5>
+                    <div>
+                        <a class="animate-item" href="/account">My account</a>
+                        <a class="animate-item app-logout" href="#">Log out</a>
+                    </div>
+                <% } else { %>
+                    <h5 class="white animate-item">Welcome Traveller</h5>
+                    <div>
+                        <a class="animate-item" href="/login">Create account</a>
+                        <a class="animate-item" href="/login">Login</a>
+                    </div>
+                <% } %>
+            </div>
+    
+            <ul class="nav-menu__lang">
+                <li data-nav-lang="en" class="animate-item active"><h5>English</h5></li>
+                <li data-nav-lang="es" class="animate-item"><h5>Español</h5></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+<!--NBCTN-->
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="admin">
+
+        <!-- Fleet React App -->
+        <div id="admin-react-app"></div>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <!-- Decalre Global Locale -->
+<script>
+    window.locale = "en";
+    window.currentUser = JSON.parse('<%- JSON.stringify(user) %>');
+    window.settings = JSON.parse('<%- JSON.stringify(settings) %>');
+</script>
+
+<!-- External JavaScript Links -->
+<script src="/js/index.js"></script> 
+
+    <!-- Deliver Full Settings JSON -->
+    <script>
+        window.fullSettings = JSON.parse('<%- JSON.stringify(fullSettings) %>');
+    </script>
+
+</body>
+
+</html

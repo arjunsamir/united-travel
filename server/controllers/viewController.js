@@ -59,6 +59,13 @@ class Views {
         this.render(res, 'navbar');
     }
 
+    async admin(req, res) {
+        await this.getSettings();
+        this.render(res, 'admin', {
+            fullSettings: this.settings
+        });
+    }
+
     async reservation(req, res) {
         this.render(res, 'reservation', {
             confirmationCode: (req.params.code || "").toLowerCase()

@@ -451,14 +451,7 @@ exports.protect = catchAsync(async (req, res, next) => {
 
     const user = await findUserByJWT(token, req.customQuery);
 
-    // const data = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    // const user = await User.findById(data.id);
-
-    // if (!user) return next(new AppError('This user does not exist', 401));
-    // if (user.changedPasswordAfter(data.iat)) return next(new AppError('The password on this account was changed. Please log in again'));
-
     req.user = user;
-    // //res.locals.user = user; // For PUG templates
 
     next();
 
@@ -507,6 +500,17 @@ exports.restrictTo = (...roles) => {
         next();
     }
     
+}
+
+
+exports.restrictAndRedirect = (target, ...roles) => {
+
+    return (req, res, next) => {
+        if (!req.user) return res.redirect(target);
+        if (!roles.includes(req.user.role)) return res.redirect(target);
+        else next();
+    }
+
 }
 
 

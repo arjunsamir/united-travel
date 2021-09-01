@@ -1,0 +1,34 @@
+.ride-credit {
+
+    border-radius: 1.2rem;
+
+    display: flex;
+    align-items: center;
+    @include flexGap(2.4rem);
+
+    padding: 2.4rem;
+
+    p {
+        color: var(--white);
+        line-height: 1.3;
+
+        &:first-child {
+            margin-bottom: .4rem;
+        }
+    }
+
+    &.valid {
+        background-color: var(--success);
+    }
+
+    &.pending {
+        background-color: var(--primary);
+    }
+
+    &.redeemed, &.expired {
+
+        background-color: var(--placeholder);
+        filter: opacity(50%);
+    }
+
+}

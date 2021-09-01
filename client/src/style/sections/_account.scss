@@ -3,20 +3,45 @@
     --visual-width: 45vw;
     --content-width: 55vw;
 
-    &__container {
-        
-        padding: 20rem 4.8rem;
-        width: var(--content-width);
-
-        @include flexCenter;
-
+    @include ipadPro {
+        --visual-width: 38vw;
+        --content-width: 62vw;
+    }
+    @include ipad {
+        --visual-width: 100vw;
+        --content-width: 100vw;
     }
 
     &__content {
+        position: relative;
         width: 100%;
         max-width: 44rem;
 
         @include blockGap(5.6rem);
+    }
+
+    &__main {
+        position: relative;
+        padding: 20rem 4.8rem;
+        width: var(--content-width);
+
+        @include flexCenter;
+        position: relative;
+
+        @include ipad {
+            margin-top: 25vh;
+            background-color: var(--white);
+            padding: var(--y-pad) var(--x-pad) 25rem;
+            border-top-right-radius: 3.6rem;
+            border-top-left-radius: 3.6rem;
+            min-height: 100vh;
+            justify-content: flex-start;
+            box-shadow: $soft-shadow;
+        }
+
+        @include phone {
+            padding: 6.4rem var(--x-pad) 25rem;
+        }
     }
 
     &__title {
@@ -48,6 +73,10 @@
         width: var(--content-width);
         @include flexCenter;
         padding-bottom: 4.8rem;
+
+        @include phone {
+            padding: 0 var(--x-pad) 3.6rem;
+        }
     }
 
     &__group {
@@ -175,6 +204,14 @@
         }
     }
 
+    &__qr {
+        @include phone {
+            padding-top: 4.8rem;
+            @include flexCenter;
+            width: 100%;
+        }
+    }
+
 }
 
 
@@ -186,9 +223,20 @@
     box-shadow: $soft-shadow;
     user-select: none;
 
+    @include phone {
+        width: 100%;
+        padding: 1.6rem 2.4rem;
+    }
+
     &__items {
         display: flex;
         @include flexGap(2.4rem);
+
+        @include phone {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            @include flexGap(0);
+        }
     }
 
     &__item {
@@ -199,6 +247,10 @@
         align-items: center;
 
         cursor: pointer;
+
+        @include phone {
+            width: unset;
+        }
 
         p {
             color: inherit;

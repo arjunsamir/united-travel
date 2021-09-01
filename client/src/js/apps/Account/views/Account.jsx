@@ -35,8 +35,10 @@ const Account = () => {
     return (
         <div className="account">
             <div className="account__container">
-                <Page />
                 <Visual />
+                <div className="account__main">
+                    <Page />
+                </div>
             </div>
             <Nav />
         </div>

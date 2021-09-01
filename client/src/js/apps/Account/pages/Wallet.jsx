@@ -18,7 +18,7 @@ import { getBrand } from '../../helpers/cardBrands';
 const Wallet = () => {
 
     // Destructure Global State
-    const { state: { paymentMethods, credits }, update } = useContext(AppContext);
+    const { state: { paymentMethods, credits }, update, appCopy } = useContext(AppContext);
 
     // Create Local State
     const [isFetching, setIsFetching] = useState(!paymentMethods);
@@ -43,6 +43,8 @@ const Wallet = () => {
         modal.current.close();
 
     }
+
+    console.log(appCopy);
 
     // Load Payment Methods
     useEffect(() => {
@@ -70,9 +72,6 @@ const Wallet = () => {
         if (!paymentMethods) fetchPaymentMethods();
 
     }, [])
-
-    console.log(credits);
-
 
     return (
         <AccountPage showLoader={isFetching}>

@@ -34,7 +34,6 @@
         @include flexGap(1.2rem, "column");
 
         @include phone {
-            align-items: flex-start;
             padding : var(--y-pad) var(--x-pad);
         }
         
@@ -52,6 +51,7 @@
             @include phone {
 
                 font-size: $h2;
+                text-align: center;
 
                 span:not(:last-child)::before {
                     content: "\A";
