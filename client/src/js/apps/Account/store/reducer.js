@@ -4,7 +4,6 @@ import initialState from './initialState';
 // Create Reducer
 const reducer = (state = initialState, action) => {
 
-
     const merge = (field, payload, currentState = state) => {
         return Object.assign({}, currentState, {
             [field]: payload ?? action.data
@@ -46,7 +45,6 @@ const reducer = (state = initialState, action) => {
         case 'SET_PHOTO':
             return merge('photo');
     }
-
 
 }
 

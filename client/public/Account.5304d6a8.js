@@ -1127,7 +1127,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./store/reducer":"bb6So","./store/initialState":"isorc","./helpers/Transition":"Rmdsg","./store/AppContext":"bdnEg","../helpers/Validator":"DGwNW","../Reservation/App":"69dzI","./views/Account":"5LcjZ"}],"a4ork":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","./store/reducer":"bb6So","./store/initialState":"isorc","./helpers/Transition":"Rmdsg","./store/AppContext":"bdnEg","../Reservation/App":"69dzI","./views/Account":"5LcjZ","../helpers/Validator":"DGwNW"}],"a4ork":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -3183,58 +3183,7 @@ exports.default = _default;
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"DGwNW":[function(require,module,exports) {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-const regex = {
-    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
-    lettersOnly: /[^A-Za-z ]+$/
-};
-class Validator {
-    checkEmail(val) {
-        const { invalid , required  } = this.errors.email;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.email.test(val.toLowerCase())) return [
-            invalid
-        ];
-        else return [];
-    }
-    checkPassword(val) {
-        const { required , short  } = this.errors.password;
-        if (!val) return [
-            required
-        ];
-        else if (val.length < 8) return [
-            short
-        ];
-        else return [];
-    }
-    checkName(val) {
-        const { invalid , required  } = this.errors.name;
-        if (!val) return [
-            required
-        ];
-        else if (!regex.name.test(val)) return [
-            invalid
-        ];
-        else return [];
-    }
-    cleanInput(val) {
-        return val.replace(regex.test, '');
-    }
-    constructor(errors){
-        this.errors = errors;
-    }
-}
-exports.default = Validator;
-
-},{}],"69dzI":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"69dzI":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$dffe = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -9451,7 +9400,58 @@ $RefreshReg$(_c, "Visual");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"krKvU":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"DGwNW":[function(require,module,exports) {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+const regex = {
+    email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    name: /^\s*([A-Za-z]{1,}([\.,] |[-']| )?)+[A-Za-z]+\.?\s*$/,
+    lettersOnly: /[^A-Za-z ]+$/
+};
+class Validator {
+    checkEmail(val) {
+        const { invalid , required  } = this.errors.email;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.email.test(val.toLowerCase())) return [
+            invalid
+        ];
+        else return [];
+    }
+    checkPassword(val) {
+        const { required , short  } = this.errors.password;
+        if (!val) return [
+            required
+        ];
+        else if (val.length < 8) return [
+            short
+        ];
+        else return [];
+    }
+    checkName(val) {
+        const { invalid , required  } = this.errors.name;
+        if (!val) return [
+            required
+        ];
+        else if (!regex.name.test(val)) return [
+            invalid
+        ];
+        else return [];
+    }
+    cleanInput(val) {
+        return val.replace(regex.test, '');
+    }
+    constructor(errors){
+        this.errors = errors;
+    }
+}
+exports.default = Validator;
+
+},{}],"krKvU":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8839 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
