@@ -4864,7 +4864,7 @@ const ReservationList = (_ref)=>{
         className: "account__group animate-children"
     }, /*#__PURE__*/ _react.default.createElement("h5", null, label), reservations.length ? reservations.map((r)=>/*#__PURE__*/ _react.default.createElement(_RideItem.default, {
             key: r._id,
-            date: _dayjs.default(r.schedule.pickup).format("dddd MMMM D, YYYY"),
+            date: _dayjs.default(r.schedule.pickup, "MM-DD-YYYY H:mm").format("dddd MMMM D, YYYY"),
             service: r.service_type,
             origin: r.origin.name,
             destination: r.destination.name,

@@ -22,7 +22,7 @@ const ReservationList = ({ reservations, label, fallback, setLoader }) => {
             {reservations.length ? (reservations.map(r => (
                 <RideItem
                     key={r._id}
-                    date={dayjs(r.schedule.pickup).format("dddd MMMM D, YYYY")}
+                    date={dayjs(r.schedule.pickup, "MM-DD-YYYY H:mm").format("dddd MMMM D, YYYY")}
                     service={r.service_type}
                     origin={r.origin.name}
                     destination={r.destination.name}
