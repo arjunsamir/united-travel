@@ -3247,6 +3247,7 @@ const App = (_ref)=>{
         value: {
             reservation: res,
             copy,
+            back,
             updateApp: setReservation,
             user: user || window.currentUser || {
             }
@@ -3256,11 +3257,7 @@ const App = (_ref)=>{
     }, /*#__PURE__*/ _react.default.createElement(_Map.default, {
         origin: res.origin.placeId,
         destination: res.destination.placeId
-    }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, {
-        reservation: res,
-        copy: copy,
-        back: back
-    }))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
+    }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, null))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
         src: "https://storage.googleapis.com/utravel-site-content/img/not_found.png",
         copy: fallbackCopy[window.locale] || fallbackCopy.en
     });
@@ -3593,7 +3590,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../AppContext"));
 var _Cancel = _interopRequireDefault(require("./Cancel"));
 var _Buttons = require("../../components/Buttons");
 var _dayjs = _interopRequireDefault(require("dayjs"));
@@ -3603,7 +3601,35 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
 // Import Base React Shit
+// Import Context
 // Import Components
 // Import Helpers
 const Wrapper = (_ref)=>{
@@ -3626,12 +3652,9 @@ const canCancel = (date, status)=>{
     const now = _dayjs.default();
     return now.isBefore(time);
 }; // Crate Component
-const ReservationDetails = (_ref2)=>{
-    let { reservation , copy , back  } = _ref2;
-    console.log(reservation);
-    console.log(copy);
-    console.log(back); // Create Shortcuts
-    const r = reservation;
+const ReservationDetails = ()=>{
+    const { reservation: r , copy , back , user  } = _react.useContext(_AppContext.default);
+    console.log(copy); // Create Shortcuts
     const s = copy.steps.Summary;
     const p = r.payment;
     const sh = r.schedule;
@@ -3647,20 +3670,22 @@ const ReservationDetails = (_ref2)=>{
     }), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__header animate-children"
     }, /*#__PURE__*/ _react.default.createElement("h4", null, s.title, " ", /*#__PURE__*/ _react.default.createElement("span", null, r.code.toUpperCase())), r.status !== "cancelled" ? /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - ", p.method.brand[0].toUpperCase() + p.method.brand.substring(1), " ", p.method.last4) : /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - Refunded")), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email)), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route"
-    }, /*#__PURE__*/ _react.default.createElement("p", {
-        className: "animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "animate-item bold"
     }, _dayjs.default(sh.pickup, format).format('dddd MMMM D, YYYY')), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-container animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-icon"
     }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("span", null)), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-details animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("hr", {
-        className: "booking-view__divider animate-item"
-    }), /*#__PURE__*/ _react.default.createElement("div", {
+    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__block animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], ", ", _dayjs.default(r.flight.time, format).format("h:mm A"), " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], ", ", _dayjs.default(r.cruise.time, format).format("h:mm A"), " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__vehicle animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, v["info_".concat(window.locale)].name), /*#__PURE__*/ _react.default.createElement("p", null, r.passengers.total, " ", cc.passengers), !!cs.rearSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.rearSeats, " \xD7 ", csr.label, " ", cc.seats), !!cs.frontSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.frontSeats, " \xD7 ", csf.label, " ", cc.seats), !!cs.boosterSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.boosterSeats, " \xD7 ", csb.label, " ", cc.seats)), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__vehicle-image"
@@ -3685,7 +3710,7 @@ $RefreshReg$(_c1, "ReservationDetails");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS","dayjs":"ihFi1","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"Ea1Vr":[function(require,module,exports) {
+},{"react":"a4ork","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS","dayjs":"ihFi1","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../AppContext":"6jzOU"}],"Ea1Vr":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$6173 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -4941,11 +4966,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountHeader = _interopRequireDefault(require("../sections/AccountHeader"));
 var _EditProfile = _interopRequireDefault(require("../sections/EditProfile"));
 var _EditAccount = _interopRequireDefault(require("../sections/EditAccount"));
 var _DeleteAccount = _interopRequireDefault(require("../sections/DeleteAccount"));
 var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
-var _Icon = _interopRequireDefault(require("../../components/Icon"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -4986,30 +5011,7 @@ const Profile = ()=>{
     const { state: user  } = _react.useContext(_AppContext.default);
     return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
         showTitle: false
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-header"
-    }, /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-photo animate-item"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: user.photo,
-        alt: "Profile Photo"
-    })), /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-info animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h4", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email))), /*#__PURE__*/ _react.default.createElement("hr", {
-        className: "booking-view__divider animate-item"
-    }), !!user.oAuth.length && /*#__PURE__*/ _react.default.createElement("div", {
-        className: "account__profile-details animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Linked Accounts"), user.oAuth.map((auth)=>/*#__PURE__*/ _react.default.createElement("div", {
-            key: auth.provider,
-            className: $.join("account__profile-oauth", [
-                auth.provider
-            ])
-        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
-            icon: auth.provider
-        }), /*#__PURE__*/ _react.default.createElement("h6", {
-            className: "small"
-        }, auth.name, " - ", auth.email))
-    )), /*#__PURE__*/ _react.default.createElement(_EditProfile.default, null), user.passwordSet && /*#__PURE__*/ _react.default.createElement(_EditAccount.default, null), /*#__PURE__*/ _react.default.createElement(_DeleteAccount.default, null)));
+    }, /*#__PURE__*/ _react.default.createElement(_AccountHeader.default, null), /*#__PURE__*/ _react.default.createElement(_EditProfile.default, null), user.passwordSet && /*#__PURE__*/ _react.default.createElement(_EditAccount.default, null), /*#__PURE__*/ _react.default.createElement(_DeleteAccount.default, null)));
 };
 _c = Profile;
 var _default = Profile;
@@ -5022,7 +5024,7 @@ $RefreshReg$(_c, "Profile");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../store/AppContext":"bdnEg","../sections/EditProfile":"aCIWu","../sections/EditAccount":"cttlh","../sections/DeleteAccount":"c6hBA","../components/AccountPage":"7WoBC","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"aCIWu":[function(require,module,exports) {
+},{"react":"a4ork","../store/AppContext":"bdnEg","../sections/EditProfile":"aCIWu","../sections/EditAccount":"cttlh","../sections/DeleteAccount":"c6hBA","../components/AccountPage":"7WoBC","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../sections/AccountHeader":"kulUo"}],"aCIWu":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$b9bb = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -5674,7 +5676,269 @@ $RefreshReg$(_c, "EditProfile");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../store/AppContext":"bdnEg","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"htIHb":[function(require,module,exports) {
+},{"react":"a4ork","../store/AppContext":"bdnEg","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","../../components/Input":"83Axu","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"kulUo":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$b7d9 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$b7d9.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Modal = _interopRequireDefault(require("../../components/Modal"));
+var _ImageUpload = _interopRequireDefault(require("../../components/ImageUpload"));
+var _Buttons = require("../../components/Buttons");
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+const AccountHeader = ()=>{
+    // Destructure Global State
+    const { state: user , update  } = _react.useContext(_AppContext.default); // Creeate Local State
+    const [showModal, setShowModal] = _react.useState(false);
+    const [isFetching, setIsFetching] = _react.useState(false);
+    const [profilePhoto, setProfilePhoto] = _react.useState(); // Create Refs
+    const modal = _react.useRef(); // Create Event Handlers
+    const handleSubmit = async ()=>{
+        // Set isFetching to true
+        setIsFetching(true);
+        const timer = $.timer(1000).start(); // Update User
+        await _axios.default.patch("/users/me", {
+            photo: profilePhoto
+        }); // Wait For Timer
+        await timer.hold(); // Update State
+        update("photo")(profilePhoto);
+        setIsFetching(false);
+        setProfilePhoto(null); // Close Modal
+        modal.current.close();
+    };
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-header"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-photo animate-item",
+        onClick: ()=>setShowModal(true)
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: user.photo,
+        alt: "Profile Photo"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-photo-icon"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "camera"
+    }))), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-info animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h4", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email))), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), !!user.oAuth.length && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-details animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Linked Accounts"), user.oAuth.map((auth)=>/*#__PURE__*/ _react.default.createElement("div", {
+            key: auth.provider,
+            className: $.join("account__profile-oauth", [
+                auth.provider
+            ])
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: auth.provider
+        }), /*#__PURE__*/ _react.default.createElement("h6", {
+            className: "small"
+        }, auth.name, " - ", auth.email))
+    )), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+        isOpen: showModal,
+        close: setShowModal,
+        preventClose: isFetching,
+        closeRef: modal
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__modal"
+    }, /*#__PURE__*/ _react.default.createElement("h4", {
+        className: "account__modal-title animate-item"
+    }, "Change Profile Photo"), /*#__PURE__*/ _react.default.createElement(_ImageUpload.default, {
+        id: "user-profile=photo-upload",
+        label: "Upload New Photo",
+        placeholder: "Click to upload a photo",
+        success: "Upload Successful!",
+        endpoint: "/api/upload/profile-photo",
+        onUpload: setProfilePhoto,
+        filename: user.name || "user-photo"
+    }), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Change Photo",
+        onClick: handleSubmit,
+        showLoader: isFetching,
+        disabled: !profilePhoto
+    })))));
+};
+_c = AccountHeader;
+var _default = AccountHeader;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AccountHeader");
+
+  $parcel$ReactRefreshHelpers$b7d9.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"bdnEg","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Modal":"h4i0T","../../components/Buttons":"6z8CS","../../components/ImageUpload":"jDN5L","axios":"hDAj5"}],"jDN5L":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$a17a = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$a17a.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _hooks = require("../helpers/hooks");
+var _Icon = _interopRequireDefault(require("./Icon"));
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const ImageUpload = (_ref)=>{
+    let { label , placeholder , success , error , id , endpoint , onUpload , filename  } = _ref;
+    // Set Up Object State
+    const [state, setState] = _hooks.useObjectState({
+        image: null,
+        isUploading: false,
+        error: "false"
+    }); // Define Refs
+    const input = _react.useRef(); // Create Change Handler
+    const onFileChange = async (e)=>{
+        var _res$data;
+        // Set State
+        setState({
+            isUploading: true
+        }); // Create Variables For Upload
+        const files = Array.from(e.target.files);
+        const formData = new FormData(); // Append Form Files
+        files.forEach((file)=>{
+            formData.append('photo', file);
+        });
+        formData.append('name', filename.replaceAll(' ', '-').toLowerCase());
+        const timer = $.timer(1000).start(); // Upload File
+        const res = await _axios.default.post(endpoint, formData);
+        await timer.hold();
+        setState({
+            isUploading: false,
+            image: res === null || res === void 0 ? void 0 : (_res$data = res.data) === null || _res$data === void 0 ? void 0 : _res$data.file
+        });
+        onUpload && onUpload(res.data.file);
+    };
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__input file animate-item",
+        onClick: ()=>input.current.click()
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__main"
+    }, state.image ? /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__photo"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: state.image,
+        alt: "uploaded photo"
+    })) : /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__icon"
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "upload"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__field"
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("input", {
+        type: "file",
+        id: id,
+        className: "input__file",
+        ref: input,
+        onChange: onFileChange
+    }), /*#__PURE__*/ _react.default.createElement("p", {
+        className: $.join("small", [
+            state.image,
+            "success"
+        ], [
+            state.error,
+            "error"
+        ])
+    }, state.image ? success : placeholder))), state.isUploading && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__loader"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("span", null))))));
+};
+_c = ImageUpload;
+var _default = ImageUpload;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ImageUpload");
+
+  $parcel$ReactRefreshHelpers$a17a.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../helpers/hooks":"8wHZG","./Icon":"3WqAm","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"htIHb":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$2e29 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

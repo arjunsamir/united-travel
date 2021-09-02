@@ -160,7 +160,7 @@
                 "departing": "Departing Cruise",
                 "buffer": "(arrive {h} hours early)"
             },
-            "notes": "Your Notes",
+            "notes": "Notes",
             "next": "Continue To Payment"
         },
         "Login": {

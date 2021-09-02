@@ -26,6 +26,7 @@ const App = ({ reservation, copy, back, user }) => {
         <AppContext.Provider value={{
             reservation: res,
             copy,
+            back,
             updateApp: setReservation,
             user: user || window.currentUser || {}
         }}>
@@ -34,11 +35,7 @@ const App = ({ reservation, copy, back, user }) => {
                     origin={res.origin.placeId}
                     destination={res.destination.placeId}
                 />
-                <ReservationDetails
-                    reservation={res}
-                    copy={copy}
-                    back={back}
-                />
+                <ReservationDetails />
             </section>
         </AppContext.Provider>
 

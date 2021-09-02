@@ -1031,6 +1031,7 @@ const App = (_ref)=>{
         value: {
             reservation: res,
             copy,
+            back,
             updateApp: setReservation,
             user: user || window.currentUser || {
             }
@@ -1040,11 +1041,7 @@ const App = (_ref)=>{
     }, /*#__PURE__*/ _react.default.createElement(_Map.default, {
         origin: res.origin.placeId,
         destination: res.destination.placeId
-    }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, {
-        reservation: res,
-        copy: copy,
-        back: back
-    }))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
+    }), /*#__PURE__*/ _react.default.createElement(_ReservationDetails.default, null))) : /*#__PURE__*/ _react.default.createElement(_Oopsie.default, {
         src: "https://storage.googleapis.com/utravel-site-content/img/not_found.png",
         copy: fallbackCopy[window.locale] || fallbackCopy.en
     });
@@ -3158,7 +3155,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../AppContext"));
 var _Cancel = _interopRequireDefault(require("./Cancel"));
 var _Buttons = require("../../components/Buttons");
 var _dayjs = _interopRequireDefault(require("dayjs"));
@@ -3168,7 +3166,35 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
 // Import Base React Shit
+// Import Context
 // Import Components
 // Import Helpers
 const Wrapper = (_ref)=>{
@@ -3191,12 +3217,9 @@ const canCancel = (date, status)=>{
     const now = _dayjs.default();
     return now.isBefore(time);
 }; // Crate Component
-const ReservationDetails = (_ref2)=>{
-    let { reservation , copy , back  } = _ref2;
-    console.log(reservation);
-    console.log(copy);
-    console.log(back); // Create Shortcuts
-    const r = reservation;
+const ReservationDetails = ()=>{
+    const { reservation: r , copy , back , user  } = _react.useContext(_AppContext.default);
+    console.log(copy); // Create Shortcuts
     const s = copy.steps.Summary;
     const p = r.payment;
     const sh = r.schedule;
@@ -3212,20 +3235,22 @@ const ReservationDetails = (_ref2)=>{
     }), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__header animate-children"
     }, /*#__PURE__*/ _react.default.createElement("h4", null, s.title, " ", /*#__PURE__*/ _react.default.createElement("span", null, r.code.toUpperCase())), r.status !== "cancelled" ? /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - ", p.method.brand[0].toUpperCase() + p.method.brand.substring(1), " ", p.method.last4) : /*#__PURE__*/ _react.default.createElement("h5", null, "$", (p.total / 100).toFixed(2), " - Refunded")), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, user.name), /*#__PURE__*/ _react.default.createElement("p", null, user.email)), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route"
-    }, /*#__PURE__*/ _react.default.createElement("p", {
-        className: "animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: "animate-item bold"
     }, _dayjs.default(sh.pickup, format).format('dddd MMMM D, YYYY')), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-container animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-icon"
     }, /*#__PURE__*/ _react.default.createElement("span", null), /*#__PURE__*/ _react.default.createElement("hr", null), /*#__PURE__*/ _react.default.createElement("span", null)), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__route-details animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("hr", {
-        className: "booking-view__divider animate-item"
-    }), /*#__PURE__*/ _react.default.createElement("div", {
+    }, /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.pickup, format).format("h:mm A"), ", ", r.origin.name), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(sh.dropoff, format).format("h:mm A"), ", ", r.destination.name)))), r.service_type !== "general" && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__block animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
+    }, /*#__PURE__*/ _react.default.createElement("h6", null, s.services[r.service_type]), r.service_type === 'airport' ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.flight.airline, ", ", s.airport.flight, " ", r.flight.number), /*#__PURE__*/ _react.default.createElement("p", null, s.airport[r.flight.type], ", ", _dayjs.default(r.flight.time, format).format("h:mm A"), " ", r.flight.type === 'departing' && s.airport.buffer.replace('{h}', _utils.toHalf(r.flight.buffer)))) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("p", null, r.cruise.line, ", ", r.cruise.ship), /*#__PURE__*/ _react.default.createElement("p", null, s.cruise[r.cruise.type], ", ", _dayjs.default(r.cruise.time, format).format("h:mm A"), " ", r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', _utils.toHalf(r.cruise.buffer)))))), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__vehicle animate-item"
     }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, v["info_".concat(window.locale)].name), /*#__PURE__*/ _react.default.createElement("p", null, r.passengers.total, " ", cc.passengers), !!cs.rearSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.rearSeats, " \xD7 ", csr.label, " ", cc.seats), !!cs.frontSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.frontSeats, " \xD7 ", csf.label, " ", cc.seats), !!cs.boosterSeats && /*#__PURE__*/ _react.default.createElement("p", null, cs.boosterSeats, " \xD7 ", csb.label, " ", cc.seats)), /*#__PURE__*/ _react.default.createElement("div", {
         className: "booking-view__vehicle-image"
@@ -3250,7 +3275,7 @@ $RefreshReg$(_c1, "ReservationDetails");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS","dayjs":"ihFi1","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"Ea1Vr":[function(require,module,exports) {
+},{"react":"a4ork","./Cancel":"Ea1Vr","../../components/Buttons":"6z8CS","dayjs":"ihFi1","../../helpers/utils":"dGtD3","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../AppContext":"6jzOU"}],"Ea1Vr":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$6173 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

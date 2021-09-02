@@ -106,11 +106,27 @@
         &-photo {
             height: 8rem;
             width: 8rem;
+            position: relative;
             overflow: hidden;
             border-radius: 50%;
+            cursor: pointer;
 
             img {
                 @include cover;
+            }
+
+            &-icon {
+                @include overlay;
+                @include flexCenter;
+                background-color: rgba(#000, 0.8);
+                color: var(--white);
+
+                opacity: 0;
+                transition: opacity $dt;
+            }
+
+            &:hover &-icon {
+                opacity: 1;
             }
         }
 

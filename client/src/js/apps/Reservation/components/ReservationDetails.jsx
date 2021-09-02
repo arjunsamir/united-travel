@@ -1,5 +1,8 @@
 // Import Base React Shit
-import React from 'react';
+import React, { useContext } from 'react';
+
+// Import Context
+import AppContext from '../AppContext';
 
 // Import Components
 import Cancel from './Cancel';
@@ -38,14 +41,13 @@ const canCancel = (date, status) => {
 
 
 // Crate Component
-const ReservationDetails = ({ reservation, copy, back }) => {
+const ReservationDetails = () => {
 
-    console.log(reservation);
+    const { reservation: r, copy, back, user } = useContext(AppContext);
+
     console.log(copy);
-    console.log(back);
 
     // Create Shortcuts
-    const r = reservation;
     const s = copy.steps.Summary;
     const p = r.payment;
     const sh = r.schedule;
@@ -73,9 +75,16 @@ const ReservationDetails = ({ reservation, copy, back }) => {
                 )}
             </div>
 
+            <div className="animate-children">
+                <p>{user.name}</p>
+                <p>{user.email}</p>
+            </div>
+
+            <hr className="booking-view__divider animate-item" />
+
 
             <div className="booking-view__route">
-                <p className="animate-item">{dayjs(sh.pickup, format).format('dddd MMMM D, YYYY')}</p>
+                <h6 className="animate-item bold">{dayjs(sh.pickup, format).format('dddd MMMM D, YYYY')}</h6>
                 <div className="booking-view__route-container animate-item">
                     <div className="booking-view__route-icon">
                         <span />
@@ -92,19 +101,18 @@ const ReservationDetails = ({ reservation, copy, back }) => {
 
             {r.service_type !== "general" && (
                 <>
-                    <hr className="booking-view__divider animate-item" />
 
                     <div className="booking-view__block animate-children">
                         <h6>{s.services[r.service_type]}</h6>
                         {r.service_type === 'airport' ? (
                             <>
                                 <p>{r.flight.airline}, {s.airport.flight} {r.flight.number}</p>
-                                <p>{s.airport[r.flight.type]} {r.flight.type === 'departing' && s.airport.buffer.replace('{h}', toHalf(r.flight.buffer))}</p>
+                                <p>{s.airport[r.flight.type]}, {dayjs(r.flight.time, format).format("h:mm A")} {r.flight.type === 'departing' && s.airport.buffer.replace('{h}', toHalf(r.flight.buffer))}</p>
                             </>
                         ) : (
                             <>
                                 <p>{r.cruise.line}, {r.cruise.ship}</p>
-                                <p>{s.cruise[r.cruise.type]} {r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', toHalf(r.cruise.buffer))}</p>
+                                <p>{s.cruise[r.cruise.type]}, {dayjs(r.cruise.time, format).format("h:mm A")} {r.cruise.type === 'departing' && s.cruise.buffer.replace('{h}', toHalf(r.cruise.buffer))}</p>
                             </>
                         )}
                     </div>
