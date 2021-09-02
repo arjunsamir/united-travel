@@ -1093,7 +1093,7 @@ const App = (_ref)=>{
     }, [
         state.view
     ]); // Determine View
-    const View = views[state.view] || /*#__PURE__*/ _react.default.createElement("div", null); // Return Component
+    const View = views[state.view]; // Return Component
     return(/*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
             state,
@@ -2938,6 +2938,9 @@ const reducer = function reducer1() {
             return merge('view');
         case 'SET_RESERVATIONS':
             return merge('reservations');
+        case 'SET_CURRENT_RESERVATION':
+        case 'SET_CURRENTRESERVATION':
+            return merge('currentReservation');
     }
 };
 var _default = reducer;
@@ -2952,7 +2955,6 @@ exports.default = void 0;
 // Get User Initial Data
 const { currentUser: { name , preferredName , email , preferredLocale , photo , _id , referralCode , oAuth , credits , stripeID , passwordSet  }  } = window; // Create Initial State
 const state = {
-    // page: "Rides",
     page: "Rides",
     view: "Settings",
     currentReservation: null,
@@ -3274,13 +3276,15 @@ const fallbackCopy = {
     es: "Lo sentimos, no podemos encontrar su reserva."
 }; // Create App
 const App = (_ref)=>{
-    let { reservation , copy , back  } = _ref;
+    let { reservation , copy , back , user  } = _ref;
     const [res, setReservation] = _react.useState(reservation);
     return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
             reservation: res,
             copy,
-            updateApp: setReservation
+            updateApp: setReservation,
+            user: user || window.currentUser || {
+            }
         }
     }, /*#__PURE__*/ _react.default.createElement("section", {
         className: "booking"
@@ -3771,9 +3775,8 @@ function _interopRequireWildcard(obj) {
 // Import Helpers
 // Create Component
 const Cancel = ()=>{
-    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default);
-    const user = window.currentUser || {
-    }; // Create Refs and State
+    const { reservation , updateApp , user , copy  } = _react.useContext(_AppContext.default);
+    console.log(reservation); // Create Refs and State
     const modal = _react.useRef();
     const [showModal, setShowModal] = _react.useState(false);
     const [isFetching, setIsFetching] = _react.useState(false);
@@ -4677,8 +4680,11 @@ Object.defineProperty(exports, "__esModule", {
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _Dropdown = _interopRequireDefault(require("../../components/Dropdown"));
 var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
+var _Loader = _interopRequireDefault(require("../../components/Loader"));
 var _ReservationList = _interopRequireDefault(require("../components/ReservationList"));
+var _hooks = require("../../helpers/hooks");
 var _axios = _interopRequireDefault(require("axios"));
 var _dayjs = _interopRequireDefault(require("dayjs"));
 function _interopRequireDefault(obj) {
@@ -4756,55 +4762,66 @@ const getTimestamps = (r)=>_objectSpread(_objectSpread({
         timestamp: _dayjs.default(r.schedule.pickup).unix()
     })
 ;
+const dropdownOptions = [
+    {
+        text: "Upcoming",
+        value: "ready"
+    },
+    {
+        text: "Complete",
+        value: "complete"
+    },
+    {
+        text: "Cancelled",
+        value: "cancelled"
+    }
+];
 const Rides = ()=>{
     // Destructure State
-    const { state: { reservations  } , update  } = _react.useContext(_AppContext.default); // Create Local State
-    const [isLoading, setIsLoading] = _react.useState(!reservations); // Get Reservations on Load
+    const { state: { reservations  } , update , transition  } = _react.useContext(_AppContext.default); // Create Local State
+    const [isLoading, setIsLoading] = _react.useState(!reservations);
+    const [api, setApi] = _hooks.useObjectState({
+        status: 'ready',
+        page: 1,
+        limit: 20
+    }); // Get Reservations on Load
     _react.useEffect(()=>{
         // Get And Sort Reservations
         const fetchReservations = async ()=>{
             var _res$data;
+            setIsLoading(true);
             const timer = $.timer(1000).start();
-            const res = await _axios.default('/api/booking/reservations/users/me');
+            const res = await _axios.default("/admin/reservations?page=".concat(api.page, "&limit=").concat(api.limit, "&status=").concat(api.status));
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.reservations)) return;
-            const today = _dayjs.default();
-            const filtered = {
-                all: res.data.reservations.map(getTimestamps).sort(sortFilter),
-                upcoming: [],
-                cancelled: [],
-                past: []
-            };
-            filtered.all.forEach((r)=>{
-                if (r.status === 'cancelled') filtered.cancelled.push(r);
-                else if (_dayjs.default(r.schedule.pickup, "MM-DD-YYYY H:mm").isBefore(today)) filtered.past.push(r);
-                else filtered.upcoming.push(r);
-            });
+            const filtered = res.data.reservations.map(getTimestamps).sort(sortFilter);
             await timer.hold();
             update("reservations")(filtered);
             setIsLoading(false);
+            transition.update();
         }; // Initialize Load
-    // if (!reservations) fetchReservations();
-    }, []); // Create Component
-    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
-        showLoader: isLoading
-    }, reservations && reservations.all.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
-        label: "Upcoming Reservations",
-        reservations: reservations.upcoming,
+        fetchReservations();
+    }, [
+        api.status
+    ]); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields"
+    }, /*#__PURE__*/ _react.default.createElement(_Dropdown.default, {
+        id: "reservation-select",
+        label: "Select Type",
+        placeholder: "Reservation Status",
+        options: dropdownOptions,
+        selected: api.status,
+        onSelect: (selected)=>setApi({
+                status: selected.value
+            })
+    })), isLoading ? /*#__PURE__*/ _react.default.createElement(_Loader.default, null) : reservations && reservations.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
+        label: "Reservations",
+        reservations: reservations,
         fallback: "No upcoming reservations...",
-        setLoader: setIsLoading
-    }), /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
-        label: "Past Reservations",
-        reservations: reservations.past,
-        fallback: "No past reservations...",
-        setLoader: setIsLoading
-    }), /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
-        label: "Cancelled Reservations",
-        reservations: reservations.cancelled,
-        fallback: "No cancelled reservations...",
         setLoader: setIsLoading
     })) : /*#__PURE__*/ _react.default.createElement("div", {
         className: "animate-item"
-    }, "You haven't made any reservations yet.")));
+    }, "No Reservations Found")));
 };
 _c = Rides;
 var _default = Rides;
@@ -4817,7 +4834,7 @@ $RefreshReg$(_c, "Rides");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../store/AppContext":"01i6J","../components/AccountPage":"fRcTL","../components/ReservationList":"5bqXq","axios":"hDAj5","dayjs":"ihFi1","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"fRcTL":[function(require,module,exports) {
+},{"react":"a4ork","../store/AppContext":"01i6J","../components/AccountPage":"fRcTL","../components/ReservationList":"5bqXq","axios":"hDAj5","dayjs":"ihFi1","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Dropdown":"aw6XZ","../../helpers/hooks":"8wHZG","../../components/Loader":"klMDW"}],"fRcTL":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$b300 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -5095,7 +5112,153 @@ $RefreshReg$(_c, "RideItem");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"95ugt":[function(require,module,exports) {
+},{"react":"a4ork","../../components/Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"aw6XZ":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$b485 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$b485.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+const Dropdown = (_ref)=>{
+    var _items$find;
+    let { placeholder , label , errors , onSelect , selected , id , options , customClasses  } = _ref;
+    // Configure Local State
+    const [changed, setChanged] = _react.useState(false); // Attach Placeholder Value
+    const items = changed ? options : [
+        {
+            value: -1,
+            text: placeholder
+        },
+        ...options
+    ]; // Get Currently Selected Value
+    const value = (selected && typeof selected === 'object' ? selected.value : selected) || -1; // Determine if the Dropdown has errors
+    const hasErrors = errors && errors.length > 0; // Create Dropdown Component
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("dropdown animate-item", [
+            customClasses
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("dropdown__select", [
+            hasErrors,
+            "has-error"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("select", {
+        id: id,
+        value: value,
+        onChange: (e)=>{
+            // Destructure Value
+            const { value: val  } = e.target; // Disable Clicking Placeholder from chaning state
+            if (val == -1) return; // Note the item has changed
+            if (!changed) setChanged(true); // Update value
+            onSelect && onSelect(items.find((item)=>item.value == val
+            ));
+        }
+    }, items.map((item)=>/*#__PURE__*/ _react.default.createElement("option", {
+            key: item.value,
+            value: item.value
+        }, item.text)
+    )), /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("dropdown__field", [
+            value === -1,
+            "placeholder"
+        ])
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("p", null, ((_items$find = items.find((i)=>i.value === value
+    )) === null || _items$find === void 0 ? void 0 : _items$find.text) || placeholder))), /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "expand"
+    })), hasErrors && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "dropdown__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "dropdown__error",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
+};
+_c = Dropdown;
+var _default = Dropdown;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Dropdown");
+
+  $parcel$ReactRefreshHelpers$b485.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8wHZG":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$134e = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$134e.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.useObjectState = void 0;
+var _react = require("react");
+const useObjectState = (initialState)=>{
+    const [state, setState] = _react.useState(initialState);
+    return [
+        state,
+        (newState)=>setState(Object.assign({
+            }, state, newState))
+    ];
+};
+exports.useObjectState = useObjectState;
+
+  $parcel$ReactRefreshHelpers$134e.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"95ugt":[function(require,module,exports) {
 "use strict";
 
 },{}],"21XtV":[function(require,module,exports) {

@@ -8,16 +8,16 @@ const dotenv = require('dotenv');
 const devcert = require('devcert');
 
 
-// Cron Jobs
-const cron = require('./server/utils/cron');
-
-
 
 // 2. IMPORT ENVIORNMENT & START SERVER
 
 
 // Initialize Enviornment Variables
 dotenv.config({ path: './config.env' });
+
+
+// Cron Jobs
+const cron = require('./server/utils/cron');
 
 
 // Import Express

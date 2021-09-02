@@ -68,8 +68,12 @@ const CruiseSchedule = ({ update, copy }) => {
                     }}
                 />
 
+            </fieldset>
+
+            <fieldset>
+                <h6 className={$.join("animate-item", [cruise.type !== 'departing', 'hidden'])}>{copy.fieldsetTitles.buffer}</h6>
                 <Dropdown
-                   id="port-select"
+                   id="arrival-buffer"
                    label={copy.labels[2]}
                    placeholder={copy.placeholders[1] || "Placeholder Value"}
                    options={[3, 3.5, 4, 4.5, 5, 5.5, 6, 6.5, 7, 7.5, 8].map(v => ({
@@ -80,7 +84,6 @@ const CruiseSchedule = ({ update, copy }) => {
                    onSelect={(selected) => update('CRUISE-BUFFER', selected.value)}
                    customClasses={cruise.type !== 'departing' && 'hidden'}
                 />
-
             </fieldset>
 
         </BookingCard>

@@ -15,7 +15,7 @@ const updateReservations = async () => {
 
         await Reservation.updateMany({
             status: 'ready',
-            scheduledComplete: { $gt: dayjs().add(2, 'hour').toDate() }
+            scheduledComplete: { $lt: dayjs().add(2, 'hour').toDate() }
         }, {
             $set: { status: 'complete' }
         });
@@ -78,9 +78,7 @@ const sendDailyReport = async () => {
 
 module.exports = () => {
 
-    // Schedule Cron Job
-    console.log('Start Cron Jobs');
-
+    // Schedule By The Hour
     cron.schedule('0 * * * *', updateReservations);
 
 }

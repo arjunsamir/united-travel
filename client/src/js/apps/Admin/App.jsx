@@ -33,7 +33,7 @@ const App = ({ copy, resCopy }) => {
     }, [state.view]);
 
     // Determine View
-    const View = views[state.view] || <div></div>;
+    const View = views[state.view];
 
     // Return Component
     return (

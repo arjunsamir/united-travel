@@ -18,7 +18,6 @@ const {
 
 // Create Initial State
 const state = {
-    // page: "Rides",
     page: "Rides",
     view: "Settings",
     currentReservation: null,

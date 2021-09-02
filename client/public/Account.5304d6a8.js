@@ -3241,13 +3241,15 @@ const fallbackCopy = {
     es: "Lo sentimos, no podemos encontrar su reserva."
 }; // Create App
 const App = (_ref)=>{
-    let { reservation , copy , back  } = _ref;
+    let { reservation , copy , back , user  } = _ref;
     const [res, setReservation] = _react.useState(reservation);
     return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
             reservation: res,
             copy,
-            updateApp: setReservation
+            updateApp: setReservation,
+            user: user || window.currentUser || {
+            }
         }
     }, /*#__PURE__*/ _react.default.createElement("section", {
         className: "booking"
@@ -3738,9 +3740,8 @@ function _interopRequireWildcard(obj) {
 // Import Helpers
 // Create Component
 const Cancel = ()=>{
-    const { reservation , updateApp , copy  } = _react.useContext(_AppContext.default);
-    const user = window.currentUser || {
-    }; // Create Refs and State
+    const { reservation , updateApp , user , copy  } = _react.useContext(_AppContext.default);
+    console.log(reservation); // Create Refs and State
     const modal = _react.useRef();
     const [showModal, setShowModal] = _react.useState(false);
     const [isFetching, setIsFetching] = _react.useState(false);

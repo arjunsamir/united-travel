@@ -4,24 +4,48 @@ import React, { useEffect, useContext, useState } from 'react';
 import AppContext from '../store/AppContext';
 
 // Import Components
+import Dropdown from '../../components/Dropdown';
 import AccountPage from '../components/AccountPage';
+import Loader from '../../components/Loader';
 import ReservationList from '../components/ReservationList';
 
 // Import Helpers
+import { useObjectState } from '../../helpers/hooks';
 import axios from 'axios';
 import dayjs from 'dayjs';
 
 const sortFilter = (a, b) => a.timestamp - b.timestamp;
 const getTimestamps = r => ({ ...r, timestamp: dayjs(r.schedule.pickup).unix() });
 
+
+const dropdownOptions = [
+    {
+        text: "Upcoming",
+        value: "ready"
+    },
+    {
+        text: "Complete",
+        value: "complete"
+    },
+    {
+        text: "Cancelled",
+        value: "cancelled"
+    }
+];
+
 const Rides = () => {
 
     // Destructure State
-    const { state: { reservations }, update } = useContext(AppContext);
+    const { state: { reservations }, update, transition } = useContext(AppContext);
 
 
     // Create Local State
     const [isLoading, setIsLoading] = useState(!reservations);
+    const [api, setApi] = useObjectState({
+        status: 'ready',
+        page: 1,
+        limit: 20
+    })
 
 
     // Get Reservations on Load
@@ -30,28 +54,15 @@ const Rides = () => {
         // Get And Sort Reservations
         const fetchReservations = async () => {
 
+            setIsLoading(true);
+
             const timer = $.timer(1000).start();
 
-            const res = await axios('/api/booking/reservations/users/me');
+            const res = await axios(`/admin/reservations?page=${api.page}&limit=${api.limit}&status=${api.status}`);
 
             if (!res?.data?.reservations) return;
 
-            const today = dayjs();
-
-            const filtered = {
-                all: res.data.reservations.map(getTimestamps).sort(sortFilter),
-                upcoming: [],
-                cancelled: [],
-                past: []
-            };
-
-            filtered.all.forEach(r => {
-
-                if (r.status === 'cancelled') filtered.cancelled.push(r);
-                else if (dayjs(r.schedule.pickup, "MM-DD-YYYY H:mm").isBefore(today)) filtered.past.push(r);
-                else filtered.upcoming.push(r);
-                
-            });
+            const filtered = res.data.reservations.map(getTimestamps).sort(sortFilter)
 
             await timer.hold();
 
@@ -59,42 +70,46 @@ const Rides = () => {
 
             setIsLoading(false);
 
+            transition.update();
+
         }
 
         // Initialize Load
-        // if (!reservations) fetchReservations();
+        fetchReservations();
 
-    }, []);
+    }, [api.status]);
 
 
     // Create Component
     return (
-        <AccountPage showLoader={isLoading} >
-            {reservations && reservations.all.length ? (
-                <>
-                    <ReservationList
-                        label="Upcoming Reservations"
-                        reservations={reservations.upcoming}
-                        fallback={"No upcoming reservations..."}
-                        setLoader={setIsLoading}
-                    />
-                    
-                    <ReservationList
-                        label="Past Reservations"
-                        reservations={reservations.past}
-                        fallback={"No past reservations..."}
-                        setLoader={setIsLoading}
-                    />
+        <AccountPage>
+            <div className="account__fields">
+                <Dropdown
+                    id="reservation-select"
+                    label="Select Type"
+                    placeholder="Reservation Status"
+                    options={dropdownOptions}
+                    selected={api.status}
+                    onSelect={(selected) => setApi({ status: selected.value })}
+                />
+            </div>
 
-                    <ReservationList
-                        label="Cancelled Reservations"
-                        reservations={reservations.cancelled}
-                        fallback={"No cancelled reservations..."}
-                        setLoader={setIsLoading}
-                    />
-                </>
+            {isLoading ? (
+                <Loader />
             ) : (
-                <div className="animate-item">You haven't made any reservations yet.</div>
+                reservations && reservations.length ? (
+                    <>
+                        <ReservationList
+                            label="Reservations"
+                            reservations={reservations}
+                            fallback={"No upcoming reservations..."}
+                            setLoader={setIsLoading}
+                        />
+    
+                    </>
+                ) : (
+                    <div className="animate-item">No Reservations Found</div>
+                )
             )}
         </AccountPage>
     )

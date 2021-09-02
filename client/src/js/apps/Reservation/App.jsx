@@ -17,13 +17,18 @@ const fallbackCopy = {
 }
 
  // Create App
-const App = ({ reservation, copy, back }) => {
+const App = ({ reservation, copy, back, user }) => {
 
     const [res, setReservation] = useState(reservation);
 
     return reservation ? (
 
-        <AppContext.Provider value={{ reservation: res, copy, updateApp: setReservation }}>
+        <AppContext.Provider value={{
+            reservation: res,
+            copy,
+            updateApp: setReservation,
+            user: user || window.currentUser || {}
+        }}>
             <section className="booking">
                 <Map
                     origin={res.origin.placeId}

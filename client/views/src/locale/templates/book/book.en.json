@@ -22,7 +22,7 @@
                 {
                     "name": "General",
                     "title": "Standard Service",
-                    "description": "I need a ride to another specific location such as a hotels, restaurants, theme parks, etc.",
+                    "description": "I need a ride to another specific location such as a hotel, restaurant, theme park, etc.",
                     "icon": "location-pin",
                     "value": "general"
                 }
@@ -58,7 +58,7 @@
         },
         "CruiseLocation": {
             "title": "Cruise Location",
-            "heading": "Port & Ship Info",
+            "heading": "Port & Ship Information",
             "labels": ["Select Port", "Cruise Line", "Ship Name"],
             "placeholders": ["Please Select", "Carnival", "Dream"],
             "infoTitle": "Cruise Information"
@@ -70,9 +70,10 @@
             "placeholders": ["Select", "Please Select"],
             "labels": ["Date", "Time", "Arrive at the cruise port"],
             "fieldsetTitles": {
-                "type": "Cruise Status",
-                "arriving": "Cruise Arrival Time",
-                "departing": "Cruise Departure Time",
+                "type": "Arriving or departing?",
+                "arriving": "Arrival Time",
+                "departing": "Departure Time",
+                "buffer": "How early do you want to arrive?",
                 "default": "Cruise Time"
             },
             "dropdownText": "{time} hours early",

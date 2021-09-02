@@ -1075,6 +1075,7 @@ const BookingApp = (_ref)=>{
     const Step = steps[state.app.step] || _CheckoutApp.default; // Create Action Dispatcher
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
+    console.log(state.reservation.schedule);
     return(/*#__PURE__*/ _react.default.createElement(_context.default.Provider, {
         value: {
             state,
@@ -64830,14 +64831,22 @@ const setServiceTime = (m, key)=>{
 };
 const setRoute = (m, PL)=>{
     var _PL$eta;
+    if (!(PL !== null && PL !== void 0 && (_PL$eta = PL.eta) !== null && _PL$eta !== void 0 && _PL$eta.value)) return m.merge({
+        route: _objectSpread({
+        }, PL)
+    });
     const { pickup , dropoff  } = m.state.reservation.schedule;
-    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule';
-    if (PL !== null && PL !== void 0 && (_PL$eta = PL.eta) !== null && _PL$eta !== void 0 && _PL$eta.value) {
-        if (!pickup) m.merge({
-            pickup: _dayjs.default(dropoff, f).subtract(PL.eta.value, u).format(f)
+    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule', r = m.state.reservation;
+    if (r.serviceType === 'general') m.merge({
+        dropoff: _dayjs.default(pickup, f).add(PL.eta.value, u).format(f)
+    }, k);
+    else {
+        const sk = r.serviceType === 'airport' ? 'flight' : 'cruise';
+        if (r[sk].type === 'arriving') m.merge({
+            dropoff: _dayjs.default(pickup, f).add(PL.eta.value, u).format(f)
         }, k);
         else m.merge({
-            dropoff: _dayjs.default(pickup, f).add(PL.eta.value, u).format(f)
+            pickup: _dayjs.default(dropoff, f).subtract(PL.eta.value, u).format(f)
         }, k);
     }
     return m.merge({
@@ -68850,8 +68859,13 @@ const CruiseSchedule = (_ref)=>{
             label: copy.labels[1],
             placeholder: copy.placeholders[0]
         }
-    }), /*#__PURE__*/ _react.default.createElement(_Dropdown.default, {
-        id: "port-select",
+    })), /*#__PURE__*/ _react.default.createElement("fieldset", null, /*#__PURE__*/ _react.default.createElement("h6", {
+        className: $.join("animate-item", [
+            cruise.type !== 'departing',
+            'hidden'
+        ])
+    }, copy.fieldsetTitles.buffer), /*#__PURE__*/ _react.default.createElement(_Dropdown.default, {
+        id: "arrival-buffer",
         label: copy.labels[2],
         placeholder: copy.placeholders[1] || "Placeholder Value",
         options: [

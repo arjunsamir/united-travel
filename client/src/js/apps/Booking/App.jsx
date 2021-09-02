@@ -81,6 +81,8 @@ const BookingApp = ({ copy, page }) => {
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
 
+    console.log(state.reservation.schedule);
+
     return (
         <AppContext.Provider value={{ 
             state,

@@ -14,9 +14,9 @@ import axios from 'axios';
 // Create Component
 const Cancel = () => {
 
-    const { reservation, updateApp, copy } = useContext(AppContext);
+    const { reservation, updateApp, user, copy } = useContext(AppContext);
 
-    const user = window.currentUser || {};
+    console.log(reservation);
 
     // Create Refs and State
     const modal = useRef();

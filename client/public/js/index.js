@@ -1130,6 +1130,7 @@ window.addEventListener('DOMContentLoaded', ()=>{
                         }
                     });
                     page.navbar.applyView('min');
+                    page.options.smooth = false;
                     return page.load();
                 }
             }

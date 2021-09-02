@@ -579,11 +579,17 @@ exports.deletePaymentMethod = catchAsync(async (req, res, next) => {
 exports.getReservations = catchAsync(async (req, res, next) => {
 
     // Retrieve
+    const api = new APIFeatures(Reservation.find({}), req.query).filter().sort().limit().paginate();
 
+    // Wait For Query
+    const reservations = await api.query;
+
+    // Send Response
     send(res, {
         status: 'SUCCESS',
-        page: 1,
-        limit: 20,
+        page: api.page,
+        limit: api.docsPerPage,
+        reservations
     })
 
 });

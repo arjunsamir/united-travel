@@ -221,7 +221,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     }});
 
                     page.navbar.applyView('min');
-
+                    
                     return page.load();
                 }
             },
@@ -236,7 +236,7 @@ window.addEventListener('DOMContentLoaded', () => {
                     }});
 
                     page.navbar.applyView('min');
-
+                    page.options.smooth = false;
                     return page.load();
                 }
             },

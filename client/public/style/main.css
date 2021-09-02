@@ -3634,6 +3634,15 @@ svg.placeholder, .icon.placeholder {
 .booking-card__content fieldset > *:not(:last-child) {
   margin-bottom: 1.6rem;
 }
+.booking-card__content fieldset h6 {
+  transition: -webkit-filter 0.2s ease-in;
+  transition: filter 0.2s ease-in;
+  transition: filter 0.2s ease-in, -webkit-filter 0.2s ease-in;
+}
+.booking-card__content fieldset h6.hidden {
+  -webkit-filter: opacity(0%);
+          filter: opacity(0%);
+}
 .booking-card__content.flex-col {
   display: flex;
   flex-direction: column;

@@ -88,13 +88,25 @@ const setServiceTime = (m, key) => {
 
 const setRoute = (m, PL) => {
 
+    if (!PL?.eta?.value)
+        return m.merge({ route: { ...PL } });
+
     const { pickup, dropoff } = m.state.reservation.schedule;
 
-    const f = 'MM-DD-YYYY H:mm', u = 'second', k = 'schedule';
+    const f = 'MM-DD-YYYY H:mm',
+        u = 'second',
+        k = 'schedule',
+        r = m.state.reservation;
 
-    if (PL?.eta?.value)  {
-        if (!pickup) m.merge({ pickup: dayjs(dropoff, f).subtract(PL.eta.value, u).format(f) }, k);
-        else m.merge({ dropoff: dayjs(pickup, f).add(PL.eta.value, u).format(f) }, k);
+    if (r.serviceType === 'general') {
+        m.merge({ dropoff: dayjs(pickup, f).add(PL.eta.value, u).format(f) }, k);
+    }
+    else {
+        const sk = r.serviceType === 'airport' ? 'flight' : 'cruise';
+        if (r[sk].type === 'arriving')
+            m.merge({ dropoff: dayjs(pickup, f).add(PL.eta.value, u).format(f) }, k);
+        else 
+            m.merge({ pickup: dayjs(dropoff, f).subtract(PL.eta.value, u).format(f) }, k);
     }
 
     return m.merge({ route: { ...PL } });
