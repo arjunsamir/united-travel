@@ -3898,6 +3898,7 @@ function _interopRequireWildcard(obj) {
     return newObj;
 }
 const animateModalOpen = (element)=>{
+    const isPhone = window.matchMedia("(max-width: 37.5em)").matches;
     const e = $(element);
     const tl = _animejs.default.timeline({
         easing: 'easeOutQuad',
@@ -3910,7 +3911,16 @@ const animateModalOpen = (element)=>{
             1
         ]
     }); // Then Fade In Window
-    tl.add({
+    if (isPhone) tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: 1,
+        translateY: [
+            "100%",
+            0
+        ],
+        duration: 400
+    });
+    else tl.add({
         targets: e.children(".modal__window").e(),
         opacity: [
             0,
@@ -3938,6 +3948,7 @@ const animateModalOpen = (element)=>{
     return tl.finished;
 };
 const animateModalClose = (element)=>{
+    const isPhone = window.matchMedia("(max-width: 37.5em)").matches;
     const e = $(element); // Create Anime Timeline
     const tl = _animejs.default.timeline({
         easing: 'easeOutQuad',
@@ -3955,7 +3966,12 @@ const animateModalClose = (element)=>{
             250
         ])
     }); // Then Fade Out Window
-    tl.add({
+    if (isPhone) tl.add({
+        targets: e.children(".modal__window").e(),
+        translateY: "100%",
+        duration: 600
+    }, "-=150");
+    else tl.add({
         targets: e.children(".modal__window").e(),
         opacity: 0
     }); // Then Fade Out Background

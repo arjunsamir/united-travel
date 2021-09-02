@@ -12,10 +12,18 @@
 
     @include flexCenter;
 
+    @include phone {
+        justify-content: flex-end;
+    }
+
     &__escape {
         @include overlay;
 
         background-color: rgba(#000, 0.5);
+
+        @include phone {
+            background-color: rgba(#000, 0.75);
+        }
     }
 
     &__window {
@@ -27,6 +35,15 @@
         border-radius: 1.6rem;
 
         padding: var(--x-pad); 
+
+        @include phone {
+            min-height: 60vh;
+            width: 100%;
+            padding: 9.6rem 3.6rem var(--y-pad);
+            border-radius: 0;
+            border-top-right-radius: 3.6rem;
+            border-top-left-radius: 3.6rem;
+        }
     }
 
     &__close {
@@ -34,11 +51,20 @@
         top: 1.6rem;
         right: 2.4rem;
 
+        @include phone {
+            top: 3.6rem;
+            right: 3.6rem;
+        }
+
         cursor: pointer;
     }
 
     &__content {
         width: var(--modal-content-width);
+
+        @include phone {
+            width: 100%;
+        }
     }
 
 }

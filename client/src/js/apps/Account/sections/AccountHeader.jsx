@@ -49,7 +49,6 @@ const AccountHeader = () => {
         // Close Modal
         modal.current.close();
 
-
     }
 
     return (

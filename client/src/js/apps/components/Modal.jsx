@@ -7,6 +7,8 @@ import anime from 'animejs';
 
 const animateModalOpen = (element) => {
 
+    const isPhone = window.matchMedia("(max-width: 37.5em)").matches;
+
     const e = $(element);
 
     const tl = anime.timeline({
@@ -21,7 +23,14 @@ const animateModalOpen = (element) => {
     });
 
     // Then Fade In Window
-    tl.add({
+    if (isPhone) tl.add({
+        targets: e.children(".modal__window").e(),
+        opacity: 1,
+        translateY: ["100%", 0],
+        duration: 400
+    });
+
+    else tl.add({
         targets: e.children(".modal__window").e(),
         opacity: [0, 1]
     });
@@ -40,6 +49,8 @@ const animateModalOpen = (element) => {
 
 const animateModalClose = (element) => {
 
+    const isPhone = window.matchMedia("(max-width: 37.5em)").matches;
+
     const e = $(element);
 
     // Create Anime Timeline
@@ -57,7 +68,13 @@ const animateModalClose = (element) => {
     });
 
     // Then Fade Out Window
-    tl.add({
+    if (isPhone) tl.add({
+        targets: e.children(".modal__window").e(),
+        translateY: "100%",
+        duration: 600
+    }, "-=150");
+
+    else tl.add({
         targets: e.children(".modal__window").e(),
         opacity: 0
     });

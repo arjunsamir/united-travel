@@ -2320,6 +2320,11 @@ svg.placeholder, .icon.placeholder {
   justify-content: center;
   align-items: center;
 }
+@media (max-width: 37.5em) {
+  .modal {
+    justify-content: flex-end;
+  }
+}
 .modal__escape {
   position: absolute;
   top: 0;
@@ -2328,6 +2333,11 @@ svg.placeholder, .icon.placeholder {
   width: 100%;
   background-color: rgba(0, 0, 0, 0.5);
 }
+@media (max-width: 37.5em) {
+  .modal__escape {
+    background-color: rgba(0, 0, 0, 0.75);
+  }
+}
 .modal__window {
   position: relative;
   background-color: var(--white);
@@ -2335,14 +2345,35 @@ svg.placeholder, .icon.placeholder {
   border-radius: 1.6rem;
   padding: var(--x-pad);
 }
+@media (max-width: 37.5em) {
+  .modal__window {
+    min-height: 60vh;
+    width: 100%;
+    padding: 9.6rem 3.6rem var(--y-pad);
+    border-radius: 0;
+    border-top-right-radius: 3.6rem;
+    border-top-left-radius: 3.6rem;
+  }
+}
 .modal__close {
   position: absolute;
   top: 1.6rem;
   right: 2.4rem;
   cursor: pointer;
 }
+@media (max-width: 37.5em) {
+  .modal__close {
+    top: 3.6rem;
+    right: 3.6rem;
+  }
+}
 .modal__content {
   width: var(--modal-content-width);
+}
+@media (max-width: 37.5em) {
+  .modal__content {
+    width: 100%;
+  }
 }
 .ride-credit {
   border-radius: 1.2rem;
