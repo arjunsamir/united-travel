@@ -960,7 +960,7 @@ class LoginApp extends _ReactAppWrapper.default {
         window.currentUser = user; // Refresh Page Navbar
         await this.page.navbar.refresh();
         const baseUrl = window.locale === "es" ? "/es" : ""; // Navigate to reservation
-        if (this.referral) this.page.barba.go("".concat(baseUrl, "/account/reservations/").concat(this.reservation)); // Navigate to Home Page
+        if (this.reservation) window.location.href = "".concat(baseUrl, "/reservations/").concat(this.reservation); // Navigate to Home Page
         else this.page.barba.go(baseUrl + "/");
     }
     async load() {

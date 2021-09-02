@@ -32,7 +32,7 @@ export default class LoginApp extends ReactAppWrapper {
         const baseUrl = window.locale === "es" ? "/es" : "";
 
         // Navigate to reservation
-        if (this.referral) this.page.barba.go(`${baseUrl}/account/reservations/${this.reservation}`);
+        if (this.reservation) window.location.href = `${baseUrl}/reservations/${this.reservation}`;
 
         // Navigate to Home Page
         else this.page.barba.go(baseUrl + "/");

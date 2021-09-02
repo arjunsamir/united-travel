@@ -1075,7 +1075,6 @@ const BookingApp = (_ref)=>{
     const Step = steps[state.app.step] || _CheckoutApp.default; // Create Action Dispatcher
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
-    console.log(state.reservation.schedule);
     return(/*#__PURE__*/ _react.default.createElement(_context.default.Provider, {
         value: {
             state,

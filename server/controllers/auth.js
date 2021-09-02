@@ -537,7 +537,25 @@ exports.redirect = (target, status = "logged-out") => (req, res, next) => {
     }
 
 
-}
+};
+
+
+exports.redirectReservation = (target, status = "logged-out") => (req, res, next) => {
+
+    const query = `${target}?reservation=${req.params.code}`;
+
+    if (status === "logged-in") {
+        if (req.user) res.redirect(query);
+        else next();
+    }
+
+    else {
+        if (!req.user) res.redirect(query);
+        else next();
+    }
+
+
+};
 
 
 exports.validateSession = catchAsync(async (req, res, next) => {
