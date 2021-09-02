@@ -78,13 +78,15 @@ const Wallet = () => {
 
             <div className="account__fields">
                 <h5 className="animate-item">Saved Cards</h5>
-                {paymentMethods && paymentMethods.length > 0 && paymentMethods.map(card => (
+                {paymentMethods && paymentMethods.length > 0 ? paymentMethods.map(card => (
                     <PaymentMethod
                         key={card.id}
                         card={card}
                         onClick={() => setCurrentCard(card)}
                     />
-                ))}
+                )) : (
+                    <p className="small animate-item">No saved cards.</p>
+                )}
 
             </div>
 
@@ -95,12 +97,14 @@ const Wallet = () => {
             
             <div className="account__fields animate-children">
                 <h5>Ride Credits</h5>
-                {credits && credits.length > 0 && credits.map((credit, i) => (
+                {credits && credits.length > 0 ? credits.map((credit, i) => (
                     <RideCredit
                         key={credit?.id || i}
                         credit={credit}
                     />
-                ))}
+                )) : (
+                    <p className="small">No ride credits.</p>
+                )}
             </div>
 
             <Modal

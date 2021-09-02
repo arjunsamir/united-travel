@@ -4346,6 +4346,7 @@ function _interopRequireDefault(obj) {
 }
 class Scroll {
     init() {
+        var _this$locomotive, _this$locomotive$scro, _this$locomotive$scro2;
         // Define Elements
         this.body = this.page.elements.body;
         this.container = this.page.elements.container; // Attach Scroll Events
@@ -4357,7 +4358,7 @@ class Scroll {
         this.position = window.pageXOffset; // Define Scroll Limits
         this.limits = {
             top: 0,
-            bottom: this.locomotive.scroll.instance.limit
+            bottom: ((_this$locomotive = this.locomotive) === null || _this$locomotive === void 0 ? void 0 : (_this$locomotive$scro = _this$locomotive.scroll) === null || _this$locomotive$scro === void 0 ? void 0 : (_this$locomotive$scro2 = _this$locomotive$scro.instance) === null || _this$locomotive$scro2 === void 0 ? void 0 : _this$locomotive$scro2.limit) || document.body.scrollHeight
         }; // Update Values
         this.position = this.locomotive.scroll.instance.scroll.y; // Determine If Mobile
         this.isMobile = this.page.state.isMobile = this.locomotive.scroll.isMobile; // Remove Fixed Class If Mobile
@@ -4399,7 +4400,13 @@ class Scroll {
         this.position = y;
     }
     update() {
+        var _this$locomotive2, _this$locomotive2$scr, _this$locomotive2$scr2;
         this.locomotive && this.locomotive.update();
+        this.limits = {
+            top: 0,
+            bottom: ((_this$locomotive2 = this.locomotive) === null || _this$locomotive2 === void 0 ? void 0 : (_this$locomotive2$scr = _this$locomotive2.scroll) === null || _this$locomotive2$scr === void 0 ? void 0 : (_this$locomotive2$scr2 = _this$locomotive2$scr.instance) === null || _this$locomotive2$scr2 === void 0 ? void 0 : _this$locomotive2$scr2.limit) || document.body.scrollHeight
+        };
+        return this;
     }
     pause() {
         this.locomotive.stop(); // if (this.isMobile) this.body.addClass('fixed');
@@ -4430,11 +4437,12 @@ class Scroll {
         }
         duration = (_Math$floor = Math.floor(Math.abs(this.position - t) * this.smoothScrollMultiplier)) !== null && _Math$floor !== void 0 ? _Math$floor : 1000;
         await this.page.navbar.closeMenu();
-        this.locomotive.scrollTo(t, {
+        if (!!this.locomotive) this.locomotive.scrollTo(t, {
             offset,
             duration,
             callback
         });
+        else window.scrollTo(0, t);
         await $.delay(duration);
         return 'Scrolling Complete';
     }

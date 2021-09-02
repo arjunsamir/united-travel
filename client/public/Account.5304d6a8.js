@@ -6049,22 +6049,26 @@ const Wallet = ()=>{
         className: "account__fields"
     }, /*#__PURE__*/ _react.default.createElement("h5", {
         className: "animate-item"
-    }, "Saved Cards"), paymentMethods && paymentMethods.length > 0 && paymentMethods.map((card)=>/*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
+    }, "Saved Cards"), paymentMethods && paymentMethods.length > 0 ? paymentMethods.map((card)=>/*#__PURE__*/ _react.default.createElement(_PaymentMethod.default, {
             key: card.id,
             card: card,
             onClick: ()=>setCurrentCard(card)
         })
-    )), /*#__PURE__*/ _react.default.createElement("div", {
+    ) : /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small animate-item"
+    }, "No saved cards.")), /*#__PURE__*/ _react.default.createElement("div", {
         className: "account__fields animate-children"
     }, /*#__PURE__*/ _react.default.createElement("h5", null, "Add Payment method"), /*#__PURE__*/ _react.default.createElement("p", {
         className: "small"
     }, "Currently payment methods can only be added during checkout. We're sorry for the inconvinence.")), /*#__PURE__*/ _react.default.createElement("div", {
         className: "account__fields animate-children"
-    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Ride Credits"), credits && credits.length > 0 && credits.map((credit, i)=>/*#__PURE__*/ _react.default.createElement(_RideCredit.default, {
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Ride Credits"), credits && credits.length > 0 ? credits.map((credit, i)=>/*#__PURE__*/ _react.default.createElement(_RideCredit.default, {
             key: (credit === null || credit === void 0 ? void 0 : credit.id) || i,
             credit: credit
         })
-    )), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+    ) : /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small"
+    }, "No ride credits.")), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
         isOpen: !!currentCard,
         close: setCurrentCard,
         preventClose: isLoading,

@@ -2347,7 +2347,7 @@ svg.placeholder, .icon.placeholder {
 }
 @media (max-width: 37.5em) {
   .modal__window {
-    min-height: 60vh;
+    min-height: 70vh;
     width: 100%;
     padding: 9.6rem 3.6rem var(--y-pad);
     border-radius: 0;

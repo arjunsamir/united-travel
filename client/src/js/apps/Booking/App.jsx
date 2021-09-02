@@ -1,5 +1,5 @@
 // Import React Defaults
-import React, { useReducer } from "react";
+import React, { useReducer, useEffect } from "react";
 
 // Import Contexts
 import AppContext from "./store/context";
@@ -80,6 +80,13 @@ const BookingApp = ({ copy, page }) => {
     // Create Action Dispatcher
     const updateApp = bindDispatcher(dispatch, "SET_APP");
     const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
+
+
+    // Scroll To Bottom On Mount
+    useEffect(() => {
+        if (!window.matchMedia("(max-width: 37.5em)").matches) return;
+        page.scroll.to(document.body.scrollHeight);
+    }, []);
 
     return (
         <AppContext.Provider value={{ 

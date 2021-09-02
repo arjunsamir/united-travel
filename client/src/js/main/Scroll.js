@@ -38,7 +38,7 @@ export default class Scroll {
         // Define Scroll Limits
         this.limits = {
             top: 0,
-            bottom: this.locomotive.scroll.instance.limit
+            bottom: this.locomotive?.scroll?.instance?.limit || document.body.scrollHeight
         }
 
 
@@ -126,6 +126,13 @@ export default class Scroll {
 
     update() {
         this.locomotive && this.locomotive.update();
+
+        this.limits = {
+            top: 0,
+            bottom: this.locomotive?.scroll?.instance?.limit || document.body.scrollHeight
+        }
+
+        return this;
     }
 
 
@@ -169,8 +176,9 @@ export default class Scroll {
         duration = Math.floor(Math.abs(this.position - t) * this.smoothScrollMultiplier) ?? 1000;
 
         await this.page.navbar.closeMenu();
-
-        this.locomotive.scrollTo(t, { offset, duration, callback });
+        
+        if (!!this.locomotive) this.locomotive.scrollTo(t, { offset, duration, callback });
+        else window.scrollTo(0, t)
 
         await $.delay(duration);
 

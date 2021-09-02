@@ -1074,7 +1074,11 @@ const BookingApp = (_ref)=>{
     const [state, dispatch] = _react.useReducer(_reducer.default, _initialState.default); // Get Current Stap
     const Step = steps[state.app.step] || _CheckoutApp.default; // Create Action Dispatcher
     const updateApp = bindDispatcher(dispatch, "SET_APP");
-    const update = bindDispatcher(dispatch, "UPDATE_RESERVATION");
+    const update = bindDispatcher(dispatch, "UPDATE_RESERVATION"); // Scroll To Bottom On Mount
+    _react.useEffect(()=>{
+        if (!window.matchMedia("(max-width: 37.5em)").matches) return;
+        page.scroll.to(document.body.scrollHeight);
+    }, []);
     return(/*#__PURE__*/ _react.default.createElement(_context.default.Provider, {
         value: {
             state,
