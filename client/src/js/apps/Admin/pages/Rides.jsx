@@ -44,7 +44,7 @@ const Rides = () => {
     const [api, setApi] = useObjectState({
         status: 'ready',
         page: 1,
-        limit: 20
+        limit: 5
     })
 
 
@@ -62,9 +62,13 @@ const Rides = () => {
 
             if (!res?.data?.reservations) return;
 
-            const filtered = res.data.reservations.map(getTimestamps).sort(sortFilter)
+            let filtered = res.data.reservations.map(getTimestamps).sort(sortFilter);
+
+            if (api.status !== 'ready') filtered = filtered.reverse();
 
             await timer.hold();
+
+            if (api.page > 1) filtered = [...reservations, ...filtered];
 
             update("reservations")(filtered);
 
@@ -77,7 +81,7 @@ const Rides = () => {
         // Initialize Load
         fetchReservations();
 
-    }, [api.status]);
+    }, [api.status, api.page]);
 
 
     // Create Component
@@ -90,7 +94,7 @@ const Rides = () => {
                     placeholder="Reservation Status"
                     options={dropdownOptions}
                     selected={api.status}
-                    onSelect={(selected) => setApi({ status: selected.value })}
+                    onSelect={(selected) => setApi({ status: selected.value, page: 1 })}
                 />
             </div>
 
@@ -104,6 +108,8 @@ const Rides = () => {
                             reservations={reservations}
                             fallback={"No upcoming reservations..."}
                             setLoader={setIsLoading}
+                            api={api}
+                            loadMore={() => setApi({ page: api.page + 1 })}
                         />
     
                     </>

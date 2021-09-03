@@ -1112,7 +1112,7 @@ const App = (_ref)=>{
         copy: resCopy,
         back: {
             text: "Back",
-            onClick: ()=>transition.current.changeView("Account")
+            onClick: ()=>transition.current.changeView("Settings")
         }
     }))));
 };
@@ -3276,7 +3276,7 @@ const fallbackCopy = {
     es: "Lo sentimos, no podemos encontrar su reserva."
 }; // Create App
 const App = (_ref)=>{
-    let { reservation , copy , back , user  } = _ref;
+    let { reservation , copy , back  } = _ref;
     const [res, setReservation] = _react.useState(reservation);
     return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
@@ -3284,7 +3284,7 @@ const App = (_ref)=>{
             copy,
             back,
             updateApp: setReservation,
-            user: user || window.currentUser || {
+            user: (typeof reservation.user === 'object' ? reservation.user : window.currentUser) || {
             }
         }
     }, /*#__PURE__*/ _react.default.createElement("section", {
@@ -4824,7 +4824,7 @@ const Rides = ()=>{
     const [api, setApi] = _hooks.useObjectState({
         status: 'ready',
         page: 1,
-        limit: 20
+        limit: 5
     }); // Get Reservations on Load
     _react.useEffect(()=>{
         // Get And Sort Reservations
@@ -4834,15 +4834,21 @@ const Rides = ()=>{
             const timer = $.timer(1000).start();
             const res = await _axios.default("/admin/reservations?page=".concat(api.page, "&limit=").concat(api.limit, "&status=").concat(api.status));
             if (!(res !== null && res !== void 0 && (_res$data = res.data) !== null && _res$data !== void 0 && _res$data.reservations)) return;
-            const filtered = res.data.reservations.map(getTimestamps).sort(sortFilter);
+            let filtered = res.data.reservations.map(getTimestamps).sort(sortFilter);
+            if (api.status !== 'ready') filtered = filtered.reverse();
             await timer.hold();
+            if (api.page > 1) filtered = [
+                ...reservations,
+                ...filtered
+            ];
             update("reservations")(filtered);
             setIsLoading(false);
             transition.update();
         }; // Initialize Load
         fetchReservations();
     }, [
-        api.status
+        api.status,
+        api.page
     ]); // Create Component
     return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, null, /*#__PURE__*/ _react.default.createElement("div", {
         className: "account__fields"
@@ -4853,13 +4859,18 @@ const Rides = ()=>{
         options: dropdownOptions,
         selected: api.status,
         onSelect: (selected)=>setApi({
-                status: selected.value
+                status: selected.value,
+                page: 1
             })
     })), isLoading ? /*#__PURE__*/ _react.default.createElement(_Loader.default, null) : reservations && reservations.length ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_ReservationList.default, {
         label: "Reservations",
         reservations: reservations,
         fallback: "No upcoming reservations...",
-        setLoader: setIsLoading
+        setLoader: setIsLoading,
+        api: api,
+        loadMore: ()=>setApi({
+                page: api.page + 1
+            })
     })) : /*#__PURE__*/ _react.default.createElement("div", {
         className: "animate-item"
     }, "No Reservations Found")));
@@ -5004,6 +5015,7 @@ exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
 var _AppContext = _interopRequireDefault(require("../store/AppContext"));
 var _RideItem = _interopRequireDefault(require("./RideItem"));
+var _Buttons = require("../../components/Buttons");
 var _dayjs = _interopRequireDefault(require("dayjs"));
 var _axios = _interopRequireDefault(require("axios"));
 function _interopRequireDefault(obj) {
@@ -5043,7 +5055,7 @@ function _interopRequireWildcard(obj) {
 // Import Components
 // Import Helpers
 const ReservationList = (_ref)=>{
-    let { reservations , label , fallback , setLoader  } = _ref;
+    let { reservations , label , fallback , setLoader , api , loadMore  } = _ref;
     const { transition , update  } = _react.useContext(_AppContext.default);
     return(/*#__PURE__*/ _react.default.createElement("div", {
         className: "account__group animate-children"
@@ -5054,7 +5066,7 @@ const ReservationList = (_ref)=>{
             origin: r.origin.name,
             destination: r.destination.name,
             onClick: async ()=>{
-                var _res$data, _res$data$data, _res$data2, _res$data2$data;
+                var _res$data;
                 // Prevent Duplicate Fetching
                 if (typeof r.vehicle === 'object') {
                     update("current_reservation")(r);
@@ -5063,15 +5075,17 @@ const ReservationList = (_ref)=>{
                 await transition.out(); // Set Loader
                 setLoader(true); // Start A Timer
                 const timer = $.timer(1000).start(); // Make Request
-                const res = await _axios.default("/api/vehicles/".concat(r.vehicle));
-                if (!((_res$data = res.data) !== null && _res$data !== void 0 && (_res$data$data = _res$data.data) !== null && _res$data$data !== void 0 && _res$data$data.data)) return; // Wait For 1 Second
+                const res = await _axios.default("/admin/reservations/".concat(r._id));
+                if (!((_res$data = res.data) !== null && _res$data !== void 0 && _res$data.reservation)) return; // Wait For 1 Second
                 await timer.hold(); // Update State
-                r.vehicle = (_res$data2 = res.data) === null || _res$data2 === void 0 ? void 0 : (_res$data2$data = _res$data2.data) === null || _res$data2$data === void 0 ? void 0 : _res$data2$data.data;
-                update("current_reservation")(r); // Finally Change View
+                update("current_reservation")(res.data.reservation); // Finally Change View
                 transition.changeView("Reservation");
             }
         })
-    ) : /*#__PURE__*/ _react.default.createElement("p", null, fallback)));
+    ) : /*#__PURE__*/ _react.default.createElement("p", null, fallback), reservations.length >= api.page * api.limit && /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: "Load More",
+        onClick: loadMore
+    })));
 };
 _c = ReservationList;
 var _default = ReservationList;
@@ -5084,7 +5098,7 @@ $RefreshReg$(_c, "ReservationList");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../store/AppContext":"01i6J","./RideItem":"2glss","dayjs":"ihFi1","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"2glss":[function(require,module,exports) {
+},{"react":"a4ork","../store/AppContext":"01i6J","./RideItem":"2glss","dayjs":"ihFi1","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../components/Buttons":"6z8CS"}],"2glss":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$189d = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

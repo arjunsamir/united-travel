@@ -3241,7 +3241,7 @@ const fallbackCopy = {
     es: "Lo sentimos, no podemos encontrar su reserva."
 }; // Create App
 const App = (_ref)=>{
-    let { reservation , copy , back , user  } = _ref;
+    let { reservation , copy , back  } = _ref;
     const [res, setReservation] = _react.useState(reservation);
     return reservation ? /*#__PURE__*/ _react.default.createElement(_AppContext.default.Provider, {
         value: {
@@ -3249,7 +3249,7 @@ const App = (_ref)=>{
             copy,
             back,
             updateApp: setReservation,
-            user: user || window.currentUser || {
+            user: (typeof reservation.user === 'object' ? reservation.user : window.currentUser) || {
             }
         }
     }, /*#__PURE__*/ _react.default.createElement("section", {

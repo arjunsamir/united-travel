@@ -53,7 +53,7 @@ const App = ({ copy, resCopy }) => {
                     copy={resCopy}
                     back={{
                         text: "Back",
-                        onClick: () => transition.current.changeView("Account")
+                        onClick: () => transition.current.changeView("Settings")
                     }}
                 />
             </section>

@@ -17,7 +17,7 @@ const fallbackCopy = {
 }
 
  // Create App
-const App = ({ reservation, copy, back, user }) => {
+const App = ({ reservation, copy, back }) => {
 
     const [res, setReservation] = useState(reservation);
 
@@ -28,7 +28,7 @@ const App = ({ reservation, copy, back, user }) => {
             copy,
             back,
             updateApp: setReservation,
-            user: user || window.currentUser || {}
+            user: (typeof reservation.user === 'object' ? reservation.user : window.currentUser) || {}
         }}>
             <section className="booking">
                 <Map

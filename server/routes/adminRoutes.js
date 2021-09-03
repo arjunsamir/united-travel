@@ -17,6 +17,7 @@ router.use(auth.protect, auth.restrictTo('admin'));
 router.post('/settings', admin.updateSettings);
 router.get('/settings/history', admin.getSettingsHistory);
 router.get('/reservations', reservations.getReservations);
+router.get('/reservations/:id', reservations.getOneReservation);
 
 
 module.exports = router;

@@ -593,3 +593,16 @@ exports.getReservations = catchAsync(async (req, res, next) => {
     })
 
 });
+
+
+// Get Singe Reservation
+exports.getOneReservation = catchAsync(async (req, res, next) => {
+
+    const reservation = await Reservation.findById(req.params.id).populate('vehicle').populate('user');
+
+    send(res, {
+        status: 'SUCCESS',
+        reservation
+    })
+
+});
