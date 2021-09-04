@@ -5802,7 +5802,8 @@ const PricingSettings = ()=>{
     // Destructure Context
     const { state: { settings: { thresholds  }  }  } = _react.useContext(_AppContext.default); // Creeate Local State
     const [state, setState] = _hooks.useObjectState({
-        tourist: thresholds.tourist
+        tourist: thresholds.tourist,
+        extended: thresholds.extended
     });
     console.log(settings); // Create Component
     return(/*#__PURE__*/ _react.default.createElement("div", {
@@ -5834,6 +5835,34 @@ const PricingSettings = ()=>{
         value: state.tourist,
         onChange: (t)=>setState({
                 tourist: t
+            })
+    })), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        title: "Minimum Extended Threshold",
+        label: "Minimum Extended Threshold",
+        value: "".concat(thresholds.extended, " Miles"),
+        submit: {
+            text: "Update Extended Threshold",
+            disabled: thresholds.extended === state.extended,
+            data: {
+            },
+            endpoint: '/admin',
+            method: 'patch',
+            callback (_ref2) {
+                let { error , data , close  } = _ref2;
+                console.log(error, data);
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small animate-item"
+    }, "This is the minimum number of miles necessart for the extended mileage discount to start taking effect"), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "extended-threshold",
+        type: "number",
+        icon: "location-pin",
+        label: "Threshold",
+        placeholder: "100",
+        value: state.extended,
+        onChange: (t)=>setState({
+                extended: t
             })
     }))));
 };

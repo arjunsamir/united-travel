@@ -25,7 +25,8 @@ const PricingSettings = () => {
 
     // Creeate Local State
     const [state, setState] = useObjectState({
-        tourist: thresholds.tourist
+        tourist: thresholds.tourist,
+        extended: thresholds.extended,
     })
 
     console.log(settings);
@@ -61,6 +62,32 @@ const PricingSettings = () => {
                 />
             </AccountField>
 
+            <AccountField
+                title="Minimum Extended Threshold"
+                label="Minimum Extended Threshold"
+                value={`${thresholds.extended} Miles`}
+                submit={{
+                    text: "Update Extended Threshold",
+                    disabled: thresholds.extended === state.extended,
+                    data: {},
+                    endpoint: '/admin',
+                    method: 'patch',
+                    callback({ error, data, close }) {
+                        console.log(error, data);
+                    }
+                }}
+            >
+                <p className="small animate-item">This is the minimum number of miles necessart for the extended mileage discount to start taking effect</p>
+                <Input
+                    id="extended-threshold"
+                    type="number"
+                    icon="location-pin"
+                    label="Threshold"
+                    placeholder="100"
+                    value={state.extended}
+                    onChange={t => setState({ extended: t })}
+                />
+            </AccountField>
         </div>
     )
 
