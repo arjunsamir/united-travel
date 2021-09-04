@@ -10,7 +10,7 @@ import Loader from '../../components/Loader';
 const AccountPage = ({ children, showLoader, showTitle = true }) => {
 
     // Destructure State
-    const { transition } = useContext(AppContext);
+    const { transition, state: user } = useContext(AppContext);
 
     // Component Did Mount
     useEffect(() => {
@@ -18,7 +18,7 @@ const AccountPage = ({ children, showLoader, showTitle = true }) => {
         if (showLoader || !transition.container) return;
 
         // Set Transition & Transition In
-        transition.update().in();
+        transition.update().in("Account");
 
     }, [showLoader, transition.container])
 
@@ -31,7 +31,7 @@ const AccountPage = ({ children, showLoader, showTitle = true }) => {
                 </div>
             ) : (
                 <>
-                    {showTitle && <h2 className="account__title animate-item">Hello <span>Arjun</span></h2>}
+                    {showTitle && <h2 className="account__title animate-item">Hello <span>{user.preferredName}</span></h2>}
                     {children}
                 </>
             )}

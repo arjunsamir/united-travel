@@ -1089,6 +1089,7 @@ const App = (_ref)=>{
     const element = _react.useRef();
     const transition = _react.useRef(new _Transition.default(dispatch)); // Update Container
     _react.useEffect(()=>{
+        console.log(state.view);
         transition.current.set(element.current).mount(state.view);
     }, [
         state.view
@@ -2952,27 +2953,52 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.default = void 0;
-// Get User Initial Data
-const { currentUser: { name , preferredName , email , preferredLocale , photo , _id , referralCode , oAuth , credits , stripeID , passwordSet  }  } = window; // Create Initial State
+function ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        });
+        keys.push.apply(keys, symbols);
+    }
+    return keys;
+}
+function _objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = arguments[i] != null ? arguments[i] : {
+        };
+        if (i % 2) ownKeys(Object(source), true).forEach(function(key) {
+            _defineProperty(target, key, source[key]);
+        });
+        else if (Object.getOwnPropertyDescriptors) Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+        else ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
+}
+function _defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+// Create Initial State
 const state = {
     page: "Rides",
     view: "Settings",
     currentReservation: null,
     reservations: null,
     // Array
-    paymentMethods: null,
-    // Array
-    email,
-    name,
-    preferredName,
-    preferredLocale,
-    photo,
-    id: _id,
-    oAuth,
-    referralCode,
-    credits,
-    stripeID,
-    passwordSet
+    settings: _objectSpread({
+    }, window.fullSettings),
+    admin: _objectSpread({
+    }, window.currentUser)
 };
 var _default = state;
 exports.default = _default;
@@ -3551,7 +3577,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.formatPhone = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
 const bemify = (block)=>{
     return (element)=>element ? "".concat(block, "__").concat(element) : block
     ;
@@ -3589,6 +3615,10 @@ const insertScript = (src, id)=>{
     });
 };
 exports.insertScript = insertScript;
+const formatPhone = (num)=>{
+    return num.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+};
+exports.formatPhone = formatPhone;
 const validateEmail = (val)=>{
     return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
 };
@@ -4942,7 +4972,7 @@ const AccountPage = (_ref)=>{
     const { transition  } = _react.useContext(_AppContext.default); // Component Did Mount
     _react.useEffect(()=>{
         if (showLoader || !transition.container) return; // Set Transition & Transition In
-        transition.update().in();
+        transition.update().in("Settings");
     }, [
         showLoader,
         transition.container
@@ -4953,7 +4983,7 @@ const AccountPage = (_ref)=>{
         className: "account__loader"
     }, /*#__PURE__*/ _react.default.createElement(_Loader.default, null)) : /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, showTitle && /*#__PURE__*/ _react.default.createElement("h2", {
         className: "account__title animate-item"
-    }, "Hello ", /*#__PURE__*/ _react.default.createElement("span", null, "Arjun")), children)));
+    }, "Hello ", /*#__PURE__*/ _react.default.createElement("span", null, "Admin")), children)));
 }; // Export Component
 _c = AccountPage;
 var _default = AccountPage;
@@ -5314,9 +5344,655 @@ exports.useObjectState = useObjectState;
   window.$RefreshSig$ = prevRefreshSig;
 }
 },{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"95ugt":[function(require,module,exports) {
-"use strict";
+var $parcel$ReactRefreshHelpers$c9b9 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$c9b9.prelude(module);
 
-},{}],"21XtV":[function(require,module,exports) {
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _ContactSettings = _interopRequireDefault(require("../sections/ContactSettings"));
+var _PricingSettings = _interopRequireDefault(require("../sections/PricingSettings"));
+var _CancellationSettings = _interopRequireDefault(require("../sections/CancellationSettings"));
+var _ReferralSettings = _interopRequireDefault(require("../sections/ReferralSettings"));
+var _AccountPage = _interopRequireDefault(require("../components/AccountPage"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import Sections
+// Import Components
+// Create Profile
+const Profile = ()=>{
+    return(/*#__PURE__*/ _react.default.createElement(_AccountPage.default, {
+        showTitle: false
+    }, /*#__PURE__*/ _react.default.createElement(_ContactSettings.default, null), /*#__PURE__*/ _react.default.createElement(_PricingSettings.default, null), /*#__PURE__*/ _react.default.createElement(_CancellationSettings.default, null), /*#__PURE__*/ _react.default.createElement(_ReferralSettings.default, null)));
+};
+_c = Profile;
+var _default = Profile;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Profile");
+
+  $parcel$ReactRefreshHelpers$c9b9.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../components/AccountPage":"fRcTL","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../sections/ContactSettings":"51yaS","../sections/PricingSettings":"3Ut9j","../sections/CancellationSettings":"j10Cv","../sections/ReferralSettings":"djQuz"}],"51yaS":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$3947 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$3947.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountField = _interopRequireDefault(require("../components/AccountField"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _utils = require("../../helpers/utils");
+var _hooks = require("../../helpers/hooks");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+const ContactSettings = ()=>{
+    // Destructure Context
+    const { state: { settings: { contact  } , admin: { photo  }  }  } = _react.useContext(_AppContext.default); // Creeate Local State
+    const [state, setState] = _hooks.useObjectState({
+        email: contact.email,
+        phone: contact.phone
+    }); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-header"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-photo animate-item"
+    }, /*#__PURE__*/ _react.default.createElement("img", {
+        src: photo,
+        alt: "Profile Photo"
+    })), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__profile-info animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("p", null, contact.email), /*#__PURE__*/ _react.default.createElement("p", null, _utils.formatPhone(contact.phone)))), /*#__PURE__*/ _react.default.createElement("hr", {
+        className: "booking-view__divider animate-item"
+    }), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Edit Contact Settings"), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        title: "Update Email Address",
+        label: "Contact Email",
+        value: contact.email,
+        submit: {
+            text: "Update Email Address",
+            disabled: contact.email === state.email,
+            data: {
+                email: state.email
+            },
+            endpoint: '/admin',
+            method: 'patch',
+            callback (_ref) {
+                let { error , data , close  } = _ref;
+                console.log(error, data);
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "admin-email",
+        type: "email",
+        icon: "email",
+        label: "Email Address",
+        placeholder: "admin@unitedtravelflorida.com",
+        value: state.email,
+        onChange: (email)=>setState({
+                email
+            })
+    })), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        title: "Update Phone Number",
+        label: "Contact Phone",
+        value: _utils.formatPhone(contact.phone),
+        submit: {
+            text: "Update Phone Number",
+            disabled: contact.phone === state.phone,
+            data: {
+                phone: state.phone
+            },
+            endpoint: '/admin',
+            method: 'patch',
+            callback (_ref2) {
+                let { error , data , close  } = _ref2;
+                console.log(error, data);
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small animate-item"
+    }, "Please don't include any dashes, spaces, or parentheses, formatting is done automatically"), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "admin-phone",
+        type: "tel",
+        icon: "iphone",
+        label: "Phone Number",
+        placeholder: "(123) 456-7890",
+        value: state.phone,
+        onChange: (phone)=>setState({
+                phone
+            })
+    })))));
+};
+_c = ContactSettings;
+var _default = ContactSettings;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ContactSettings");
+
+  $parcel$ReactRefreshHelpers$3947.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"01i6J","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","../../helpers/utils":"dGtD3","../components/AccountField":"9gmbA","../../components/Input":"83Axu","../../helpers/hooks":"8wHZG"}],"9gmbA":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$5146 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$5146.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _Modal = _interopRequireDefault(require("../../components/Modal"));
+var _Icon = _interopRequireDefault(require("../../components/Icon"));
+var _Buttons = require("../../components/Buttons");
+var _axios = _interopRequireDefault(require("axios"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Base React Shit
+// Import Components
+// Import Helpers
+const AccountField = (_ref)=>{
+    let { title , label , value , children , submit ={
+    }  } = _ref;
+    // Cretate Local State
+    const [showModal, setShowModal] = _react.useState(false);
+    const [isFetching, setIsFetching] = _react.useState(false); // Create Refs
+    const modal = _react.useRef(); // Create Submission handler
+    const handleSubmit = async ()=>{
+        // Start Timer
+        const timer = $.timer(1000).start(); // Set Fetch Status
+        setIsFetching(true);
+        try {
+            var _modal$current;
+            // Start Request
+            const res = await _axios.default[submit.method || "patch"](submit.endpoint || '/users/me', submit.data);
+            console.log(res); // Throw Error
+            if (res.data.status === 'ERROR' || res.data.status === 'FAIL') throw res; // Hold For Timer
+            await timer.hold(); // Set Fetch Status
+            setIsFetching(false); // Execute Submit Callback
+            submit.callback({
+                data: res === null || res === void 0 ? void 0 : res.data,
+                close: modal.current && ((_modal$current = modal.current) === null || _modal$current === void 0 ? void 0 : _modal$current.close)
+            });
+        } catch (error) {
+            var _modal$current2;
+            // Set Fetch Status
+            setIsFetching(false); // Execte Error Callback
+            submit.callback({
+                error: true,
+                close: modal.current && ((_modal$current2 = modal.current) === null || _modal$current2 === void 0 ? void 0 : _modal$current2.close)
+            });
+        }
+    }; // Create Modal
+    return(/*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__field",
+        onClick: ()=>setShowModal(true)
+    }, /*#__PURE__*/ _react.default.createElement("div", null, /*#__PURE__*/ _react.default.createElement("h6", null, label), /*#__PURE__*/ _react.default.createElement("p", null, value)), /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: "create",
+        size: "lg"
+    })), /*#__PURE__*/ _react.default.createElement(_Modal.default, {
+        isOpen: showModal,
+        close: setShowModal,
+        preventClose: isFetching,
+        closeRef: modal
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__modal"
+    }, title && /*#__PURE__*/ _react.default.createElement("h4", {
+        className: "account__modal-title animate-item"
+    }, title), children, /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
+        text: submit.text,
+        onClick: handleSubmit,
+        showLoader: isFetching,
+        disabled: submit.disabled
+    })))));
+};
+_c = AccountField;
+var _default = AccountField;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "AccountField");
+
+  $parcel$ReactRefreshHelpers$5146.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../../components/Modal":"h4i0T","../../components/Icon":"3WqAm","../../components/Buttons":"6z8CS","axios":"hDAj5","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"83Axu":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$bdcc = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$bdcc.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireDefault(require("react"));
+var _hooks = require("../helpers/hooks");
+var _Icon = _interopRequireDefault(require("./Icon"));
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+// Import React Defaults
+// Import Helpers
+// Import Other Components
+// Create Component
+const Input = (_ref)=>{
+    let { value , placeholder , onChange , onBlur: _onBlur , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
+    const [state, setState] = _hooks.useObjectState({
+        type,
+        showErrors: false
+    });
+    const isText = state.type === "text";
+    const hasError = state.showErrors && errors && errors.length > 0;
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "input"
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: $.join("input__input", [
+            hasError,
+            "has-error"
+        ], animationClass || "animate-item")
+    }, /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__main"
+    }, icon && /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: icon,
+        size: "lg"
+    }), /*#__PURE__*/ _react.default.createElement("hr", null)), /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__field"
+    }, /*#__PURE__*/ _react.default.createElement("label", {
+        htmlFor: id
+    }, label), /*#__PURE__*/ _react.default.createElement("input", {
+        id: id,
+        type: state.type || "text",
+        value: value,
+        placeholder: placeholder,
+        onChange: (onChange || formatInput) && ((e)=>{
+            let val = e.target.value;
+            if (formatInput) val = formatInput(val);
+            onChange && onChange(val);
+        }),
+        onBlur: (e)=>{
+            if (!state.showErrors) setState({
+                showErrors: true
+            });
+            _onBlur && _onBlur(e);
+        },
+        onFocus: selectOnFocus && ((e)=>e.target.select()
+        ),
+        className: "input__text-input"
+    }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__toggle",
+        onClick: ()=>setState({
+                type: isText ? "password" : "text"
+            })
+    }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+        icon: isText ? "eye-off" : "eye",
+        size: "lg"
+    }))), hasError && /*#__PURE__*/ _react.default.createElement("div", {
+        className: "input__errors"
+    }, errors.map((err, i)=>/*#__PURE__*/ _react.default.createElement("div", {
+            className: "input__error animate-item",
+            key: i
+        }, /*#__PURE__*/ _react.default.createElement(_Icon.default, {
+            icon: "error",
+            size: "sm"
+        }), /*#__PURE__*/ _react.default.createElement("p", {
+            className: "small bold"
+        }, err))
+    ))));
+};
+_c = Input;
+var _default = Input;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "Input");
+
+  $parcel$ReactRefreshHelpers$bdcc.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../helpers/hooks":"8wHZG","./Icon":"3WqAm","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"3Ut9j":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$017b = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$017b.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountField = _interopRequireDefault(require("../components/AccountField"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _hooks = require("../../helpers/hooks");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+const $$ = (cents)=>(cents / 100).toFixed(2)
+;
+const PricingSettings = ()=>{
+    // Destructure Context
+    const { state: { settings: { thresholds  }  }  } = _react.useContext(_AppContext.default); // Creeate Local State
+    const [state, setState] = _hooks.useObjectState({
+        tourist: thresholds.tourist
+    });
+    console.log(settings); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Edit Pricing Algorithm"), /*#__PURE__*/ _react.default.createElement(_AccountField.default, {
+        title: "Tourist Threshold",
+        label: "Tourist Threshold",
+        value: "".concat(thresholds.tourist, " Miles"),
+        submit: {
+            text: "Update Tourist Threshold",
+            disabled: thresholds.tourist === state.tourist,
+            data: {
+            },
+            endpoint: '/admin',
+            method: 'patch',
+            callback (_ref) {
+                let { error , data , close  } = _ref;
+                console.log(error, data);
+            }
+        }
+    }, /*#__PURE__*/ _react.default.createElement("p", {
+        className: "small animate-item"
+    }, "This is the maximum distance that the tourist threshold will be applied to."), /*#__PURE__*/ _react.default.createElement(_Input.default, {
+        id: "tourist-threshold",
+        type: "number",
+        icon: "location-pin",
+        label: "Threshold",
+        placeholder: "50",
+        value: state.tourist,
+        onChange: (t)=>setState({
+                tourist: t
+            })
+    }))));
+};
+_c = PricingSettings;
+var _default = PricingSettings;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "PricingSettings");
+
+  $parcel$ReactRefreshHelpers$017b.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"01i6J","../components/AccountField":"9gmbA","../../components/Input":"83Axu","../../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"j10Cv":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$d248 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$d248.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountField = _interopRequireDefault(require("../components/AccountField"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _hooks = require("../../helpers/hooks");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+const CancellationSettings = ()=>{
+    // Destructure Context
+    const { state: { settings  }  } = _react.useContext(_AppContext.default); // Creeate Local State
+    const [state, setState] = _hooks.useObjectState({
+    }); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Edit Cancellation Policy")));
+};
+_c = CancellationSettings;
+var _default = CancellationSettings;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "CancellationSettings");
+
+  $parcel$ReactRefreshHelpers$d248.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"01i6J","../components/AccountField":"9gmbA","../../components/Input":"83Axu","../../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"djQuz":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$bc74 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+var prevRefreshReg = window.$RefreshReg$;
+var prevRefreshSig = window.$RefreshSig$;
+$parcel$ReactRefreshHelpers$bc74.prelude(module);
+
+try {
+"use strict";
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = void 0;
+var _react = _interopRequireWildcard(require("react"));
+var _AppContext = _interopRequireDefault(require("../store/AppContext"));
+var _AccountField = _interopRequireDefault(require("../components/AccountField"));
+var _Input = _interopRequireDefault(require("../../components/Input"));
+var _hooks = require("../../helpers/hooks");
+function _interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        default: obj
+    };
+}
+function _getRequireWildcardCache() {
+    if (typeof WeakMap !== "function") return null;
+    var cache = new WeakMap();
+    _getRequireWildcardCache = function _getRequireWildcardCache1() {
+        return cache;
+    };
+    return cache;
+}
+function _interopRequireWildcard(obj) {
+    if (obj && obj.__esModule) return obj;
+    if (obj === null || typeof obj !== "object" && typeof obj !== "function") return {
+        default: obj
+    };
+    var cache = _getRequireWildcardCache();
+    if (cache && cache.has(obj)) return cache.get(obj);
+    var newObj = {
+    };
+    var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor;
+    for(var key in obj)if (Object.prototype.hasOwnProperty.call(obj, key)) {
+        var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null;
+        if (desc && (desc.get || desc.set)) Object.defineProperty(newObj, key, desc);
+        else newObj[key] = obj[key];
+    }
+    newObj.default = obj;
+    if (cache) cache.set(obj, newObj);
+    return newObj;
+}
+// Import Context
+// Import Components
+// Import Helpers
+const ReferralSettings = ()=>{
+    // Destructure Context
+    const { state: { settings  }  } = _react.useContext(_AppContext.default); // Creeate Local State
+    const [state, setState] = _hooks.useObjectState({
+    }); // Create Component
+    return(/*#__PURE__*/ _react.default.createElement("div", {
+        className: "account__fields animate-children"
+    }, /*#__PURE__*/ _react.default.createElement("h5", null, "Edit Referral Settings")));
+};
+_c = ReferralSettings;
+var _default = ReferralSettings;
+exports.default = _default;
+var _c;
+$RefreshReg$(_c, "ReferralSettings");
+
+  $parcel$ReactRefreshHelpers$bc74.postlude(module);
+} finally {
+  window.$RefreshReg$ = prevRefreshReg;
+  window.$RefreshSig$ = prevRefreshSig;
+}
+},{"react":"a4ork","../store/AppContext":"01i6J","../components/AccountField":"9gmbA","../../components/Input":"83Axu","../../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"21XtV":[function(require,module,exports) {
 "use strict";
 
 },{}],"krKvU":[function(require,module,exports) {

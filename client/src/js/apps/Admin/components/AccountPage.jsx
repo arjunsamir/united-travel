@@ -18,7 +18,7 @@ const AccountPage = ({ children, showLoader, showTitle = true }) => {
         if (showLoader || !transition.container) return;
 
         // Set Transition & Transition In
-        transition.update().in();
+        transition.update().in("Settings");
 
     }, [showLoader, transition.container])
 
@@ -31,7 +31,7 @@ const AccountPage = ({ children, showLoader, showTitle = true }) => {
                 </div>
             ) : (
                 <>
-                    {showTitle && <h2 className="account__title animate-item">Hello <span>Arjun</span></h2>}
+                    {showTitle && <h2 className="account__title animate-item">Hello <span>Admin</span></h2>}
                     {children}
                 </>
             )}

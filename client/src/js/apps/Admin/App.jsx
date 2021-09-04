@@ -29,6 +29,7 @@ const App = ({ copy, resCopy }) => {
 
     // Update Container
     useEffect(() => {
+        console.log(state.view);
         transition.current.set(element.current).mount(state.view);
     }, [state.view]);
 

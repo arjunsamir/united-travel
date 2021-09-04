@@ -3081,7 +3081,7 @@ exports.default = _default;
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
+exports.toHalf = exports.lettersOnly = exports.validatePassword = exports.validateName = exports.validateEmail = exports.formatPhone = exports.insertScript = exports.toUSD = exports.constructWrappers = exports.bemify = void 0;
 const bemify = (block)=>{
     return (element)=>element ? "".concat(block, "__").concat(element) : block
     ;
@@ -3119,6 +3119,10 @@ const insertScript = (src, id)=>{
     });
 };
 exports.insertScript = insertScript;
+const formatPhone = (num)=>{
+    return num.replace(/\D/g, '').replace(/(\d{3})(\d{3})(\d{4})/, '($1) $2-$3');
+};
+exports.formatPhone = formatPhone;
 const validateEmail = (val)=>{
     return /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val ? val.toLowerCase() : '');
 };
