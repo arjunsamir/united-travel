@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react';
+import React, { useContext } from 'react';
 
 // Import Context
 import AppContext from '../store/AppContext';
@@ -17,7 +17,7 @@ const ContactSettings = () => {
     // Destructure Context
     const {
         state: {
-            settings: { contact },
+            settings: { contact, _id },
             admin: { photo }
         }
     } = useContext(AppContext);
@@ -28,6 +28,26 @@ const ContactSettings = () => {
         phone: contact.phone,
     })
 
+    // Handle Submit
+    const submit = ({ text, disabled }) => ({
+        text,
+        disabled,
+        endpoint: `/admin/settings/${_id}`,
+        method: 'patch',
+        data: {
+            contact: {
+                ...contact,
+                email: state.email,
+                phone: state.phone
+            }
+        },
+        callback({ error, data: { settings }, close }) {
+            if (error || !settings) return;
+            update("settings")(settings)
+            close && close();
+        }
+    });
+    
     // Create Component
     return (
         <>
@@ -51,16 +71,10 @@ const ContactSettings = () => {
                     title="Update Email Address"
                     label="Contact Email"
                     value={contact.email}
-                    submit={{
+                    submit={submit({
                         text: "Update Email Address",
-                        disabled: contact.email === state.email,
-                        data: { email: state.email },
-                        endpoint: '/admin',
-                        method: 'patch',
-                        callback({ error, data, close }) {
-                            console.log(error, data);
-                        }
-                    }}
+                        disabled: contact.email === state.email
+                    })}
                 >
                     <Input
                         id="admin-email"
@@ -77,16 +91,10 @@ const ContactSettings = () => {
                     title="Update Phone Number"
                     label="Contact Phone"
                     value={formatPhone(contact.phone)}
-                    submit={{
+                    submit={submit({
                         text: "Update Phone Number",
-                        disabled: contact.phone === state.phone,
-                        data: { phone: state.phone },
-                        endpoint: '/admin',
-                        method: 'patch',
-                        callback({ error, data, close }) {
-                            console.log(error, data);
-                        }
-                    }}
+                        disabled: contact.phone === state.phone
+                    })}
                 >
                     <p className="small animate-item">Please don't include any dashes, spaces, or parentheses, formatting is done automatically</p>
                     <Input

@@ -14,7 +14,8 @@ router.get('/settings', admin.getSettings);
 // Limit Changes TO ADMIN Enable this in production
 router.use(auth.protect, auth.restrictTo('admin'));
 
-router.post('/settings', admin.updateSettings);
+router.post('/settings', admin.createSettings);
+router.patch('/settings/:id', admin.updateSettings);
 router.get('/settings/history', admin.getSettingsHistory);
 router.get('/reservations', reservations.getReservations);
 router.get('/reservations/:id', reservations.getOneReservation);

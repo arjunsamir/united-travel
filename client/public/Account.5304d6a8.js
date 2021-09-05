@@ -5326,7 +5326,7 @@ function _interopRequireDefault(obj) {
 // Import Other Components
 // Create Component
 const Input = (_ref)=>{
-    let { value , placeholder , onChange , onBlur: _onBlur , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
+    let { value , placeholder , onChange , onBlur: _onBlur , onEnter , formatInput , label , type , icon , id , errors , animationClass , selectOnFocus  } = _ref;
     const [state, setState] = _hooks.useObjectState({
         type,
         showErrors: false
@@ -5366,6 +5366,8 @@ const Input = (_ref)=>{
             _onBlur && _onBlur(e);
         },
         onFocus: selectOnFocus && ((e)=>e.target.select()
+        ),
+        onKeyDown: onEnter && ((e)=>e.key === "Enter" && onEnter()
         ),
         className: "input__text-input"
     }))), type === "password" && /*#__PURE__*/ _react.default.createElement("div", {

@@ -38,7 +38,7 @@ const SettingsView = () => {
                     <Page />
                 </div>
             </div>
-            <Nav />
+            {!!state.page && !state.page.startsWith("New") && <Nav />}
         </div>
     );
 };

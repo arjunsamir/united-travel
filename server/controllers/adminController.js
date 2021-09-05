@@ -21,15 +21,29 @@ exports.getSettings = catchAsync(async (req, res, next) => {
 
 });
 
-
-// Update/Create Settings
-exports.updateSettings = catchAsync(async (req, res, next) => {
+exports.createSettings = catchAsync(async (req, res, next) => {
 
     // Update Settings To Be Inactive
     await Settings.updateMany({ active: true }, { active: false });
 
     // Query For Active Settings
     const settings = await Settings.create(req.body);
+
+    // Send Respons
+    send(res, {
+        status: 'success',
+        settings
+    });
+
+});
+
+// Update/Create Settings
+exports.updateSettings = catchAsync(async (req, res, next) => {
+
+    // Update Settings Data
+    const settings = await Settings.findByIdAndUpdate(req.params.id, req.body, {
+        new: true
+    });
 
     // Send Respons
     send(res, {

@@ -2402,6 +2402,31 @@ svg.placeholder, .icon.placeholder {
   -webkit-filter: opacity(50%);
           filter: opacity(50%);
 }
+.tags__container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(8rem, 1fr));
+  grid-gap: 0.8rem;
+  max-height: 24rem;
+  overflow-y: scroll;
+}
+.tags__tag {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--slate-light);
+  border-radius: 0.8rem;
+  padding: 0.8rem;
+}
+.tags__tag-x {
+  padding-left: 0.4rem;
+  cursor: pointer;
+}
+.toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 .hero {
   height: 100vh;
   width: 100%;
