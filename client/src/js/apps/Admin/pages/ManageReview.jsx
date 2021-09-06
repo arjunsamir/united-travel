@@ -9,7 +9,7 @@ import AppContext from '../store/AppContext';
 // Import Components
 import AccountPage from '../components/AccountPage';
 import Input from '../../components/Input';
-import TextArea from '../../components/TextArea';
+import Textarea from '../../components/Textarea';
 import QuantitySelector from '../../components/QuantitySelector';
 import Options from '../../components/Options';
 import { Button, BackButton, LinkButton } from '../../components/Buttons';
@@ -157,7 +157,7 @@ const ManageReview = () => {
                     value={state.title}
                     onChange={title => setState({ title })}
                 />
-                <TextArea
+                <Textarea
                     ida="review-body"
                     label="Review Body"
                     placeholder="The super stylish vehicle cruises down the road..."

@@ -9,7 +9,7 @@ import AppContext from '../store/AppContext';
 // Import Components
 import AccountPage from '../components/AccountPage';
 import Input from '../../components/Input';
-import TextArea from '../../components/TextArea';
+import Textarea from '../../components/Textarea';
 import QuantitySelector from '../../components/QuantitySelector';
 import Options from '../../components/Options';
 import { Button, BackButton, LinkButton } from '../../components/Buttons';
@@ -144,7 +144,7 @@ const ManageVehicle = () => {
                     value={state.info_en.name}
                     onChange={val => setState({ info_en: { ...state.info_en, name: val } })}
                 />
-                <TextArea
+                <Textarea
                     id="english-description"
                     label="Vehicle Description"
                     placeholder="The super stylish vehicle cruises down the road..."
@@ -163,7 +163,7 @@ const ManageVehicle = () => {
                     value={state.info_es.name}
                     onChange={val => setState({ info_es: { ...state.info_es, name: val } })}
                 />
-                <TextArea
+                <Textarea
                     id="spanish-description"
                     label="Vehicle Description"
                     placeholder="El vehículo súper elegante navega por la carretera..."
