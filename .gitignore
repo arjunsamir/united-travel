@@ -7,3 +7,5 @@ dist/
 .parcel-cache
 *.code-workspace
 cloud_keys.json
+united-travel.code-workspace
+google-credentials.json
