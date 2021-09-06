@@ -94,7 +94,7 @@
         "Passengers": {
             "title": "Passengers",
             "heading": "Passengers",
-            "text": "How many passengers will be under your reservation? Please include children and infants in this total. You will be able to select car seats for them in the next step.",
+            "text": "How many passengers will be under your reservation? Please include children in this total. You will be able to select car seats later.",
             "hint": "All Ages",
             "errors": {
                 "min": "Minimum of {min} passenger",
@@ -110,7 +110,7 @@
         "ChildSeats": {
             "title": "Child Seats",
             "heading": "Child Seats",
-            "text": "No additional charges, we just want your children to travel safely. Check out {link} for more information.",
+            "text": "We offer no additional charge for these. We want to ensure your children’s safety during the trip. Check out {link} for more information.",
             "link": {
                 "text": "NHTSA recommendations",
                 "url": "https://www.nhtsa.gov/equipment/car-seats-and-booster-seats#age-size-rec"
@@ -139,7 +139,7 @@
             "heading": "Notes",
             "text": "Please let us know if there are any special requests you might have, or anything we can do to make your experience even better.",
             "label": "Your Notes",
-            "placeholder": "Say something, or don't. Up to you..."
+            "placeholder": "Say something, don't be shy!"
         },
         "Summary": {
             "title": "Reservation",
@@ -170,7 +170,7 @@
         },
         "Checkout": {
             "title": "Complete Payment",
-            "notice": "Complete the payment to book your reservation. You can cancel your reservation at no cost until 48 hours prior to your reservation.",
+            "notice": "Once payment is complete, your reservation will be booked. If plans change, no worries. You can cancel your reservation. For more information about the cancellation policy, click here.",
             "method": "Payment Method",
             "back": "Back",
             "next": "Confirm & Pay ${total}",
@@ -180,10 +180,10 @@
                 "incomplete_number": "Card number is incomplete. Most cards have 16 digits.",
                 "incomplete_cvc": "The CVC code is incomplete",
                 "incomplete_expiry": "The card expiration date is incomplete",
-                "invalid_expiry_year_past": "Expriation year is in the past",
+                "invalid_expiry_year_past": "Expiration year is in the past",
                 "incomplete_zip": "The zip code is incomplete",
                 "failed": "Sorry, your card could not be added.",          
-                "default": "Your card informaiton is invalid.",
+                "default": "Your card information is invalid.",
                 "fucked": "We had a hard time processing your card. Please try again or select a different payment method.",
                 "name": "Name is required."
             },

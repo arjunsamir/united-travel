@@ -30,37 +30,202 @@
             "next": "Continuar"
         },
         "PickupTime": {
-            "title": "Pickup Time"
+            "title": "Hora de recogida",
+            "heading": "¿Cuándo quieres que te recojan?",
+            "labels": ["Fecha", "Tiempo"],
+            "placeholder": "Seleccione"
         },
         "FlightLocation": {
-            "title": "Flight Location"
+            "title": "Aeropuerto y Aerolínea",
+            "heading": "Información de aeropuerto y aerolínea",
+            "labels": ["Seleccionar Aeropuerto", "Aerolínea", "Número de Vuelo"],
+            "placeholders": ["Seleccione", "United", "A2204"],
+            "infoTitle": "Informacion de Vuelo"
         },
         "FlightSchedule": {
-            "title": "Flight Schedule"
+            "title": "Horario de vuelo",
+            "heading": "Obtengamos el horario de su vuelo",
+            "options": ["Llegando", "Partiendo"],
+            "placeholders": ["Seleccione", "Seleccione"],
+            "labels": ["Fecha", "Tiempo", "Llegada al Aeropuerto"],
+            "fieldsetTitles": {
+                "type": "Tipo de Vuelo",
+                "arriving": "Hora de llegada del vuelo",
+                "departing": "Hora de salida del vuelo",
+                "default": "Tiempo de vuelo"
+            },
+            "dropdownText": "{time} horas antes",
+            "footerText": "Lo llevaremos al aeropuerto a las {time}"
         },
         "CruiseLocation": {
-            "title": "Cruise Location"
+            "title": "Ubicación del crucero",
+            "heading": "Información de puerto y barco",
+            "labels": ["Seleccionar puerto", "Línea de cruceros", "Nombre del barco"],
+            "placeholders": ["Seleccione", "Carnival", "Dream"],
+            "infoTitle": "Información del crucero"
         },
         "CruiseSchedule": {
-            "title": "Cruise Schedule"
+            "title": "Horario del crucero",
+            "heading": "Consigamos el horario de su crucero",
+            "options": ["Llegada", "Salida"],
+            "placeholders": ["Seleccione", "Seleccione"],
+            "labels": ["Fecha", "Hora", "Llegada al puerto de cruceros"],
+            "fieldsetTitles": {
+                "type": "¿Llegando o saliendo?",
+                "arriving": "Hora de llegada",
+                "departing": "Hora de salida",
+                "buffer": "¿Qué tan temprano quieres llegar?",
+                "default": "Tiempo de crucero"
+            },
+            "dropdownText": "{time} horas antes",
+            "footerText": "Te llevaremos al puerto a las {time}"
         },
         "Route": {
-            "title": "Create Route"
+            "title": "Crear ruta",
+            "heading": "",
+            "labels": {
+                "origin": "Origen",
+                "destination": "Destino"
+            },
+            "placeholders": {
+                "origin": "Buscar",
+                "destination": "Buscar"
+            }
         },
         "Passengers": {
-            "title": "Passengers"
+            "title": "Pasajeros",
+            "heading": "Pasajeros",
+            "text": "¿Cuántos pasajeros habrá bajo su reserva? Incluya a los niños en este total. Podrá seleccionar asientos para el automóvil más tarde.",
+            "hint": "Todas las edades",
+            "errors": {
+                "min": "Mínimo de {min} pasajero",
+                "max": "Máximo de {max} pasajeros. Por favor contáctenos para grupos grandes."
+            }
         },
         "Vehicle": {
-            "title": "Vehicle"
+            "title": "Vehículo",
+            "heading": "Seleccione un vehiculo",
+            "seats": "Asientos",
+            "bags": "Equipaje"
         },
         "ChildSeats": {
-            "title": "Child Seats"
+            "title": "Asientos para niños",
+            "heading": "Asientos para niños",
+            "text": "No ofrecemos ningún cargo adicional por estos. Queremos garantizar la seguridad de sus hijos durante el viaje. Consulte {link} para obtener más información",
+            "link": {
+                "text": "las recomendaciones de la NHTSA",
+                "url": "https://www.nhtsa.gov/equipment/car-seats-and-booster-seats#age-size-rec"
+            },
+            "inputs": [
+                {
+                    "label": "Orientado hacia atrás",
+                    "hint": "Ages 0 - 3"
+                },
+                {
+                    "label": "Con salida adelante",
+                    "hint": "Ages 1 - 7"
+                },
+                {
+                    "label": "Asientos elevados",
+                    "hint": "Ages 4 - 12"
+                }
+            ],
+            "errors": {
+                "min": "",
+                "max": "Máximo de {max} asientos disponibles"
+            }
         },
         "Notes": {
-            "title": "Special Accomodations"
+            "title": "Notas de reserva",
+            "heading": "Notas",
+            "text": "Háganos saber si hay alguna solicitud especial que pueda tener o cualquier cosa que podamos hacer para que su experiencia sea aún mejor.",
+            "label": "Tus notas",
+            "placeholder": "Di algo, no seas tímido!"
         },
         "Summary": {
-            "title": "Summary"
+            "title": "Reserva",
+            "back": "Atrás",
+            "services": {
+                "airport": "Servicio de aeropuerto",
+                "cruise": "Servicio de crucero",
+                "general": "Estándar"
+            },
+            "airport": {
+                "arriving": "Vuelo de llegada",
+                "departing": "Vuelo de salida",
+                "buffer": "(llegar {h} horas antes)",
+                "flight": "Vuelo"
+            },
+            "cruise": {
+                "arriving": "Crucero de llegada",
+                "departing": "Crucero de salida",
+                "buffer": "(llegar {h} horas antes)"
+            },
+            "notes": "Notas",
+            "next": "Continuar con el pago"
+        },
+        "Login": {
+            "title": "Inicie sesión o regístrese para continuar.",
+            "text": "Para completar su reserva, inicie sesión en su cuenta. Si no tiene una cuenta, podrá registrarse.",
+            "next": "Continuar"
+        },
+        "Checkout": {
+            "title": "El pago completo",
+            "notice": "Una vez que se complete el pago, su reserva será reservada. Si los planes cambian, no se preocupe. Puede cancelar su reserva. Para obtener más información sobre la política de cancelación, haga clic aquí.",
+            "method": "Método de pago",
+            "back": "Atrás",
+            "next": "Confirmar y pagar $ {total}",
+            "credit": "Crédito aplicado",
+            "errors": {
+                "invalid_number": "Este número de tarjeta no es válido.",
+                "incomplete_number": "El número de tarjeta está incompleto. La mayoría de las tarjetas tienen 16 dígitos.",
+                "incomplete_cvc": "El código CVC está incompleto",
+                "incomplete_expiry": "La fecha de vencimiento de la tarjeta está incompleta.",
+                "invalid_expiry_year_past": "El año de vencimiento está en el pasado",
+                "incomplete_zip": "El código postal está incompleto",
+                "failed": "Lo sentimos, no se pudo agregar su tarjeta.",          
+                "default": "La información de su tarjeta no es válida.",
+                "fucked": "Tuvimos dificultades para procesar su tarjeta. Vuelva a intentarlo o seleccione otro método de pago.",
+                "name": "Se requiere el nombre."
+            },
+            "labels": {
+                "name": "Nombre en la tarjeta",
+                "card": "Información de la tarjeta"
+            },
+            "views": {
+                "add-card": {
+                    "title": "Agregar nueva tarjeta",
+                    "button": "Agregar tarjeta",
+                    "save": "Guarda esta tarjeta para uso futuro",
+                    "placeholder": "Jamie Lopez"
+                },
+                "methods": {
+                    "title": "Seleccionar método de pago",
+                    "wallets": "Carteras digitales",
+                    "cards": "Tus tarjetas de crédito/débito",
+                    "text":"Aún no tienes ninguna tarjeta de crédito / débito guardada. Agregue uno a continuación.",
+                    "add": "Agregar nueva tarjeta",
+                    "button": {
+                        "disabled": "Seleccionar para continuar",
+                        "enabled": "Usa {method}"
+                    }
+                }
+            }
+        },
+        "Confirmation": {
+            "title": "¡Estás listo!",
+            "code": "Código de confirmación:",
+            "email": "Se ha enviado un correo electrónico de confirmación a",
+            "thanks": "¡Gracias por reservar con nosotros! Esperamos poder hacer que su viaje sea excelente."
+        }
+    },
+    "common": {
+        "next": "Continuar",
+        "back": "Atrás",
+        "units": {
+            "miles": "Millas",
+            "mins": "Minutos",
+            "hours": "Horas"
         }
     }
     

@@ -9,37 +9,37 @@
         },
         "beyond": {
             "title": "Desde el punto A hasta el más allá.",
-            "copy": "Brindamos servicios de transporte de alta calidad, seguros y confiables en toda la Florida Central. También ofrecemos viajes de mayor distancia dentro y fuera de Orlando. Llegue a su próximo destino con facilidad, comodidad y tranquilidad.",
+            "copy": "Brindamos servicios de transporte seguros, de alta calidad y confiables en toda la Florida Central. También ofrecemos transporte de larga distancia dentro y fuera de Orlando. Nos enorgullece llevarlo a su próximo destino con facilidad, comodidad y tranquilidad.",
             "cta": "Reservar Ahora"
         },
         "airport": {
             "title": "Servicio de Aeropuerto",
-            "copy": "¿Necesita que lo recojan o lo dejen en el aeropuerto? Ofrecemos una experiencia completamente perfecta. Realizamos un seguimiento del estado de su vuelo para que podamos llegar temprano para que no tenga que esperar un minuto a que llegue su conductor. Siempre llegamos a tiempo y siempre somos profesionales.",
+            "copy": "¿Necesita que lo recojan o lo dejen en el aeropuerto? ¡No hay problema! Llegamos a tiempo y le ofrecemos la experiencia más profesional y fluida posible. Para mayor comodidad, realizamos un seguimiento del estado de su vuelo para que no tenga que esperar a que llegue su conductor.",
             "cta": "Hacer Reservacion"
         },
         "cruise": {
             "title": "Servicio de Crucero",
-            "copy": "¿Vas a hacer un crucero y necesitas que te dejen en la terminal de cruceros? Lo cubrimos con una experiencia completamente fluida. Siempre somos profesionales y siempre a tiempo.",
+            "copy": "¿Está planeando un crucero y necesita que lo dejen en la terminal? ¡Te tenemos cubierto! Podemos tener un conductor esperándolo justo afuera antes de que se vaya. ¡Nuestros servicios de alta calidad pueden satisfacer todas sus necesidades y llevarlo a tiempo para que comiencen las festividades!",
             "cta": "Hacer Reservacion"
         },
         "charter": {
             "title": "Servicio Charter",
-            "copy": "Reserve un conductor para el día. Esto es perfecto para eventos especiales o para un día visitando las atracciones de clase mundial de Orlando. Lo llevaremos a cualquier lugar al que necesite ir y lo estaremos allí esperándolo cuando esté listo para dirigirse a su próximo destino. Reserve con nosotros todo el tiempo que desee con un mínimo de tres horas. Si desea reservar el servicio chárter, comuníquese con nosotros para obtener más información.",
+            "copy": "¡Reserve un conductor para el día! Esto es perfecto para eventos especiales o incluso para un día recorriendo las atracciones de clase mundial de Orlando. Te llevaremos a donde necesites ir y te estaremos esperando para tu próxima aventura. Si desea reservar nuestros servicios chárter, comuníquese con nosotros para obtener más información.",
             "cta": "Contacta con nosotros"
         },
         "long": {
             "title": "<span>¿Paseos de larga distancia?</span> No hay problema.",
-            "copy": "¿Se puede llegar de Orlando a Miami? Eso no es un problema para nosotros, ya que estamos orgullosos de ofrecer viajes de larga distancia. Siéntese y relájese mientras lo conducimos por el estado de Florida. Disfruta de un viaje en autopista cómodo y suave con toda la comodidad que necesitas para que el tiempo pase volando.",
+            "copy": "¿Necesitas ir de Orlando a Miami? Estamos orgullosos de ofrecer viajes de larga distancia para su conveniencia. Siéntese y relájese mientras lo conducimos por el estado de Florida. ¡Disfrute de un viaje cómodo y suave hacia el sur sin preocupaciones y observe cómo pasa el tiempo!",
             "cta": "Reservar Ahora"
         },
         "safety": {
             "children": {
                 "title": "Acomodar a sus hijas.",
-                "copy": "Queremos asegurarnos de que sus hijos estén seguros. Ofrecemos asientos de seguridad para niños en varios tamaños para mantenerlos seguros. Cuando reserve un viaje con nosotros, puede solicitar un alojamiento especial y le proporcionaremos los asientos de seguridad para sus hijos."
+                "copy": "Queremos asegurarnos de que sus hijos estén seguros. Ofrecemos asientos para el automóvil en varios tamaños para priorizar la seguridad de sus hijos. Cuando reserve un viaje con nosotros, puede solicitar estos asientos para el automóvil de manera especial y nos adaptamos a sus necesidades y seguridad."
             },
             "covid": {
                 "title": "Priorizando tu seguridad.",
-                "copy": "Priorizamos tu seguridad y comodidad. Haremos un esfuerzo adicional para asegurarnos de que tenga una experiencia de primera clase y llegue a su destino de manera oportuna. Nuestra flota de vehículos se limpia y desinfecta antes y después de cada viaje para que pueda tener más tranquilidad. Ya sea que se encuentre en Florida por vacaciones o por negocios, estamos aquí para ofrecer nuestros servicios líderes en su clase."
+                "copy": "¡Priorizamos su comodidad y seguridad primero! Haremos un esfuerzo adicional para garantizar una experiencia de primera clase y llevarlo a su destino de manera segura y oportuna. Nuestra flota de vehículos se limpia y desinfecta a fondo antes y después de cada viaje, para su tranquilidad. Ya sea que se encuentre en Florida por negocios o de vacaciones, con gusto le ofrecemos nuestros servicios líderes en su clase para ayudarlo."
             }
         }
     }
