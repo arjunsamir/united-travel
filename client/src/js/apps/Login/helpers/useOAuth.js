@@ -76,6 +76,7 @@ class GoogleAuth {
         this.callback = callback;
         this.endpoint = endpoint;
         this.allowCallback = false;
+        this.enabled = true;
     }
 
     async load() {
@@ -86,11 +87,15 @@ class GoogleAuth {
             // Load Google API
             gapi.load('client:auth2', () => {
 
-
-                gapi.client.init(config.google).then(resolve)
+                gapi.client.init(config.google).then(resolve).catch(() => {
+                    this.enabled = false;
+                    resolve();
+                })
 
             })
         });
+
+        if (!this.enabled) return;
 
         // Create New Auth Instance
         this.auth = window.GoogleAuth = gapi.auth2.getAuthInstance();
@@ -150,6 +155,7 @@ const useOAuth = (callback) => {
 
             setOAuth({
                 loaded: true,
+                enabled: googleAuth.enabled,
                 useAuthProvider: (service) => {
 
                     switch (service) {

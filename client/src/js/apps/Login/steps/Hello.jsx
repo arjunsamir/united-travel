@@ -25,7 +25,7 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
     const typewriter = useRef();
 
     // Enable Third Party Login
-    const { loaded, useAuthProvider } = useOAuth(async (endpoint, data) => {
+    const { enabled, loaded, useAuthProvider } = useOAuth(async (endpoint, data) => {
         const user = await authenticate(endpoint, data);
         update('user')(user);
         transition.to("greeting");
@@ -111,21 +111,28 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
                     </h2>
                 </div>
                 <fieldset className="login__fieldset">
-                    <h6 className={`bold ${aC}`}>{copy.continueWith}</h6>
-                    <div className="login__inline">
-                        <Button
-                            text="Google"
-                            icon="google"
-                            theme="google"
-                            onClick={loaded && useAuthProvider('google')}
-                        />
-                        <Button
-                            text="Facebook"
-                            icon="facebook"
-                            theme="facebook"
-                            onClick={loaded && useAuthProvider('facebook')}
-                        />
-                    </div>
+                    {enabled ? (
+                        <>
+                            <h6 className={`bold ${aC}`}>{copy.continueWith}</h6>
+                            <div className="login__inline">
+                                <Button
+                                    text="Google"
+                                    icon="google"
+                                    theme="google"
+                                    onClick={loaded && useAuthProvider('google')}
+                                />
+                                <Button
+                                    text="Facebook"
+                                    icon="facebook"
+                                    theme="facebook"
+                                    onClick={loaded && useAuthProvider('facebook')}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <p className="animate-item">We're sorry, third party sign in is not available in this browser. This can be caused by using incognito mode or private browsing mode. We are actively working to resolve this.</p>
+                    )}
+                    
                 </fieldset>
                 <div className="login__fieldset">
                     <h6 className={`bold ${aC}`}>{copy.alt}</h6>

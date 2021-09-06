@@ -2884,7 +2884,7 @@ const Hello = (_ref)=>{
     const typeRef = _react.useRef();
     const mainRef = _react.useRef();
     const typewriter = _react.useRef(); // Enable Third Party Login
-    const { loaded , useAuthProvider  } = _useOAuth.default(async (endpoint, data)=>{
+    const { enabled , loaded , useAuthProvider  } = _useOAuth.default(async (endpoint, data)=>{
         const user = await authenticate(endpoint, data);
         update('user')(user);
         transition.to("greeting");
@@ -2950,7 +2950,7 @@ const Hello = (_ref)=>{
         className: "blink"
     }, "|"))), /*#__PURE__*/ _react.default.createElement("fieldset", {
         className: "login__fieldset"
-    }, /*#__PURE__*/ _react.default.createElement("h6", {
+    }, enabled ? /*#__PURE__*/ _react.default.createElement(_react.default.Fragment, null, /*#__PURE__*/ _react.default.createElement("h6", {
         className: "bold ".concat(aC)
     }, copy.continueWith), /*#__PURE__*/ _react.default.createElement("div", {
         className: "login__inline"
@@ -2964,7 +2964,9 @@ const Hello = (_ref)=>{
         icon: "facebook",
         theme: "facebook",
         onClick: loaded && useAuthProvider('facebook')
-    }))), /*#__PURE__*/ _react.default.createElement("div", {
+    }))) : /*#__PURE__*/ _react.default.createElement("p", {
+        className: "animate-item"
+    }, "We're sorry, third party sign in is not available in this browser. This can be caused by using incognito mode or private browsing mode. We are actively working to resolve this.")), /*#__PURE__*/ _react.default.createElement("div", {
         className: "login__fieldset"
     }, /*#__PURE__*/ _react.default.createElement("h6", {
         className: "bold ".concat(aC)
@@ -3673,9 +3675,13 @@ class GoogleAuth {
         if (!window.GoogleAuth) await new Promise((resolve)=>{
             // Load Google API
             gapi.load('client:auth2', ()=>{
-                gapi.client.init(_config.default.google).then(resolve);
+                gapi.client.init(_config.default.google).then(resolve).catch(()=>{
+                    this.enabled = false;
+                    resolve();
+                });
             });
-        }); // Create New Auth Instance
+        });
+        if (!this.enabled) return; // Create New Auth Instance
         this.auth = window.GoogleAuth = gapi.auth2.getAuthInstance(); // Sign Out User
         this.auth.signOut(); // Listen For Chances to Authenticator
         this.auth.isSignedIn.listen(()=>this.updateStatus()
@@ -3699,6 +3705,7 @@ class GoogleAuth {
         this.callback = callback1;
         this.endpoint = endpoint1;
         this.allowCallback = false;
+        this.enabled = true;
     }
 } // Create Custom Hook
 const useOAuth = (callback2)=>{
@@ -3720,6 +3727,7 @@ const useOAuth = (callback2)=>{
             ]);
             setOAuth({
                 loaded: true,
+                enabled: googleAuth.enabled,
                 useAuthProvider: (service)=>{
                     switch(service){
                         case 'google':
