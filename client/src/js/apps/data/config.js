@@ -1,6 +1,6 @@
 const config = {
     maps: {
-        api_key: "AIzaSyDoZ26XMBSKktL9yuvUapEO-X7lHzOZIlY"
+        api_key: "AIzaSyAyUCWmX5nIHikJ1XaeGR1EYMHEtXaA0Gc"
     },
     facebook: {
         appId: '274042323746865',
@@ -9,7 +9,7 @@ const config = {
         version: 'v11.0'
     },
     google: {
-        client_id: '220634530652-pl9i990faf23aoc95mdcgvfsmhqmvd9c.apps.googleusercontent.com',
+        client_id: '35387890783-9o43d5rm0g8kdcath0snh319sfoctmvo.apps.googleusercontent.com',
         scope: 'https://www.googleapis.com/auth/userinfo.profile',
         cookiepolicy: 'single_host_origin'
     },
