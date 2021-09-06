@@ -11,5 +11,7 @@ united-travel.code-workspace
 google-credentials.json
 client/public/*.js
 client/public/*.map
+client/public/js/*.js
+client/public/js/*.map
 client/public/style/*.css
 client/public/style/*.map
