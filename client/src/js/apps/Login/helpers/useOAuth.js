@@ -87,8 +87,9 @@ class GoogleAuth {
             // Load Google API
             gapi.load('client:auth2', () => {
 
-                gapi.client.init(config.google).then(resolve).catch(() => {
+                gapi.client.init(config.google).then(resolve).catch((err) => {
                     this.enabled = false;
+                    console.warn(err);
                     resolve();
                 })
 
