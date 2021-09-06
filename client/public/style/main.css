@@ -4136,4 +4136,33 @@ svg.placeholder, .icon.placeholder {
 .account-nav__item.active {
   color: var(--white);
 }
+.legal {
+  padding: var(--y-pad) var(--x-pad);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.legal__content {
+  max-width: calc(var(--max-content-width) * 1.5);
+}
+.legal__content h2 {
+  margin: 6.4rem 0 2.4rem;
+}
+.legal__content h4 {
+  margin: 2.4rem 0;
+}
+.legal__content h5 {
+  margin-bottom: 1.6rem 0;
+}
+.legal__content ul {
+  list-style: bullet;
+  padding-left: 2.4rem;
+}
+.legal__content ul li {
+  margin: 1.2rem 0;
+}
+.legal__content strong {
+  color: var(--jet);
+}
 /*# sourceMappingURL=main.css.map */
