@@ -59,6 +59,10 @@ class Views {
         this.render(res, 'navbar');
     }
 
+    contact(req, res) {
+        this.render(res, 'contact');
+    }
+
     async admin(req, res) {
         await this.getSettings();
         this.render(res, 'admin', {

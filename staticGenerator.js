@@ -95,7 +95,7 @@ const generateStaticFiles = async (view) => {
 }
 
 const watchStaticFiles = () => {
-    return Promise.all(['home', 'about', 'fleet', 'login', 'book', 'account', 'reservation', 'admin', 'privacy', 'terms'].map(generateStaticFiles)).then(() => {
+    return Promise.all(['home', 'about', 'fleet', 'login', 'book', 'account', 'reservation', 'admin', 'privacy', 'terms', 'contact'].map(generateStaticFiles)).then(() => {
         console.log('Rebuilt Static Files 🔥')
     }).catch(err => process.exit());
 }

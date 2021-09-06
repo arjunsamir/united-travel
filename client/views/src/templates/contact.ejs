@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+
+<%- include('../partials/head', { title })  %>
+
+<body class="terms-page fixed" data-barba="wrapper">
+
+    <!-- Preloader -->
+    <%- include('../components/preloader') %>
+
+    <!-- Navbar -->
+    <%- include('../components/navbar', { path, lang, ...components.navbar }) %>
+
+    <!-- Main Block (Scroll Container) -->
+    <main data-scroll-container data-barba="container" data-barba-namespace="contact">
+
+        <!-- Hero Section -->
+        <section class="hero smol">
+
+            <!-- Background Video -->
+            <div class="hero__background">
+                <img src="https://storage.googleapis.com/utravel-site-content/img/contact-hero.jpeg" alt="Parked car with reflections of city lights">
+            </div>
+
+            <!-- Content -->
+            <div class="hero__content" data-scroll data-scroll-speed="-2">
+
+                <h1><%- hero.title %></h1>
+                <h4><%= hero.subtitle %></h4>
+                
+            </div>
+
+        </section>
+        
+        <!-- Contact Us -->
+        <%- include('../components/contact', { path, lang, ...components.contact }) %>
+        
+        <!-- Footer -->
+        <%- include('../components/footer', { path, lang, ...components.footer }) %>
+
+    </main>
+    
+    <!-- JavaScript -->
+    <%- include('../partials/scripts'), { lang }  %> 
+
+</body>
+
+</html>

@@ -26,6 +26,7 @@ module.exports = lang => {
     router.get('/services', render(views, 'services'));
     router.get('/fleet', render(views, 'fleet'));
     router.get('/book', render(views, 'book'));
+    router.get('/contact', render(views, 'contact'));
 
     // Account Routes
     router.get('/login', auth.redirect(`${prefix}/`, 'logged-in'), render(views, 'login'));
