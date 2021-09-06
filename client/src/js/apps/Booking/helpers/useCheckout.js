@@ -160,6 +160,9 @@ const useCheckout = () => {
             // Get Mobile Wallets
             const wallets = await paymentRequest.canMakePayment() || {};
 
+            // Disable Apple Pay (No Developer Credentials)
+            if (wallets.applePay) wallets.applePay = false;
+
             // Attach Wallet Event Listers
             if (wallets) {
 

@@ -69840,7 +69840,7 @@ const Passengers = (_ref)=>{
         min: 1,
         max: 14,
         value: passengers,
-        placeholder: "1",
+        placeholder: "0",
         onChange: (val)=>update("PASSENGERS", val)
         ,
         errorCopy: copy.errors
@@ -75417,7 +75417,8 @@ const useCheckout = ()=>{
                 requestPayerEmail: true
             }); // Get Mobile Wallets
             const wallets = await paymentRequest.canMakePayment() || {
-            }; // Attach Wallet Event Listers
+            }; // Disable Apple Pay (No Developer Credentials)
+            if (wallets.applePay) wallets.applePay = false; // Attach Wallet Event Listers
             if (wallets) paymentRequest.on('paymentmethod', async (e)=>{
                 const status = await processPayment(stripe, secret)(e.paymentMethod.id, e);
                 setState({

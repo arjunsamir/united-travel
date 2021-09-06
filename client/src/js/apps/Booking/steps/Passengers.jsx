@@ -34,7 +34,7 @@ const Passengers = ({ update, copy }) => {
                     min={1}
                     max={14}
                     value={passengers}
-                    placeholder="1"
+                    placeholder="0"
                     onChange={(val) => update("PASSENGERS", val)}
                     errorCopy={copy.errors}
                 />
