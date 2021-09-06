@@ -199,6 +199,8 @@ const isRefundable = async (date, status) => {
 // Send Confirmation Email
 const sendConfirmationEmail = async (reservation) => {
 
+    const { contact } = await refreshSettings();
+
     const { user, code, schedule, origin, destination, passengers, payment } = reservation;
     const locale = user.preferredLocale || "en";
 
@@ -217,6 +219,25 @@ const sendConfirmationEmail = async (reservation) => {
         locale,
         data: {
             name: user.preferredName || user.name,
+            code,
+            date: pickup.format("dddd MMMM D, YYYY"),
+            pickup: pickup.format("h:mm A"),
+            dropoff: dropoff.format("h:mm A"),
+            origin: origin.name,
+            destination: destination.name,
+            passengers: passengers.total,
+            total: `$${(payment.total/100).toFixed(2)}`
+        }
+    });
+
+    await sendEmail({
+        to: contact.notificationEmail,
+        template: "confirmation",
+        locale: 'en',
+        data: {
+            name: user.preferredName || user.name,
+            fullName: user.name,
+            email: user.email,
             code,
             date: pickup.format("dddd MMMM D, YYYY"),
             pickup: pickup.format("h:mm A"),
@@ -486,13 +507,15 @@ exports.issueRefund = catchAsync(async (req, res, next) => {
     });
 
 
-    // Send Email To Admin
-    sendEmail({
-        to: contact.notificationEmail,
-        locale: 'en',
-        template: 'refund_notification',
-        data: {}
-    })
+    // TODO: Send Email To Admin
+    // sendEmail({
+    //     to: contact.notificationEmail,
+    //     locale: 'en',
+    //     template: 'refund_notification',
+    //     data: {
+
+    //     }
+    // })
 
 });
 

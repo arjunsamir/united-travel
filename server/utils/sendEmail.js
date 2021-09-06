@@ -16,8 +16,8 @@ const templates = {
         es: "d-6c8b6e17d86740b09bf5b5dafb8b5f12"
     },
     confirmation_notification: {
-        en: "",
-        es: ""
+        en: "d-4ca62ff53f8f4965860013ad5d4fb560",
+        es: "d-4ca62ff53f8f4965860013ad5d4fb560"
     },
     reset: {
         en: "d-9a9e4871986f4f738dd4dad88e7cb9e2",
