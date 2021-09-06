@@ -27,8 +27,6 @@ const EditProfile = () => {
         }
     } = useContext(AppContext);
 
-    // console.log(errCopy);
-
     // Create Local State
     const [email, setEmail] = useState(user.email);
     const [emailErrs, setEmailErrs] = useState([]);
@@ -55,7 +53,7 @@ const EditProfile = () => {
                     disabled: user.email === email || errors.email.length > 0,
                     data: { email },
                     callback({ error, data, close }) {
-                        if (error) return setEmailErrs(["FUCK YOU"]);
+                        if (error) return setEmailErrs(["This email address is already registered to another account."]);
                         update("email")(data.user.email);
                         close && close();
                     }
@@ -87,7 +85,7 @@ const EditProfile = () => {
                     method: "post",
                     endpoint: "/auth/update-password",
                     callback({ error, data, close }) {
-                        if (error) return setPasswordErrs(["FUCK YOU"]);
+                        if (error) return setPasswordErrs(["THe current password you entered is incorrect."]);
                         close && close();
                     }
                 }}

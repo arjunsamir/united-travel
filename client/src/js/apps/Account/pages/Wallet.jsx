@@ -44,8 +44,6 @@ const Wallet = () => {
 
     }
 
-    console.log(appCopy);
-
     // Load Payment Methods
     useEffect(() => {
 
