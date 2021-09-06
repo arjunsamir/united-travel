@@ -6,7 +6,7 @@ import AppContext from '../store/AppContext';
 
 // Import pages
 import Rides from '../pages/Rides';
-import Profile from '../Pages/Profile';
+import Profile from '../pages/Profile';
 import Wallet from '../pages/Wallet';
 import Invite from '../pages/Invite';
 

@@ -9,3 +9,7 @@ dist/
 cloud_keys.json
 united-travel.code-workspace
 google-credentials.json
+client/public/*.js
+client/public/*.map
+client/public/style/*.css
+client/public/style/*.map
