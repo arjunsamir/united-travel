@@ -55,14 +55,14 @@
     },
     "requestReset": {
         "title": "Restablecer la Contraseña",
-        "copy": "Ingrese su dirección de correo electrónico y le enviaremos un enlace de restablecimiento de contraseña para que pueda crear una nueva contraseña.",
+        "copy": "Ingrese su dirección de correo electrónico y le enviaremos un código de restablecimiento para crear una nueva contraseña.",
         "button": "Obtener Código de Reinicio",
         "back": "Atrás",
         "inputs": {}
     },
     "resetCode": {
         "title": "Consultar su correo electrónico",
-        "copy": "Se envió un correo electrónico con su código de restablecimiento a {email}. El código puede tardar hasta 10 minutos en llegar.",
+        "copy": "Se envió un correo electrónico con su código de restablecimiento a {email}. El código puede tardar unos minutos en llegar.",
         "button": "Código de verificación",
         "back": "Atrás",
         "resend": ["¿No recibiste el correo electrónico?", "Reenviar codigo."],
@@ -117,7 +117,7 @@
         },
         "fails": {
             "password": "Tu contraseña es incorrecta.",
-            "oauth": "Este correo electrónico se registró mediante el inicio de sesión de un tercero. Inicie sesión con Google o Facebook. Una vez que inicie sesión, puede establecer una contraseña en la configuración de su cuenta."
+            "oauth": "Este correo electrónico se registró mediante el inicio de sesión de un tercero. Inicie sesión con Google o Facebook."
         }
     },
     "referral": {

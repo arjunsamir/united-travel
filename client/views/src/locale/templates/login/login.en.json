@@ -55,14 +55,14 @@
     },
     "requestReset": {
         "title": "Reset Password",
-        "copy": "Enter your email address and we'll send you a password reset link so that you can create a new password.",
+        "copy": "Enter your email address and we'll send you a reset code to create a new password.",
         "button": "Get Reset Code",
         "back": "Back",
         "inputs": {}
     },
     "resetCode": {
         "title": "Check Your Email",
-        "copy": "An email with your reset code has been sent to {email}. The code can take up to 10 minutes to arrive.",
+        "copy": "An email with your reset code has been sent to {email}. The code may take a few minutes to arrive.",
         "button": "Verify Code",
         "back": "Back",
         "resend": ["Didn't receive the email?", "Resend code."],
@@ -117,7 +117,7 @@
         },
         "fails": {
             "password": "Your password is incorrect.",
-            "oauth": "This email was registered through third party sign in. Please sign in with Google or Facebook. Once you login you can set a password in your account settings."
+            "oauth": "This email was registered through a third party sign in. Please sign in with Google or Facebook."
         }
     },
     "referral": {
