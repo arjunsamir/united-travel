@@ -15,3 +15,4 @@ client/public/js/*.js
 client/public/js/*.map
 client/public/style/*.css
 client/public/style/*.map
+.DS_Store
