@@ -66425,7 +66425,7 @@ const TimePicker = (_ref3)=>{
 }; // Create Component
 _c2 = TimePicker;
 const DateTimePicker = (_ref4)=>{
-    let { value , defaultValue , onChange , datePicker , timePicker , icon  } = _ref4;
+    let { value , defaultValue , onChange , datePicker , timePicker , icon , useMinDate =true  } = _ref4;
     const handleChange = (val)=>{
         onChange(val.format('MM-DD-YYYY H:mm'));
         setShow(false);
@@ -66445,8 +66445,10 @@ const DateTimePicker = (_ref4)=>{
     }), /*#__PURE__*/ _react.default.createElement("hr", null)), datePicker && typeof datePicker === 'object' && /*#__PURE__*/ _react.default.createElement(DatePicker, _extends({
         date: date,
         onChange: handleChange,
-        showPlaceholder: show,
+        showPlaceholder: show
+    }, useMinDate ? {
         minDate: _dayjs.default().add(1, 'day')
+    } : {
     }, datePicker || {
     })), datePicker && timePicker && /*#__PURE__*/ _react.default.createElement("hr", null), timePicker && typeof timePicker === 'object' && /*#__PURE__*/ _react.default.createElement(TimePicker, _extends({
         time: date,
@@ -66769,6 +66771,11 @@ const Input = (_ref)=>{
         onChange: (onChange || formatInput) && ((e)=>{
             let val = e.target.value;
             if (formatInput) val = formatInput(val);
+            if (type === "number") {
+                var _parseFloat;
+                val = (_parseFloat = parseFloat(val)) !== null && _parseFloat !== void 0 ? _parseFloat : "";
+                if (val !== val) val = "";
+            }
             onChange && onChange(val);
         }),
         onBlur: (e)=>{
@@ -76311,7 +76318,7 @@ const Confirmation = ()=>{
         className: "booking-view__section animate-children"
     }, /*#__PURE__*/ _react.default.createElement("p", null, copy.email, " ", user.email), /*#__PURE__*/ _react.default.createElement("p", null, copy.thanks), /*#__PURE__*/ _react.default.createElement(_Buttons.Button, {
         text: "View my reservation",
-        onClick: ()=>page.barba.go("/reservations/".concat(code))
+        onClick: ()=>window.location.href = "/reservations/".concat(code)
     }))));
 };
 _c = Confirmation;

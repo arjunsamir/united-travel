@@ -15,7 +15,27 @@ import Validator from '../helpers/Validator';
 import Reservation from '../Reservation/App';
 import Settings from './views/Settings'; 
 
+// Import Date Time Libraries
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DayjsUtils from '@date-io/dayjs'
+import enLocale from 'dayjs/locale/en';
+import esLocale from 'dayjs/locale/es';
+
+// Import Theming
+import { ThemeProvider } from '@material-ui/styles';
+import theme from '../data/materialTheme';
+
+
+// Create Views Registry
 const views = { Settings, Reservation }
+
+
+// Create Locale
+const locales = {
+    en: enLocale,
+    es: esLocale
+};
+
 
 // Create Account App
 const App = ({ copy, resCopy }) => {
@@ -48,17 +68,20 @@ const App = ({ copy, resCopy }) => {
                 data: val
             })
         }}>
-            <section ref={element}>
-                <View
-                    reservation={state.currentReservation}
-                    copy={resCopy}
-                    back={{
-                        text: "Back",
-                        onClick: () => transition.current.changeView("Settings")
-                    }}
-                />
-            </section>
-            
+            <MuiPickersUtilsProvider utils={DayjsUtils} locale={locales[window.locale]}>
+                <ThemeProvider theme={theme}>
+                    <section ref={element}>
+                        <View
+                            reservation={state.currentReservation}
+                            copy={resCopy}
+                            back={{
+                                text: "Back",
+                                onClick: () => transition.current.changeView("Settings")
+                            }}
+                        />
+                    </section>
+                </ThemeProvider>
+            </MuiPickersUtilsProvider>
         </AppContext.Provider>
     )
     

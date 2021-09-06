@@ -8,6 +8,9 @@ import AppContext from '../store/AppContext';
 import Rides from '../pages/Rides';
 import Settings from '../pages/Settings';
 import Vehicles from '../pages/Vehicles';
+import ManageVehicle from '../pages/ManageVehicle';
+import Reviews from '../pages/Reviews';
+import ManageReview from '../pages/ManageReview';
 
 // Import Components
 import Nav from '../components/Nav';
@@ -18,7 +21,10 @@ import Visual from '../components/Visual';
 const pages = {
     Rides,
     Settings,
-    Vehicles
+    Vehicles,
+    ManageVehicle,
+    Reviews,
+    ManageReview
 };
 
 
@@ -38,7 +44,7 @@ const SettingsView = () => {
                     <Page />
                 </div>
             </div>
-            {!!state.page && !state.page.startsWith("New") && <Nav />}
+            <Nav />
         </div>
     );
 };

@@ -988,10 +988,10 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 var _react = _interopRequireWildcard(require("react"));
-var _Oopsie = _interopRequireDefault(require("../components/Oopsie"));
 var _Icon = _interopRequireDefault(require("../components/Icon"));
 var _animejs = _interopRequireDefault(require("animejs"));
 var _hooks = require("../helpers/hooks");
+var _dayjs = _interopRequireDefault(require("dayjs"));
 function _interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
         default: obj
@@ -1115,11 +1115,7 @@ const App = (_ref)=>{
             alt: review1.author
         })), /*#__PURE__*/ _react.default.createElement("div", {
             className: "reviewer__info"
-        }, /*#__PURE__*/ _react.default.createElement("h5", null, review1.author), /*#__PURE__*/ _react.default.createElement("p", null, new Date(review1.date).toLocaleDateString("".concat(window.locale, "-US"), {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        }))))
+        }, /*#__PURE__*/ _react.default.createElement("h5", null, review1.author), /*#__PURE__*/ _react.default.createElement("p", null, _dayjs.default(review1.date, "MM-DD-YYYY H:mm").format("MMMM D, YYYY"))))
     )), /*#__PURE__*/ _react.default.createElement("div", {
         className: "reviews__review"
     }, /*#__PURE__*/ _react.default.createElement("div", {
@@ -1155,7 +1151,7 @@ $RefreshReg$(_c, "App");
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","../components/Oopsie":"ckamV","../components/Icon":"3WqAm","animejs":"aMVBn","../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"a4ork":[function(require,module,exports) {
+},{"react":"a4ork","../components/Icon":"3WqAm","animejs":"aMVBn","../helpers/hooks":"8wHZG","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3","dayjs":"ihFi1"}],"a4ork":[function(require,module,exports) {
 'use strict';
 module.exports = require('./cjs/react.development.js');
 
@@ -2816,11 +2812,11 @@ module.exports = shouldUseNative() ? Object.assign : function(target, source) {
     return to;
 };
 
-},{}],"ckamV":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$1528 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
+},{}],"3WqAm":[function(require,module,exports) {
+var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$1528.prelude(module);
+$parcel$ReactRefreshHelpers$fde0.prelude(module);
 
 try {
 "use strict";
@@ -2834,26 +2830,36 @@ function _interopRequireDefault(obj) {
         default: obj
     };
 }
-const localCopy = {
-    en: "We're having trouble loading this application. Please try again later.",
-    es: "Tenemos problemas para cargar esta aplicación. Por favor, inténtelo de nuevo más tarde."
+const Icon = (_ref)=>{
+    let { icon , size , color  } = _ref;
+    let classes = 'icon-md';
+    let style = {
+    };
+    if (size) {
+        if (typeof size === 'string') classes = "icon-".concat(size);
+        if (size && typeof size === 'number') style = {
+            height: size + 'rem',
+            width: size + 'rem'
+        };
+    }
+    if (color) {
+        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
+        else classes += " ".concat(color);
+    }
+    return(/*#__PURE__*/ _react.default.createElement("svg", {
+        className: classes,
+        style: style
+    }, /*#__PURE__*/ _react.default.createElement("use", {
+        href: "/img/icons.svg#".concat(icon)
+    })));
 };
-const Oppsie = (_ref)=>{
-    let { copy , src  } = _ref;
-    return(/*#__PURE__*/ _react.default.createElement("section", {
-        className: "oopsie"
-    }, /*#__PURE__*/ _react.default.createElement("img", {
-        src: src || "/img/oopsie.svg",
-        alt: "Oopsie"
-    }), /*#__PURE__*/ _react.default.createElement("h3", null, copy || localCopy[window.locale] || localCopy.en)));
-};
-_c = Oppsie;
-var _default = Oppsie;
+_c = Icon;
+var _default = Icon;
 exports.default = _default;
 var _c;
-$RefreshReg$(_c, "Oppsie");
+$RefreshReg$(_c, "Icon");
 
-  $parcel$ReactRefreshHelpers$1528.postlude(module);
+  $parcel$ReactRefreshHelpers$fde0.postlude(module);
 } finally {
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
@@ -2978,59 +2984,7 @@ function registerExportsForReactRefresh(module) {
     }
 }
 
-},{"react-refresh/runtime":"cWWA1"}],"3WqAm":[function(require,module,exports) {
-var $parcel$ReactRefreshHelpers$fde0 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
-var prevRefreshReg = window.$RefreshReg$;
-var prevRefreshSig = window.$RefreshSig$;
-$parcel$ReactRefreshHelpers$fde0.prelude(module);
-
-try {
-"use strict";
-Object.defineProperty(exports, "__esModule", {
-    value: true
-});
-exports.default = void 0;
-var _react = _interopRequireDefault(require("react"));
-function _interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        default: obj
-    };
-}
-const Icon = (_ref)=>{
-    let { icon , size , color  } = _ref;
-    let classes = 'icon-md';
-    let style = {
-    };
-    if (size) {
-        if (typeof size === 'string') classes = "icon-".concat(size);
-        if (size && typeof size === 'number') style = {
-            height: size + 'rem',
-            width: size + 'rem'
-        };
-    }
-    if (color) {
-        if (color.startsWith('#') || color.startsWith('rgb') || color.startsWith('var')) style.color = color;
-        else classes += " ".concat(color);
-    }
-    return(/*#__PURE__*/ _react.default.createElement("svg", {
-        className: classes,
-        style: style
-    }, /*#__PURE__*/ _react.default.createElement("use", {
-        href: "/img/icons.svg#".concat(icon)
-    })));
-};
-_c = Icon;
-var _default = Icon;
-exports.default = _default;
-var _c;
-$RefreshReg$(_c, "Icon");
-
-  $parcel$ReactRefreshHelpers$fde0.postlude(module);
-} finally {
-  window.$RefreshReg$ = prevRefreshReg;
-  window.$RefreshSig$ = prevRefreshSig;
-}
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"8wHZG":[function(require,module,exports) {
+},{"react-refresh/runtime":"cWWA1"}],"8wHZG":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$134e = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;
@@ -3058,7 +3012,296 @@ exports.useObjectState = useObjectState;
   window.$RefreshReg$ = prevRefreshReg;
   window.$RefreshSig$ = prevRefreshSig;
 }
-},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"krKvU":[function(require,module,exports) {
+},{"react":"a4ork","@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js":"fo4q3"}],"ihFi1":[function(require,module,exports) {
+!function(t, e) {
+    "object" == typeof exports && "undefined" != typeof module ? module.exports = e() : "function" == typeof define && define.amd ? define(e) : (t = "undefined" != typeof globalThis ? globalThis : t || self).dayjs = e();
+}(this, function() {
+    "use strict";
+    var t = 1000, e = 60000, n = 3600000, r = "millisecond", i = "second", s = "minute", u = "hour", a = "day", o = "week", f = "month", h = "quarter", c = "year", d = "date", $ = "Invalid Date", l = /^(\d{4})[-/]?(\d{1,2})?[-/]?(\d{0,2})[Tt\s]*(\d{1,2})?:?(\d{1,2})?:?(\d{1,2})?[.:]?(\d+)?$/, y = /\[([^\]]+)]|Y{1,4}|M{1,4}|D{1,2}|d{1,4}|H{1,2}|h{1,2}|a|A|m{1,2}|s{1,2}|Z{1,2}|SSS/g, M = {
+        name: "en",
+        weekdays: "Sunday_Monday_Tuesday_Wednesday_Thursday_Friday_Saturday".split("_"),
+        months: "January_February_March_April_May_June_July_August_September_October_November_December".split("_")
+    }, m = function(t1, e1, n1) {
+        var r1 = String(t1);
+        return !r1 || r1.length >= e1 ? t1 : "" + Array(e1 + 1 - r1.length).join(n1) + t1;
+    }, g = {
+        s: m,
+        z: function(t1) {
+            var e1 = -t1.utcOffset(), n1 = Math.abs(e1), r1 = Math.floor(n1 / 60), i1 = n1 % 60;
+            return (e1 <= 0 ? "+" : "-") + m(r1, 2, "0") + ":" + m(i1, 2, "0");
+        },
+        m: function t1(e1, n1) {
+            if (e1.date() < n1.date()) return -t1(n1, e1);
+            var r1 = 12 * (n1.year() - e1.year()) + (n1.month() - e1.month()), i1 = e1.clone().add(r1, f), s1 = n1 - i1 < 0, u1 = e1.clone().add(r1 + (s1 ? -1 : 1), f);
+            return +(-(r1 + (n1 - i1) / (s1 ? i1 - u1 : u1 - i1)) || 0);
+        },
+        a: function(t2) {
+            return t2 < 0 ? Math.ceil(t2) || 0 : Math.floor(t2);
+        },
+        p: function(t2) {
+            return ({
+                M: f,
+                y: c,
+                w: o,
+                d: a,
+                D: d,
+                h: u,
+                m: s,
+                s: i,
+                ms: r,
+                Q: h
+            })[t2] || String(t2 || "").toLowerCase().replace(/s$/, "");
+        },
+        u: function(t2) {
+            return (void 0) === t2;
+        }
+    }, D = "en", v = {
+    };
+    v[D] = M;
+    var p = function(t1) {
+        return t1 instanceof _;
+    }, S = function(t1, e1, n1) {
+        var r1;
+        if (!t1) return D;
+        if ("string" == typeof t1) v[t1] && (r1 = t1), e1 && (v[t1] = e1, r1 = t1);
+        else {
+            var i1 = t1.name;
+            v[i1] = t1, r1 = i1;
+        }
+        return !n1 && r1 && (D = r1), r1 || !n1 && D;
+    }, w = function(t1, e1) {
+        if (p(t1)) return t1.clone();
+        var n1 = "object" == typeof e1 ? e1 : {
+        };
+        return n1.date = t1, n1.args = arguments, new _(n1);
+    }, O = g;
+    O.l = S, O.i = p, O.w = function(t1, e1) {
+        return w(t1, {
+            locale: e1.$L,
+            utc: e1.$u,
+            x: e1.$x,
+            $offset: e1.$offset
+        });
+    };
+    var _ = function() {
+        function M1(t1) {
+            this.$L = S(t1.locale, null, !0), this.parse(t1);
+        }
+        var m1 = M1.prototype;
+        return m1.parse = function(t1) {
+            this.$d = (function(t2) {
+                var e1 = t2.date, n1 = t2.utc;
+                if (null === e1) return new Date(NaN);
+                if (O.u(e1)) return new Date;
+                if (e1 instanceof Date) return new Date(e1);
+                if ("string" == typeof e1 && !/Z$/i.test(e1)) {
+                    var r1 = e1.match(l);
+                    if (r1) {
+                        var i2 = r1[2] - 1 || 0, s1 = (r1[7] || "0").substring(0, 3);
+                        return n1 ? new Date(Date.UTC(r1[1], i2, r1[3] || 1, r1[4] || 0, r1[5] || 0, r1[6] || 0, s1)) : new Date(r1[1], i2, r1[3] || 1, r1[4] || 0, r1[5] || 0, r1[6] || 0, s1);
+                    }
+                }
+                return new Date(e1);
+            })(t1), this.$x = t1.x || {
+            }, this.init();
+        }, m1.init = function() {
+            var t1 = this.$d;
+            this.$y = t1.getFullYear(), this.$M = t1.getMonth(), this.$D = t1.getDate(), this.$W = t1.getDay(), this.$H = t1.getHours(), this.$m = t1.getMinutes(), this.$s = t1.getSeconds(), this.$ms = t1.getMilliseconds();
+        }, m1.$utils = function() {
+            return O;
+        }, m1.isValid = function() {
+            return !(this.$d.toString() === $);
+        }, m1.isSame = function(t1, e1) {
+            var n1 = w(t1);
+            return this.startOf(e1) <= n1 && n1 <= this.endOf(e1);
+        }, m1.isAfter = function(t1, e1) {
+            return w(t1) < this.startOf(e1);
+        }, m1.isBefore = function(t1, e1) {
+            return this.endOf(e1) < w(t1);
+        }, m1.$g = function(t1, e1, n1) {
+            return O.u(t1) ? this[e1] : this.set(n1, t1);
+        }, m1.unix = function() {
+            return Math.floor(this.valueOf() / 1000);
+        }, m1.valueOf = function() {
+            return this.$d.getTime();
+        }, m1.startOf = function(t1, e1) {
+            var n1 = this, r2 = !!O.u(e1) || e1, h1 = O.p(t1), $1 = function(t2, e2) {
+                var i3 = O.w(n1.$u ? Date.UTC(n1.$y, e2, t2) : new Date(n1.$y, e2, t2), n1);
+                return r2 ? i3 : i3.endOf(a);
+            }, l1 = function(t2, e2) {
+                return O.w(n1.toDate()[t2].apply(n1.toDate("s"), (r2 ? [
+                    0,
+                    0,
+                    0,
+                    0
+                ] : [
+                    23,
+                    59,
+                    59,
+                    999
+                ]).slice(e2)), n1);
+            }, y1 = this.$W, M2 = this.$M, m2 = this.$D, g1 = "set" + (this.$u ? "UTC" : "");
+            switch(h1){
+                case c:
+                    return r2 ? $1(1, 0) : $1(31, 11);
+                case f:
+                    return r2 ? $1(1, M2) : $1(0, M2 + 1);
+                case o:
+                    var D1 = this.$locale().weekStart || 0, v1 = (y1 < D1 ? y1 + 7 : y1) - D1;
+                    return $1(r2 ? m2 - v1 : m2 + (6 - v1), M2);
+                case a:
+                case d:
+                    return l1(g1 + "Hours", 0);
+                case u:
+                    return l1(g1 + "Minutes", 1);
+                case s:
+                    return l1(g1 + "Seconds", 2);
+                case i:
+                    return l1(g1 + "Milliseconds", 3);
+                default:
+                    return this.clone();
+            }
+        }, m1.endOf = function(t1) {
+            return this.startOf(t1, !1);
+        }, m1.$set = function(t1, e1) {
+            var n1, o1 = O.p(t1), h1 = "set" + (this.$u ? "UTC" : ""), $1 = (n1 = {
+            }, n1[a] = h1 + "Date", n1[d] = h1 + "Date", n1[f] = h1 + "Month", n1[c] = h1 + "FullYear", n1[u] = h1 + "Hours", n1[s] = h1 + "Minutes", n1[i] = h1 + "Seconds", n1[r] = h1 + "Milliseconds", n1)[o1], l1 = o1 === a ? this.$D + (e1 - this.$W) : e1;
+            if (o1 === f || o1 === c) {
+                var y1 = this.clone().set(d, 1);
+                y1.$d[$1](l1), y1.init(), this.$d = y1.set(d, Math.min(this.$D, y1.daysInMonth())).$d;
+            } else $1 && this.$d[$1](l1);
+            return this.init(), this;
+        }, m1.set = function(t1, e1) {
+            return this.clone().$set(t1, e1);
+        }, m1.get = function(t1) {
+            return this[O.p(t1)]();
+        }, m1.add = function(r2, h1) {
+            var d1, $1 = this;
+            r2 = Number(r2);
+            var l1 = O.p(h1), y2 = function(t1) {
+                var e1 = w($1);
+                return O.w(e1.date(e1.date() + Math.round(t1 * r2)), $1);
+            };
+            if (l1 === f) return this.set(f, this.$M + r2);
+            if (l1 === c) return this.set(c, this.$y + r2);
+            if (l1 === a) return y2(1);
+            if (l1 === o) return y2(7);
+            var M2 = (d1 = {
+            }, d1[s] = e, d1[u] = n, d1[i] = t, d1)[l1] || 1, m2 = this.$d.getTime() + r2 * M2;
+            return O.w(m2, this);
+        }, m1.subtract = function(t1, e1) {
+            return this.add(-1 * t1, e1);
+        }, m1.format = function(t1) {
+            var e1 = this, n1 = this.$locale();
+            if (!this.isValid()) return n1.invalidDate || $;
+            var r2 = t1 || "YYYY-MM-DDTHH:mm:ssZ", i3 = O.z(this), s2 = this.$H, u1 = this.$m, a1 = this.$M, o1 = n1.weekdays, f1 = n1.months, h1 = function(t2, n2, i4, s3) {
+                return t2 && (t2[n2] || t2(e1, r2)) || i4[n2].substr(0, s3);
+            }, c1 = function(t2) {
+                return O.s(s2 % 12 || 12, t2, "0");
+            }, d1 = n1.meridiem || function(t2, e2, n2) {
+                var r3 = t2 < 12 ? "AM" : "PM";
+                return n2 ? r3.toLowerCase() : r3;
+            }, l1 = {
+                YY: String(this.$y).slice(-2),
+                YYYY: this.$y,
+                M: a1 + 1,
+                MM: O.s(a1 + 1, 2, "0"),
+                MMM: h1(n1.monthsShort, a1, f1, 3),
+                MMMM: h1(f1, a1),
+                D: this.$D,
+                DD: O.s(this.$D, 2, "0"),
+                d: String(this.$W),
+                dd: h1(n1.weekdaysMin, this.$W, o1, 2),
+                ddd: h1(n1.weekdaysShort, this.$W, o1, 3),
+                dddd: o1[this.$W],
+                H: String(s2),
+                HH: O.s(s2, 2, "0"),
+                h: c1(1),
+                hh: c1(2),
+                a: d1(s2, u1, !0),
+                A: d1(s2, u1, !1),
+                m: String(u1),
+                mm: O.s(u1, 2, "0"),
+                s: String(this.$s),
+                ss: O.s(this.$s, 2, "0"),
+                SSS: O.s(this.$ms, 3, "0"),
+                Z: i3
+            };
+            return r2.replace(y, function(t2, e2) {
+                return e2 || l1[t2] || i3.replace(":", "");
+            });
+        }, m1.utcOffset = function() {
+            return 15 * -Math.round(this.$d.getTimezoneOffset() / 15);
+        }, m1.diff = function(r2, d1, $1) {
+            var l1, y2 = O.p(d1), M2 = w(r2), m2 = (M2.utcOffset() - this.utcOffset()) * e, g1 = this - M2, D1 = O.m(this, M2);
+            return D1 = (l1 = {
+            }, l1[c] = D1 / 12, l1[f] = D1, l1[h] = D1 / 3, l1[o] = (g1 - m2) / 604800000, l1[a] = (g1 - m2) / 86400000, l1[u] = g1 / n, l1[s] = g1 / e, l1[i] = g1 / t, l1)[y2] || g1, $1 ? D1 : O.a(D1);
+        }, m1.daysInMonth = function() {
+            return this.endOf(f).$D;
+        }, m1.$locale = function() {
+            return v[this.$L];
+        }, m1.locale = function(t1, e1) {
+            if (!t1) return this.$L;
+            var n1 = this.clone(), r2 = S(t1, e1, !0);
+            return r2 && (n1.$L = r2), n1;
+        }, m1.clone = function() {
+            return O.w(this.$d, this);
+        }, m1.toDate = function() {
+            return new Date(this.valueOf());
+        }, m1.toJSON = function() {
+            return this.isValid() ? this.toISOString() : null;
+        }, m1.toISOString = function() {
+            return this.$d.toISOString();
+        }, m1.toString = function() {
+            return this.$d.toUTCString();
+        }, M1;
+    }(), b = _.prototype;
+    return w.prototype = b, [
+        [
+            "$ms",
+            r
+        ],
+        [
+            "$s",
+            i
+        ],
+        [
+            "$m",
+            s
+        ],
+        [
+            "$H",
+            u
+        ],
+        [
+            "$W",
+            a
+        ],
+        [
+            "$M",
+            f
+        ],
+        [
+            "$y",
+            c
+        ],
+        [
+            "$D",
+            d
+        ]
+    ].forEach(function(t1) {
+        b[t1[1]] = function(e1) {
+            return this.$g(e1, t1[0], t1[1]);
+        };
+    }), w.extend = function(t1, e1) {
+        return t1.$i || (t1(e1, _, w), t1.$i = !0), w;
+    }, w.locale = S, w.isDayjs = p, w.unix = function(t1) {
+        return w(1000 * t1);
+    }, w.en = v[D], w.Ls = v, w.p = {
+    }, w;
+});
+
+},{}],"krKvU":[function(require,module,exports) {
 var $parcel$ReactRefreshHelpers$8839 = require("@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js");
 var prevRefreshReg = window.$RefreshReg$;
 var prevRefreshSig = window.$RefreshSig$;

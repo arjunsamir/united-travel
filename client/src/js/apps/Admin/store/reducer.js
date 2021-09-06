@@ -28,6 +28,20 @@ const reducer = (state = initialState, action) => {
         case 'SET_SETTINGS':
             return merge('settings');
 
+        case 'SET_VEHICLES':
+            return merge('vehicles');
+
+        case 'SET_CURRENT_VEHICLE':
+        case 'SET_CURRENTVEHICLE':
+            return merge('currentVehicle');
+
+        case 'SET_REVIEWS':
+            return merge('reviews');
+
+        case 'SET_CURRENT_REVIEW':
+        case 'SET_CURRENTREVIEW':
+            return merge('currentReview');
+
     }
 
 

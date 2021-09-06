@@ -34,7 +34,7 @@ const Confirmation = () => {
                 <p>{copy.thanks}</p>
                 <Button
                     text="View my reservation"
-                    onClick={() => page.barba.go(`/reservations/${code}`)}
+                    onClick={() => window.location.href = `/reservations/${code}`}
                 />
             </div>
         </BookingPage>        

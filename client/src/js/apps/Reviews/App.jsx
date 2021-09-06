@@ -1,11 +1,11 @@
 import React, { useRef, useEffect } from 'react';
 
-import Oopsie from '../components/Oopsie';
 import Icon from '../components/Icon';
 
 // Import Helpers
 import anime from 'animejs';
 import { useObjectState } from '../helpers/hooks';
+import dayjs from 'dayjs';
 
 const getStars = (stars) => {
     const arr = new Array(5).fill("star-outline");
@@ -93,11 +93,7 @@ const App = ({ reviews, copy, scroll }) => {
                             </div>
                             <div className="reviewer__info">
                                 <h5>{review.author}</h5>
-                                <p>{new Date(review.date).toLocaleDateString(`${window.locale}-US`, {
-                                    year: 'numeric',
-                                    month: 'long',
-                                    day: 'numeric'
-                                })}</p>
+                                <p>{dayjs(review.date, "MM-DD-YYYY H:mm").format("MMMM D, YYYY")}</p>
                             </div>
                         </div>
                     ))}

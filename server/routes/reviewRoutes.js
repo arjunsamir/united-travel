@@ -1,24 +1,22 @@
 // Import Dependencies
 const express = require('express');
-const send = require('../utils/sendResponse');
 const ctrl = require('../controllers/reviewController');
-
+const auth = require('../controllers/auth');
 
 // Create Router
 const router = express.Router();
 
-// router.use(auth.protect, auth.restrictTo('admin'));
+// Unprotected Routes
+router.get('/', ctrl.getAllReviews);
+router.get('/:id', ctrl.getReview);
 
-router.route('/')
-    .get(ctrl.getAllReviews)
-    .post(ctrl.createReview)
-;
-
+// Protected Routes
+router.use(auth.protect, auth.restrictTo('admin'));
+router.post('/', ctrl.createReview);
 router.route('/:id')
-    .get(ctrl.getReview)
     .patch(ctrl.updateReview)
     .delete(ctrl.deleteReview)
 ;
 
-
+// Export Router
 module.exports = router;

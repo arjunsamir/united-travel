@@ -44,6 +44,10 @@ const Input = ({ value, placeholder, onChange, onBlur, onEnter, formatInput, lab
                             onChange={(onChange || formatInput) && ((e) => {
                                 let val = e.target.value;
                                 if (formatInput) val = formatInput(val);
+                                if (type  === "number") {
+                                    val = parseFloat(val) ?? "";
+                                    if (val !== val) val = "";
+                                }
                                 onChange && onChange(val);
                             })}
                             onBlur={(e) => {

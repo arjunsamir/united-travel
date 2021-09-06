@@ -168,6 +168,24 @@
             padding-bottom: 1.2rem;
             font-weight: 700;
         }
+
+        &-img {
+            img {
+                width: 100%;
+            }
+        }
+
+        &-profile {
+            height: 12rem;
+            width: 12rem;
+
+            border-radius: 50%;
+            overflow: hidden;
+
+            img {
+                @include cover;
+            }
+        }
     }
 
     &__field {

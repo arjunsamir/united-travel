@@ -21,10 +21,7 @@ const schema = new mongoose.Schema({
         required: [true, 'Review must have a title'],
         default: 'Lorem Ipsum Set Dolor'
     },
-    date: {
-        type: Date,
-        default: Date.now(),
-    },
+    date: String,
     photo: {
         type: String,
         default: '/img/profile-photos/juan.jpg'

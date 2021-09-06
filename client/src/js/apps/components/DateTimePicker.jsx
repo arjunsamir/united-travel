@@ -51,7 +51,7 @@ const TimePicker = ({ time, label, placeholder, onChange, customProps, showPlace
 
 
 // Create Component
-const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker, icon }) => {
+const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker, icon, useMinDate = true }) => {
 
     const handleChange = (val) => {
         onChange(val.format('MM-DD-YYYY H:mm'));
@@ -77,7 +77,7 @@ const DateTimePicker = ({ value, defaultValue, onChange, datePicker, timePicker,
                             date={date}
                             onChange={handleChange}
                             showPlaceholder={show}
-                            minDate={dayjs().add(1, 'day')}
+                            { ...(useMinDate ? { minDate: dayjs().add(1, 'day') } : {}) }
                             { ...(datePicker || {}) }
                         />
                     )}

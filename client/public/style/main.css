@@ -4021,6 +4021,20 @@ svg.placeholder, .icon.placeholder {
   padding-bottom: 1.2rem;
   font-weight: 700;
 }
+.account__fields-img img {
+  width: 100%;
+}
+.account__fields-profile {
+  height: 12rem;
+  width: 12rem;
+  border-radius: 50%;
+  overflow: hidden;
+}
+.account__fields-profile img {
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
 .account__field {
   display: flex;
   align-items: center;

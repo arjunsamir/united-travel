@@ -114,7 +114,6 @@ const PricingSettings = () => {
                             <div
                                 key={`${i}-${zip}`}
                                 className="tags__tag"
-                                onClick={() => {}}
                             >
                                 <p className="small">{zip}</p>
                                 <div className="tags__tag-x" onClick={() => {

@@ -3513,6 +3513,11 @@ const Input = (_ref)=>{
         onChange: (onChange || formatInput) && ((e)=>{
             let val = e.target.value;
             if (formatInput) val = formatInput(val);
+            if (type === "number") {
+                var _parseFloat;
+                val = (_parseFloat = parseFloat(val)) !== null && _parseFloat !== void 0 ? _parseFloat : "";
+                if (val !== val) val = "";
+            }
             onChange && onChange(val);
         }),
         onBlur: (e)=>{
