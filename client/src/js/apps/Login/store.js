@@ -1,10 +1,10 @@
 // Define initial state
 export const initialState = {
     step: 'hello',
-    email: 'me@arjunsamir.com',
-    password: 'password',
-    fullName: 'Samir Patel',
-    preferredName: 'Arjun',
+    email: '',
+    password: '',
+    fullName: '',
+    preferredName: '',
     profilePhoto: '',
     code: '',
     loginType: '',
