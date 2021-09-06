@@ -2184,8 +2184,7 @@ svg.placeholder, .icon.placeholder {
 }
 .vehicle-card__img img {
   position: relative;
-  width: 90%;
-  left: 20%;
+  width: 100%;
 }
 .vehicle-card__key-specs {
   padding: 0 3.2rem;

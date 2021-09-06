@@ -7,7 +7,8 @@
         "alt": "O continuar con el correo electrónico",
         "button": "Continuar con el correo electrónico",
         "back": "Atrás",
-        "inputs": {}
+        "inputs": {},
+        "noAuth": "Lo sentimos, el inicio de sesión de terceros no está disponible en este navegador. Esto puede deberse al uso del modo de incógnito o el modo de navegación privada. Estamos trabajando activamente para resolver esto."
     },
     "signup": {
         "title": "Crear inicio de sesión",

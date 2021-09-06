@@ -130,7 +130,7 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
                             </div>
                         </>
                     ) : (
-                        <p className="animate-item">We're sorry, third party sign in is not available in this browser. This can be caused by using incognito mode or private browsing mode. We are actively working to resolve this.</p>
+                        <p className="animate-item">{copy.noAuth}</p>
                     )}
                     
                 </fieldset>

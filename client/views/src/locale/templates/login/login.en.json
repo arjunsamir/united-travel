@@ -7,7 +7,8 @@
         "alt": "Or continue with email",
         "button": "Continue with email",
         "back": "Back",
-        "inputs": {}
+        "inputs": {},
+        "noAuth": "We're sorry, third party sign in is not available in this browser. This can be caused by using incognito mode or private browsing mode. We are actively working to resolve this."
     },
     "signup": {
         "title": "Create Login",
