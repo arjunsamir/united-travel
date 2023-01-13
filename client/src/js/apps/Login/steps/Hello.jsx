@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useLayoutEffect, useState, useMemo } from 'react';
 
 // Import Login Components
 import Image from '../components/Image';
@@ -40,7 +40,7 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
 
 
     // Enable Typewriter Effect
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         if (!loaded) return;
 
@@ -57,7 +57,7 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
 
     }, [loaded]);
 
-    const handleSubmit = async () => {
+    const handleSubmit = useMemo(() => async () => {
 
         // Fetching Animation
         const timer = $.timer(1000).start();
@@ -89,7 +89,7 @@ const Hello = ({ copy, exit, authenticate, transition, update, state, validator,
         // Transition to next step
         transition.to(loginType);
 
-    }
+    }, [])
 
 
     return (

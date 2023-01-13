@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useLayoutEffect, useRef, useState } from 'react';
 
 import Icon from './Icon';
 
@@ -97,7 +97,7 @@ const Modal = ({ children, isOpen, close, preventClose, closeRef }) => {
     const element = useRef();
 
     // Animate Opening And Closing
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         const triggerOpen = async () => {
             if (!element.current || isAnimating) return

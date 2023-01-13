@@ -27,7 +27,7 @@ const Login = ({ copy, authenticate, transition, update, state, validator }) => 
     const emailErrors = validator.checkEmail(state.email);
     const passwordErrors = [...validator.checkPassword(state.password), ...localState.errors];
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         transition.set(mainRef.current).in();
     }, []);
 

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 
 import anime from 'animejs';
 
@@ -9,7 +9,7 @@ const Greeting = ({ copy, state, callback }) => {
     const mainRef = useRef();
 
     // Animate Out of app
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         const tl = anime.timeline({
             easing: 'easeOutQuad',

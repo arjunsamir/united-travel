@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 
 import Icon from '../components/Icon';
 
@@ -30,7 +30,7 @@ const App = ({ reviews, copy, scroll }) => {
     const review = reviews[state.selected];
 
     // Animate In Review
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         // Create Timeline
         const tl = anime.timeline({

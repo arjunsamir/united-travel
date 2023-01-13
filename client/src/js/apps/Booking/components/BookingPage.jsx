@@ -1,5 +1,5 @@
 // Import React Itsself
-import React, { useContext, useEffect, useRef } from 'react';
+import React, { useContext, useLayoutEffect, useRef } from 'react';
 
 // Import Context
 import AppContext from '../store/context';
@@ -16,14 +16,14 @@ const BookingPage = ({ children, showLoader, back, next, backText, nextText }) =
     const element = useRef();
 
     // Set Up Transition
-    useEffect(() => {
+    useLayoutEffect(() => {
         if (!element.current) return;
         transition.set({ container: element.current, animation: 'view' });
     })
 
 
-    // Apply UseEffect
-    useEffect(() => {
+    // Apply useLayoutEffect
+    useLayoutEffect(() => {
 
         if (!showLoader) {
             app.map.show()

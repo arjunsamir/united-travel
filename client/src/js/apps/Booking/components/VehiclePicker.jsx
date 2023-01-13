@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 
 import Icon from '../../components/Icon';
 
@@ -54,7 +54,7 @@ const VehiclePicker = ({ vehicles, onChange, selected, copy }) => {
     const slider = useRef();
 
     // Scroll To Slide
-    useEffect(() => {
+    useLayoutEffect(() => {
         const selectedIndex = selected ? vehicles.findIndex(v => v._id === selected._id) : 0;
         scrollToSelected(slider.current, selectedIndex < 0 ? 0 : selectedIndex);
     }, [selected]);

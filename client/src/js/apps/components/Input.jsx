@@ -4,6 +4,7 @@ import React from 'react';
 
 // Import Helpers
 import { useObjectState } from '../helpers/hooks';
+import { bemify } from '../helpers/utils';
 
 
 // Import Other Components

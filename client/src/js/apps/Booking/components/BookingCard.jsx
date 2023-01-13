@@ -1,5 +1,5 @@
 // Import React Defaults
-import React, { useContext, useRef, useEffect } from 'react';
+import React, { useContext, useRef, useLayoutEffect } from 'react';
 
 // Import App Context
 import AppContext from '../store/context';
@@ -135,15 +135,15 @@ const BookingCard = ({ children, next, back, showLoader, footer, disableExpand, 
     }
 
     // Set Up Transition
-    useEffect(() => {
+    useLayoutEffect(() => {
         transition.set({ container: element.current, animation: 'card' });
         state.app.map.show();
         state.app.map.setClass(null);
     })
 
 
-    // Apply UseEffect
-    useEffect(() => {
+    // Apply useLayoutEffect
+    useLayoutEffect(() => {
         if (!showLoader) {
             const prev = steps.findIndex(s => s.name === state.app.previousStep);
             transition.in(prev >=  0 ? 'in' : 'enter');

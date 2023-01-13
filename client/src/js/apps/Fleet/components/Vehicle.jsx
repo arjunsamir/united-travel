@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef, useLayoutEffect } from "react";
 
 import anime from "animejs";
 
@@ -24,7 +24,7 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
     }
 
     // Exit Animation
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         if (!nextVehicle) return;
 
@@ -51,7 +51,7 @@ const Vehicle = ({ vehicle, copy, nextVehicle, setNext, clearNext }) => {
     }, [nextVehicle]);
 
     // Enter Animation
-    useEffect(() => {
+    useLayoutEffect(() => {
 
         const tl = anime.timeline({
             easing: 'easeOutQuad',
