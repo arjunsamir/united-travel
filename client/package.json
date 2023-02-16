@@ -61,5 +61,8 @@
     "minBundles": 1,
     "minBundleSize": 3000,
     "maxParallelRequests": 20
+  },
+  "devDependencies": {
+    "process": "^0.11.10"
   }
 }

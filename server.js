@@ -1,11 +1,8 @@
 // 1. IMPORT REQUIRED MODULES
 
 // Import Core Modules
-const https = require('https');
-const http = require('http');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const devcert = require('devcert');
 
 
 
