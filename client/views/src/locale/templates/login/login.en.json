@@ -1,128 +1,130 @@
 {
-    "title": "Login - United Travel LLC",
-    "hello": {
-        "title": "Hello ",
-        "words": ["Traveller", "Adventurer", "Friend"],
-        "continueWith": "Continue With",
-        "alt": "Or continue with email",
-        "button": "Continue with email",
-        "back": "Back",
-        "inputs": {},
-        "noAuth": "We're sorry, third party sign in is not available in this browser. This can be caused by using incognito mode or private browsing mode. We are actively working to resolve this."
+  "title": "Login - United Travel LLC",
+  "hello": {
+    "title": "Hello ",
+    "words": ["Traveller", "Adventurer", "Friend"],
+    "continueWith": "Continue With",
+    "alt": "Or continue with email",
+    "noThirdParty": "Enter your email address to continue.",
+    "button": "Continue with email",
+    "back": "Back",
+    "inputs": {},
+    "noAuthBrowser": "We're sorry, third party sign in is not available in this browser. This can be caused by using incognito mode or private browsing mode. We are actively working to resolve this.",
+    "noAuth": "We're sorry, third party sign in is not available at this time. We are working to resolve this. Please try again later."
+  },
+  "signup": {
+    "title": "Create Login",
+    "inputs": {
+      "password": {
+        "label": "Create Password",
+        "placeholder": "••••••••"
+      }
     },
-    "signup": {
-        "title": "Create Login",
-        "inputs": {
-            "password": {
-                "label": "Create Password",
-                "placeholder": "••••••••"
-            }
-        },
-        "button": "Create Login",
-        "back": "Back"
+    "button": "Create Login",
+    "back": "Back"
+  },
+  "registration": {
+    "title": "Introduce Yourself",
+    "inputs": {
+      "fullName": {
+        "label": "Full Name",
+        "placeholder": "Juan Mendez"
+      },
+      "preferredName": {
+        "label": "Preferred Name",
+        "placeholder": "Juan"
+      },
+      "profilePhoto": {
+        "label": "Profile Photo (optional)",
+        "placeholder": "Click to upload a photo",
+        "success": "Upload Successful!",
+        "error": "Something went wrong..."
+      }
     },
-    "registration": {
-        "title": "Introduce Yourself",
-        "inputs": {
-            "fullName": {
-                "label": "Full Name",
-                "placeholder": "Juan Mendez"
-            },
-            "preferredName": {
-                "label": "Preferred Name",
-                "placeholder": "Juan"
-            },
-            "profilePhoto": {
-                "label": "Profile Photo (optional)",
-                "placeholder": "Click to upload a photo",
-                "success": "Upload Successful!",
-                "error": "Something went wrong..."
-            }
-        },
-        "button": "Complete Signup",
-        "back": "Back"
+    "button": "Complete Signup",
+    "back": "Back"
+  },
+  "login": {
+    "title": "Welcome Back",
+    "inputs": {
+      "password": {
+        "label": "Password",
+        "placeholder": "••••••••"
+      }
     },
-    "login": {
-        "title": "Welcome Back",
-        "inputs": {
-            "password": {
-                "label": "Password",
-                "placeholder": "••••••••"
-            }
-        },
-        "button": "Login",
-        "forgot": "Forgot your password?",
-        "back": "Back"
-    },
-    "requestReset": {
-        "title": "Reset Password",
-        "copy": "Enter your email address and we'll send you a reset code to create a new password.",
-        "button": "Get Reset Code",
-        "back": "Back",
-        "inputs": {}
-    },
-    "resetCode": {
-        "title": "Check Your Email",
-        "copy": "An email with your reset code has been sent to {email}. The code may take a few minutes to arrive.",
-        "button": "Verify Code",
-        "back": "Back",
-        "resend": ["Didn't receive the email?", "Resend code."],
-        "sent": "Your code has been sent successfully.",
-        "invalid": "Your reset code is invalid.",
-        "inputs": {
-            "code": {
-                "label": "Reset Code",
-                "placeholder": "••••••••"
-            }
-        }
-    },
-    "reset": {
-        "title": "Create New Password",
-        "copy": "Please choose a new password for your account. Your password must have at least 8 characters but the longer the better!",
-        "inputs": {
-            "password": {
-                "label": "New Password",
-                "placeholder": "••••••••"
-            }
-        },
-        "button": "Update Password",
-        "back": "Back"
-    },
-    "greeting": {
-        "titles": {
-            "login": "Welcome back",
-            "signup": "Nice to meet you",
-            "default": "Hello"
-        },
-        "inputs": {}
-    },
-    "common": {
-        "email": {
-            "label": "Email Address",
-            "placeholder": "hello@unitedtravel.llc"
-        }
-    },
-    "errors": {
-        "email": {
-            "required": "Email Address is required",
-            "invalid": "Email Address is not valid"
-        },
-        "password": {
-            "required": "Password is required",
-            "invalid": "Password is not valid",
-            "short": "Password must be at least 8 characters long"
-        },
-        "name": {
-            "required": "Full Name is required",
-            "invalid": "Name cannot contain numbers or special characters"
-        },
-        "fails": {
-            "password": "Your password is incorrect.",
-            "oauth": "This email was registered through a third party sign in. Please sign in with Google or Facebook."
-        }
-    },
-    "referral": {
-        "title": "{name} Invited You",
-        "subtitle": "Sign up and save ${amount} on your first ride."
+    "button": "Login",
+    "forgot": "Forgot your password?",
+    "back": "Back"
+  },
+  "requestReset": {
+    "title": "Reset Password",
+    "copy": "Enter your email address and we'll send you a reset code to create a new password.",
+    "button": "Get Reset Code",
+    "back": "Back",
+    "inputs": {}
+  },
+  "resetCode": {
+    "title": "Check Your Email",
+    "copy": "An email with your reset code has been sent to {email}. The code may take a few minutes to arrive.",
+    "button": "Verify Code",
+    "back": "Back",
+    "resend": ["Didn't receive the email?", "Resend code."],
+    "sent": "Your code has been sent successfully.",
+    "invalid": "Your reset code is invalid.",
+    "inputs": {
+      "code": {
+        "label": "Reset Code",
+        "placeholder": "••••••••"
+      }
     }
+  },
+  "reset": {
+    "title": "Create New Password",
+    "copy": "Please choose a new password for your account. Your password must have at least 8 characters but the longer the better!",
+    "inputs": {
+      "password": {
+        "label": "New Password",
+        "placeholder": "••••••••"
+      }
+    },
+    "button": "Update Password",
+    "back": "Back"
+  },
+  "greeting": {
+    "titles": {
+      "login": "Welcome back",
+      "signup": "Nice to meet you",
+      "default": "Hello"
+    },
+    "inputs": {}
+  },
+  "common": {
+    "email": {
+      "label": "Email Address",
+      "placeholder": "hello@unitedtravel.llc"
+    }
+  },
+  "errors": {
+    "email": {
+      "required": "Email Address is required",
+      "invalid": "Email Address is not valid"
+    },
+    "password": {
+      "required": "Password is required",
+      "invalid": "Password is not valid",
+      "short": "Password must be at least 8 characters long"
+    },
+    "name": {
+      "required": "Full Name is required",
+      "invalid": "Name cannot contain numbers or special characters"
+    },
+    "fails": {
+      "password": "Your password is incorrect.",
+      "oauth": "This email was registered through a third party sign in. Please sign in with Google or Facebook."
+    }
+  },
+  "referral": {
+    "title": "{name} Invited You",
+    "subtitle": "Sign up and save ${amount} on your first ride."
+  }
 }

@@ -40,7 +40,7 @@ mongoose
 // Listen For Errors
 process.on("unhandledRejection", (err) => {
   console.log("💥UNHANDLED REJECTION! Shutting down application...")
-  console.log(err.name, err.message)
+  console.log(err)
   server.close(() => process.exit(1))
 })
 
